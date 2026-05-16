@@ -35,7 +35,7 @@ export default function HighlightsPage() {
       {/* Bento grid. VNTT claims the full top row. The other four cards
           fill two rows below in mixed widths. 5-col grid on lg, 2-col on
           md, single column on mobile. */}
-      <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5 lg:auto-rows-[minmax(260px,auto)]">
+      <section className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-5 lg:gap-6 lg:auto-rows-[minmax(320px,auto)]">
         {vntt && (
           <BentoCard
             h={vntt}
@@ -86,7 +86,7 @@ function BentoCard({
   layout: BentoLayout;
 }) {
   const DateChip = () => (
-    <span className="font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
+    <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
       {h.date}
     </span>
   );
@@ -118,7 +118,7 @@ function BentoCard({
     inner = (
       <div className="lift-card group grid h-full grid-cols-1 overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] sm:grid-cols-[1.2fr_1fr]">
         {h.imageSrc ? (
-          <div className="relative min-h-[180px] w-full overflow-hidden bg-[var(--color-bg-card)] sm:min-h-[220px]">
+          <div className="relative min-h-[180px] w-full overflow-hidden bg-[var(--color-bg-warm)] sm:min-h-[220px] lg:min-h-[280px]">
             <Image
               src={h.imageSrc}
               alt={h.title}
@@ -149,7 +149,7 @@ function BentoCard({
     inner = (
       <div className="lift-card group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]">
         {h.imageSrc && (
-          <div className="relative min-h-[200px] w-full overflow-hidden bg-[var(--color-bg-card)]">
+          <div className="relative min-h-[220px] w-full overflow-hidden bg-[var(--color-bg-warm)]">
             <Image
               src={h.imageSrc}
               alt={h.title}
@@ -159,42 +159,24 @@ function BentoCard({
             />
           </div>
         )}
-        <div className="flex flex-1 flex-col p-5">
-          <div className="mb-3 flex items-center justify-end">
+        <div className="flex flex-1 flex-col p-5 sm:p-6">
+          <div className="mb-3 flex items-center justify-start">
             <DateChip />
           </div>
-          <h3 className="mb-2 font-sans text-[14.5px] font-semibold leading-[1.3] text-[var(--color-fg)]">
+          <h3 className="mb-2 font-sans text-[clamp(0.95rem,1.2vw,1.15rem)] font-semibold leading-[1.3] tracking-[-0.01em] text-[var(--color-fg)]">
             {h.title}
           </h3>
-          <p className="text-[12.5px] leading-[1.55] text-[var(--color-fg-muted)]">
+          <p className="text-[13px] leading-[1.6] text-[var(--color-fg-muted)]">
             {h.description}
           </p>
-          {h.href && (
-            <div className="mt-auto flex items-center gap-1.5 pt-4 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[var(--color-fg-muted)] transition-colors group-hover:text-[var(--color-ruby)]">
-              Open
-              <svg
-                width="11"
-                height="11"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path d="M7 17 17 7M7 7h10v10" />
-              </svg>
-            </div>
-          )}
+          {h.href && <div className="mt-auto pt-4"><OpenPill /></div>}
         </div>
       </div>
     );
   } else {
     // text-only
     inner = (
-      <div className="lift-card group relative flex h-full min-h-[280px] flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6 sm:p-7">
+      <div className="lift-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6 sm:p-7">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-40"
