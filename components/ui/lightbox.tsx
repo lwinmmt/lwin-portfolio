@@ -1,34 +1,49 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 
 export type LightboxImage = { src: string; alt: string };
 
 /**
- * Lightbox group. Owns the active-index state and renders the modal,
- * but delegates the visible thumbnail layout to a render prop so the
- * cover image and the gallery thumbs can use the same lightbox while
- * keeping their own visual treatment.
+ * Project case-study image gallery with click-to-zoom lightbox.
  *
- * Keyboard: Esc closes. Arrow keys page through images.
- * Click outside the image closes. Body scroll is locked while open.
+ * Takes a (large) cover image and an optional list of gallery thumbs.
+ * Internally renders the cover, the 3-up gallery grid, AND the lightbox
+ * modal, because the parent route is a Server Component and Server
+ * Components cannot pass function children (render props) to Client
+ * Components.
+ *
+ * Keyboard: Esc closes. Arrow keys page through. Click outside closes.
+ * Body scroll is locked while the modal is open.
  */
-export function LightboxGroup({
-  images,
-  children,
+export function ProjectLightboxGallery({
+  cover,
+  gallery,
+  title,
 }: {
-  images: LightboxImage[];
-  children: (open: (index: number) => void) => ReactNode;
+  cover?: LightboxImage;
+  gallery?: LightboxImage[];
+  title: string;
 }) {
+  const images: LightboxImage[] = [
+    ...(cover ? [cover] : []),
+    ...(gallery ?? []),
+  ];
+  const galleryStart = cover ? 1 : 0;
   const [active, setActive] = useState<number | null>(null);
 
   const close = useCallback(() => setActive(null), []);
   const prev = useCallback(
-    () => setActive((i) => (i === null ? null : (i - 1 + images.length) % images.length)),
+    () =>
+      setActive((i) =>
+        i === null ? null : (i - 1 + images.length) % images.length,
+      ),
     [images.length],
   );
   const next = useCallback(
-    () => setActive((i) => (i === null ? null : (i + 1) % images.length)),
+    () =>
+      setActive((i) => (i === null ? null : (i + 1) % images.length)),
     [images.length],
   );
 
@@ -40,8 +55,6 @@ export function LightboxGroup({
       else if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", onKey);
-    // Lock background scroll while the modal is open so wheel events
-    // do not scroll the page behind the overlay.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -50,9 +63,52 @@ export function LightboxGroup({
     };
   }, [active, close, prev, next]);
 
+  if (images.length === 0) return null;
+
   return (
     <>
-      {children((idx) => setActive(idx))}
+      {cover && (
+        <button
+          type="button"
+          onClick={() => setActive(0)}
+          aria-label={`Open ${title} cover image full size`}
+          className="group relative mb-8 block aspect-[16/9] w-full cursor-zoom-in overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
+        >
+          <Image
+            src={cover.src}
+            alt={cover.alt}
+            fill
+            priority
+            sizes="(max-width: 860px) 100vw, 720px"
+            className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+          />
+          <ZoomBadge size="md" />
+        </button>
+      )}
+
+      {gallery && gallery.length > 0 && (
+        <div className="mb-8 grid grid-cols-3 gap-2">
+          {gallery.map((img, idx) => (
+            <button
+              key={img.src}
+              type="button"
+              onClick={() => setActive(galleryStart + idx)}
+              aria-label={`Open ${title} photo ${idx + 1} full size`}
+              className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                sizes="(max-width: 860px) 33vw, 220px"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+              <ZoomBadge size="sm" />
+            </button>
+          ))}
+        </div>
+      )}
+
       {active !== null && (
         <LightboxModal
           image={images[active]}
@@ -64,6 +120,30 @@ export function LightboxGroup({
         />
       )}
     </>
+  );
+}
+
+function ZoomBadge({ size }: { size: "sm" | "md" }) {
+  const dim = size === "sm" ? "h-6 w-6 right-2 top-2" : "h-7 w-7 right-3 top-3";
+  const icon = size === "sm" ? 11 : 13;
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute ${dim} inline-flex items-center justify-center rounded-full bg-black/55 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100`}
+    >
+      <svg
+        width={icon}
+        height={icon}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+      </svg>
+    </span>
   );
 }
 

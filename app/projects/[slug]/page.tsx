@@ -5,7 +5,7 @@ import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { ESMOSDiagram } from "@/components/esmos/esmos-diagram";
 import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
-import { LightboxGroup, type LightboxImage } from "@/components/ui/lightbox";
+import { ProjectLightboxGallery } from "@/components/ui/lightbox";
 import {
   projects,
   type Project,
@@ -89,88 +89,18 @@ export default async function ProjectPage({
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_240px]">
         <div>
-          {(() => {
-            const lightboxImages: LightboxImage[] = [
-              ...(project.imageSrc
-                ? [{ src: project.imageSrc, alt: `${project.title} cover` }]
-                : []),
-              ...(project.gallery ?? []).map((src, idx) => ({
-                src,
-                alt: `${project.title}, photo ${idx + 1}`,
-              })),
-            ];
-            if (lightboxImages.length === 0) return null;
-            const galleryStart = project.imageSrc ? 1 : 0;
-            return (
-              <LightboxGroup images={lightboxImages}>
-                {(open) => (
-                  <>
-                    {project.imageSrc && (
-                      <button
-                        type="button"
-                        onClick={() => open(0)}
-                        aria-label={`Open ${project.title} cover image full size`}
-                        className="group relative mb-8 block aspect-[16/9] w-full cursor-zoom-in overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
-                      >
-                        <Image
-                          src={project.imageSrc}
-                          alt={`${project.title} cover`}
-                          fill
-                          priority
-                          sizes="(max-width: 860px) 100vw, 720px"
-                          // Top-biased crop. Project covers are either people photos
-                          // (faces in upper third) or dashboard screenshots (headers
-                          // up top). Either way, biasing the crop upward keeps the
-                          // most informative pixels in shot across card sizes.
-                          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
-                        <span
-                          aria-hidden="true"
-                          className="absolute right-3 top-3 inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/55 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100"
-                        >
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                          </svg>
-                        </span>
-                      </button>
-                    )}
-
-                    {/* Optional supporting gallery. Dashboard comes first via the
-                        cover; team/process shots follow as a 3-up grid. */}
-                    {project.gallery && project.gallery.length > 0 && (
-                      <div className="mb-8 grid grid-cols-3 gap-2">
-                        {project.gallery.map((src, idx) => (
-                          <button
-                            key={src}
-                            type="button"
-                            onClick={() => open(galleryStart + idx)}
-                            aria-label={`Open ${project.title} photo ${idx + 1} full size`}
-                            className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
-                          >
-                            <Image
-                              src={src}
-                              alt={`${project.title}, photo ${idx + 1}`}
-                              fill
-                              sizes="(max-width: 860px) 33vw, 220px"
-                              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                            />
-                            <span
-                              aria-hidden="true"
-                              className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/55 text-white opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100"
-                            >
-                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                              </svg>
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-              </LightboxGroup>
-            );
-          })()}
+          <ProjectLightboxGallery
+            title={project.title}
+            cover={
+              project.imageSrc
+                ? { src: project.imageSrc, alt: `${project.title} cover` }
+                : undefined
+            }
+            gallery={(project.gallery ?? []).map((src, idx) => ({
+              src,
+              alt: `${project.title}, photo ${idx + 1}`,
+            }))}
+          />
 
           <p className="text-[1.0625rem] leading-[1.7] text-[var(--color-fg-soft)]">
             {project.description}

@@ -54,6 +54,18 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Read the sidebar collapsed pref BEFORE React hydrates so the
+            CSS variable --sidebar-w is correct on first paint. Otherwise
+            the sidebar starts at 260px, then snaps to 64px after JS runs,
+            and the main content margin reflows. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('sidebarCollapsed')==='1')document.documentElement.setAttribute('data-sidebar-collapsed','1')}catch(e){}",
+          }}
+        />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
