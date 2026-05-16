@@ -346,11 +346,6 @@
 
 .animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .animate-fade-in { animation: fade-in 0.6s ease-out both; }
-@keyframes device-pulse {
-  0%, 100% { opacity: 0.32; }
-  50% { opacity: 0.85; }
-}
-
 /* Custom Leaflet map pin */
 .map-pin {
   width: 14px;
