@@ -2,25 +2,33 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-// W1 implementation. Pure CSS 3D globe driven by requestAnimationFrame so
-// pointer drag can override the auto-rotation. ~700 dots positioned via
-// Fibonacci spiral on a unit sphere. Each dot rotateY(lng) rotateX(-lat)
-// so its surface normal points outward; the parent rotateY then hides
-// back-facing dots via backface-visibility.
+// W2 implementation. Pure CSS 3D globe with auto-rotation, drag-to-rotate,
+// and animated great-circle arcs traveling between the three city pins.
+// Arcs carry the IoT theme: data flowing between Yangon, Singapore, HCMC.
+// Each arc loops continuously and is rendered as a faint static track plus
+// a moving comet (head + trailing particles).
 //
-// The globe earns its keep by surfacing role + live local time per city:
-// Yangon (Born), Singapore (Schooled), HCMC (Working). The chips below
-// are buttons. Hover or focus expands a small card with the role label
-// and current local time, and pulses the matching marker on the sphere.
+// Why pure CSS: earlier attempts with Three.js / Cobe / react-globe.gl
+// crashed the dev server. CSS 3D + RAF for comet positions stays cheap and
+// avoids any new heavy deps.
+//
+// Performance: comet positions are written directly to DOM refs in a single
+// RAF loop. Avoids React re-rendering ~20 elements every frame.
 
 const SIZE = 380;
 const RADIUS = (SIZE / 2) * 0.92;
 const NUM_DOTS = 700;
 const RUBY = "#B73A2C";
-const AUTO_ROTATE_DEG_PER_FRAME = 0.12; // ~0.12deg per 16ms = roughly 38s/rev
-const DRAG_SENSITIVITY = 0.4; // pixels to degrees
+const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
+const DRAG_SENSITIVITY = 0.4;
+const INITIAL_PHI_DEG = -100; // centers SE Asia on first paint
 
-type SphereDot = { x: number; y: number; z: number; lat: number; lng: number };
+const ARC_TRACK_DOTS = 28;
+const ARC_HEIGHT = 0.18; // 18% rise above sphere at midpoint
+const COMET_TRAIL_COUNT = 6;
+const COMET_TRAIL_GAP = 0.022; // each trail particle lags by 2.2% of arc
+
+type SphereVec = { x: number; y: number; z: number; lat: number; lng: number };
 type City = {
   id: string;
   label: string;
@@ -32,37 +40,50 @@ type City = {
 };
 
 const CITIES: City[] = [
-  {
-    id: "yangon",
-    label: "Yangon",
-    role: "Born",
-    tzMinutes: 390,
-    lat: 16.8409,
-    lng: 96.1735,
-    size: 5,
-  },
-  {
-    id: "singapore",
-    label: "Singapore",
-    role: "Schooled at SP, SMU",
-    tzMinutes: 480,
-    lat: 1.3521,
-    lng: 103.8198,
-    size: 6,
-  },
-  {
-    id: "hcmc",
-    label: "HCMC",
-    role: "Working at VNTT",
-    tzMinutes: 420,
-    lat: 10.7769,
-    lng: 106.7009,
-    size: 8,
-  },
+  { id: "yangon", label: "Yangon", role: "Born", tzMinutes: 390, lat: 16.8409, lng: 96.1735, size: 5 },
+  { id: "singapore", label: "Singapore", role: "Schooled at SP, SMU", tzMinutes: 480, lat: 1.3521, lng: 103.8198, size: 6 },
+  { id: "hcmc", label: "HCMC", role: "Working at VNTT", tzMinutes: 420, lat: 10.7769, lng: 106.7009, size: 8 },
 ];
 
-function fibSphere(n: number): SphereDot[] {
-  const dots: SphereDot[] = [];
+const ARCS: { id: string; fromId: string; toId: string; periodMs: number; offsetMs: number }[] = [
+  { id: "y-s", fromId: "yangon", toId: "singapore", periodMs: 3600, offsetMs: 0 },
+  { id: "s-h", fromId: "singapore", toId: "hcmc", periodMs: 3600, offsetMs: -1200 },
+  { id: "h-y", fromId: "hcmc", toId: "yangon", periodMs: 3600, offsetMs: -2400 },
+];
+
+function latLngToVec(latDeg: number, lngDeg: number): SphereVec {
+  const lat = (latDeg * Math.PI) / 180;
+  const lng = (lngDeg * Math.PI) / 180;
+  return {
+    x: Math.cos(lat) * Math.sin(lng),
+    y: Math.sin(lat),
+    z: Math.cos(lat) * Math.cos(lng),
+    lat,
+    lng,
+  };
+}
+
+function slerp(a: SphereVec, b: SphereVec, t: number): SphereVec {
+  const d = Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z));
+  const omega = Math.acos(d);
+  const so = Math.sin(omega);
+  if (so < 1e-6) return a;
+  const s1 = Math.sin((1 - t) * omega) / so;
+  const s2 = Math.sin(t * omega) / so;
+  const x = a.x * s1 + b.x * s2;
+  const y = a.y * s1 + b.y * s2;
+  const z = a.z * s1 + b.z * s2;
+  const lat = Math.asin(Math.max(-1, Math.min(1, y)));
+  const lng = Math.atan2(x, z);
+  return { x, y, z, lat, lng };
+}
+
+const CITY_VECS: Record<string, SphereVec> = Object.fromEntries(
+  CITIES.map((c) => [c.id, latLngToVec(c.lat, c.lng)]),
+);
+
+function fibSphere(n: number): SphereVec[] {
+  const dots: SphereVec[] = [];
   const goldenAngle = Math.PI * (Math.sqrt(5) - 1);
   for (let i = 0; i < n; i++) {
     const y = 1 - (i / (n - 1)) * 2;
@@ -77,22 +98,6 @@ function fibSphere(n: number): SphereDot[] {
   return dots;
 }
 
-function latLngToVec(latDeg: number, lngDeg: number) {
-  const lat = (latDeg * Math.PI) / 180;
-  const lng = (lngDeg * Math.PI) / 180;
-  return {
-    x: Math.cos(lat) * Math.sin(lng),
-    y: Math.sin(lat),
-    z: Math.cos(lat) * Math.cos(lng),
-    lat,
-    lng,
-  };
-}
-
-// Convert a UTC instant into "HH:MM" for a given timezone offset (minutes).
-// Shift the underlying epoch by tzMinutes then read UTC components: avoids
-// any dependency on the viewer's local timezone, so HCMC time shows as
-// HCMC time regardless of where the page is loaded.
 function formatLocalTime(now: Date, tzMinutes: number): string {
   const shifted = new Date(now.getTime() + tzMinutes * 60_000);
   const hh = String(shifted.getUTCHours()).padStart(2, "0");
@@ -110,18 +115,35 @@ function formatTzLabel(tzMinutes: number): string {
     : `GMT${sign}${h}:${String(m).padStart(2, "0")}`;
 }
 
+// Precompute static track points along each great circle. These stay fixed
+// in the rotator's local frame and rotate with the globe.
+const ARC_TRACKS = ARCS.map((arc) => {
+  const from = CITY_VECS[arc.fromId];
+  const to = CITY_VECS[arc.toId];
+  const pts: { p: SphereVec; elev: number }[] = [];
+  for (let i = 0; i <= ARC_TRACK_DOTS; i++) {
+    const t = i / ARC_TRACK_DOTS;
+    const p = slerp(from, to, t);
+    const elev = 1 + ARC_HEIGHT * Math.sin(t * Math.PI);
+    pts.push({ p, elev });
+  }
+  return pts;
+});
+
 export function HeroGlobe() {
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
   const rotatorRef = useRef<HTMLDivElement | null>(null);
-  const phi = useRef(0);
+  const phi = useRef(INITIAL_PHI_DEG);
   const dragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartPhi = useRef(0);
+  const cometRefs = useRef<HTMLSpanElement[][]>(ARCS.map(() => []));
 
-  // Suppress server/client text mismatch: render times only after mount.
-  // Before mount, chips show the role and timezone label but no live time.
   const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState<Date>(() => new Date(0));
+  const [reduced, setReduced] = useState(false);
+  const [activeCity, setActiveCity] = useState<string | null>(null);
+
   useEffect(() => {
     setMounted(true);
     setNow(new Date());
@@ -129,23 +151,60 @@ export function HeroGlobe() {
     return () => clearInterval(id);
   }, []);
 
-  const [activeCity, setActiveCity] = useState<string | null>(null);
-
-  // Animation loop. Auto-rotate when idle. While dragging, the pointer
-  // move handler writes the transform directly, so this loop just keeps
-  // running without overwriting.
   useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  // Single RAF loop drives globe auto-rotation and comet positions.
+  // When reduced motion is preferred, the loop is skipped entirely so the
+  // tracks remain visible but nothing moves.
+  useEffect(() => {
+    if (reduced) return;
     let raf = 0;
-    const tick = () => {
+    const start = performance.now();
+    const tick = (nowMs: number) => {
       if (!dragging.current && rotatorRef.current) {
         phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
         rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
       }
+
+      const elapsed = nowMs - start;
+      for (let arcIdx = 0; arcIdx < ARCS.length; arcIdx++) {
+        const arc = ARCS[arcIdx];
+        const fromV = CITY_VECS[arc.fromId];
+        const toV = CITY_VECS[arc.toId];
+        const wrapped =
+          (((elapsed + arc.offsetMs) % arc.periodMs) + arc.periodMs) % arc.periodMs;
+        const cycleT = wrapped / arc.periodMs;
+        for (let trailIdx = 0; trailIdx < COMET_TRAIL_COUNT; trailIdx++) {
+          const node = cometRefs.current[arcIdx][trailIdx];
+          if (!node) continue;
+          const t = cycleT - trailIdx * COMET_TRAIL_GAP;
+          if (t < 0 || t > 1) {
+            node.style.opacity = "0";
+            continue;
+          }
+          const p = slerp(fromV, toV, t);
+          const elev = 1 + ARC_HEIGHT * Math.sin(t * Math.PI);
+          const tx = (p.x * RADIUS * elev).toFixed(2);
+          const ty = (-p.y * RADIUS * elev).toFixed(2);
+          const tz = (p.z * RADIUS * elev).toFixed(2);
+          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateY(${p.lng}rad) rotateX(${-p.lat}rad)`;
+          const headness = Math.max(0, 1 - trailIdx / COMET_TRAIL_COUNT);
+          const windowOpacity = Math.sin(t * Math.PI);
+          node.style.opacity = String((0.35 + 0.65 * headness) * windowOpacity);
+        }
+      }
+
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [reduced]);
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     dragging.current = true;
@@ -194,6 +253,7 @@ export function HeroGlobe() {
           className="absolute inset-0"
           style={{
             transformStyle: "preserve-3d",
+            transform: `rotateY(${INITIAL_PHI_DEG}deg)`,
             cursor: "grab",
             willChange: "transform",
           }}
@@ -214,8 +274,60 @@ export function HeroGlobe() {
               }}
             />
           ))}
+
+          {/* Static arc tracks: faint ruby dots along each great-circle path. */}
+          {ARC_TRACKS.map((track, arcIdx) =>
+            track.map((pt, idx) => (
+              <span
+                key={`track-${arcIdx}-${idx}`}
+                className="absolute rounded-full"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  width: 1.6,
+                  height: 1.6,
+                  backgroundColor: RUBY,
+                  opacity: 0.18,
+                  transform: `translate(-50%, -50%) translate3d(${(pt.p.x * RADIUS * pt.elev).toFixed(2)}px, ${(-pt.p.y * RADIUS * pt.elev).toFixed(2)}px, ${(pt.p.z * RADIUS * pt.elev).toFixed(2)}px) rotateY(${pt.p.lng}rad) rotateX(${-pt.p.lat}rad)`,
+                  backfaceVisibility: "hidden",
+                }}
+              />
+            )),
+          )}
+
+          {/* Comet trail particles: positions/opacities written by the RAF loop. */}
+          {ARCS.map((arc, arcIdx) =>
+            Array.from({ length: COMET_TRAIL_COUNT }).map((_, trailIdx) => {
+              const isHead = trailIdx === 0;
+              const sz = isHead ? 4 : Math.max(1.5, 3 - trailIdx * 0.3);
+              const glow = isHead
+                ? `0 0 10px ${RUBY}, 0 0 4px ${RUBY}`
+                : `0 0 ${Math.max(0, 5 - trailIdx)}px ${RUBY}`;
+              return (
+                <span
+                  key={`comet-${arc.id}-${trailIdx}`}
+                  ref={(el) => {
+                    if (el) cometRefs.current[arcIdx][trailIdx] = el;
+                  }}
+                  className="absolute rounded-full"
+                  style={{
+                    left: "50%",
+                    top: "50%",
+                    width: sz,
+                    height: sz,
+                    backgroundColor: RUBY,
+                    boxShadow: glow,
+                    opacity: 0,
+                    backfaceVisibility: "hidden",
+                    willChange: "transform, opacity",
+                  }}
+                />
+              );
+            }),
+          )}
+
           {CITIES.map((c) => {
-            const p = latLngToVec(c.lat, c.lng);
+            const p = CITY_VECS[c.id];
             const isActive = activeCity === c.id;
             const renderedSize = isActive ? c.size + 2 : c.size;
             const glowMul = isActive ? 3 : 2;
@@ -249,9 +361,6 @@ export function HeroGlobe() {
         />
       </div>
 
-      {/* City chip row. Each chip is a button that, when hovered or focused,
-          surfaces a small card with the role label and current local time,
-          and pulses the matching marker on the sphere. */}
       <div className="relative mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-2">
         {CITIES.map((c, idx) => {
           const isActive = activeCity === c.id;
