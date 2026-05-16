@@ -28,6 +28,15 @@ const ARC_HEIGHT = 0.18; // 18% rise above sphere at midpoint
 const COMET_TRAIL_COUNT = 6;
 const COMET_TRAIL_GAP = 0.022; // each trail particle lags by 2.2% of arc
 
+// Device constellation. Three hub cities are the narrative anchor (born,
+// schooled, working), but on their own a triangle of pins reads as a
+// personal map, not as IoT. The device nodes are a field of dimmer pins
+// scattered across SE Asia and the wider region, each connected to its
+// nearest hub by a faint static arc. Closer to Singapore = denser, since
+// that is where most of the deployments were (NEA wastewater, Osiris).
+const DEVICE_LINK_DOTS = 10;
+const DEVICE_LINK_HEIGHT = 0.05; // device arcs hug the surface more than hub arcs
+
 type SphereVec = { x: number; y: number; z: number; lat: number; lng: number };
 type City = {
   id: string;
@@ -128,6 +137,62 @@ const ARC_TRACKS = ARCS.map((arc) => {
     pts.push({ p, elev });
   }
   return pts;
+});
+
+const DEVICE_NODES: { id: string; lat: number; lng: number }[] = [
+  // Singapore deployments (NEA wastewater + Osiris built here)
+  { id: "sg-jurong",    lat: 1.34,  lng: 103.71 },
+  { id: "sg-changi",    lat: 1.36,  lng: 103.99 },
+  { id: "sg-woodlands", lat: 1.43,  lng: 103.79 },
+  { id: "sg-east",      lat: 1.30,  lng: 103.92 },
+  // HCMC region (VNTT)
+  { id: "vn-binhthanh", lat: 10.80, lng: 106.70 },
+  { id: "vn-thuduc",    lat: 10.85, lng: 106.77 },
+  // Yangon region
+  { id: "mm-thaketa",   lat: 16.78, lng: 96.20 },
+  // Regional spread implying broader reach across SE Asia
+  { id: "th-bkk",       lat: 13.75, lng: 100.50 },
+  { id: "my-kl",        lat: 3.14,  lng: 101.69 },
+  { id: "id-jkt",       lat: -6.20, lng: 106.85 },
+  { id: "ph-mnl",       lat: 14.60, lng: 120.98 },
+  { id: "hk",           lat: 22.32, lng: 114.17 },
+  { id: "tw-tpe",       lat: 25.03, lng: 121.57 },
+  { id: "kh-pnh",       lat: 11.55, lng: 104.92 },
+];
+
+const DEVICE_VECS = DEVICE_NODES.map((d) => ({
+  id: d.id,
+  vec: latLngToVec(d.lat, d.lng),
+}));
+
+function nearestHubId(v: SphereVec): string {
+  let bestId = CITIES[0].id;
+  let bestDist = Infinity;
+  for (const c of CITIES) {
+    const cv = CITY_VECS[c.id];
+    const dot = Math.max(-1, Math.min(1, v.x * cv.x + v.y * cv.y + v.z * cv.z));
+    const dist = Math.acos(dot);
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestId = c.id;
+    }
+  }
+  return bestId;
+}
+
+// Precompute device-to-hub link arcs. Endpoints are skipped so the line
+// does not visually crash into the device pin or the hub pin.
+const DEVICE_LINKS = DEVICE_VECS.map((d) => {
+  const hubId = nearestHubId(d.vec);
+  const hubVec = CITY_VECS[hubId];
+  const pts: { p: SphereVec; elev: number }[] = [];
+  for (let i = 1; i <= DEVICE_LINK_DOTS; i++) {
+    const t = i / (DEVICE_LINK_DOTS + 1);
+    const p = slerp(hubVec, d.vec, t);
+    const elev = 1 + DEVICE_LINK_HEIGHT * Math.sin(t * Math.PI);
+    pts.push({ p, elev });
+  }
+  return { id: d.id, hubId, points: pts };
 });
 
 export function HeroGlobe() {
@@ -307,6 +372,50 @@ export function HeroGlobe() {
             />
           ))}
 
+          {/* Device-to-hub connection tracks. Each device is wired to its
+              nearest hub via a faint dotted arc that hugs the surface. */}
+          {DEVICE_LINKS.map((link) =>
+            link.points.map((pt, idx) => (
+              <span
+                key={`devlink-${link.id}-${idx}`}
+                className="absolute rounded-full"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  width: 1.2,
+                  height: 1.2,
+                  backgroundColor: RUBY,
+                  opacity: 0.1,
+                  transform: `translate(-50%, -50%) translate3d(${(pt.p.x * RADIUS * pt.elev).toFixed(2)}px, ${(-pt.p.y * RADIUS * pt.elev).toFixed(2)}px, ${(pt.p.z * RADIUS * pt.elev).toFixed(2)}px) rotateY(${pt.p.lng}rad) rotateX(${-pt.p.lat}rad)`,
+                  backfaceVisibility: "hidden",
+                }}
+              />
+            )),
+          )}
+
+          {/* Device pins. Small ruby dots staggered through a slow opacity
+              pulse so the constellation reads as live infrastructure. */}
+          {DEVICE_VECS.map((d, idx) => (
+            <span
+              key={`dev-${d.id}`}
+              className="absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "50%",
+                width: 2.5,
+                height: 2.5,
+                backgroundColor: RUBY,
+                boxShadow: `0 0 3px ${RUBY}`,
+                // Negative delay starts each pin mid-cycle so the field
+                // is never in lockstep. 180ms step over a 2400ms cycle
+                // gives 14 distinct phases for the 14 nodes.
+                animation: `device-pulse 2.4s ease-in-out -${(idx * 180) % 2400}ms infinite`,
+                transform: `translate(-50%, -50%) translate3d(${(d.vec.x * RADIUS).toFixed(2)}px, ${(-d.vec.y * RADIUS).toFixed(2)}px, ${(d.vec.z * RADIUS).toFixed(2)}px) rotateY(${d.vec.lng}rad) rotateX(${-d.vec.lat}rad)`,
+                backfaceVisibility: "hidden",
+              }}
+            />
+          ))}
+
           {/* Static arc tracks: faint ruby dots along each great-circle path. */}
           {ARC_TRACKS.map((track, arcIdx) =>
             track.map((pt, idx) => (
@@ -449,7 +558,7 @@ export function HeroGlobe() {
         })}
       </div>
       <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-        Drag to rotate. Hover cities for local time.
+        Drag to rotate. 3 hubs, devices across Asia.
       </div>
     </div>
   );
