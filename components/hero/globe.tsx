@@ -132,12 +132,18 @@ const ARC_TRACKS = ARCS.map((arc) => {
 
 export function HeroGlobe() {
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const rotatorRef = useRef<HTMLDivElement | null>(null);
   const phi = useRef(INITIAL_PHI_DEG);
   const dragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartPhi = useRef(0);
   const cometRefs = useRef<HTMLSpanElement[][]>(ARCS.map(() => []));
+  // Visibility ref instead of state: written by IntersectionObserver,
+  // read inside the RAF tick. State would cause a re-render of every
+  // dot/track/comet span every time the user scrolls past, which is
+  // exactly what we are trying to avoid.
+  const visibleRef = useRef(true);
 
   const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState<Date>(() => new Date(0));
@@ -159,6 +165,23 @@ export function HeroGlobe() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
+  // Pause the RAF loop while the globe is off-screen. Otherwise it keeps
+  // ticking every frame even when the user has scrolled past the hero or
+  // navigated to another section of the app where the home page stays
+  // mounted (DashboardShell does not unmount on route change).
+  useEffect(() => {
+    const node = wrapperRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        visibleRef.current = entries[0]?.isIntersecting ?? true;
+      },
+      { rootMargin: "150px" },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
+
   // Single RAF loop drives globe auto-rotation and comet positions.
   // When reduced motion is preferred, the loop is skipped entirely so the
   // tracks remain visible but nothing moves.
@@ -167,6 +190,14 @@ export function HeroGlobe() {
     let raf = 0;
     const start = performance.now();
     const tick = (nowMs: number) => {
+      // Skip work when off-screen. Keep the RAF chain alive so when the
+      // globe comes back into view the loop resumes immediately rather
+      // than waiting on another effect to start it.
+      if (!visibleRef.current) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
       if (!dragging.current && rotatorRef.current) {
         phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
         rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
@@ -231,6 +262,7 @@ export function HeroGlobe() {
 
   return (
     <div
+      ref={wrapperRef}
       className="mx-auto flex flex-col items-center"
       style={{ width: "100%", maxWidth: SIZE }}
     >

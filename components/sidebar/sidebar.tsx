@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { SidebarIcon } from "./sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
@@ -11,10 +10,7 @@ import { isActiveRoute } from "@/lib/nav-utils";
 
 export function Sidebar() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => setMounted(true), []);
 
   return (
     <aside
@@ -89,9 +85,16 @@ export function Sidebar() {
         </kbd>
       </button>
 
-      <div className="mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1">
+      {/* suppressHydrationWarning: next-themes sets the resolved theme on
+          the client after hydration, so the active-button styling will
+          briefly differ from the SSR render. We accept that mismatch here
+          rather than paying for a mount-flag re-render on every page load. */}
+      <div
+        className="mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1"
+        suppressHydrationWarning
+      >
         {(["light", "dark", "system"] as const).map((mode) => {
-          const isActiveTheme = mounted && theme === mode;
+          const isActiveTheme = theme === mode;
           const label = mode === "system" ? "Auto" : mode.charAt(0).toUpperCase() + mode.slice(1);
           return (
             <button

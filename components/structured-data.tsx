@@ -1,5 +1,17 @@
 import { profile } from "@/lib/content";
 
+// Escape characters that could break out of a <script> tag if a string
+// in the JSON-LD payload ever happens to contain them. JSON parsers
+// accept these \uXXXX escapes, so the rendered structured data still
+// validates. Today the payload is fully server-controlled (profile +
+// project metadata), but defensive encoding costs nothing.
+function safeJsonLd(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+}
+
 /**
  * JSON-LD Person schema. Mount on the home page so Google rich results
  * can surface the right entity. Kept as a Server Component since this is
@@ -33,7 +45,7 @@ export function PersonJsonLd() {
     <script
       type="application/ld+json"
       // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   );
 }
@@ -71,7 +83,7 @@ export function ProjectBreadcrumbsJsonLd({
     <script
       type="application/ld+json"
       // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   );
 }

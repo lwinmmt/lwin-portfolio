@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 
 /**
  * HTTP Basic Auth gate on /studio.
@@ -17,11 +18,32 @@ import type { NextRequest } from "next/server";
  * To actually unlock the route, set in .env.local (or Vercel project env):
  *   STUDIO_USERNAME="your-username"
  *   STUDIO_PASSWORD="a-long-random-password"
+ *
+ * The file MUST be named middleware.ts at the project root: Next.js only
+ * reads middleware from that exact path, so any other name silently does
+ * nothing.
  */
 
 const REALM = "Studio (restricted)";
 
-export function proxy(req: NextRequest) {
+// Compare two strings without leaking length or content via response timing.
+// Node's timingSafeEqual requires equal-length buffers, so pad the shorter
+// one and force a mismatch when lengths differ.
+function safeStringEqual(a: string, b: string): boolean {
+  const aBuf = Buffer.from(a, "utf8");
+  const bBuf = Buffer.from(b, "utf8");
+  if (aBuf.length !== bBuf.length) {
+    // Burn the same amount of time on the mismatch path so an attacker
+    // cannot distinguish a length mismatch from a content mismatch.
+    const padded = Buffer.alloc(aBuf.length);
+    bBuf.copy(padded);
+    timingSafeEqual(aBuf, padded);
+    return false;
+  }
+  return timingSafeEqual(aBuf, bBuf);
+}
+
+export default function middleware(req: NextRequest) {
   const expectedUser = process.env.STUDIO_USERNAME;
   const expectedPass = process.env.STUDIO_PASSWORD;
   const configured = Boolean(expectedUser && expectedPass);
@@ -37,7 +59,10 @@ export function proxy(req: NextRequest) {
           if (sepIdx !== -1) {
             const user = decoded.slice(0, sepIdx);
             const pass = decoded.slice(sepIdx + 1);
-            if (user === expectedUser && pass === expectedPass) {
+            if (
+              safeStringEqual(user, expectedUser!) &&
+              safeStringEqual(pass, expectedPass!)
+            ) {
               return NextResponse.next();
             }
           }
