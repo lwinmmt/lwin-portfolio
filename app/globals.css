@@ -1,0 +1,321 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* CSS custom property registration for beam angle animation */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Light theme tokens (default) */
+:root {
+  --color-bg: #FAFAF7;
+  --color-bg-card: #FFFFFF;
+  --color-bg-warm: #F4F1EA;
+  --color-bg-sidebar: #FAFAF7;
+  --color-surface: rgba(255, 255, 255, 0.55);
+  --color-surface-2: rgba(255, 255, 255, 0.5);
+  --color-surface-3: rgba(255, 255, 255, 0.85);
+  --color-fg: #0A0A0A;
+  --color-fg-soft: #1F1F1F;
+  --color-fg-muted: #57534E;
+  --color-fg-faint: #A8A29E;
+  --color-border-default: #E7E5E4;
+  --color-border-soft: #EFEDEA;
+  --color-border-glass: rgba(255, 255, 255, 0.6);
+  --color-ruby: #B73A2C;
+  --color-ruby-deep: #962F25;
+  --color-ruby-bright: #D34939;
+  --color-ruby-soft: rgba(183, 58, 44, 0.08);
+  --color-live: #22C55E;
+  --color-grid: rgba(0, 0, 0, 0.028);
+  --color-hover-mute: rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-glass-overlay: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-map: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 1px 3px rgba(0, 0, 0, 0.04), 0 10px 32px rgba(0, 0, 0, 0.06);
+  --aurora-ruby: rgba(183, 58, 44, 0.06);
+  --aurora-violet: rgba(139, 92, 246, 0.04);
+  --aurora-amber: rgba(217, 119, 6, 0.035);
+  /* Highlight tag accents. Light mode values. */
+  --tag-work: #B73A2C;
+  --tag-talk: #2563EB;
+  --tag-award: #B45309;
+  --tag-press: #047857;
+  --tag-school: #6D28D9;
+}
+
+/* Dark theme tokens */
+.dark {
+  --color-bg: #0A0908;
+  --color-bg-card: #131110;
+  --color-bg-warm: #1A1815;
+  --color-bg-sidebar: #0C0B0A;
+  --color-surface: rgba(18, 17, 16, 0.55);
+  --color-surface-2: rgba(28, 26, 24, 0.5);
+  --color-surface-3: rgba(20, 19, 17, 0.85);
+  --color-fg: #FAFAF7;
+  --color-fg-soft: #E5E4E0;
+  --color-fg-muted: #A8A29E;
+  --color-fg-faint: #57534E;
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-soft: rgba(255, 255, 255, 0.04);
+  --color-border-glass: rgba(255, 255, 255, 0.07);
+  --color-ruby: #D34939;
+  --color-ruby-deep: #B73A2C;
+  --color-ruby-bright: #EF5440;
+  --color-ruby-soft: rgba(211, 73, 57, 0.10);
+  --color-live: #22C55E;
+  --color-grid: rgba(255, 255, 255, 0.025);
+  --color-hover-mute: rgba(255, 255, 255, 0.05);
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-glass-overlay: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-map: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 1px 3px rgba(0, 0, 0, 0.3), 0 10px 32px rgba(0, 0, 0, 0.5);
+  --aurora-ruby: rgba(211, 73, 57, 0.10);
+  --aurora-violet: rgba(139, 92, 246, 0.07);
+  --aurora-amber: rgba(217, 119, 6, 0.06);
+  /* Highlight tag accents. Punched up for dark backgrounds. */
+  --tag-work: #E5594B;
+  --tag-talk: #60A5FA;
+  --tag-award: #F59E0B;
+  --tag-press: #34D399;
+  --tag-school: #A78BFA;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-bg-card: var(--color-bg-card);
+  --color-bg-warm: var(--color-bg-warm);
+  --color-fg: var(--color-fg);
+  --color-fg-soft: var(--color-fg-soft);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-fg-faint: var(--color-fg-faint);
+  --color-border-default: var(--color-border-default);
+  --color-border-soft: var(--color-border-soft);
+  --color-ruby: var(--color-ruby);
+  --color-ruby-deep: var(--color-ruby-deep);
+  --color-ruby-bright: var(--color-ruby-bright);
+  --color-live: var(--color-live);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  html, body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+    min-height: 100dvh;
+  }
+  body {
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Aurora gradient mesh: atmospheric background, sits behind everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 900px 700px at 18% 22%, var(--aurora-ruby), transparent 55%),
+      radial-gradient(ellipse 800px 600px at 82% 18%, var(--aurora-violet), transparent 55%),
+      radial-gradient(ellipse 700px 500px at 50% 95%, var(--aurora-amber), transparent 50%);
+    pointer-events: none;
+    animation: aurora-drift 28s ease-in-out infinite alternate;
+    filter: blur(2px);
+  }
+
+  /* Reduce motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; }
+  }
+}
+
+@layer utilities {
+  /* Card lift micro-interaction. One canonical hover treatment so every
+     card on the site feels the same. Use in place of ad-hoc
+     hover:-translate-y-px / hover:shadow combinations. */
+  .lift-card {
+    /* Force a composite layer so the hover lift does not subpixel-jitter
+       on 2x displays. translateZ(0) creates the layer; will-change tells
+       the browser to keep it composited. */
+    transform: translateZ(0);
+    will-change: transform;
+    transition:
+      transform 0.2s cubic-bezier(0.2, 0.7, 0.3, 1),
+      box-shadow 0.2s cubic-bezier(0.2, 0.7, 0.3, 1),
+      border-color 0.2s ease;
+  }
+  .lift-card:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.06),
+      0 2px 6px rgba(0, 0, 0, 0.04);
+    border-color: var(--color-border-default);
+  }
+  .dark .lift-card:hover {
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.35),
+      0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Tag chip vocabulary. The single source of truth for compact uppercase
+     mono pill chips used on /projects filter tabs, /highlights, and
+     anywhere we need a kbd-style tag. */
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-warm);
+    padding: 0.375rem 0.875rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--color-fg-soft);
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .tag-chip:hover {
+    border-color: var(--color-fg-muted);
+    color: var(--color-fg);
+  }
+  .tag-chip-active {
+    background: var(--color-ruby-soft);
+    border-color: var(--color-ruby);
+    color: var(--color-ruby-deep);
+  }
+
+  /* Numbered section eyebrow. Use beside an h2 to anchor sections as an
+     editorial sequence rather than flat headings. */
+  .section-counter {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ruby);
+    opacity: 0.6;
+    margin-right: 1rem;
+  }
+
+  .glass-pill {
+    background: var(--color-surface);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--color-border-glass);
+    box-shadow: var(--shadow-glass-overlay);
+  }
+  .glass-chip {
+    background: var(--color-surface-2);
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    border: 1px solid var(--color-border-glass);
+    box-shadow: var(--shadow-card);
+  }
+  .glass-overlay {
+    background: var(--color-surface-3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--color-border-glass);
+    box-shadow: var(--shadow-glass-overlay);
+  }
+
+  /* Beam border: a rotating conic gradient revealed on hover */
+  .beam-card {
+    position: relative;
+    isolation: isolate;
+  }
+  .beam-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--beam-angle),
+      transparent 0deg,
+      transparent 200deg,
+      var(--color-ruby) 280deg,
+      var(--color-ruby-bright) 320deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: beam-spin 5s linear infinite;
+  }
+  .beam-card:hover::before {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beam-card::before { animation: none; }
+  }
+}
+
+/* Animations: only transform + opacity */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(0%, 0%, 0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate3d(-3%, 2%, 0) scale(1.08);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(3%, -2%, 0) scale(1.04);
+    opacity: 1;
+  }
+}
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+.animate-fade-in { animation: fade-in 0.6s ease-out both; }
+
+/* Custom Leaflet map pin */
+.map-pin {
+  width: 14px;
+  height: 14px;
+  background: var(--color-ruby);
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(183, 58, 44, 0.3), 0 2px 10px rgba(183, 58, 44, 0.5), 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-control-attribution {
+  background: var(--color-surface-3) !important;
+  backdrop-filter: blur(8px);
+  font-family: var(--font-geist-mono), monospace !important;
+  font-size: 9px !important;
+  color: var(--color-fg-faint) !important;
+  padding: 3px 8px !important;
+  border-radius: 6px;
+  margin: 8px !important;
+  border: 1px solid var(--color-border-default) !important;
+}
+.leaflet-control-attribution a {
+  color: var(--color-fg-muted) !important;
+  text-decoration: none !important;
+}
+
+.map-tiles-light { filter: saturate(0.85) contrast(0.96); }
+.dark .map-tiles-light { filter: invert(0.92) hue-rotate(180deg) saturate(0.6) contrast(0.9); }
