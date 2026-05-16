@@ -286,11 +286,6 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes device-pulse {
-  0%, 100% { opacity: 0.32; }
-  50% { opacity: 0.85; }
-}
-
 /* Sidebar collapsible state. Width is a CSS variable so the main content
    margin in DashboardShell can react. Element visibility is also driven
    from the same data attribute so toggling stays in pure CSS (no React

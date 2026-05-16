@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HeroGlobe } from "@/components/hero/globe";
+import { HeroOpsPanel } from "@/components/hero/ops-panel";
 import { EmailButton } from "@/components/ui/email-button";
 import { profile } from "@/lib/content";
 
@@ -40,7 +40,7 @@ export function Hero() {
         . Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.
       </p>
 
-      <HeroGlobe />
+      <HeroOpsPanel />
 
       <div className="animate-fade-up" style={{ animationDelay: "400ms" }}>
         <div className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
