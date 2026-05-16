@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { timingSafeEqual } from "node:crypto";
 
 /**
  * HTTP Basic Auth gate on /studio.
@@ -19,31 +18,35 @@ import { timingSafeEqual } from "node:crypto";
  *   STUDIO_USERNAME="your-username"
  *   STUDIO_PASSWORD="a-long-random-password"
  *
- * The file MUST be named middleware.ts at the project root: Next.js only
- * reads middleware from that exact path, so any other name silently does
- * nothing.
+ * Next.js 16 file convention: this MUST be named proxy.ts and the
+ * exported function MUST be named proxy. The previous middleware.ts
+ * convention is deprecated.
+ * https://nextjs.org/docs/messages/middleware-to-proxy
  */
 
 const REALM = "Studio (restricted)";
 
-// Compare two strings without leaking length or content via response timing.
-// Node's timingSafeEqual requires equal-length buffers, so pad the shorter
-// one and force a mismatch when lengths differ.
+// Constant-time string compare implemented in pure JS so it works in the
+// Edge runtime (proxy defaults to Edge; node:crypto's timingSafeEqual is
+// not available there). The XOR accumulator means the loop touches every
+// byte regardless of where a mismatch occurs.
 function safeStringEqual(a: string, b: string): boolean {
-  const aBuf = Buffer.from(a, "utf8");
-  const bBuf = Buffer.from(b, "utf8");
-  if (aBuf.length !== bBuf.length) {
-    // Burn the same amount of time on the mismatch path so an attacker
-    // cannot distinguish a length mismatch from a content mismatch.
-    const padded = Buffer.alloc(aBuf.length);
-    bBuf.copy(padded);
-    timingSafeEqual(aBuf, padded);
+  if (a.length !== b.length) {
+    // Burn the same loop on the length-mismatch path so callers cannot
+    // distinguish a length difference from a content difference purely
+    // by response time.
+    let dummy = 0;
+    for (let i = 0; i < a.length; i++) dummy |= a.charCodeAt(i) ^ 0xff;
     return false;
   }
-  return timingSafeEqual(aBuf, bBuf);
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
 }
 
-export default function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const expectedUser = process.env.STUDIO_USERNAME;
   const expectedPass = process.env.STUDIO_PASSWORD;
   const configured = Boolean(expectedUser && expectedPass);

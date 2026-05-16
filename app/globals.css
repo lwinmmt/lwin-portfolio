@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "leaflet/dist/leaflet.css";
 
 /* CSS custom property registration for beam angle animation */
 @property --beam-angle {
@@ -290,32 +289,3 @@
 
 .animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .animate-fade-in { animation: fade-in 0.6s ease-out both; }
-
-/* Custom Leaflet map pin */
-.map-pin {
-  width: 14px;
-  height: 14px;
-  background: var(--color-ruby);
-  border: 3px solid white;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(183, 58, 44, 0.3), 0 2px 10px rgba(183, 58, 44, 0.5), 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.leaflet-control-attribution {
-  background: var(--color-surface-3) !important;
-  backdrop-filter: blur(8px);
-  font-family: var(--font-geist-mono), monospace !important;
-  font-size: 9px !important;
-  color: var(--color-fg-faint) !important;
-  padding: 3px 8px !important;
-  border-radius: 6px;
-  margin: 8px !important;
-  border: 1px solid var(--color-border-default) !important;
-}
-.leaflet-control-attribution a {
-  color: var(--color-fg-muted) !important;
-  text-decoration: none !important;
-}
-
-.map-tiles-light { filter: saturate(0.85) contrast(0.96); }
-.dark .map-tiles-light { filter: invert(0.92) hue-rotate(180deg) saturate(0.6) contrast(0.9); }
