@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { HeroGlobe } from "@/components/hero/globe";
-import { LocationMap } from "@/components/map/location-map";
 import { EmailButton } from "@/components/ui/email-button";
 import { profile } from "@/lib/content";
 
@@ -41,23 +40,11 @@ export function Hero() {
         . Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.
       </p>
 
-      {/* 2-card bento: globe (narrower, footprint anchor) on the left,
-          zoomed HCMC map (current location) on the right. Stacks
-          vertically on mobile. Grid items stretch so both cards share
-          a row height regardless of intrinsic content height. */}
       <div
-        className="grid grid-cols-1 gap-4 animate-fade-up sm:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] sm:gap-5"
+        className="flex justify-center animate-fade-up"
         style={{ animationDelay: "300ms" }}
       >
-        <div className="flex flex-col rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] px-5 pt-5 pb-4">
-          <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-            Footprint
-          </div>
-          <div className="flex flex-1 items-center justify-center">
-            <HeroGlobe />
-          </div>
-        </div>
-        <LocationMap />
+        <HeroGlobe />
       </div>
 
       <div className="animate-fade-up" style={{ animationDelay: "400ms" }}>

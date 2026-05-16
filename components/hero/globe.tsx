@@ -1,107 +1,58 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import createGlobe, { type COBEOptions } from "cobe";
+import { useTheme } from "next-themes";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-// Pure CSS 3D globe. Stripe-style aesthetic: dense fine dot field, smooth
-// thin arc tracks between the three hub cities, open-ring city pins, slow
-// auto-rotate that the viewer can override by dragging.
+// Cobe-backed globe (~5KB WebGL, same family as Stripe / Vercel / fly.io).
+// Cobe renders continent-shaped dot distributions directly on a canvas
+// using an internal landmass sampler, which is the visual gap our
+// Fibonacci sphere could never close.
 //
-// The three cities anchor a personal-footprint story (Yangon born,
-// Singapore schooled, HCMC working). No device pretense: every visible
-// element is a place a human has actually lived or worked.
+// The Cobe canvas owns the rendering. This component wires:
+//  - Theme-aware colors (recreate the globe when theme toggles)
+//  - Drag-to-rotate that overrides the auto-rotation
+//  - Reduced-motion: skip auto-rotate, render a single still frame
+//  - IntersectionObserver: pause the rotation when scrolled off-screen
+//  - The three city chips below with live local time on hover
 //
-// Why pure CSS: earlier attempts with Three.js / Cobe / react-globe.gl
-// crashed the dev server. CSS 3D + RAF for comet positions stays cheap.
-//
-// Performance: comet positions are written directly to DOM refs in a
-// single RAF loop. Avoids React re-rendering ~20 elements per frame.
+// Cobe v2 supports arcs natively via the `arcs` option, so the great-
+// circle connections between the three hubs are rendered by Cobe itself.
 
-const SIZE = 380;
-const RADIUS = (SIZE / 2) * 0.92;
-// Higher density gives the Stripe "fine dust" look. Keeping each dot
-// small balances the increased count for visual weight.
-const NUM_DOTS = 1200;
-const RUBY = "#B73A2C";
-const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
-const DRAG_SENSITIVITY = 0.4;
-const INITIAL_PHI_DEG = -100; // centers SE Asia on first paint
+// Cobe v2's type definitions omit `onRender`, even though the runtime
+// API uses it (see node_modules/cobe/README.md). Augment the type so
+// the callback typechecks.
+type CobeOptionsWithOnRender = COBEOptions & {
+  onRender?: (state: Record<string, number>) => void;
+};
 
-// 80 dots per arc makes the arc read as a smooth thin line instead of a
-// dashed track at typical viewing distances.
-const ARC_TRACK_DOTS = 80;
-const ARC_HEIGHT = 0.18; // 18% rise above sphere at midpoint
-const COMET_TRAIL_COUNT = 4;
-const COMET_TRAIL_GAP = 0.025; // each trail particle lags by 2.5% of arc
-
-type SphereVec = { x: number; y: number; z: number; lat: number; lng: number };
 type City = {
   id: string;
   label: string;
   role: string;
   tzMinutes: number;
-  lat: number;
-  lng: number;
+  location: [number, number]; // [lat, lng]
+  size: number; // cobe marker size, 0..1 (~0.03..0.10 looks right)
 };
 
 const CITIES: City[] = [
-  { id: "yangon", label: "Yangon", role: "Born", tzMinutes: 390, lat: 16.8409, lng: 96.1735 },
-  { id: "singapore", label: "Singapore", role: "Schooled at SP, SMU", tzMinutes: 480, lat: 1.3521, lng: 103.8198 },
-  { id: "hcmc", label: "HCMC", role: "Working at VNTT", tzMinutes: 420, lat: 10.7769, lng: 106.7009 },
+  { id: "yangon", label: "Yangon", role: "Born", tzMinutes: 390, location: [16.8409, 96.1735], size: 0.07 },
+  { id: "singapore", label: "Singapore", role: "Schooled at SP, SMU", tzMinutes: 480, location: [1.3521, 103.8198], size: 0.08 },
+  { id: "hcmc", label: "HCMC", role: "Working at VNTT", tzMinutes: 420, location: [10.7769, 106.7009], size: 0.09 },
 ];
 
-const ARCS: { id: string; fromId: string; toId: string; periodMs: number; offsetMs: number }[] = [
-  { id: "y-s", fromId: "yangon", toId: "singapore", periodMs: 3600, offsetMs: 0 },
-  { id: "s-h", fromId: "singapore", toId: "hcmc", periodMs: 3600, offsetMs: -1200 },
-  { id: "h-y", fromId: "hcmc", toId: "yangon", periodMs: 3600, offsetMs: -2400 },
-];
+// Pixel size on screen. Internal WebGL render size is this times the
+// device pixel ratio so the dots stay crisp on retina displays.
+const DISPLAY_SIZE = 480;
 
-function latLngToVec(latDeg: number, lngDeg: number): SphereVec {
-  const lat = (latDeg * Math.PI) / 180;
-  const lng = (lngDeg * Math.PI) / 180;
-  return {
-    x: Math.cos(lat) * Math.sin(lng),
-    y: Math.sin(lat),
-    z: Math.cos(lat) * Math.cos(lng),
-    lat,
-    lng,
-  };
-}
+// Initial longitude rotation, in radians, that puts SE Asia under the
+// camera on first paint. Cobe uses phi for longitude rotation.
+const INITIAL_PHI = 4.5;
+const AUTO_ROTATE_SPEED = 0.0028; // radians per frame
+const DRAG_SENSITIVITY = 0.005; // pixels to radians
 
-function slerp(a: SphereVec, b: SphereVec, t: number): SphereVec {
-  const d = Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z));
-  const omega = Math.acos(d);
-  const so = Math.sin(omega);
-  if (so < 1e-6) return a;
-  const s1 = Math.sin((1 - t) * omega) / so;
-  const s2 = Math.sin(t * omega) / so;
-  const x = a.x * s1 + b.x * s2;
-  const y = a.y * s1 + b.y * s2;
-  const z = a.z * s1 + b.z * s2;
-  const lat = Math.asin(Math.max(-1, Math.min(1, y)));
-  const lng = Math.atan2(x, z);
-  return { x, y, z, lat, lng };
-}
-
-const CITY_VECS: Record<string, SphereVec> = Object.fromEntries(
-  CITIES.map((c) => [c.id, latLngToVec(c.lat, c.lng)]),
-);
-
-function fibSphere(n: number): SphereVec[] {
-  const dots: SphereVec[] = [];
-  const goldenAngle = Math.PI * (Math.sqrt(5) - 1);
-  for (let i = 0; i < n; i++) {
-    const y = 1 - (i / (n - 1)) * 2;
-    const r = Math.sqrt(1 - y * y);
-    const theta = goldenAngle * i;
-    const x = Math.cos(theta) * r;
-    const z = Math.sin(theta) * r;
-    const lat = Math.asin(y);
-    const lng = Math.atan2(z, x);
-    dots.push({ x, y, z, lat, lng });
-  }
-  return dots;
-}
-
+// Convert a UTC instant into "HH:MM" for a given timezone offset (minutes).
+// Independent of the viewer's local timezone.
 function formatLocalTime(now: Date, tzMinutes: number): string {
   const shifted = new Date(now.getTime() + tzMinutes * 60_000);
   const hh = String(shifted.getUTCHours()).padStart(2, "0");
@@ -119,34 +70,14 @@ function formatTzLabel(tzMinutes: number): string {
     : `GMT${sign}${h}:${String(m).padStart(2, "0")}`;
 }
 
-// Precompute static track points along each great circle. These stay fixed
-// in the rotator's local frame and rotate with the globe.
-const ARC_TRACKS = ARCS.map((arc) => {
-  const from = CITY_VECS[arc.fromId];
-  const to = CITY_VECS[arc.toId];
-  const pts: { p: SphereVec; elev: number }[] = [];
-  for (let i = 0; i <= ARC_TRACK_DOTS; i++) {
-    const t = i / ARC_TRACK_DOTS;
-    const p = slerp(from, to, t);
-    const elev = 1 + ARC_HEIGHT * Math.sin(t * Math.PI);
-    pts.push({ p, elev });
-  }
-  return pts;
-});
-
 export function HeroGlobe() {
-  const dots = useMemo(() => fibSphere(NUM_DOTS), []);
+  const { resolvedTheme } = useTheme();
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const rotatorRef = useRef<HTMLDivElement | null>(null);
-  const phi = useRef(INITIAL_PHI_DEG);
-  const dragging = useRef(false);
-  const dragStartX = useRef(0);
-  const dragStartPhi = useRef(0);
-  const cometRefs = useRef<HTMLSpanElement[][]>(ARCS.map(() => []));
-  // Visibility ref instead of state: written by IntersectionObserver,
-  // read inside the RAF tick. State would cause a re-render of every
-  // dot/track/comet span every time the user scrolls past, which is
-  // exactly what we are trying to avoid.
+
+  // Visibility ref, written by IntersectionObserver, read inside the
+  // Cobe onRender tick. State would force a re-render on every scroll
+  // crossing.
   const visibleRef = useRef(true);
 
   const [mounted, setMounted] = useState(false);
@@ -169,10 +100,6 @@ export function HeroGlobe() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // Pause the RAF loop while the globe is off-screen. Otherwise it keeps
-  // ticking every frame even when the user has scrolled past the hero or
-  // navigated to another section of the app where the home page stays
-  // mounted (DashboardShell does not unmount on route change).
   useEffect(() => {
     const node = wrapperRef.current;
     if (!node || typeof IntersectionObserver === "undefined") return;
@@ -186,229 +113,145 @@ export function HeroGlobe() {
     return () => io.disconnect();
   }, []);
 
-  // Single RAF loop drives globe auto-rotation and comet positions.
-  // When reduced motion is preferred, the loop is skipped entirely so the
-  // tracks remain visible but nothing moves.
+  // Create the Cobe globe. Recreated on theme change so the baseColor
+  // and glowColor reflect light vs dark mode.
   useEffect(() => {
-    if (reduced) return;
-    let raf = 0;
-    const start = performance.now();
-    const tick = (nowMs: number) => {
-      // Skip work when off-screen. Keep the RAF chain alive so when the
-      // globe comes back into view the loop resumes immediately rather
-      // than waiting on another effect to start it.
-      if (!visibleRef.current) {
-        raf = requestAnimationFrame(tick);
-        return;
-      }
+    if (!canvasRef.current || !mounted) return;
+    const canvas = canvasRef.current;
+    const isDark = resolvedTheme === "dark";
 
-      if (!dragging.current && rotatorRef.current) {
-        phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
-        rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
-      }
+    // RGB triplets in 0..1. baseColor is the land-dot color; markerColor
+    // is the city pin color; glowColor is the atmospheric halo around
+    // the sphere edge.
+    const baseColor: [number, number, number] = isDark
+      ? [0.93, 0.34, 0.27] // softer ruby on dark so dots do not blow out
+      : [0.72, 0.23, 0.17]; // RUBY = #B73A2C ~= (183/255, 58/255, 44/255)
+    const glowColor: [number, number, number] = isDark
+      ? [0.18, 0.16, 0.13] // bg-warm in dark ~= #1A1815
+      : [0.96, 0.95, 0.92]; // bg-warm in light ~= #F4F1EA
+    const markerColor: [number, number, number] = isDark
+      ? [0.98, 0.42, 0.34]
+      : [0.59, 0.18, 0.14]; // ruby-deep for slightly stronger pin contrast
 
-      const elapsed = nowMs - start;
-      for (let arcIdx = 0; arcIdx < ARCS.length; arcIdx++) {
-        const arc = ARCS[arcIdx];
-        const fromV = CITY_VECS[arc.fromId];
-        const toV = CITY_VECS[arc.toId];
-        const wrapped =
-          (((elapsed + arc.offsetMs) % arc.periodMs) + arc.periodMs) % arc.periodMs;
-        const cycleT = wrapped / arc.periodMs;
-        for (let trailIdx = 0; trailIdx < COMET_TRAIL_COUNT; trailIdx++) {
-          const node = cometRefs.current[arcIdx][trailIdx];
-          if (!node) continue;
-          const t = cycleT - trailIdx * COMET_TRAIL_GAP;
-          if (t < 0 || t > 1) {
-            node.style.opacity = "0";
-            continue;
-          }
-          const p = slerp(fromV, toV, t);
-          const elev = 1 + ARC_HEIGHT * Math.sin(t * Math.PI);
-          const tx = (p.x * RADIUS * elev).toFixed(2);
-          const ty = (-p.y * RADIUS * elev).toFixed(2);
-          const tz = (p.z * RADIUS * elev).toFixed(2);
-          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateY(${p.lng}rad) rotateX(${-p.lat}rad)`;
-          const headness = Math.max(0, 1 - trailIdx / COMET_TRAIL_COUNT);
-          const windowOpacity = Math.sin(t * Math.PI);
-          node.style.opacity = String((0.35 + 0.65 * headness) * windowOpacity);
+    let phi = INITIAL_PHI;
+    let phiOffset = 0; // contribution from active dragging
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartPhi = 0;
+
+    const arcColor: [number, number, number] = isDark
+      ? [0.98, 0.42, 0.34]
+      : [0.72, 0.23, 0.17];
+
+    const options: CobeOptionsWithOnRender = {
+      devicePixelRatio:
+        typeof window !== "undefined" ? window.devicePixelRatio : 2,
+      width: DISPLAY_SIZE * 2,
+      height: DISPLAY_SIZE * 2,
+      phi: INITIAL_PHI,
+      theta: 0.25, // tilt the north pole slightly forward
+      dark: isDark ? 1 : 0,
+      diffuse: 1.2,
+      // Sample count drives dot density on the landmass. ~16000 is the
+      // Cobe demo default and feels right at our size.
+      mapSamples: 16000,
+      mapBrightness: isDark ? 5 : 6,
+      baseColor,
+      markerColor,
+      glowColor,
+      markers: CITIES.map(({ location, size }) => ({ location, size })),
+      // Great-circle arcs between the three hub cities. Cobe v2 renders
+      // these natively; no SVG overlay needed.
+      arcs: [
+        { from: CITIES[0].location, to: CITIES[1].location },
+        { from: CITIES[1].location, to: CITIES[2].location },
+        { from: CITIES[2].location, to: CITIES[0].location },
+      ],
+      arcColor,
+      arcWidth: 0.6,
+      arcHeight: 0.3,
+      markerElevation: 0.02,
+      onRender: (state) => {
+        if (!visibleRef.current) {
+          state.phi = phi + phiOffset;
+          return;
         }
-      }
-
-      raf = requestAnimationFrame(tick);
+        if (!dragging && !reduced) phi += AUTO_ROTATE_SPEED;
+        state.phi = phi + phiOffset;
+      },
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [reduced]);
 
-  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    dragging.current = true;
-    dragStartX.current = e.clientX;
-    dragStartPhi.current = phi.current;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    if (rotatorRef.current) rotatorRef.current.style.cursor = "grabbing";
-  }, []);
+    const globe = createGlobe(canvas, options);
 
-  const onPointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!dragging.current || !rotatorRef.current) return;
-      const delta = e.clientX - dragStartX.current;
-      phi.current = dragStartPhi.current + delta * DRAG_SENSITIVITY;
-      rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
-    },
+    const onPointerDown = (e: PointerEvent) => {
+      dragging = true;
+      dragStartX = e.clientX;
+      dragStartPhi = phiOffset;
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      canvas.style.cursor = "grabbing";
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      const delta = e.clientX - dragStartX;
+      phiOffset = dragStartPhi + delta * DRAG_SENSITIVITY;
+    };
+    const endDrag = () => {
+      dragging = false;
+      canvas.style.cursor = "grab";
+    };
+
+    canvas.style.cursor = "grab";
+    canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("pointermove", onPointerMove);
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
+    canvas.addEventListener("pointerleave", endDrag);
+
+    return () => {
+      canvas.removeEventListener("pointerdown", onPointerDown);
+      canvas.removeEventListener("pointermove", onPointerMove);
+      canvas.removeEventListener("pointerup", endDrag);
+      canvas.removeEventListener("pointercancel", endDrag);
+      canvas.removeEventListener("pointerleave", endDrag);
+      globe.destroy();
+    };
+  }, [mounted, resolvedTheme, reduced]);
+
+  const handleChipEnter = useCallback((id: string) => setActiveCity(id), []);
+  const handleChipLeave = useCallback(
+    (id: string) =>
+      setActiveCity((curr) => (curr === id ? null : curr)),
     [],
   );
-
-  const endDrag = useCallback(() => {
-    dragging.current = false;
-    if (rotatorRef.current) rotatorRef.current.style.cursor = "grab";
-  }, []);
 
   return (
     <div
       ref={wrapperRef}
       className="mx-auto flex flex-col items-center"
-      style={{ width: "100%", maxWidth: SIZE }}
+      style={{ width: "100%", maxWidth: DISPLAY_SIZE }}
     >
       <div
-        className="globe-wrap relative"
+        className="relative"
         style={{
           width: "100%",
           aspectRatio: "1 / 1",
-          perspective: "1400px",
-          perspectiveOrigin: "center",
           touchAction: "none",
         }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
       >
-        <div
-          ref={rotatorRef}
-          className="absolute inset-0"
+        <canvas
+          ref={canvasRef}
           style={{
-            transformStyle: "preserve-3d",
-            transform: `rotateY(${INITIAL_PHI_DEG}deg)`,
-            cursor: "grab",
-            willChange: "transform",
+            width: "100%",
+            height: "100%",
+            display: "block",
           }}
-        >
-          {dots.map((d, i) => (
-            <span
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                left: "50%",
-                top: "50%",
-                width: 1.2,
-                height: 1.2,
-                backgroundColor: "var(--color-fg-soft)",
-                opacity: 0.42,
-                transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px) rotateY(${d.lng}rad) rotateX(${-d.lat}rad)`,
-                backfaceVisibility: "hidden",
-              }}
-            />
-          ))}
-
-          {/* Arc tracks between the 3 hub cities. Dense small dots so the
-              path reads as a thin smooth line at viewing distance, not a
-              dashed track. */}
-          {ARC_TRACKS.map((track, arcIdx) =>
-            track.map((pt, idx) => (
-              <span
-                key={`track-${arcIdx}-${idx}`}
-                className="absolute rounded-full"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  width: 0.9,
-                  height: 0.9,
-                  backgroundColor: RUBY,
-                  opacity: 0.55,
-                  transform: `translate(-50%, -50%) translate3d(${(pt.p.x * RADIUS * pt.elev).toFixed(2)}px, ${(-pt.p.y * RADIUS * pt.elev).toFixed(2)}px, ${(pt.p.z * RADIUS * pt.elev).toFixed(2)}px) rotateY(${pt.p.lng}rad) rotateX(${-pt.p.lat}rad)`,
-                  backfaceVisibility: "hidden",
-                }}
-              />
-            )),
-          )}
-
-          {/* Comet trail particles: positions/opacities written by the RAF loop.
-              Toned down vs earlier iteration so the moving particle does not
-              overshadow the static arc line. */}
-          {ARCS.map((arc, arcIdx) =>
-            Array.from({ length: COMET_TRAIL_COUNT }).map((_, trailIdx) => {
-              const isHead = trailIdx === 0;
-              const sz = isHead ? 3 : Math.max(1, 2.2 - trailIdx * 0.4);
-              const glow = isHead
-                ? `0 0 6px ${RUBY}, 0 0 2px ${RUBY}`
-                : `0 0 ${Math.max(0, 3 - trailIdx)}px ${RUBY}`;
-              return (
-                <span
-                  key={`comet-${arc.id}-${trailIdx}`}
-                  ref={(el) => {
-                    if (el) cometRefs.current[arcIdx][trailIdx] = el;
-                  }}
-                  className="absolute rounded-full"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    width: sz,
-                    height: sz,
-                    backgroundColor: RUBY,
-                    boxShadow: glow,
-                    opacity: 0,
-                    backfaceVisibility: "hidden",
-                    willChange: "transform, opacity",
-                  }}
-                />
-              );
-            }),
-          )}
-
-          {/* City pins: open-ring style. Single span with a transparent
-              center and a ruby border. The center dot is faked with a
-              radial-gradient inside the border so we keep one DOM node
-              per pin. Active state thickens the ring and adds glow. */}
-          {CITIES.map((c) => {
-            const p = CITY_VECS[c.id];
-            const isActive = activeCity === c.id;
-            const ringSize = isActive ? 12 : 10;
-            const borderWidth = isActive ? 2 : 1.5;
-            const glow = isActive
-              ? `0 0 10px ${RUBY}, 0 0 3px ${RUBY}`
-              : `0 0 5px rgba(183, 58, 44, 0.55), 0 0 1px rgba(183, 58, 44, 0.8)`;
-            return (
-              <span
-                key={c.id}
-                className="absolute rounded-full"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  width: ringSize,
-                  height: ringSize,
-                  background: `radial-gradient(circle at center, ${RUBY} 22%, transparent 26%)`,
-                  border: `${borderWidth}px solid ${RUBY}`,
-                  boxShadow: glow,
-                  transform: `translate(-50%, -50%) translate3d(${(p.x * RADIUS).toFixed(2)}px, ${(-p.y * RADIUS).toFixed(2)}px, ${(p.z * RADIUS).toFixed(2)}px) rotateY(${p.lng}rad) rotateX(${-p.lat}rad)`,
-                  backfaceVisibility: "hidden",
-                  transition:
-                    "width 180ms ease-out, height 180ms ease-out, border-width 180ms ease-out, box-shadow 180ms ease-out",
-                }}
-              />
-            );
-          })}
-        </div>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{
-            background: `radial-gradient(circle at center, color-mix(in oklab, ${RUBY} 14%, transparent) 0%, transparent 62%)`,
-            filter: "blur(8px)",
-          }}
+          aria-label="Interactive globe showing Yangon, Singapore, and Ho Chi Minh City"
         />
       </div>
 
+      {/* City chip row. Static metadata only; the chip does not directly
+          interact with the WebGL canvas (Cobe markers are not exposed to
+          JS), but the chip still surfaces role + live local time on hover. */}
       <div className="relative mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-2">
         {CITIES.map((c, idx) => {
           const isActive = activeCity === c.id;
@@ -417,14 +260,10 @@ export function HeroGlobe() {
             <button
               key={c.id}
               type="button"
-              onPointerEnter={() => setActiveCity(c.id)}
-              onPointerLeave={() =>
-                setActiveCity((curr) => (curr === c.id ? null : curr))
-              }
-              onFocus={() => setActiveCity(c.id)}
-              onBlur={() =>
-                setActiveCity((curr) => (curr === c.id ? null : curr))
-              }
+              onPointerEnter={() => handleChipEnter(c.id)}
+              onPointerLeave={() => handleChipLeave(c.id)}
+              onFocus={() => handleChipEnter(c.id)}
+              onBlur={() => handleChipLeave(c.id)}
               onClick={() =>
                 setActiveCity((curr) => (curr === c.id ? null : c.id))
               }
@@ -436,7 +275,7 @@ export function HeroGlobe() {
                 aria-hidden="true"
                 className="h-1.5 w-1.5 rounded-full transition-transform duration-200"
                 style={{
-                  background: RUBY,
+                  background: "var(--color-ruby)",
                   opacity: 0.4 + idx * 0.3,
                   transform: isActive ? "scale(1.5)" : "scale(1)",
                 }}
