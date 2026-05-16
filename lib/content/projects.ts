@@ -153,7 +153,7 @@ export const projects: Project[] = [
   },
   {
     slug: "osiris-hydroponics",
-    title: "Osiris: Hydroponics IoT Automation",
+    title: "Hydroponics IoT Automation",
     course: "Osiris Technology",
     description:
       "ESP32-driven irrigation and lighting automation for hydroponic SMEs. AWS S3 data pipeline. SMU BIG grant funded. Showcased to Ministers Indranee Rajah and Desmond Lee at World Cities Summit 2024.",
