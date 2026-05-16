@@ -214,11 +214,16 @@ function ProjectCard({
   return (
     <article className={cardClass}>
       {project.imageSrc && (
-        <div className={`relative ${imgHeight} w-full overflow-hidden bg-[var(--color-bg-card)]`}>
+        <div className={`relative ${imgHeight} w-full overflow-hidden bg-[var(--color-bg-warm)]`}>
           <Image
             src={project.imageSrc}
             alt={`${project.title} cover`}
             fill
+            // Featured cards are above the fold and need to paint before
+            // lazy-load kicks in: otherwise the empty wrapper reads as a
+            // broken card on dark mode. Below-fold non-featured cards
+            // stay lazy.
+            priority={featured}
             sizes={
               featured
                 ? "(max-width: 640px) 100vw, 860px"

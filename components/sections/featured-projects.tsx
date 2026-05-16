@@ -21,26 +21,30 @@ export function FeaturedProjects() {
         </Link>
       </div>
       <div className="grid gap-3.5 sm:grid-cols-2">
-        {featuredProjects.map((project) => (
-          <ProjectCard key={project.slug} {...project} />
+        {featuredProjects.map((project, idx) => (
+          <ProjectCard key={project.slug} {...project} priority={idx < 2} />
         ))}
       </div>
     </section>
   );
 }
 
-function ProjectCard(project: Project) {
+function ProjectCard(project: Project & { priority?: boolean }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
       className="beam-card group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)]"
     >
       {project.imageSrc && (
-        <div className="relative h-36 w-full overflow-hidden bg-[var(--color-bg-card)]">
+        <div className="relative h-36 w-full overflow-hidden bg-[var(--color-bg-warm)]">
           <Image
             src={project.imageSrc}
             alt={`${project.title} cover`}
             fill
+            // First two cards are above the fold on desktop. Eager-load so
+            // the dark-mode empty bg doesn't read as a broken card before
+            // the optimizer streams the image in.
+            priority={project.priority}
             sizes="(max-width: 640px) 100vw, 50vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
