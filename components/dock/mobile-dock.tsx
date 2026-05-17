@@ -10,7 +10,7 @@ import { navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
 import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { useLocale, useT } from "@/lib/i18n/client";
-import { localeHref } from "@/lib/i18n/href";
+import { localeHref, swapLocaleInPath } from "@/lib/i18n/href";
 import {
   DEFAULT_LOCALE,
   LOCALES,
@@ -343,12 +343,17 @@ function ThemePill() {
 function LocalePill() {
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
   const t = useT();
 
   const switchTo = (next: Locale) => {
     if (next === locale) return;
+    // See LanguageSwitcher: cookie write for next bare-URL visit,
+    // push to the prerendered HTML for the new locale for instant CDN
+    // navigation. router.refresh() would only re-render the EN page
+    // because the URL is already locale-prefixed.
     writeLocaleCookie(next);
-    router.refresh();
+    router.push(swapLocaleInPath(pathname || "/", next));
   };
 
   return (

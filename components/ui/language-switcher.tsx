@@ -1,33 +1,45 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { m as motion } from "framer-motion";
 import { useLocale, useT } from "@/lib/i18n/client";
 import { writeLocaleCookie } from "@/lib/i18n/cookie";
+import { swapLocaleInPath } from "@/lib/i18n/href";
 import { LOCALES, LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 
 // Sidebar language switcher. Pill matching the theme toggle's visual
-// pattern. Writes the locale cookie and refreshes so the server re-reads
-// it on next request.
+// pattern.
+//
+// Navigates to the same path in the new locale (e.g. /en/about ->
+// /vi/about) instead of router.refresh(). Both variants are
+// prerendered static HTML at build time so the swap is CDN-instant;
+// router.refresh() would only re-render the EN route (the locale is
+// baked into the URL once any locale-prefixed Link is clicked) and
+// the cookie change alone would not flip the rendered page.
 //
 // Visible swap animation is handled in components/layout/locale-swap.tsx:
 // it keys the main content wrapper by the current locale, so when the
-// server re-render lands, React unmounts the old subtree and mounts the
+// navigation lands, React unmounts the old subtree and mounts the
 // new one, replaying the .locale-fade-in keyframe (fade + slide + blur).
 // The sidebar lives outside the swap and stays still through the flip.
 
 export function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
   const t = useT();
   const [isPending, startTransition] = useTransition();
 
   const switchTo = (next: Locale) => {
     if (next === locale || isPending) return;
+    // Cookie still gets written so that a future bare-URL visit (e.g.
+    // user types lwinmmt.com directly) lands in their chosen locale
+    // via the proxy.ts Accept-Language / cookie negotiation.
     writeLocaleCookie(next);
+    const target = swapLocaleInPath(pathname || "/", next);
     startTransition(() => {
-      router.refresh();
+      router.push(target);
     });
   };
 

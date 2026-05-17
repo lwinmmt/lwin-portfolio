@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "@/lib/i18n/client";
+import { swapLocaleInPath } from "@/lib/i18n/href";
 import { LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 
 // One-shot floating banner that lets a first-time visitor know the
@@ -42,6 +43,7 @@ const PROMPT: Record<Locale, { also: string; switchTo: string; dismiss: string }
 export function LocalePromptBanner() {
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [, startTransition] = useTransition();
   // Tracks whether localStorage is usable for persisting the
@@ -90,8 +92,12 @@ export function LocalePromptBanner() {
         : "";
     document.cookie = `locale=${other}; path=/; max-age=31536000; samesite=lax${secure}`;
     dismiss();
+    // Navigate to the prerendered HTML for the other locale instead
+    // of router.refresh(). Once any locale-prefixed Link has been
+    // clicked the URL is /en/... and a refresh would re-render the
+    // EN page; pushing to /vi/... hits the CDN-cached VI variant.
     startTransition(() => {
-      router.refresh();
+      router.push(swapLocaleInPath(pathname || "/", other));
     });
   };
 
