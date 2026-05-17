@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+
+export const runtime = "edge";
 import { EmailButton } from "@/components/ui/email-button";
 import {
   profile,

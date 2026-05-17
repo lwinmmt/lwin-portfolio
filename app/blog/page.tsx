@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+
+export const runtime = "edge";
 import { blogDrafts as drafts } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";

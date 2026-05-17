@@ -1,5 +1,10 @@
 "use client";
 
+// Edge runtime for the SSR bootstrap of this client page. The
+// interactive parts run in the browser as usual; the server-side
+// initial render that hydration matches against runs at edge.
+export const runtime = "edge";
+
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";

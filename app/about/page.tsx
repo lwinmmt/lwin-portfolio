@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+
+export const runtime = "edge";
 import { KineticQuote } from "@/components/about/kinetic-quote";
 import {
   profile,

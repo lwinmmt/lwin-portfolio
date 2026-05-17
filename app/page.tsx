@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+
+// Edge runtime: cold start ~30ms vs ~300ms on serverless, and runs
+// in the Vercel edge POP closest to the visitor. Since getLocale()
+// reads cookies (which marks every route dynamic), the function
+// still runs per request — edge just makes each invocation cheap.
+// All deps used by this route + its children are edge-compatible:
+// next/headers, framer-motion (client only), lib/content (pure JS).
+export const runtime = "edge";
 import { Hero } from "@/components/sections/hero";
 import { Highlights } from "@/components/sections/highlights";
 import { Experience } from "@/components/sections/experience";

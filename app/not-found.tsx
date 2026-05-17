@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+
+export const runtime = "edge";
 import { getT } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {

@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+
+// No `runtime = "edge"` here: this route uses generateStaticParams
+// to pre-render one HTML page per project slug at build time
+// (which is even better than edge SSR — it's served as a static
+// asset from the CDN). Edge runtime would force every request
+// back to a live function and undo the SSG.
 import { ESMOSDiagram } from "@/components/esmos/esmos-diagram";
 import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
 import { ProjectLightboxGallery } from "@/components/ui/lightbox";
