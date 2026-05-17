@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
 import { MotionProvider } from "@/components/providers/motion-provider";
-import { LocaleProvider } from "@/lib/i18n/client";
-import { getLocale, getT } from "@/lib/i18n/server";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -43,25 +41,24 @@ export const metadata: Metadata = {
       "Engineer by training. Founder by accident. Daily AI-tools operator.",
   },
   // Icons resolved automatically from app/icon.svg and app/apple-icon.svg.
-  // No explicit `icons` block needed: Next.js generates the link tags.
 };
 
-export default async function RootLayout({
+// Root layout is fully static — no cookies(), no headers(), nothing
+// that would mark routes dynamic. The LocaleProvider + locale-aware
+// content move into app/[lang]/layout.tsx, which prerenders both
+// EN and VI variants at build time via generateStaticParams.
+//
+// `html lang="en"` is hardcoded as a baseline; the [lang]/layout
+// provides the actual locale context for content. Most search
+// engines weight document content over this attribute anyway.
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Locale resolution: explicit cookie wins, else Accept-Language
-  // (Vietnamese browsers auto-flip), else English. The whole tree
-  // reads from this single source via the LocaleProvider so any
-  // client component can call useLocale() / useT() without prop
-  // drilling.
-  const locale = await getLocale();
-  const t = await getT();
-
   return (
     <html
-      lang={locale}
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
@@ -70,25 +67,25 @@ export default async function RootLayout({
             straight to main content instead of traversing every
             sidebar nav row + utility control first. Visually hidden
             until focused; the focus-visible state pops it to the
-            top-left of the viewport. */}
+            top-left of the viewport. Text stays English here at the
+            root layout so the page can be fully static — the rest of
+            the chrome translates inside [lang]/layout. */}
         <a
           href="#main-content"
           className="sr-only fixed left-3 top-3 z-[80] rounded-md bg-[var(--color-fg)] px-3 py-2 font-sans text-sm font-medium text-[var(--color-bg)] focus:not-sr-only focus:outline-none"
         >
-          {t("nav.skipToMain")}
+          Skip to main content
         </a>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <LocaleProvider locale={locale}>
-            <MotionProvider>
-              <ConsoleBranding />
-              {children}
-            </MotionProvider>
-          </LocaleProvider>
+          <MotionProvider>
+            <ConsoleBranding />
+            {children}
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>

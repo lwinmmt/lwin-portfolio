@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-export const runtime = "edge";
 import { EmailButton } from "@/components/ui/email-button";
 import {
   profile,
@@ -48,8 +47,8 @@ const ROLE_CASE_STUDY: Record<string, string> = {
 };
 
 export default async function ResumePage() {
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   return (
     <DashboardShell>
       {/* Bento-style identity card */}

@@ -2,34 +2,38 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * HTTP Basic Auth gate on /studio.
+ * Two jobs:
  *
- * Sanity Studio has its own login (sanity.io OAuth), but anyone could still
- * land on the route, see the login UI, and try to enumerate or social-engineer
- * access. The Basic Auth layer keeps the route private at the network level.
+ *   1. HTTP Basic Auth gate on /studio.
+ *      Sanity Studio has its own login but we don't want randos
+ *      stumbling onto the route. The Basic Auth layer keeps it
+ *      private at the network level. Fail-closed when
+ *      STUDIO_USERNAME / STUDIO_PASSWORD env vars are unset.
  *
- * Gate is ALWAYS ON. Visitors hitting /studio see the browser's basic-auth
- * prompt by default. They cannot get past it unless both env vars are set
- * AND they enter the matching credentials. With env vars unset (typical for
- * a public deploy), no value the visitor types can match, so the prompt
- * keeps reappearing. That is the intended "restricted" state.
+ *   2. Locale rewrite for everything else.
+ *      Pages live under app/[lang]/... and are prerendered into two
+ *      static variants (en + vi) at build time. Visitors should see
+ *      bare URLs (/about, /projects, etc.), so this proxy rewrites
+ *      bare paths into /{cookie-locale}/{path} server-side. URL bar
+ *      stays clean; the response is cached static HTML served from
+ *      the Vercel CDN. That's what makes navigation feel local-fast
+ *      instead of running a serverless function per click.
  *
- * To actually unlock the route, set in .env.local (or Vercel project env):
- *   STUDIO_USERNAME="your-username"
- *   STUDIO_PASSWORD="a-long-random-password"
- *
- * Next.js 16 file convention: this MUST be named proxy.ts and the
- * exported function MUST be named proxy. The previous middleware.ts
- * convention is deprecated.
+ * Next.js 16 file convention: this file MUST be named proxy.ts and
+ * the exported function MUST be named proxy.
  * https://nextjs.org/docs/messages/middleware-to-proxy
  */
 
 const REALM = "Studio (restricted)";
 
-// Constant-time string compare implemented in pure JS so it works in the
-// Edge runtime (proxy defaults to Edge; node:crypto's timingSafeEqual is
-// not available there). The XOR accumulator means the loop touches every
-// byte regardless of where a mismatch occurs.
+const SUPPORTED_LOCALES = ["en", "vi"] as const;
+type Locale = (typeof SUPPORTED_LOCALES)[number];
+const DEFAULT_LOCALE: Locale = "en";
+const LOCALE_COOKIE = "locale";
+
+// Constant-time string compare implemented in pure JS so it works in
+// the Edge runtime (proxy defaults to Edge; node:crypto's
+// timingSafeEqual is not available there).
 function safeStringEqual(a: string, b: string): boolean {
   if (a.length !== b.length) {
     // Burn the same loop on the length-mismatch path so callers cannot
@@ -48,7 +52,7 @@ function safeStringEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
-export function proxy(req: NextRequest) {
+function studioGate(req: NextRequest): NextResponse {
   const expectedUser = process.env.STUDIO_USERNAME;
   const expectedPass = process.env.STUDIO_PASSWORD;
   const configured = Boolean(expectedUser && expectedPass);
@@ -78,8 +82,6 @@ export function proxy(req: NextRequest) {
     }
   }
 
-  // Always challenge. The body text is what some browsers (and curl) show
-  // after the user cancels the auth prompt, so keep it informative.
   const body = configured
     ? "Authentication required."
     : "This area is restricted. Studio access has not been provisioned on this deployment.";
@@ -93,7 +95,47 @@ export function proxy(req: NextRequest) {
   });
 }
 
+function resolveLocale(req: NextRequest): Locale {
+  // Explicit cookie set by the LanguageSwitcher wins.
+  const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
+  if (cookieLocale === "en" || cookieLocale === "vi") return cookieLocale;
+  // First-time visitors with `Accept-Language: vi*` get Vietnamese.
+  const accept = (req.headers.get("accept-language") ?? "").toLowerCase();
+  const primary = accept.split(",")[0]?.split(";")[0]?.trim() ?? "";
+  if (primary.startsWith("vi")) return "vi";
+  return DEFAULT_LOCALE;
+}
+
+export function proxy(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Studio path: Basic Auth gate.
+  if (pathname === "/studio" || pathname.startsWith("/studio/")) {
+    return studioGate(req);
+  }
+
+  // Path already locale-prefixed: leave it. Direct hits on
+  // /en/about and /vi/about still work (useful for SEO + sitemap +
+  // testing both locales without flipping the cookie).
+  for (const lang of SUPPORTED_LOCALES) {
+    if (pathname === `/${lang}` || pathname.startsWith(`/${lang}/`)) {
+      return NextResponse.next();
+    }
+  }
+
+  // Bare path: rewrite to /{locale}/{path}.
+  const locale = resolveLocale(req);
+  const url = req.nextUrl.clone();
+  url.pathname = pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;
+  return NextResponse.rewrite(url);
+}
+
 export const config = {
-  // Apply only to the studio routes. Everything else stays untouched.
-  matcher: ["/studio", "/studio/:path*"],
+  // Run the proxy on every route EXCEPT static assets, Next.js
+  // internals, and a few public files that should never be locale-
+  // rewritten. The locale rewrite + Studio gate handle their own
+  // path matching above.
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|opengraph-image|icon.svg|images/|files/|diagrams/|logos/|sounds/).*)",
+  ],
 };

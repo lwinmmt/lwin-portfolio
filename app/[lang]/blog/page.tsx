@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-export const runtime = "edge";
 import { blogDrafts as drafts } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
@@ -12,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   return (
     <DashboardShell>
       <header>

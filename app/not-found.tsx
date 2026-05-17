@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-export const runtime = "edge";
 import { getT } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
@@ -11,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NotFound() {
-  const t = await getT();
+  const t = getT();
   return (
     <DashboardShell>
       <section className="flex min-h-[60vh] flex-col justify-center">

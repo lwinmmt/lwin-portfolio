@@ -21,7 +21,7 @@ import { getT } from "@/lib/i18n/server";
 // handles, school proper noun, org short name).
 
 export async function Hero() {
-  const t = await getT();
+  const t = getT();
   const currentRole = t("hero.currentRole");
   const currentOrgFullName = t("hero.currentOrgFullName");
   const ariaCurrentRole = t("hero.cta.ariaCurrentRole")

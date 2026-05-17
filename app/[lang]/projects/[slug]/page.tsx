@@ -2,12 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
-
-// No `runtime = "edge"` here: this route uses generateStaticParams
-// to pre-render one HTML page per project slug at build time
-// (which is even better than edge SSR — it's served as a static
-// asset from the CDN). Edge runtime would force every request
-// back to a live function and undo the SSG.
 import { ESMOSDiagram } from "@/components/esmos/esmos-diagram";
 import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
 import { ProjectLightboxGallery } from "@/components/ui/lightbox";
@@ -66,8 +60,8 @@ export default async function ProjectPage({
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   const categoryLabel = t(CATEGORY_LABEL_KEY[project.category]);
   const title = pickLocalized(project.title, project.titleVi, locale);
   const description = pickLocalized(

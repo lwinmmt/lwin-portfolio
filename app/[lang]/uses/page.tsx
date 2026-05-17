@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-export const runtime = "edge";
 import { usesGroups, type UsesItem } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
@@ -14,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function UsesPage() {
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   const hardwareTag = t("uses.hardwareTag");
   const aiTools = usesGroups.find((g) => g.id === "ai-tools");
   const stack = usesGroups.find((g) => g.id === "stack");

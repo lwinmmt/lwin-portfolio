@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-export const runtime = "edge";
 import { highlights, type Highlight } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
@@ -18,8 +17,8 @@ export const metadata: Metadata = {
 type BentoLayout = "side-by-side" | "stacked" | "text-only";
 
 export default async function HighlightsPage() {
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   // Highlights order in lib/content/highlights.ts is intentional and
   // maps directly to bento slots. Destructure by name so the layout is
   // explicit, not derived from .map().

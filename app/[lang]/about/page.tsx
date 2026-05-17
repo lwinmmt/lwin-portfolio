@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-export const runtime = "edge";
 import { KineticQuote } from "@/components/about/kinetic-quote";
 import {
   profile,
@@ -37,8 +36,8 @@ const INTEREST_LABEL_KEY: Record<string, MessageKey> = {
 };
 
 export default async function AboutPage() {
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   const citizenshipNote = t("about.citizenshipNote");
 
   return (

@@ -15,7 +15,7 @@ const SVG_NATURAL_H = 3248;
 // Async server component: reads i18n via getT() so caption + link
 // labels follow the request locale.
 export async function ESMOSDiagram() {
-  const t = await getT();
+  const t = getT();
   return (
     <figure className="overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-white">
       <Image

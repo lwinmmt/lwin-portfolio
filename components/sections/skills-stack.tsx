@@ -8,8 +8,8 @@ import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 
 export async function SkillsStack() {
-  const t = await getT();
-  const locale = await getLocale();
+  const t = getT();
+  const locale = getLocale();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
