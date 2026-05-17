@@ -66,6 +66,7 @@ function ProjectCard({
           // First two cards are above the fold on desktop. Eager-load
           // so the dark-mode empty bg does not read as a broken card.
           priority={priority}
+          objectPosition={project.coverFocus}
         />
       )}
       <div className="flex flex-1 flex-col p-5">

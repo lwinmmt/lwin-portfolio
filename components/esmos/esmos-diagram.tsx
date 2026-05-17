@@ -138,11 +138,22 @@ export function ESMOSDiagram() {
             </button>
           </div>
           <div className="relative flex-1 overflow-hidden rounded-lg bg-white">
+            {/*
+              react-zoom-pan-pinch v4 quirks worth preserving:
+              - The SVG is 5237x3248 at natural size; initialScale 0.18
+                fits the whole thing into a typical desktop viewport at
+                first paint, then the user zooms IN.
+              - smoothStep is gone in v4; use a single `step` for wheel.
+              - DO NOT pass contentClass forcing h-full/w-full. The img
+                needs its natural dimensions so the wrapper can compute
+                the correct centered transform; constraining the content
+                box made the diagram render off-screen.
+            */}
             <TransformWrapper
-              initialScale={0.4}
-              minScale={0.2}
-              maxScale={8}
-              wheel={{ step: 0.15, smoothStep: 0.005 }}
+              initialScale={0.18}
+              minScale={0.15}
+              maxScale={6}
+              wheel={{ step: 0.15 }}
               pinch={{ step: 5 }}
               doubleClick={{ mode: "zoomIn", step: 0.6 }}
               limitToBounds={false}
@@ -151,7 +162,7 @@ export function ESMOSDiagram() {
               <ZoomControls />
               <TransformComponent
                 wrapperClass="!h-full !w-full"
-                contentClass="!h-full !w-full"
+                wrapperStyle={{ height: "100%", width: "100%" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img

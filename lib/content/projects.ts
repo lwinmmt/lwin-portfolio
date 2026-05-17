@@ -39,6 +39,11 @@ export type Project = {
   /** Case study PDF or report. */
   pdfLink?: string;
   imageSrc?: string;
+  /** Optional CSS `object-position` value applied to the cover image
+   *  in landscape crops. Useful when the source photo is portrait
+   *  and the subject is not at the geometric center (e.g. face in
+   *  the upper portion). Defaults to "center" if omitted. */
+  coverFocus?: string;
   /** Additional images surfaced as a small gallery below the cover image
    *  on the case study page. */
   gallery?: string[];
@@ -181,6 +186,11 @@ export const projects: Project[] = [
     liveLink: "https://osiris.so/",
     newsLink:
       "https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures",
+    imageSrc: "/images/projects/osiris-hydroponics/cover.jpg",
+    // Portrait photo, subject's face sits in the upper-left third.
+    // Shift the landscape crop window up so the faces stay in frame
+    // instead of cropping to the middle (torsos + planters).
+    coverFocus: "30% 22%",
     featured: true,
     caseStudy: [
       {

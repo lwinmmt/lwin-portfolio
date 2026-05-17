@@ -69,9 +69,6 @@ export default async function ProjectPage({
     project.descriptionVi,
     locale,
   );
-  const course = project.course
-    ? pickLocalized(project.course, project.courseVi, locale)
-    : undefined;
 
   const related = projects
     .filter((p) => p.slug !== project.slug && p.category === project.category)
@@ -97,18 +94,16 @@ export default async function ProjectPage({
       </Link>
 
       <header className="mt-6">
-        {course && (
-          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
-            {course}
-          </div>
-        )}
-        <h1 className="mt-2 font-sans text-[clamp(2rem,4.5vw,3.25rem)] font-bold leading-[1.02] tracking-[-0.035em] text-[var(--color-fg)]">
+        {/* No course eyebrow and no category badge on the detail
+            header. The /projects index already groups projects by
+            category; once you click into one, the meta clutter on
+            top of the title is just noise. Dates alone is enough
+            context above the body. */}
+        <h1 className="font-sans text-[clamp(2rem,4.5vw,3.25rem)] font-bold leading-[1.02] tracking-[-0.035em] text-[var(--color-fg)]">
           {title}
         </h1>
-        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-          <span className="text-[var(--color-ruby)]">{categoryLabel}</span>
-          <span className="text-[var(--color-fg-faint)]">·</span>
-          <span>{project.dates}</span>
+        <div className="mt-3 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
+          {project.dates}
         </div>
       </header>
 

@@ -228,10 +228,15 @@ function ProjectCard({
                 ? "(max-width: 640px) 100vw, 860px"
                 : "(max-width: 640px) 100vw, 50vw"
             }
-            // Top-biased crop. People photos: faces are in upper third.
-            // Dashboard screenshots: headers up top. Either way the top
-            // is the most informative slice.
-            className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+            // Top-biased crop by default. Projects with `coverFocus`
+            // override get an explicit object-position so portrait
+            // photos with off-center subjects stay in frame.
+            style={
+              project.coverFocus ? { objectPosition: project.coverFocus } : undefined
+            }
+            className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+              project.coverFocus ? "" : "object-top"
+            }`}
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-bg-warm)] via-[var(--color-bg-warm)]/0 to-transparent" />
         </div>

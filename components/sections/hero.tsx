@@ -62,10 +62,12 @@ export async function Hero() {
       </p>
 
       {/* Globe: stacked between intro and 'Right now' on mobile (natural
-          document order in a single-column grid), right column spanning
-          the full text-block height and vertically centered on lg+. */}
+          document order in a single-column grid). On lg+ it spans the
+          full text-block height and self-ends, so the location chip
+          underneath lines up with the bottom of the CTA button row on
+          the left column. */}
       <div
-        className="animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:self-center"
+        className="animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:self-end"
         style={{ animationDelay: "300ms" }}
       >
         <HeroGlobe />

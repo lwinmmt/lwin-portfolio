@@ -17,6 +17,7 @@ export function CardCover({
   background = "warm",
   priority = false,
   sizes = "(max-width: 640px) 100vw, 50vw",
+  objectPosition,
 }: {
   src: string;
   alt: string;
@@ -24,6 +25,10 @@ export function CardCover({
   background?: "warm" | "card";
   priority?: boolean;
   sizes?: string;
+  /** Optional CSS `object-position` value. Default "center" works for
+   *  landscape cover photos; pass an override (e.g. "30% 22%") when
+   *  the source is portrait and the subject lives off-center. */
+  objectPosition?: string;
 }) {
   const heightClass = height === "sm" ? "h-32" : "h-36";
   const bgClass =
@@ -36,6 +41,7 @@ export function CardCover({
         fill
         priority={priority}
         sizes={sizes}
+        style={objectPosition ? { objectPosition } : undefined}
         className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-bg-warm)] via-transparent to-transparent" />

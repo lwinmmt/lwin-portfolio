@@ -516,7 +516,7 @@ export function HeroGlobe() {
       </div>
 
       <div
-        className="glass-chip mt-8 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
+        className="glass-chip mt-4 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
         aria-label={`Currently in ${profile.location}`}
       >
         <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">

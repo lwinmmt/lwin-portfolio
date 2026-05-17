@@ -112,23 +112,9 @@ export default async function UsesPage() {
                         </span>
                       )}
                     </div>
-                    {tool.link && (
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="flex-shrink-0 text-[var(--color-fg-faint)] opacity-0 transition-opacity duration-200 group-hover:text-[var(--color-ruby)] group-hover:opacity-100"
-                        aria-hidden="true"
-                        focusable="false"
-                      >
-                        <path d="M7 17 17 7M7 7h10v10" />
-                      </svg>
-                    )}
+                    {/* No external-link arrow icon here. The whole
+                        row is already a link target; an extra glyph
+                        on hover read as visual noise. */}
                   </>
                 );
                 const rowClass =
