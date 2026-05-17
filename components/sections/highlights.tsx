@@ -88,10 +88,9 @@ function HighlightCard(h: Highlight) {
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-bg-warm)] via-transparent to-transparent" />
-          {/* Icon badge overlay on imaged cards */}
-          <div className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/90 text-[var(--color-fg)] backdrop-blur">
-            <HighlightIcon name={h.icon} />
-          </div>
+          {/* Icon badge removed from image cards; the text tag (Work / Talk /
+              Press / Award) next to the title already signals category. The
+              icon remains on text-only cards below as the only visual anchor. */}
         </div>
       )}
       <div className="flex flex-1 flex-col p-5">
