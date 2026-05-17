@@ -46,6 +46,7 @@ export const highlights: Highlight[] = [
       "Osiris được điểm danh trong số 9 startup sinh viên SMU triển vọng nhất trong bài viết độc quyền của SBR.",
     date: "MAY 2024",
     href: "https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures",
+    imageSrc: "/images/highlights/sbr-osiris.jpg",
   },
   {
     title: "PM Club Internal Challenge 1st",

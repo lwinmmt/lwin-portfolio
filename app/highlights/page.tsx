@@ -17,7 +17,6 @@ type BentoLayout = "side-by-side" | "stacked" | "text-only";
 export default async function HighlightsPage() {
   const t = await getT();
   const locale = await getLocale();
-  const openLabel = t("highlightsPage.open");
   // Highlights order in lib/content/highlights.ts is intentional and
   // maps directly to bento slots. Destructure by name so the layout is
   // explicit, not derived from .map().
@@ -46,7 +45,6 @@ export default async function HighlightsPage() {
             h={vntt}
             className="md:col-span-2 lg:col-span-5"
             layout="side-by-side"
-            openLabel={openLabel}
             locale={locale}
           />
         )}
@@ -55,7 +53,6 @@ export default async function HighlightsPage() {
             h={wcs}
             className="md:col-span-1 lg:col-span-3"
             layout="side-by-side"
-            openLabel={openLabel}
             locale={locale}
           />
         )}
@@ -64,7 +61,6 @@ export default async function HighlightsPage() {
             h={pmclub}
             className="md:col-span-1 lg:col-span-2"
             layout="stacked"
-            openLabel={openLabel}
             locale={locale}
           />
         )}
@@ -73,7 +69,6 @@ export default async function HighlightsPage() {
             h={cna}
             className="md:col-span-1 lg:col-span-2"
             layout="stacked"
-            openLabel={openLabel}
             locale={locale}
           />
         )}
@@ -81,8 +76,7 @@ export default async function HighlightsPage() {
           <BentoCard
             h={sbr}
             className="md:col-span-2 lg:col-span-3"
-            layout="text-only"
-            openLabel={openLabel}
+            layout="side-by-side"
             locale={locale}
           />
         )}
@@ -95,13 +89,11 @@ function BentoCard({
   h,
   className,
   layout,
-  openLabel,
   locale,
 }: {
   h: Highlight;
   className?: string;
   layout: BentoLayout;
-  openLabel: string;
   locale: Locale;
 }) {
   const title = pickLocalized(h.title, h.titleVi, locale);
@@ -112,26 +104,9 @@ function BentoCard({
     </span>
   );
 
-  const OpenPill = () =>
-    h.href ? (
-      <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-soft)] transition-all group-hover:border-transparent group-hover:bg-[var(--color-ruby)] group-hover:text-white">
-        {openLabel}
-        <svg
-          width="11"
-          height="11"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M7 17 17 7M7 7h10v10" />
-        </svg>
-      </span>
-    ) : null;
+  // No explicit "Open" pill on bento cards: the whole card is the
+  // link target and the lift-card hover already signals clickability.
+  // The extra chip read as redundant noise.
 
   let inner: React.ReactNode;
 
@@ -162,7 +137,6 @@ function BentoCard({
           <p className="text-[13px] leading-[1.55] text-[var(--color-fg-muted)]">
             {description}
           </p>
-          {h.href && <div className="mt-auto pt-4"><OpenPill /></div>}
         </div>
       </div>
     );
@@ -190,7 +164,6 @@ function BentoCard({
           <p className="text-[13px] leading-[1.6] text-[var(--color-fg-muted)]">
             {description}
           </p>
-          {h.href && <div className="mt-auto pt-4"><OpenPill /></div>}
         </div>
       </div>
     );
@@ -216,7 +189,6 @@ function BentoCard({
           <p className="text-[13.5px] leading-[1.6] text-[var(--color-fg-muted)]">
             {description}
           </p>
-          {h.href && <div className="mt-auto pt-5"><OpenPill /></div>}
         </div>
       </div>
     );

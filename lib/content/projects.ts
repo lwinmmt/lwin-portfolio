@@ -458,7 +458,7 @@ export const projects: Project[] = [
       "Two-surface product for a dental clinic chain: patient mobile app (appointments, recall reminders) and operations dashboard (retention by outlet, no-show analytics).",
     descriptionVi:
       "Sản phẩm hai mặt cho chuỗi nha khoa: ứng dụng di động cho bệnh nhân (đặt lịch, nhắc tái khám) và dashboard vận hành (giữ chân khách theo chi nhánh, phân tích trễ hẹn).",
-    dates: "Aug 2024 to Dec 2024",
+    dates: "Jan 2026 to Apr 2026",
     category: "Coursework",
     tags: ["Next.js", "React Native", "Vercel", "TypeScript"],
     liveLinks: [

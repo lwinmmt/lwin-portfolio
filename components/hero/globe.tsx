@@ -340,8 +340,11 @@ export function HeroGlobe() {
       ctx.clearRect(0, 0, SIZE, SIZE);
 
       // === Dots ===
-      // Sphere has no backface culling; all dots render. Per-dot
-      // perspective scale gives natural depth (closer dot = bigger).
+      // Back-hemisphere cull: skip dots whose rotated z is on the far
+      // side of the sphere. Reads as a real globe with depth instead
+      // of a see-through wireframe where back-side dots showed through
+      // the front. A small negative threshold softens the silhouette
+      // so dots fade past the limb instead of cutting abruptly.
       ctx.fillStyle = palette.current.dot;
       for (let i = 0; i < dots.length; i++) {
         const d = dots[i];
@@ -351,6 +354,7 @@ export function HeroGlobe() {
         // then rotateX (only y, z change)
         const y2 = d.y * cosTheta - z1 * sinTheta;
         const z2 = d.y * sinTheta + z1 * cosTheta;
+        if (z2 < -0.02) continue; // back-of-sphere, hide
         const zScaled = z2 * RADIUS;
         const scale = FOCAL / (FOCAL - zScaled);
         const sx = x1 * RADIUS * scale + cx;
@@ -372,34 +376,48 @@ export function HeroGlobe() {
           continue;
         }
 
-        // Arc path — drawn as a single continuous stroked polyline
-        // through the projected track points. Reads as one curved
-        // ruby thread instead of a string of separated dots. Stripe
-        // / Aceternity style.
+        // Arc path — stroked polyline through the projected track
+        // points. Back-hemisphere segments are skipped: we break the
+        // sub-path when z2 dips below the visibility threshold and
+        // resume when it climbs back. Without this break, a single
+        // continuous lineTo would draw a chord across the sphere
+        // through points that should be hidden behind it.
         ctx.strokeStyle = palette.current.arcTrack;
         ctx.lineWidth = 1.1;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.beginPath();
         const track = arc.track;
+        let pathActive = false;
         for (let i = 0; i < track.length; i++) {
           const { p, elev } = track[i];
           const x1 = p.x * cosPhi + p.z * sinPhi;
           const z1 = -p.x * sinPhi + p.z * cosPhi;
           const y2 = p.y * cosTheta - z1 * sinTheta;
           const z2 = p.y * sinTheta + z1 * cosTheta;
+          if (z2 < -0.02) {
+            // Hide point + force the next visible point to start a
+            // fresh sub-path, not connect across the dark side.
+            pathActive = false;
+            continue;
+          }
           const r = RADIUS * elev;
           const zS = z2 * r;
           const scale = FOCAL / (FOCAL - zS);
           const sx = x1 * r * scale + cx;
           const sy = -y2 * r * scale + cy;
-          if (i === 0) ctx.moveTo(sx, sy);
-          else ctx.lineTo(sx, sy);
+          if (!pathActive) {
+            ctx.moveTo(sx, sy);
+            pathActive = true;
+          } else {
+            ctx.lineTo(sx, sy);
+          }
         }
         ctx.stroke();
 
         // Comet trail: head + 3 fading shadow dots. Each segment is
-        // at headT - offset and slerps along (from, to).
+        // at headT - offset and slerps along (from, to). Hide comets
+        // on the back of the sphere; they should not show through.
         for (let idx = 0; idx < COMET_TRAIL_OFFSETS.length; idx++) {
           const offset = COMET_TRAIL_OFFSETS[idx];
           const tt = headT - offset;
@@ -410,6 +428,7 @@ export function HeroGlobe() {
           const z1 = -p.x * sinPhi + p.z * cosPhi;
           const y2 = p.y * cosTheta - z1 * sinTheta;
           const z2 = p.y * sinTheta + z1 * cosTheta;
+          if (z2 < -0.02) continue;
           const r = RADIUS * elev;
           const zS = z2 * r;
           const scale = FOCAL / (FOCAL - zS);
@@ -515,8 +534,14 @@ export function HeroGlobe() {
         />
       </div>
 
+      {/* The chip content is asymmetric ("HCMC" short, "5:48 PM"
+          longer in the middle, "GMT+7" on the right), so centering
+          the chip BOX puts the time text slightly left of the globe
+          center axis. translateX(10px) nudges the chip right so the
+          time reads centered under the sphere. */}
       <div
         className="glass-chip mt-4 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
+        style={{ transform: "translateX(10px)" }}
         aria-label={`Currently in ${profile.location}`}
       >
         <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">

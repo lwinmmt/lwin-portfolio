@@ -180,7 +180,10 @@ function LightboxModal({
       aria-modal="true"
       aria-label={labels.dialog}
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6 backdrop-blur-sm animate-fade-in"
+      // Solid backdrop. The previous bg-black/85 + backdrop-blur let the
+      // page content bleed through the modal, which read as a "did the
+      // click do anything?" bug rather than a fullscreen viewer.
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(8,8,8,0.97)] p-6 animate-fade-in"
     >
       <div className="relative max-h-full max-w-full" onClick={(e) => e.stopPropagation()}>
         {/* Plain img: the source images are already optimized webp/avif at
