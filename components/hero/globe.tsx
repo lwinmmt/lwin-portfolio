@@ -58,11 +58,13 @@ export function HeroGlobe() {
     if (!canvasRef.current || !mounted) return;
     const canvas = canvasRef.current;
 
-    // Warm-gray palette that integrates with the cream page bg.
-    // dark: 0 inverts the rendering so continents appear as DARK dots
-    // on the LIGHT cream sphere set by glowColor.
-    const baseColor: [number, number, number] = [0.22, 0.20, 0.18];
-    const glowColor: [number, number, number] = [0.96, 0.95, 0.92];
+    // Aceternity-style navy palette. The globe now lives in its own
+    // column (right side of the hero), so it does not need to blend
+    // with the cream page bg; it can be a distinct dark object that
+    // pops. `dark: 1` renders dots DIRECTLY (bright dots on dark
+    // sphere) which is what Aceternity does.
+    const baseColor: [number, number, number] = [0.5, 0.7, 1.0]; // bright blue-white continent dots
+    const glowColor: [number, number, number] = [0.08, 0.18, 0.45]; // deep blue atmospheric halo
 
     let phi = INITIAL_PHI;
     let phiOffset = 0;
@@ -77,10 +79,10 @@ export function HeroGlobe() {
       height: DISPLAY_SIZE * 2,
       phi: INITIAL_PHI,
       theta: 0.3,
-      dark: 0,
-      diffuse: 1.2,
-      mapSamples: 16000,
-      mapBrightness: 6,
+      dark: 1,
+      diffuse: 1.5,
+      mapSamples: 32000,
+      mapBrightness: 8,
       baseColor,
       markerColor: baseColor,
       glowColor,
