@@ -3,10 +3,19 @@ import { HeroGlobe } from "@/components/hero/globe";
 import { EmailButton } from "@/components/ui/email-button";
 import { profile } from "@/lib/content";
 
+// Asymmetric 2-col hero on lg+: text block (greeting, name, intro,
+// 'Right now' chip, CTAs) on the left, globe vertically centered in
+// a narrower right column. On smaller viewports the grid collapses to
+// a single column and the globe falls between the intro paragraph and
+// the 'Right now' chip in natural document order.
+
 export function Hero() {
   return (
-    <section className="flex flex-col gap-8">
-      <div className="animate-fade-up" style={{ animationDelay: "0ms" }}>
+    <section className="grid gap-8 lg:grid-cols-[3fr_2fr] lg:gap-10">
+      <div
+        className="animate-fade-up lg:col-start-1 lg:row-start-1"
+        style={{ animationDelay: "0ms" }}
+      >
         <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
           {profile.greeting}
         </div>
@@ -17,7 +26,7 @@ export function Hero() {
       </div>
 
       <p
-        className="max-w-[640px] text-[1.0625rem] leading-[1.65] text-[var(--color-fg-soft)] animate-fade-up"
+        className="max-w-[640px] text-[1.0625rem] leading-[1.65] text-[var(--color-fg-soft)] animate-fade-up lg:col-start-1 lg:row-start-2"
         style={{ animationDelay: "150ms" }}
       >
         I&rsquo;m an{" "}
@@ -40,14 +49,20 @@ export function Hero() {
         . Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.
       </p>
 
+      {/* Globe: stacked between intro and 'Right now' on mobile (natural
+          document order in a single-column grid), right column spanning
+          the full text-block height and vertically centered on lg+. */}
       <div
-        className="flex justify-center animate-fade-up"
+        className="animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:self-center"
         style={{ animationDelay: "300ms" }}
       >
         <HeroGlobe />
       </div>
 
-      <div className="animate-fade-up" style={{ animationDelay: "400ms" }}>
+      <div
+        className="animate-fade-up lg:col-start-1 lg:row-start-3"
+        style={{ animationDelay: "400ms" }}
+      >
         <div className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
           Right now
         </div>
@@ -73,7 +88,10 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 animate-fade-up" style={{ animationDelay: "500ms" }}>
+      <div
+        className="flex flex-wrap gap-2 animate-fade-up lg:col-start-1 lg:row-start-4"
+        style={{ animationDelay: "500ms" }}
+      >
         <Link
           href="/resume"
           className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:-translate-y-px hover:bg-[var(--color-ruby)]"

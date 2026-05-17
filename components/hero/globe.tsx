@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 // Cobe v2: needs manual globe.update({ phi }) in a RAF loop. The
 // `onRender` callback only existed in v1.
 
-const DISPLAY_SIZE = 460;
+const DISPLAY_SIZE = 380;
 const INITIAL_PHI = 4.6;
 const AUTO_ROTATE_SPEED = 0.0028;
 const DRAG_SENSITIVITY = 0.005;
