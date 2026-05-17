@@ -13,6 +13,7 @@ import {
 } from "@/lib/content";
 import { useLocale, useT } from "@/lib/i18n/client";
 import { pickLocalized } from "@/lib/i18n/content";
+import { localeHref } from "@/lib/i18n/href";
 import type { MessageKey } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/types";
 import { useModKey } from "@/lib/use-mod-key";
@@ -232,9 +233,9 @@ export function CmdPalette() {
         }
         return;
       }
-      router.push(item.href);
+      router.push(localeHref(item.href, locale));
     },
-    [close, router],
+    [close, router, locale],
   );
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

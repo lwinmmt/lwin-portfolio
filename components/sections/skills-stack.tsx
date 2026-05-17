@@ -6,8 +6,9 @@ import {
 } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { localeHref } from "@/lib/i18n/href";
 
-export async function SkillsStack() {
+export function SkillsStack() {
   const t = getT();
   const locale = getLocale();
   return (
@@ -17,7 +18,7 @@ export async function SkillsStack() {
           {t("skills.title")}
         </h2>
         <Link
-          href="/uses"
+          href={localeHref("/uses", locale)}
           className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
           {t("skills.viewAll")}

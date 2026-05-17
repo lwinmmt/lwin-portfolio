@@ -10,6 +10,7 @@ import { navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
 import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { useLocale, useT } from "@/lib/i18n/client";
+import { localeHref } from "@/lib/i18n/href";
 import {
   DEFAULT_LOCALE,
   LOCALES,
@@ -55,6 +56,7 @@ const SHEET_INTERNAL: DockItem[] = [
 export function MobileDock() {
   const pathname = usePathname();
   const t = useT();
+  const locale = useLocale();
   const [sheetOpen, setSheetOpen] = useState(false);
 
   // Close the sheet whenever the route changes (e.g. tapping a link).
@@ -86,7 +88,7 @@ export function MobileDock() {
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={localeHref(item.href, locale)}
               aria-label={label}
               className={itemClass}
             >
@@ -124,6 +126,7 @@ function MobileMoreSheet({
   onClose: () => void;
 }) {
   const t = useT();
+  const locale = useLocale();
 
   // Esc closes + body scroll lock while open.
   useEffect(() => {
@@ -167,7 +170,13 @@ function MobileMoreSheet({
         {/* Internal routes. */}
         <SheetSection label={t("nav.section.resources")}>
           {SHEET_INTERNAL.map((item) => (
-            <SheetLink key={item.href} item={item} onClose={onClose} t={t} />
+            <SheetLink
+              key={item.href}
+              item={item}
+              onClose={onClose}
+              t={t}
+              locale={locale}
+            />
           ))}
         </SheetSection>
 
@@ -216,14 +225,16 @@ function SheetLink({
   item,
   onClose,
   t,
+  locale,
 }: {
   item: DockItem;
   onClose: () => void;
   t: (key: MessageKey) => string;
+  locale: Locale;
 }) {
   return (
     <Link
-      href={item.href}
+      href={localeHref(item.href, locale)}
       onClick={onClose}
       className="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-[var(--color-fg-muted)] transition-colors hover:bg-[var(--color-hover-mute)] hover:text-[var(--color-fg)]"
     >

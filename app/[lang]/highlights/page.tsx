@@ -7,6 +7,7 @@ import { highlights, type Highlight } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
+import { localeHref } from "@/lib/i18n/href";
 import type { Locale } from "@/lib/i18n/types";
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 
 type BentoLayout = "side-by-side" | "stacked" | "text-only";
 
-export default async function HighlightsPage() {
+export default function HighlightsPage() {
   const t = getT();
   const locale = getLocale();
   // Highlights order in lib/content/highlights.ts is intentional and
@@ -199,10 +200,15 @@ function BentoCard({
     );
   }
 
-  return wrapWithLink(h, inner, className);
+  return wrapWithLink(h, inner, locale, className);
 }
 
-function wrapWithLink(h: Highlight, inner: React.ReactNode, className?: string) {
+function wrapWithLink(
+  h: Highlight,
+  inner: React.ReactNode,
+  locale: Locale,
+  className?: string,
+) {
   // h-full so the inner card's h-full can resolve against this wrapper
   // when the grid assigns a row height.
   if (!h.href) {
@@ -210,7 +216,7 @@ function wrapWithLink(h: Highlight, inner: React.ReactNode, className?: string) 
   }
   if (h.href.startsWith("/")) {
     return (
-      <Link href={h.href} className={"block h-full " + (className ?? "")}>
+      <Link href={localeHref(h.href, locale)} className={"block h-full " + (className ?? "")}>
         {inner}
       </Link>
     );

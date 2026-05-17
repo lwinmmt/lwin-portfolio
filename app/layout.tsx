@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     template: "%s | Lwin MMT",
   },
   description:
-    "I build IoT systems and ship products end-to-end. Cloud, hardware, and the operating system in between. Currently AI & IIoT Engineer at VNTT, Ho Chi Minh City.",
+    "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.",
   metadataBase: new URL("https://lwinmmt.com"),
   openGraph: {
     title: "Lwin, AI and IIoT Engineer",
     description:
-      "Engineer by training. Founder by accident. Daily AI-tools operator. Currently at VNTT, HCMC.",
+      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
     url: "https://lwinmmt.com",
     siteName: "Lwin MMT",
     locale: "en_SG",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Lwin, AI and IIoT Engineer",
     description:
-      "Engineer by training. Founder by accident. Daily AI-tools operator.",
+      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
   },
   // Icons resolved automatically from app/icon.svg and app/apple-icon.svg.
 };

@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { navItems, navResources, navContact } from "@/lib/content";
+import { useLocale } from "@/lib/i18n/client";
+import { localeHref } from "@/lib/i18n/href";
 
 /**
  * Global keyboard shortcut handler. The sidebar nav rows render small
@@ -15,6 +17,7 @@ import { navItems, navResources, navContact } from "@/lib/content";
  */
 export function KeyboardNav() {
   const router = useRouter();
+  const locale = useLocale();
 
   useEffect(() => {
     const all = [...navItems, ...navResources, ...navContact];
@@ -39,12 +42,12 @@ export function KeyboardNav() {
       if (!dest) return;
       if (dest.startsWith("mailto:") || dest.startsWith("http")) return;
       event.preventDefault();
-      router.push(dest);
+      router.push(localeHref(dest, locale));
     };
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [router]);
+  }, [router, locale]);
 
   return null;
 }

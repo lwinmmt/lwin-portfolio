@@ -11,7 +11,8 @@ import { EmailButton } from "@/components/ui/email-button";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { profile, navItems, navResources, navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
-import { useT } from "@/lib/i18n/client";
+import { useLocale, useT } from "@/lib/i18n/client";
+import { localeHref } from "@/lib/i18n/href";
 import { useModKey } from "@/lib/use-mod-key";
 
 export function Sidebar() {
@@ -149,6 +150,7 @@ export function Sidebar() {
 
 function NavSection({ items, pathname }: { items: NavLink[]; pathname: string }) {
   const t = useT();
+  const locale = useLocale();
   return (
     <nav className="flex flex-col gap-[1px]">
       {items.map((item) => {
@@ -206,7 +208,11 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
         }
 
         return (
-          <Link key={item.href} href={item.href} className={className}>
+          <Link
+            key={item.href}
+            href={localeHref(item.href, locale)}
+            className={className}
+          >
             {inner}
           </Link>
         );

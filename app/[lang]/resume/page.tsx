@@ -17,6 +17,7 @@ import {
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
+import { localeHref } from "@/lib/i18n/href";
 import { renderRich } from "@/lib/i18n/rich";
 import type { MessageKey } from "@/lib/i18n/messages";
 
@@ -46,7 +47,7 @@ const ROLE_CASE_STUDY: Record<string, string> = {
   "sp-iot": "asv-5g-autonomous",
 };
 
-export default async function ResumePage() {
+export default function ResumePage() {
   const t = getT();
   const locale = getLocale();
   return (
@@ -197,7 +198,7 @@ export default async function ResumePage() {
                     </span>
                     {ROLE_CASE_STUDY[r.id] ? (
                       <Link
-                        href={`/projects/${ROLE_CASE_STUDY[r.id]}`}
+                        href={localeHref(`/projects/${ROLE_CASE_STUDY[r.id]}`, locale)}
                         className="underline decoration-[var(--color-border-default)] decoration-1 underline-offset-[3px] transition-colors hover:text-[var(--color-fg)] hover:decoration-[var(--color-ruby-deep)]"
                       >
                         {highlight}

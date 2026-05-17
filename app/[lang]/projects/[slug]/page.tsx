@@ -8,6 +8,7 @@ import { ProjectLightboxGallery } from "@/components/ui/lightbox";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
+import { localeHref } from "@/lib/i18n/href";
 import type { MessageKey } from "@/lib/i18n/messages";
 import {
   projects,
@@ -92,7 +93,7 @@ export default async function ProjectPage({
     <DashboardShell>
       <ProjectBreadcrumbsJsonLd slug={project.slug} title={project.title} />
       <Link
-        href="/projects"
+        href={localeHref("/projects", locale)}
         className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
       >
         <span aria-hidden="true">&larr;</span> {t("project.back")}
@@ -177,7 +178,7 @@ export default async function ProjectPage({
                 {related.map((p) => (
                   <li key={p.slug}>
                     <Link
-                      href={`/projects/${p.slug}`}
+                      href={localeHref(`/projects/${p.slug}`, locale)}
                       className="group block rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-4 transition-colors hover:border-[var(--color-border-default)]"
                     >
                       <h3 className="font-sans text-[13.5px] font-semibold text-[var(--color-fg)]">

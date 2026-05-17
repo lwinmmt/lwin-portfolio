@@ -2,7 +2,8 @@ import Link from "next/link";
 import { HeroStage } from "@/components/hero/hero-stage";
 import { EmailButton } from "@/components/ui/email-button";
 import { profile } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { localeHref } from "@/lib/i18n/href";
 
 // Asymmetric 2-col hero on lg+: text block (greeting, name, intro,
 // 'Right now' chip, CTAs) on the left, hero stage (globe or terminal
@@ -20,8 +21,9 @@ import { getT } from "@/lib/i18n/server";
 // still provides the language-agnostic data (links, email, social
 // handles, school proper noun, org short name).
 
-export async function Hero() {
+export function Hero() {
   const t = getT();
+  const locale = getLocale();
   const currentRole = t("hero.currentRole");
   const currentOrgFullName = t("hero.currentOrgFullName");
   const ariaCurrentRole = t("hero.cta.ariaCurrentRole")
@@ -112,7 +114,7 @@ export async function Hero() {
         style={{ animationDelay: "500ms" }}
       >
         <Link
-          href="/resume"
+          href={localeHref("/resume", locale)}
           className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:-translate-y-px hover:bg-[var(--color-ruby)]"
         >
           {t("hero.cta.resume")}

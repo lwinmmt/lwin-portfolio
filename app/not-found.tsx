@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { localeHref } from "@/lib/i18n/href";
 
 export const metadata: Metadata = {
   title: "Not Found",
   robots: { index: false, follow: false },
 };
 
-export default async function NotFound() {
+export default function NotFound() {
   const t = getT();
+  const locale = getLocale();
   return (
     <DashboardShell>
       <section className="flex min-h-[60vh] flex-col justify-center">
@@ -27,25 +29,25 @@ export default async function NotFound() {
 
         <div className="mt-8 flex flex-wrap gap-2.5">
           <Link
-            href="/"
+            href={localeHref("/", locale)}
             className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:-translate-y-px hover:bg-[var(--color-ruby)]"
           >
             {t("notFound.home")}
           </Link>
           <Link
-            href="/projects"
+            href={localeHref("/projects", locale)}
             className="btn-secondary"
           >
             {t("notFound.projects")}
           </Link>
           <Link
-            href="/about"
+            href={localeHref("/about", locale)}
             className="btn-secondary"
           >
             {t("notFound.about")}
           </Link>
           <Link
-            href="/resume"
+            href={localeHref("/resume", locale)}
             className="btn-secondary"
           >
             {t("notFound.resume")}

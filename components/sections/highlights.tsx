@@ -4,6 +4,7 @@ import { CardCover } from "@/components/ui/card-cover";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
+import { localeHref } from "@/lib/i18n/href";
 import type { Locale } from "@/lib/i18n/types";
 
 // Hoist the slice so it's computed once at module load, not on every
@@ -11,7 +12,7 @@ import type { Locale } from "@/lib/i18n/types";
 // list lives at /highlights.
 const HOME_HIGHLIGHTS = highlights.slice(0, 4);
 
-export async function Highlights() {
+export function Highlights() {
   const t = getT();
   const locale = getLocale();
   return (
@@ -21,7 +22,7 @@ export async function Highlights() {
           {t("highlights.title")}
         </h2>
         <Link
-          href="/highlights"
+          href={localeHref("/highlights", locale)}
           className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
           {t("highlights.viewAll")}
@@ -69,7 +70,7 @@ function HighlightCard({ h, locale }: { h: Highlight; locale: Locale }) {
   const isInternal = h.href.startsWith("/");
   if (isInternal) {
     return (
-      <Link href={h.href} className="block h-full">
+      <Link href={localeHref(h.href, locale)} className="block h-full">
         {inner}
       </Link>
     );

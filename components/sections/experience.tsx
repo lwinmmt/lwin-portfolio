@@ -9,9 +9,10 @@ import { EntityNameLink } from "@/components/ui/entity-name-link";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
+import { localeHref } from "@/lib/i18n/href";
 import type { Locale } from "@/lib/i18n/types";
 
-export async function Experience() {
+export function Experience() {
   const t = getT();
   const locale = getLocale();
   return (
@@ -21,7 +22,7 @@ export async function Experience() {
           {t("experience.title")}
         </h2>
         <Link
-          href="/resume"
+          href={localeHref("/resume", locale)}
           className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
           {t("experience.viewAll")}

@@ -18,6 +18,7 @@ import { useLocale, useT } from "@/lib/i18n/client";
 import type { MessageKey } from "@/lib/i18n/messages";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
+import { localeHref } from "@/lib/i18n/href";
 
 // Map category enum -> display translation key. Enum stays English; the
 // label users see comes from t().
@@ -293,7 +294,7 @@ function ProjectCard({
         )}
         <h3 className="font-sans text-[15px] font-semibold leading-[1.35] text-[var(--color-fg)]">
           <Link
-            href={`/projects/${project.slug}`}
+            href={localeHref(`/projects/${project.slug}`, locale)}
             className="transition-colors after:absolute after:inset-0 after:content-[''] hover:text-[var(--color-ruby-deep)] focus-visible:after:rounded-2xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-[var(--color-ruby)]"
           >
             <span className="card-title-draw">{title}</span>
