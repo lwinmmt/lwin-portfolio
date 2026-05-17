@@ -45,6 +45,12 @@ const COMET_TRAIL_OPACITY = [1, 0.55, 0.3, 0.15] as const;
 const COAST_FRICTION = 0.94;
 const COAST_STOP_THRESHOLD = 0.05;
 
+// Vertical tilt range. The globe is a dot sphere with no country
+// outlines, so unbounded pitch is disorienting (you cannot tell
+// which way is up). Clamp to +/- 70 degrees so the poles stay
+// reachable but the user cannot flip the globe upside down.
+const MAX_THETA_DEG = 70;
+
 const ARC_POOL: Array<[number, number]> = [
   // SEA + APAC
   [16.8409, 96.1735], // Yangon
@@ -175,13 +181,23 @@ export function HeroGlobe() {
   const locale = useLocale();
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
   const rotatorRef = useRef<HTMLDivElement | null>(null);
+  // phi   = rotation around the Y axis (left-right spin, auto-rotates)
+  // theta = rotation around the X axis (up-down tilt, drag only)
   const phi = useRef(INITIAL_PHI_DEG);
+  const theta = useRef(0);
   const dragging = useRef(false);
   const dragStartX = useRef(0);
+  const dragStartY = useRef(0);
   const dragStartPhi = useRef(0);
+  const dragStartTheta = useRef(0);
   const lastDragX = useRef(0);
   const dragVelocity = useRef(0);
   const coastVelocity = useRef(0);
+
+  const applyRotation = () => {
+    if (!rotatorRef.current) return;
+    rotatorRef.current.style.transform = `rotateX(${-theta.current}deg) rotateY(${phi.current}deg)`;
+  };
 
   const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState<Date>(() => new Date(0));
@@ -244,15 +260,17 @@ export function HeroGlobe() {
     const tick = () => {
       if (rotatorRef.current) {
         if (dragging.current) {
-          // Pointer drives phi directly during drag.
+          // Pointer handler writes phi + theta directly during drag.
         } else if (Math.abs(coastVelocity.current) > COAST_STOP_THRESHOLD) {
           phi.current = (phi.current + coastVelocity.current) % 360;
           coastVelocity.current *= COAST_FRICTION;
-          rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+          applyRotation();
         } else {
           coastVelocity.current = 0;
           phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
-          rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+          // theta is preserved at whatever tilt the user dragged to,
+          // so the auto-rotation continues around their chosen axis.
+          applyRotation();
         }
       }
 
@@ -288,8 +306,10 @@ export function HeroGlobe() {
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     dragging.current = true;
     dragStartX.current = e.clientX;
+    dragStartY.current = e.clientY;
     lastDragX.current = e.clientX;
     dragStartPhi.current = phi.current;
+    dragStartTheta.current = theta.current;
     dragVelocity.current = 0;
     coastVelocity.current = 0;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -299,12 +319,24 @@ export function HeroGlobe() {
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (!dragging.current || !rotatorRef.current) return;
-      const delta = e.clientX - dragStartX.current;
-      phi.current = dragStartPhi.current + delta * DRAG_SENSITIVITY;
+      const dx = e.clientX - dragStartX.current;
+      const dy = e.clientY - dragStartY.current;
+      phi.current = dragStartPhi.current + dx * DRAG_SENSITIVITY;
+      // Tilt: drag down -> globe tilts forward (top toward camera).
+      // Clamped so the user cannot flip past the poles, which would
+      // be disorienting on a sphere with no recognisable landmarks.
+      const rawTheta = dragStartTheta.current + dy * DRAG_SENSITIVITY;
+      theta.current = Math.max(
+        -MAX_THETA_DEG,
+        Math.min(MAX_THETA_DEG, rawTheta),
+      );
+      // Horizontal velocity drives the coast on release. Tilt does
+      // not coast; users almost always want it to land where they
+      // let go.
       const frameDelta = (e.clientX - lastDragX.current) * DRAG_SENSITIVITY;
       dragVelocity.current = dragVelocity.current * 0.6 + frameDelta * 0.4;
       lastDragX.current = e.clientX;
-      rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+      applyRotation();
     },
     [],
   );
@@ -371,7 +403,7 @@ export function HeroGlobe() {
           className="absolute inset-0"
           style={{
             transformStyle: "preserve-3d",
-            transform: `rotateY(${INITIAL_PHI_DEG}deg)`,
+            transform: `rotateX(0deg) rotateY(${INITIAL_PHI_DEG}deg)`,
             cursor: "grab",
             willChange: "transform",
           }}
