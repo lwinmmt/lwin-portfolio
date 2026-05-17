@@ -114,13 +114,13 @@ function BentoCard({
     inner = (
       <div className="lift-card group grid h-full grid-cols-1 overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] sm:grid-cols-[1.2fr_1fr]">
         {h.imageSrc ? (
-          <div className="relative min-h-[180px] w-full overflow-hidden bg-[var(--color-bg-warm)] sm:min-h-[220px] lg:min-h-[280px]">
+          <div className="relative min-h-[180px] w-full overflow-hidden bg-[var(--color-bg-warm)] [isolation:isolate] [mask-image:linear-gradient(#000,#000)] sm:min-h-[220px] lg:min-h-[280px]">
             <Image
               src={h.imageSrc}
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, 50vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-500 [backface-visibility:hidden] [will-change:transform] group-hover:scale-[1.03]"
               style={h.coverFocus ? { objectPosition: h.coverFocus } : undefined}
               priority
             />
@@ -145,13 +145,13 @@ function BentoCard({
     inner = (
       <div className="lift-card group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]">
         {h.imageSrc && (
-          <div className="relative min-h-[220px] w-full overflow-hidden bg-[var(--color-bg-warm)]">
+          <div className="relative min-h-[220px] w-full overflow-hidden bg-[var(--color-bg-warm)] [isolation:isolate] [mask-image:linear-gradient(#000,#000)]">
             <Image
               src={h.imageSrc}
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, 25vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-500 [backface-visibility:hidden] [will-change:transform] group-hover:scale-[1.03]"
               style={h.coverFocus ? { objectPosition: h.coverFocus } : undefined}
             />
           </div>

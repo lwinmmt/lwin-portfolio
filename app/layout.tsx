@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
+import { HeroVariantSwitcher } from "@/components/hero/hero-variant-switcher";
 import { LocaleProvider } from "@/lib/i18n/client";
 import { getLocale } from "@/lib/i18n/server";
 import "./globals.css";
@@ -73,6 +74,11 @@ export default async function RootLayout({
           <LocaleProvider locale={locale}>
             <ConsoleBranding />
             {children}
+            {/* Dev affordance: floating hero variant switcher. Lives
+                here so it's reachable from any page. Delete this
+                mount + the component + the unused variant once Lwin
+                picks globe or terminal. */}
+            <HeroVariantSwitcher />
           </LocaleProvider>
         </ThemeProvider>
       </body>

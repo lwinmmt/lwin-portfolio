@@ -37,7 +37,16 @@ export function CardCover({
   const bgClass =
     background === "card" ? "bg-[var(--color-bg-card)]" : "bg-[var(--color-bg-warm)]";
   return (
-    <div className={`relative ${heightClass} w-full overflow-hidden ${bgClass}`}>
+    // `isolation: isolate` + `mask-image` here are the GPU-friendly
+    // version of overflow clipping. Without them the scaled <img>
+    // briefly painted a 1px dark hairline along the bottom edge during
+    // hover (subpixel overshoot past the parent's `overflow:hidden`
+    // before the compositor caught up). The mask forces the browser to
+    // composite this subtree as one layer that is hard-clipped to its
+    // own bounds, which kills the artifact across Webkit/Blink.
+    <div
+      className={`relative ${heightClass} w-full overflow-hidden ${bgClass} [isolation:isolate] [mask-image:linear-gradient(#000,#000)]`}
+    >
       <Image
         src={src}
         alt={alt}
@@ -51,7 +60,7 @@ export function CardCover({
         // CardCover quietly defaulted to browser "center" and the
         // same project image looked subtly different on every page.
         style={objectPosition ? { objectPosition } : undefined}
-        className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+        className={`object-cover transition-transform duration-500 [backface-visibility:hidden] [will-change:transform] group-hover:scale-[1.03] ${
           objectPosition ? "" : "object-top"
         }`}
       />

@@ -65,11 +65,14 @@ export const highlights: Highlight[] = [
     date: "MAY 2024",
     href: "https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures",
     imageSrc: "/images/highlights/sbr-osiris.jpg",
-    // Composite image: team photo on the left half, giant OSIRIS
-    // wordmark on the right. Default crop centers between them and
-    // lands awkwardly on white. Push left to favor the team and
-    // slightly down so faces (not the booth poster top) anchor.
-    coverFocus: "30% 65%",
+    // Source was a wide composite: team photo on the left, giant
+    // OSIRIS wordmark on the right. Lwin sat at the very left margin
+    // of the source and got pushed to the container edge on every
+    // crop. Recropped the source down to the team portion
+    // (800x1200 portrait); his face now sits at ~15% from the left
+    // instead of at the border. center 35% vertical anchors on the
+    // faces, not the booth poster.
+    coverFocus: "center 35%",
   },
   {
     title: "PM Club Internal Challenge 1st",

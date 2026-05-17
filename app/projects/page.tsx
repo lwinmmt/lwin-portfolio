@@ -221,7 +221,11 @@ function ProjectCard({
   return (
     <article className={cardClass}>
       {project.imageSrc && (
-        <div className={`relative ${imgHeight} w-full overflow-hidden bg-[var(--color-bg-warm)]`}>
+        // isolation + mask-image: see CardCover for the rationale.
+        // Kills the 1px hairline that flashed along the bottom edge
+        // when the scaled image briefly overshot overflow:hidden
+        // during the hover transition.
+        <div className={`relative ${imgHeight} w-full overflow-hidden bg-[var(--color-bg-warm)] [isolation:isolate] [mask-image:linear-gradient(#000,#000)]`}>
           <Image
             src={project.imageSrc}
             alt={`${title} cover`}
@@ -242,7 +246,7 @@ function ProjectCard({
             style={
               project.coverFocus ? { objectPosition: project.coverFocus } : undefined
             }
-            className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+            className={`object-cover transition-transform duration-500 [backface-visibility:hidden] [will-change:transform] group-hover:scale-[1.03] ${
               project.coverFocus ? "" : "object-top"
             }`}
           />
