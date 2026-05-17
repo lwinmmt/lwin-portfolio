@@ -52,27 +52,80 @@ function useAudio(enabled: boolean) {
 
   useEffect(() => {
     if (!enabled) return;
-    const init = async () => {
+
+    // Browser autoplay policy: AudioContext won't actually play sound
+    // until the user has made a gesture (click / tap / keypress /
+    // pointermove) somewhere on the page. Creating the AudioContext
+    // before that first gesture leaves it in `suspended` state and
+    // every play call is silently ignored. So we split the work:
+    //
+    //   1. PREFETCH the 2.5MB sprite bytes on requestIdleCallback —
+    //      no AudioContext yet, no autoplay involvement, no LCP
+    //      impact. The bytes warm the browser cache so step 2 is
+    //      instant.
+    //   2. On the first user gesture (any kind), create the
+    //      AudioContext (now starts in `running` state) and decode
+    //      the prefetched bytes. From here, every typing tick plays
+    //      as expected.
+    //
+    // Trade-off: if a visitor lands on the terminal variant and
+    // never moves the mouse / never scrolls before the animation
+    // finishes, the typing is silent. Any interaction at all —
+    // even a pointermove on initial load — flips it on for the
+    // rest of the session.
+    let cachedBytes: ArrayBuffer | null = null;
+    let unmounted = false;
+
+    const prefetch = async () => {
       try {
-        ctxRef.current = new AudioContext();
         const res = await fetch("/sounds/sound.ogg");
         if (!res.ok) return;
-        bufferRef.current = await ctxRef.current.decodeAudioData(
-          await res.arrayBuffer(),
-        );
-        readyRef.current = true;
+        const bytes = await res.arrayBuffer();
+        if (!unmounted) cachedBytes = bytes;
       } catch {
-        // Silent — terminal stays muted if the sprite is missing
-        // or AudioContext is disallowed (e.g. autoplay policy).
+        // Silent — terminal stays muted if the sprite is missing.
       }
     };
-    // Defer the 2.5MB audio sprite fetch off the critical path.
-    // requestIdleCallback waits for the browser's main thread to be
-    // idle (after hydration, LCP paint, etc.); the fallback timeout
-    // covers Safari / older Webkit which doesn't ship rIC. Early
-    // characters of the typing animation may play silently if the
-    // sprite isn't decoded yet — acceptable trade for shaving the
-    // upfront network + decode work off the hero load.
+
+    const unlock = async () => {
+      try {
+        const ctx = new AudioContext();
+        ctxRef.current = ctx;
+        // If the prefetch didn't land yet, fetch synchronously now.
+        if (!cachedBytes) {
+          const res = await fetch("/sounds/sound.ogg");
+          if (!res.ok) return;
+          cachedBytes = await res.arrayBuffer();
+        }
+        // decodeAudioData consumes the buffer; clone first so a
+        // remount (e.g. variant toggle) can still re-decode without
+        // re-fetching.
+        const buf = await ctx.decodeAudioData(cachedBytes.slice(0));
+        if (unmounted) return;
+        bufferRef.current = buf;
+        readyRef.current = true;
+      } catch {
+        // Silent — autoplay still disallowed or decode failed.
+      }
+    };
+
+    const gestureEvents = [
+      "pointerdown",
+      "pointermove",
+      "keydown",
+      "touchstart",
+    ] as const;
+    const onGesture = () => {
+      gestureEvents.forEach((e) =>
+        document.removeEventListener(e, onGesture),
+      );
+      unlock();
+    };
+    gestureEvents.forEach((e) =>
+      document.addEventListener(e, onGesture, { once: true, passive: true }),
+    );
+
+    // Kick off the prefetch in the background.
     type IdleWindow = Window & {
       requestIdleCallback?: (cb: () => void) => number;
       cancelIdleCallback?: (id: number) => void;
@@ -81,11 +134,16 @@ function useAudio(enabled: boolean) {
     let idleId: number | undefined;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
     if (typeof w.requestIdleCallback === "function") {
-      idleId = w.requestIdleCallback(() => init());
+      idleId = w.requestIdleCallback(prefetch);
     } else {
-      timeoutId = setTimeout(init, 1500);
+      timeoutId = setTimeout(prefetch, 1500);
     }
+
     return () => {
+      unmounted = true;
+      gestureEvents.forEach((e) =>
+        document.removeEventListener(e, onGesture),
+      );
       if (idleId !== undefined && typeof w.cancelIdleCallback === "function") {
         w.cancelIdleCallback(idleId);
       }
