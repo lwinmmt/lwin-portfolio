@@ -9,7 +9,6 @@ import {
   projects,
   type Project,
   type ProjectCategory,
-  type ProjectLiveLink,
 } from "@/lib/content";
 import { useLocale, useT } from "@/lib/i18n/client";
 import type { MessageKey } from "@/lib/i18n/messages";
@@ -42,11 +41,6 @@ function categoryToAnchor(category: ProjectCategory) {
     .replace(/(^-|-$)/g, "");
 }
 
-function allLiveLinks(p: Project): ProjectLiveLink[] {
-  if (p.liveLinks && p.liveLinks.length > 0) return p.liveLinks;
-  if (p.liveLink) return [{ url: p.liveLink, label: "Live" }];
-  return [];
-}
 
 export default function ProjectsPage() {
   const t = useT();
@@ -192,7 +186,6 @@ function ProjectCard({
   featured?: boolean;
 }) {
   const locale = useLocale();
-  const liveLinks = allLiveLinks(project);
   const attachments = attachmentCount(project);
   const title = pickLocalized(project.title, project.titleVi, locale);
   const description = pickLocalized(

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { useT } from "@/lib/i18n/client";
 
 export type LightboxImage = { src: string; alt: string };
 
@@ -26,6 +27,7 @@ export function ProjectLightboxGallery({
   gallery?: LightboxImage[];
   title: string;
 }) {
+  const t = useT();
   const images: LightboxImage[] = [
     ...(cover ? [cover] : []),
     ...(gallery ?? []),
@@ -71,7 +73,7 @@ export function ProjectLightboxGallery({
         <button
           type="button"
           onClick={() => setActive(0)}
-          aria-label={`Open ${title} cover image full size`}
+          aria-label={t("lightbox.open.cover").replace("{title}", title)}
           className="group relative mb-8 block aspect-[16/9] w-full cursor-zoom-in overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
         >
           <Image
@@ -93,7 +95,9 @@ export function ProjectLightboxGallery({
               key={img.src}
               type="button"
               onClick={() => setActive(galleryStart + idx)}
-              aria-label={`Open ${title} photo ${idx + 1} full size`}
+              aria-label={t("lightbox.open.photo")
+                .replace("{title}", title)
+                .replace("{n}", String(idx + 1))}
               className="group relative aspect-[4/3] cursor-zoom-in overflow-hidden rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
             >
               <Image
@@ -117,6 +121,12 @@ export function ProjectLightboxGallery({
           onClose={close}
           onPrev={prev}
           onNext={next}
+          labels={{
+            dialog: t("lightbox.aria.viewer"),
+            close: t("lightbox.close"),
+            prev: t("lightbox.previous"),
+            next: t("lightbox.next"),
+          }}
         />
       )}
     </>
@@ -154,6 +164,7 @@ function LightboxModal({
   onClose,
   onPrev,
   onNext,
+  labels,
 }: {
   image: LightboxImage;
   index: number;
@@ -161,12 +172,13 @@ function LightboxModal({
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
+  labels: { dialog: string; close: string; prev: string; next: string };
 }) {
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Image viewer"
+      aria-label={labels.dialog}
       onClick={onClose}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6 backdrop-blur-sm animate-fade-in"
     >
@@ -185,7 +197,7 @@ function LightboxModal({
       <button
         type="button"
         onClick={onClose}
-        aria-label="Close image viewer"
+        aria-label={labels.close}
         className="absolute right-5 top-5 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -201,7 +213,7 @@ function LightboxModal({
               e.stopPropagation();
               onPrev();
             }}
-            aria-label="Previous image"
+            aria-label={labels.prev}
             className="absolute left-4 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -214,7 +226,7 @@ function LightboxModal({
               e.stopPropagation();
               onNext();
             }}
-            aria-label="Next image"
+            aria-label={labels.next}
             className="absolute right-4 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

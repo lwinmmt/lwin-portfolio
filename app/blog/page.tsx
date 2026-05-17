@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { blogDrafts as drafts } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const t = await getT();
+  const locale = await getLocale();
   return (
     <DashboardShell>
       <header>
@@ -58,27 +60,32 @@ export default async function BlogPage() {
           </span>
         </div>
         <ul className="grid gap-3.5 sm:grid-cols-2">
-          {drafts.map((d) => (
-            <li
-              key={d.title}
-              className="rounded-2xl border border-dashed border-[var(--color-border-default)] bg-transparent p-5 opacity-70 transition-opacity hover:opacity-100"
-            >
-              <div className="mb-3 flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-ruby)]">
-                  {d.tag}
-                </span>
-                <span className="font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
-                  {d.estimatedDate}
-                </span>
-              </div>
-              <h3 className="mb-1.5 font-sans text-[15px] font-semibold leading-[1.3] text-[var(--color-fg)]">
-                {d.title}
-              </h3>
-              <p className="text-[12.5px] leading-[1.55] text-[var(--color-fg-muted)]">
-                {d.excerpt}
-              </p>
-            </li>
-          ))}
+          {drafts.map((d) => {
+            const title = pickLocalized(d.title, d.titleVi, locale);
+            const excerpt = pickLocalized(d.excerpt, d.excerptVi, locale);
+            const tag = pickLocalized(d.tag, d.tagVi, locale);
+            return (
+              <li
+                key={d.title}
+                className="rounded-2xl border border-dashed border-[var(--color-border-default)] bg-transparent p-5 opacity-70 transition-opacity hover:opacity-100"
+              >
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-ruby)]">
+                    {tag}
+                  </span>
+                  <span className="font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
+                    {d.estimatedDate}
+                  </span>
+                </div>
+                <h3 className="mb-1.5 font-sans text-[15px] font-semibold leading-[1.3] text-[var(--color-fg)]">
+                  {title}
+                </h3>
+                <p className="text-[12.5px] leading-[1.55] text-[var(--color-fg-muted)]">
+                  {excerpt}
+                </p>
+              </li>
+            );
+          })}
         </ul>
       </section>
 

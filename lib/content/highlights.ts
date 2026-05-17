@@ -1,7 +1,5 @@
 // Recent highlights surfaced on home and on the /highlights page.
 
-export type HighlightTag = "Work" | "Talk" | "Award" | "Press" | "School";
-
 export type Highlight = {
   title: string;
   /** Optional Vietnamese variant of the title. Skip for proper-noun
@@ -13,8 +11,6 @@ export type Highlight = {
    *  nouns and product names in English, translate only prose. */
   descriptionVi?: string;
   date: string;
-  tag: HighlightTag;
-  icon: "grid" | "globe" | "trophy" | "camera" | "book";
   href?: string;
   imageSrc?: string;
 };
@@ -28,8 +24,6 @@ export const highlights: Highlight[] = [
     descriptionVi:
       "Hệ thống IoT công nghiệp quy mô production tại TP. Hồ Chí Minh. Học EdgeX, triển khai hệ thống thật ở quy mô lớn.",
     date: "MAY 2026",
-    tag: "Work",
-    icon: "grid",
     href: "https://vntt.com.vn/",
     imageSrc: "/images/highlights/vntt-welcome.jpg",
   },
@@ -40,8 +34,6 @@ export const highlights: Highlight[] = [
     descriptionVi:
       "Giới thiệu giải pháp IoT thủy canh Osiris cho lãnh đạo chính phủ, bao gồm Bộ trưởng Indranee Rajah và Desmond Lee, tại gian trưng bày của SMU IIE.",
     date: "JUN 2024",
-    tag: "Talk",
-    icon: "globe",
     href: "https://cityperspectives.smu.edu.sg/special-features/wcs-2024",
     imageSrc: "/images/highlights/world-cities-summit-2024.webp",
   },
@@ -53,8 +45,6 @@ export const highlights: Highlight[] = [
     descriptionVi:
       "Osiris được điểm danh trong số 9 startup sinh viên SMU triển vọng nhất trong bài viết độc quyền của SBR.",
     date: "MAY 2024",
-    tag: "Press",
-    icon: "book",
     href: "https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures",
   },
   {
@@ -65,8 +55,6 @@ export const highlights: Highlight[] = [
     descriptionVi:
       "Đạt giải Nhất tại SMU Product Management Experience Internal Product Challenge với dự án GrabCompare.",
     date: "OCT 2023",
-    tag: "Award",
-    icon: "trophy",
     href: "/projects/grabcompare",
     imageSrc: "/images/highlights/pm-club-grabcompare.webp",
   },
@@ -78,8 +66,6 @@ export const highlights: Highlight[] = [
     descriptionVi:
       "Dự án Singapore Indoor Farms được giới thiệu trên CNA. Một Raspberry Pi với cảm biến độ ẩm DHT22, cảm biến CO2 và điều khiển đèn cùng máy bơm nước qua relay. Một bộ demo đơn giản, nhưng lên được truyền hình quốc gia.",
     date: "MAY 2022",
-    tag: "Press",
-    icon: "camera",
     imageSrc: "/images/highlights/cna-singapore-indoor-farm.webp",
   },
 ];

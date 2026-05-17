@@ -97,7 +97,12 @@ export function Sidebar() {
       <div className="mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1">
         {(["light", "dark", "system"] as const).map((mode) => {
           const isActiveTheme = mounted && theme === mode;
-          const label = mode === "system" ? "Auto" : mode.charAt(0).toUpperCase() + mode.slice(1);
+          const label =
+            mode === "system"
+              ? t("theme.auto")
+              : mode === "light"
+                ? t("theme.light")
+                : t("theme.dark");
           return (
             <button
               key={mode}
@@ -172,7 +177,6 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
               target="_blank"
               rel="noopener noreferrer"
               className={className}
-              aria-label={label}
             >
               {inner}
             </a>
@@ -180,7 +184,7 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
         }
 
         return (
-          <Link key={item.href} href={item.href} className={className} aria-label={label}>
+          <Link key={item.href} href={item.href} className={className}>
             {inner}
           </Link>
         );

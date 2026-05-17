@@ -4,10 +4,12 @@ import {
   certifications,
   spokenLanguages,
 } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
 
 export async function SkillsStack() {
   const t = await getT();
+  const locale = await getLocale();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
@@ -32,11 +34,15 @@ export async function SkillsStack() {
               <div key={group.id}>
                 <div className="mb-1.5 flex items-baseline gap-2">
                   <div className="font-sans text-[12.5px] font-semibold text-[var(--color-fg)]">
-                    {group.label}
+                    {pickLocalized(group.label, group.labelVi, locale)}
                   </div>
                   {group.description && (
                     <div className="font-sans text-[11px] text-[var(--color-fg-muted)]">
-                      {group.description}
+                      {pickLocalized(
+                        group.description,
+                        group.descriptionVi,
+                        locale,
+                      )}
                     </div>
                   )}
                 </div>

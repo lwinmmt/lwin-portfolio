@@ -24,6 +24,8 @@ export const messages = {
     // Sidebar section headings
     "nav.section.resources": "Resources",
     "nav.section.stayInTouch": "Stay in touch",
+    // Nav aria
+    "nav.aria.mobile": "Primary navigation, mobile",
     // Sidebar chrome
     "sidebar.subtitle": "AI & IIoT Engineer",
     "sidebar.search": "Search",
@@ -45,8 +47,38 @@ export const messages = {
     "hero.cta.github": "GitHub",
     "hero.cta.linkedin": "LinkedIn",
     "hero.cta.ariaCurrentRole": "Currently {role} at {org}, opens in new tab",
-    // Globe
-    "globe.dragToRotate": "Drag to rotate.",
+    // Theme switcher
+    "theme.light": "Light",
+    "theme.dark": "Dark",
+    "theme.auto": "Auto",
+    // Command palette
+    "cmd.placeholder": "Type a page, project, or action",
+    "cmd.aria": "Search command palette",
+    "cmd.aria.dialog": "Command palette",
+    "cmd.empty": "No matches for “{q}”",
+    "cmd.group.pages": "Pages",
+    "cmd.group.projects": "Projects",
+    "cmd.group.actions": "Actions",
+    "cmd.hint.page": "Page",
+    "cmd.hint.email": "Email",
+    "cmd.hint.external": "External",
+    "cmd.hint.action": "Action",
+    "cmd.footer.navigate": "Navigate",
+    "cmd.footer.open": "Open",
+    "cmd.footer.toggle": "Toggle",
+    "cmd.action.resumePdf": "Download resume PDF",
+    "cmd.action.email": "Email {email}",
+    "cmd.action.github": "Open GitHub profile",
+    "cmd.action.linkedin": "Open LinkedIn profile",
+    // Lightbox + zoom
+    "lightbox.open.cover": "Open {title} cover image full size",
+    "lightbox.open.photo": "Open {title} photo {n} full size",
+    "lightbox.aria.viewer": "Image viewer",
+    "lightbox.close": "Close image viewer",
+    "lightbox.previous": "Previous image",
+    "lightbox.next": "Next image",
+    // Project links shared between cards and detail page
+    "project.link.live": "Live",
     // About page chrome
     "about.eyebrow": "About",
     "about.title": "The longer story",
@@ -209,6 +241,8 @@ export const messages = {
     // Section headings
     "nav.section.resources": "Tài nguyên",
     "nav.section.stayInTouch": "Liên hệ",
+    // Nav aria
+    "nav.aria.mobile": "Điều hướng chính, mobile",
     // Sidebar chrome
     "sidebar.subtitle": "Kỹ sư AI & IIoT",
     "sidebar.search": "Tìm kiếm",
@@ -230,8 +264,38 @@ export const messages = {
     "hero.cta.github": "GitHub",
     "hero.cta.linkedin": "LinkedIn",
     "hero.cta.ariaCurrentRole": "Hiện đang là {role} tại {org}, mở trong tab mới",
-    // Globe
-    "globe.dragToRotate": "Kéo để xoay.",
+    // Theme switcher
+    "theme.light": "Sáng",
+    "theme.dark": "Tối",
+    "theme.auto": "Tự động",
+    // Command palette
+    "cmd.placeholder": "Gõ tên trang, dự án, hoặc thao tác",
+    "cmd.aria": "Tìm trong bảng lệnh",
+    "cmd.aria.dialog": "Bảng lệnh",
+    "cmd.empty": "Không có kết quả cho “{q}”",
+    "cmd.group.pages": "Trang",
+    "cmd.group.projects": "Dự án",
+    "cmd.group.actions": "Thao tác",
+    "cmd.hint.page": "Trang",
+    "cmd.hint.email": "Email",
+    "cmd.hint.external": "Ngoài",
+    "cmd.hint.action": "Thao tác",
+    "cmd.footer.navigate": "Di chuyển",
+    "cmd.footer.open": "Mở",
+    "cmd.footer.toggle": "Bật tắt",
+    "cmd.action.resumePdf": "Tải hồ sơ PDF",
+    "cmd.action.email": "Gửi email tới {email}",
+    "cmd.action.github": "Mở hồ sơ GitHub",
+    "cmd.action.linkedin": "Mở hồ sơ LinkedIn",
+    // Lightbox + zoom
+    "lightbox.open.cover": "Mở ảnh bìa {title} kích thước đầy đủ",
+    "lightbox.open.photo": "Mở ảnh {title} số {n} kích thước đầy đủ",
+    "lightbox.aria.viewer": "Trình xem ảnh",
+    "lightbox.close": "Đóng trình xem ảnh",
+    "lightbox.previous": "Ảnh trước",
+    "lightbox.next": "Ảnh sau",
+    // Project links shared between cards and detail page
+    "project.link.live": "Live",
     // About page chrome
     "about.eyebrow": "Giới thiệu",
     "about.title": "Câu chuyện dài hơn",

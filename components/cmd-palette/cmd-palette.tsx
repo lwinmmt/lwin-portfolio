@@ -9,14 +9,21 @@ import {
   projects,
   profile,
   type NavLink,
+  type ProjectCategory,
 } from "@/lib/content";
+import { useLocale, useT } from "@/lib/i18n/client";
+import { pickLocalized } from "@/lib/i18n/content";
+import type { MessageKey } from "@/lib/i18n/messages";
+import type { Locale } from "@/lib/i18n/types";
 import { useModKey } from "@/lib/use-mod-key";
+
+type PaletteGroup = "Pages" | "Projects" | "Actions";
 
 type PaletteItem = {
   id: string;
   label: string;
   hint?: string;
-  group: "Pages" | "Projects" | "Actions";
+  group: PaletteGroup;
   shortcut?: string;
   /** Either a route for router.push or an absolute URL for window.open. */
   href: string;
@@ -25,46 +32,73 @@ type PaletteItem = {
   search: string;
 };
 
-function buildItems(): PaletteItem[] {
+const GROUP_ORDER: PaletteGroup[] = ["Pages", "Projects", "Actions"];
+
+const GROUP_LABEL_KEY: Record<PaletteGroup, MessageKey> = {
+  Pages: "cmd.group.pages",
+  Projects: "cmd.group.projects",
+  Actions: "cmd.group.actions",
+};
+
+const PROJECT_CATEGORY_KEY: Record<ProjectCategory, MessageKey> = {
+  Projects: "projects.category.Projects",
+  Coursework: "projects.category.Coursework",
+};
+
+function buildItems(
+  t: (k: MessageKey) => string,
+  locale: Locale,
+): PaletteItem[] {
   const navAll: NavLink[] = [...navItems, ...navResources, ...navContact];
-  const pages: PaletteItem[] = navAll.map((n) => ({
-    id: `nav:${n.href}`,
-    label: n.label,
-    hint: n.href.startsWith("mailto:")
-      ? "Email"
+  const pages: PaletteItem[] = navAll.map((n) => {
+    const label = t(n.labelKey);
+    const hint = n.href.startsWith("mailto:")
+      ? t("cmd.hint.email")
       : n.href.startsWith("http")
-        ? "External"
-        : "Page",
-    group: "Pages",
-    shortcut: n.shortcut,
-    href: n.href,
-    external: n.external || n.href.startsWith("http"),
-    search: `${n.label} ${n.href}`.toLowerCase(),
-  }));
+        ? t("cmd.hint.external")
+        : t("cmd.hint.page");
+    return {
+      id: `nav:${n.href}`,
+      label,
+      hint,
+      group: "Pages" as const,
+      shortcut: n.shortcut,
+      href: n.href,
+      external: n.external || n.href.startsWith("http"),
+      search: `${label} ${n.label} ${n.href}`.toLowerCase(),
+    };
+  });
 
-  const projectItems: PaletteItem[] = projects.map((p) => ({
-    id: `project:${p.slug}`,
-    label: p.title,
-    hint: p.category,
-    group: "Projects",
-    href: `/projects/${p.slug}`,
-    search: `${p.title} ${p.tags.join(" ")} ${p.course ?? ""}`.toLowerCase(),
-  }));
+  const projectItems: PaletteItem[] = projects.map((p) => {
+    const label = pickLocalized(p.title, p.titleVi, locale);
+    return {
+      id: `project:${p.slug}`,
+      label,
+      hint: t(PROJECT_CATEGORY_KEY[p.category]),
+      group: "Projects" as const,
+      href: `/projects/${p.slug}`,
+      // Include both EN and VI strings in the search blob so users
+      // typing in either language still find the project.
+      search: `${label} ${p.title} ${p.tags.join(" ")} ${p.course ?? ""}`.toLowerCase(),
+    };
+  });
 
+  const actionHint = t("cmd.hint.action");
+  const externalHint = t("cmd.hint.external");
   const actions: PaletteItem[] = [
     {
       id: "action:resume",
-      label: "Download resume PDF",
-      hint: "Action",
+      label: t("cmd.action.resumePdf"),
+      hint: actionHint,
       group: "Actions",
       href: "/resume/lwinmmt-resume.pdf",
       external: true,
-      search: "download resume pdf cv",
+      search: "download resume pdf cv hồ sơ",
     },
     {
       id: "action:email",
-      label: `Email ${profile.email}`,
-      hint: "Action",
+      label: t("cmd.action.email").replace("{email}", profile.email),
+      hint: actionHint,
       group: "Actions",
       href: `mailto:${profile.email}`,
       external: true,
@@ -72,8 +106,8 @@ function buildItems(): PaletteItem[] {
     },
     {
       id: "action:github",
-      label: "Open GitHub profile",
-      hint: "External",
+      label: t("cmd.action.github"),
+      hint: externalHint,
       group: "Actions",
       href: profile.github,
       external: true,
@@ -81,8 +115,8 @@ function buildItems(): PaletteItem[] {
     },
     {
       id: "action:linkedin",
-      label: "Open LinkedIn profile",
-      hint: "External",
+      label: t("cmd.action.linkedin"),
+      hint: externalHint,
       group: "Actions",
       href: profile.linkedin,
       external: true,
@@ -93,8 +127,6 @@ function buildItems(): PaletteItem[] {
   return [...pages, ...projectItems, ...actions];
 }
 
-const GROUP_ORDER: PaletteItem["group"][] = ["Pages", "Projects", "Actions"];
-
 export function CmdPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -102,9 +134,13 @@ export function CmdPalette() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+  const t = useT();
+  const locale = useLocale();
   const modKey = useModKey();
 
-  const items = useMemo(buildItems, []);
+  // Rebuild when locale or t() changes so labels stay in the active
+  // language. t identity changes per LocaleProvider re-render.
+  const items = useMemo(() => buildItems(t, locale), [t, locale]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -211,7 +247,7 @@ export function CmdPalette() {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Command palette"
+      aria-label={t("cmd.aria.dialog")}
       className="fixed inset-0 z-[60] flex items-start justify-center bg-[rgba(15,23,42,0.75)] p-4 pt-[14vh] backdrop-blur-sm"
       onClick={close}
     >
@@ -239,12 +275,12 @@ export function CmdPalette() {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Type a page, project, or action"
+            placeholder={t("cmd.placeholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
             className="flex-1 bg-transparent font-sans text-[14px] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-fg-faint)]"
-            aria-label="Search command palette"
+            aria-label={t("cmd.aria")}
           />
           <kbd className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] font-mono text-[10px] text-[var(--color-fg-faint)]">
             Esc
@@ -253,13 +289,13 @@ export function CmdPalette() {
         <div ref={listRef} className="max-h-[60vh] overflow-y-auto py-2">
           {grouped.length === 0 ? (
             <div className="px-4 py-8 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-              No matches for &ldquo;{query}&rdquo;
+              {t("cmd.empty").replace("{q}", query)}
             </div>
           ) : (
             grouped.map(({ group, items: rows }) => (
               <div key={group} className="mb-2 last:mb-0">
                 <div className="px-4 pt-2 pb-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
-                  {group}
+                  {t(GROUP_LABEL_KEY[group])}
                 </div>
                 {rows.map((item) => {
                   const flatIdx = flat.indexOf(item);
@@ -302,19 +338,19 @@ export function CmdPalette() {
             <kbd className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] text-[var(--color-fg-soft)]">
               ↑↓
             </kbd>
-            Navigate
+            {t("cmd.footer.navigate")}
           </span>
           <span className="inline-flex items-center gap-2">
             <kbd className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] text-[var(--color-fg-soft)]">
               Enter
             </kbd>
-            Open
+            {t("cmd.footer.open")}
           </span>
           <span className="inline-flex items-center gap-2">
             <kbd className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] text-[var(--color-fg-soft)]">
               {modKey.glyph}K
             </kbd>
-            Toggle
+            {t("cmd.footer.toggle")}
           </span>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { usesGroups, type UsesItem } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
+import type { Locale } from "@/lib/i18n/types";
 
 export const metadata: Metadata = {
   title: "Uses",
@@ -11,6 +13,7 @@ export const metadata: Metadata = {
 
 export default async function UsesPage() {
   const t = await getT();
+  const locale = await getLocale();
   const hardwareTag = t("uses.hardwareTag");
   const aiTools = usesGroups.find((g) => g.id === "ai-tools");
   const stack = usesGroups.find((g) => g.id === "stack");
@@ -63,7 +66,7 @@ export default async function UsesPage() {
                   {t("uses.dailyCore")}
                 </div>
                 <h2 className="mt-2 font-sans text-[1.5rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-                  {aiTools.label}
+                  {pickLocalized(aiTools.label, aiTools.labelVi, locale)}
                 </h2>
               </div>
               <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
@@ -72,7 +75,11 @@ export default async function UsesPage() {
             </div>
             {aiTools.description && (
               <p className="mt-3 max-w-[560px] text-[14px] leading-[1.6] text-[var(--color-fg-soft)]">
-                {aiTools.description}
+                {pickLocalized(
+                  aiTools.description,
+                  aiTools.descriptionVi,
+                  locale,
+                )}
               </p>
             )}
             {/* Editorial band rows. Each AI tool is a full-width band with
@@ -101,7 +108,7 @@ export default async function UsesPage() {
                       </span>
                       {tool.detail && (
                         <span className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-                          {tool.detail}
+                          {pickLocalized(tool.detail, tool.detailVi, locale)}
                         </span>
                       )}
                     </div>
@@ -159,7 +166,7 @@ export default async function UsesPage() {
             <section className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6">
               <div className="flex items-baseline justify-between">
                 <h2 className="font-sans text-[16px] font-semibold tracking-[-0.01em] text-[var(--color-fg)]">
-                  {stack.label}
+                  {pickLocalized(stack.label, stack.labelVi, locale)}
                 </h2>
                 <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
                   {stack.items.length}
@@ -167,12 +174,16 @@ export default async function UsesPage() {
               </div>
               {stack.description && (
                 <p className="mt-1 text-[12px] leading-[1.55] text-[var(--color-fg-muted)]">
-                  {stack.description}
+                  {pickLocalized(
+                    stack.description,
+                    stack.descriptionVi,
+                    locale,
+                  )}
                 </p>
               )}
               <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
                 {stack.items.map((item) => (
-                  <StackChip key={item.name} item={item} />
+                  <StackChip key={item.name} item={item} locale={locale} />
                 ))}
               </div>
             </section>
@@ -181,7 +192,7 @@ export default async function UsesPage() {
             <section className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] p-6">
               <div className="flex items-baseline justify-between">
                 <h2 className="font-sans text-[16px] font-semibold tracking-[-0.01em] text-[var(--color-fg)]">
-                  {iotStack.label}
+                  {pickLocalized(iotStack.label, iotStack.labelVi, locale)}
                 </h2>
                 <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
                   {iotStack.items.length}
@@ -189,12 +200,16 @@ export default async function UsesPage() {
               </div>
               {iotStack.description && (
                 <p className="mt-1 text-[12px] leading-[1.55] text-[var(--color-fg-muted)]">
-                  {iotStack.description}
+                  {pickLocalized(
+                    iotStack.description,
+                    iotStack.descriptionVi,
+                    locale,
+                  )}
                 </p>
               )}
               <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
                 {iotStack.items.map((item) => (
-                  <StackChip key={item.name} item={item} />
+                  <StackChip key={item.name} item={item} locale={locale} />
                 ))}
               </div>
             </section>
@@ -205,9 +220,19 @@ export default async function UsesPage() {
             quieter than the split panel above. Visual weight flows down:
             AI hero (heaviest) -> split panel (medium) -> these (lightest). */}
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
-          {editor && <DetailListGroup group={editor} hardwareTag={hardwareTag} />}
+          {editor && (
+            <DetailListGroup
+              group={editor}
+              hardwareTag={hardwareTag}
+              locale={locale}
+            />
+          )}
           {everydayMerged && (
-            <DetailListGroup group={everydayMerged} hardwareTag={hardwareTag} />
+            <DetailListGroup
+              group={everydayMerged}
+              hardwareTag={hardwareTag}
+              locale={locale}
+            />
           )}
         </div>
 
@@ -216,15 +241,16 @@ export default async function UsesPage() {
   );
 }
 
-function StackChip({ item }: { item: UsesItem }) {
+function StackChip({ item, locale }: { item: UsesItem; locale: Locale }) {
+  const detail = item.detail
+    ? pickLocalized(item.detail, item.detailVi, locale)
+    : undefined;
   return (
     <span className="group relative inline-flex items-center">
-      <span className="tag-chip cursor-default">
-        {item.name}
-      </span>
-      {item.detail && (
+      <span className="tag-chip cursor-default">{item.name}</span>
+      {detail && (
         <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-bg)] opacity-0 shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 group-hover:opacity-100">
-          {item.detail}
+          {detail}
         </span>
       )}
     </span>
@@ -234,20 +260,24 @@ function StackChip({ item }: { item: UsesItem }) {
 function DetailListGroup({
   group,
   hardwareTag,
+  locale,
 }: {
   group: {
     id: string;
     label: string;
+    labelVi?: string;
     description?: string;
+    descriptionVi?: string;
     items: Array<UsesItem & { _isHardware?: boolean }>;
   };
   hardwareTag: string;
+  locale: Locale;
 }) {
   return (
     <section className="flex flex-col rounded-2xl border border-[var(--color-border-soft)] p-6">
       <div className="flex items-baseline justify-between">
         <h2 className="font-sans text-[15px] font-semibold tracking-[-0.01em] text-[var(--color-fg)]">
-          {group.label}
+          {pickLocalized(group.label, group.labelVi, locale)}
         </h2>
         <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
           {group.items.length}
@@ -255,7 +285,7 @@ function DetailListGroup({
       </div>
       {group.description && (
         <p className="mt-1 text-[12px] leading-[1.55] text-[var(--color-fg-muted)]">
-          {group.description}
+          {pickLocalized(group.description, group.descriptionVi, locale)}
         </p>
       )}
       <ul className="mt-4 flex flex-col gap-2.5 border-t border-[var(--color-border-soft)] pt-4">
@@ -297,7 +327,7 @@ function DetailListGroup({
             </div>
             {item.detail && (
               <div className="mt-0.5 text-[12px] leading-snug text-[var(--color-fg-muted)]">
-                {item.detail}
+                {pickLocalized(item.detail, item.detailVi, locale)}
               </div>
             )}
           </li>

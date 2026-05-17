@@ -37,12 +37,10 @@
   --aurora-ruby: rgba(183, 58, 44, 0.06);
   --aurora-violet: rgba(139, 92, 246, 0.04);
   --aurora-amber: rgba(217, 119, 6, 0.035);
-  /* Highlight tag accents. Light mode values. */
-  --tag-work: #B73A2C;
-  --tag-talk: #2563EB;
-  --tag-award: #B45309;
+  /* Tag accent. Only --tag-press is currently consumed (highlights
+     bento text-only card gradient). Other tag colors were removed
+     when the highlight tag chips were taken off the cards. */
   --tag-press: #047857;
-  --tag-school: #6D28D9;
   /* Globe sphere body tint. Subtle radial shade that lives BEHIND
      the dots so the sphere reads as a textured object instead of
      points floating in air. Light mode: very faint gray shading. */
@@ -80,12 +78,8 @@
   --aurora-ruby: rgba(211, 73, 57, 0.10);
   --aurora-violet: rgba(139, 92, 246, 0.07);
   --aurora-amber: rgba(217, 119, 6, 0.06);
-  /* Highlight tag accents. Punched up for dark backgrounds. */
-  --tag-work: #E5594B;
-  --tag-talk: #60A5FA;
-  --tag-award: #F59E0B;
+  /* Tag accent. See light-mode block for context. */
   --tag-press: #34D399;
-  --tag-school: #A78BFA;
   /* Globe sphere body tint. Dark mode: slightly lighter than the
      page bg so the sphere has presence against a near-black canvas. */
   --globe-body-hi: rgba(255, 255, 255, 0.06);

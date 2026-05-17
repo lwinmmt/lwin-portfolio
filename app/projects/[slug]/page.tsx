@@ -24,9 +24,12 @@ const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
 
 type Params = { slug: string };
 
-function allLiveLinks(p: Project): ProjectLiveLink[] {
+function allLiveLinks(
+  p: Project,
+  liveLabel: string,
+): ProjectLiveLink[] {
   if (p.liveLinks && p.liveLinks.length > 0) return p.liveLinks;
-  if (p.liveLink) return [{ url: p.liveLink, label: "Live site" }];
+  if (p.liveLink) return [{ url: p.liveLink, label: liveLabel }];
   return [];
 }
 
@@ -74,7 +77,7 @@ export default async function ProjectPage({
     .filter((p) => p.slug !== project.slug && p.category === project.category)
     .slice(0, 2);
 
-  const liveLinks = allLiveLinks(project);
+  const liveLinks = allLiveLinks(project, t("project.link.live"));
   const anyLinks =
     liveLinks.length > 0 ||
     project.repoLink ||

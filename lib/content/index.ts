@@ -12,4 +12,3 @@ export * from "./languages";
 export * from "./about";
 export * from "./uses";
 export * from "./blog";
-export * from "./now";
