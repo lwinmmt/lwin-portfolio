@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { usesGroups, type UsesItem } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Uses",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
     "Daily AI tools, dev stack, IoT and cloud stack, hardware, and everyday software.",
 };
 
-export default function UsesPage() {
+export default async function UsesPage() {
+  const t = await getT();
+  const hardwareTag = t("uses.hardwareTag");
   const aiTools = usesGroups.find((g) => g.id === "ai-tools");
   const stack = usesGroups.find((g) => g.id === "stack");
   const hardware = usesGroups.find((g) => g.id === "hardware");
@@ -34,14 +37,13 @@ export default function UsesPage() {
       <figure>
         <header>
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-            Uses
+            {t("uses.eyebrow")}
           </div>
           <h1 className="mt-3 font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-            The daily toolkit<span className="text-[var(--color-ruby)]">.</span>
+            {t("uses.titleHead")}<span className="text-[var(--color-ruby)]">{t("uses.titleDot")}</span>
           </h1>
           <p className="mt-5 max-w-[640px] text-[1rem] leading-[1.6] text-[var(--color-fg-muted)]">
-            The tools I reach for every day. Rotation changes; if something
-            falls off the list it gets removed.
+            {t("uses.intro")}
           </p>
         </header>
 
@@ -58,14 +60,14 @@ export default function UsesPage() {
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <div>
                 <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-                  Daily core
+                  {t("uses.dailyCore")}
                 </div>
                 <h2 className="mt-2 font-sans text-[1.5rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
                   {aiTools.label}
                 </h2>
               </div>
               <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-                {aiTools.items.length} agents, no fixed workflow
+                {t("uses.aiTools.subtitle").replace("{n}", String(aiTools.items.length))}
               </div>
             </div>
             {aiTools.description && (
@@ -203,8 +205,10 @@ export default function UsesPage() {
             quieter than the split panel above. Visual weight flows down:
             AI hero (heaviest) -> split panel (medium) -> these (lightest). */}
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
-          {editor && <DetailListGroup group={editor} />}
-          {everydayMerged && <DetailListGroup group={everydayMerged} />}
+          {editor && <DetailListGroup group={editor} hardwareTag={hardwareTag} />}
+          {everydayMerged && (
+            <DetailListGroup group={everydayMerged} hardwareTag={hardwareTag} />
+          )}
         </div>
 
       </figure>
@@ -229,6 +233,7 @@ function StackChip({ item }: { item: UsesItem }) {
 
 function DetailListGroup({
   group,
+  hardwareTag,
 }: {
   group: {
     id: string;
@@ -236,6 +241,7 @@ function DetailListGroup({
     description?: string;
     items: Array<UsesItem & { _isHardware?: boolean }>;
   };
+  hardwareTag: string;
 }) {
   return (
     <section className="flex flex-col rounded-2xl border border-[var(--color-border-soft)] p-6">
@@ -258,7 +264,7 @@ function DetailListGroup({
             <div className="flex items-center gap-2 font-sans text-[13.5px] font-semibold text-[var(--color-fg)]">
               {item._isHardware && (
                 <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--color-ruby)]">
-                  Hardware /
+                  {hardwareTag}
                 </span>
               )}
               {item.link ? (

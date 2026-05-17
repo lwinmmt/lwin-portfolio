@@ -1,19 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { experience, type ExperienceRole } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
-export function Experience() {
+export async function Experience() {
+  const t = await getT();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
         <h2 className="font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-          Experience
+          {t("experience.title")}
         </h2>
         <Link
           href="/resume"
           className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
-          Full timeline
+          {t("experience.viewAll")}
         </Link>
       </div>
       <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">

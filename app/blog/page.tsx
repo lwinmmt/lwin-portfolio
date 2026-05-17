@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { blogDrafts as drafts } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Blog",
   description: "Writing on engineering, AI tools, and shipping products.",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const t = await getT();
   return (
     <DashboardShell>
       <header>
         <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-          Blog
+          {t("blog.eyebrow")}
         </div>
         <h1 className="mt-3 font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-          Notes in progress<span className="text-[var(--color-ruby)]">.</span>
+          {t("blog.titleHead")}<span className="text-[var(--color-ruby)]">{t("blog.titleDot")}</span>
         </h1>
         <p className="mt-5 max-w-[640px] text-[1rem] leading-[1.6] text-[var(--color-fg-muted)]">
-          Occasional writing on engineering decisions, AI tools, and lessons
-          from shipping products. MDX-backed, so each post will have code
-          blocks, diagrams, and embeds.
+          {t("blog.intro")}
         </p>
       </header>
 
@@ -39,10 +39,10 @@ export default function BlogPage() {
             //
           </div>
           <h2 className="mt-5 font-sans text-[1.5rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-            Writing is coming.
+            {t("blog.empty.heading")}
           </h2>
           <p className="mt-2 max-w-[420px] font-sans text-[14px] leading-[1.6] text-[var(--color-fg-muted)]">
-            Three drafts are in progress. Check back soon.
+            {t("blog.empty.body")}
           </p>
         </div>
       </section>
@@ -51,10 +51,10 @@ export default function BlogPage() {
         <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
           <h2 className="flex items-baseline font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
             <span className="section-counter">01</span>
-            Drafts in the pipeline
+            {t("blog.drafts.heading")}
           </h2>
           <span className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-            {drafts.length} queued
+            {t("blog.drafts.queued").replace("{n}", String(drafts.length))}
           </span>
         </div>
         <ul className="grid gap-3.5 sm:grid-cols-2">
@@ -84,10 +84,10 @@ export default function BlogPage() {
 
       <div className="mt-16 flex items-center justify-between border-t border-[var(--color-border-soft)] pt-6">
         <p className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-          Email signup goes here once the first post ships.
+          {t("blog.signupFooter")}
         </p>
         <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-          Soon
+          {t("blog.soon")}
         </span>
       </div>
     </DashboardShell>

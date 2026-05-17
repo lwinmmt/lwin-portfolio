@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { highlights, type Highlight } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Highlights",
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
 
 type BentoLayout = "side-by-side" | "stacked" | "text-only";
 
-export default function HighlightsPage() {
+export default async function HighlightsPage() {
+  const t = await getT();
+  const openLabel = t("highlightsPage.open");
   // Highlights order in lib/content/highlights.ts is intentional and
   // maps directly to bento slots. Destructure by name so the layout is
   // explicit, not derived from .map().
@@ -21,14 +24,13 @@ export default function HighlightsPage() {
     <DashboardShell>
       <header>
         <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-          Highlights
+          {t("highlightsPage.eyebrow")}
         </div>
         <h1 className="mt-3 font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-          Moments worth remembering<span className="text-[var(--color-ruby)]">.</span>
+          {t("highlightsPage.titleHead")}<span className="text-[var(--color-ruby)]">{t("highlightsPage.titleDot")}</span>
         </h1>
         <p className="mt-5 max-w-[640px] text-[1rem] leading-[1.6] text-[var(--color-fg-muted)]">
-          Talks, press features, awards, and other public moments. Click into
-          any of them for context.
+          {t("highlightsPage.intro")}
         </p>
       </header>
 
@@ -41,6 +43,7 @@ export default function HighlightsPage() {
             h={vntt}
             className="md:col-span-2 lg:col-span-5"
             layout="side-by-side"
+            openLabel={openLabel}
           />
         )}
         {wcs && (
@@ -48,6 +51,7 @@ export default function HighlightsPage() {
             h={wcs}
             className="md:col-span-1 lg:col-span-3"
             layout="side-by-side"
+            openLabel={openLabel}
           />
         )}
         {pmclub && (
@@ -55,6 +59,7 @@ export default function HighlightsPage() {
             h={pmclub}
             className="md:col-span-1 lg:col-span-2"
             layout="stacked"
+            openLabel={openLabel}
           />
         )}
         {cna && (
@@ -62,6 +67,7 @@ export default function HighlightsPage() {
             h={cna}
             className="md:col-span-1 lg:col-span-2"
             layout="stacked"
+            openLabel={openLabel}
           />
         )}
         {sbr && (
@@ -69,6 +75,7 @@ export default function HighlightsPage() {
             h={sbr}
             className="md:col-span-2 lg:col-span-3"
             layout="text-only"
+            openLabel={openLabel}
           />
         )}
       </section>
@@ -80,10 +87,12 @@ function BentoCard({
   h,
   className,
   layout,
+  openLabel,
 }: {
   h: Highlight;
   className?: string;
   layout: BentoLayout;
+  openLabel: string;
 }) {
   const DateChip = () => (
     <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
@@ -94,7 +103,7 @@ function BentoCard({
   const OpenPill = () =>
     h.href ? (
       <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-soft)] transition-all group-hover:border-transparent group-hover:bg-[var(--color-ruby)] group-hover:text-white">
-        Open
+        {openLabel}
         <svg
           width="11"
           height="11"

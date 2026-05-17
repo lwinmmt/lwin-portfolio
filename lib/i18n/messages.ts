@@ -135,6 +135,64 @@ export const messages = {
     // Featured projects (home section)
     "featuredProjects.title": "Featured Projects",
     "featuredProjects.viewAll": "View all",
+    // Experience section (home + resume)
+    "experience.title": "Experience",
+    "experience.viewAll": "Full timeline",
+    // Highlights home section
+    "highlights.title": "Recent Highlights",
+    "highlights.viewAll": "View all",
+    // Highlights page
+    "highlightsPage.eyebrow": "Highlights",
+    "highlightsPage.titleHead": "Moments worth remembering",
+    "highlightsPage.titleDot": ".",
+    "highlightsPage.intro":
+      "Talks, press features, awards, and other public moments. Click into any of them for context.",
+    "highlightsPage.open": "Open",
+    // Education
+    "education.title": "Education",
+    // Skills, stack & certifications
+    "skills.title": "Skills, Stack & Certifications",
+    "skills.viewAll": "Full toolkit",
+    "skills.techStack": "Tech Stack",
+    "skills.certifications": "Certifications",
+    "skills.languages": "Languages",
+    "skills.cert.issued": "Issued",
+    "skills.cert.expires": "Expires",
+    "skills.cert.id": "ID",
+    "skills.cert.verify": "Verify",
+    // Uses page
+    "uses.eyebrow": "Uses",
+    "uses.titleHead": "The daily toolkit",
+    "uses.titleDot": ".",
+    "uses.intro":
+      "The tools I reach for every day. Rotation changes; if something falls off the list it gets removed.",
+    "uses.dailyCore": "Daily core",
+    "uses.aiTools.subtitle": "{n} agents, no fixed workflow",
+    "uses.hardwareTag": "Hardware /",
+    // Blog page
+    "blog.eyebrow": "Blog",
+    "blog.titleHead": "Notes in progress",
+    "blog.titleDot": ".",
+    "blog.intro":
+      "Occasional writing on engineering decisions, AI tools, and lessons from shipping products. MDX-backed, so each post will have code blocks, diagrams, and embeds.",
+    "blog.empty.heading": "Writing is coming.",
+    "blog.empty.body": "Three drafts are in progress. Check back soon.",
+    "blog.drafts.heading": "Drafts in the pipeline",
+    "blog.drafts.queued": "{n} queued",
+    "blog.signupFooter": "Email signup goes here once the first post ships.",
+    "blog.soon": "Soon",
+    // 404 page
+    "notFound.eyebrow": "404",
+    "notFound.titleHead": "Nothing here",
+    "notFound.titleDot": ".",
+    "notFound.body":
+      "The page you tried to open is missing, was renamed, or never existed. No telemetry, no broker, nothing to debug here. Try one of these instead.",
+    "notFound.home": "Home",
+    "notFound.projects": "Projects",
+    "notFound.about": "About",
+    "notFound.resume": "Resume",
+    "notFound.status": "Status",
+    "notFound.routeMissing": "route not found",
   },
   vi: {
     // Sidebar navigation
@@ -262,6 +320,65 @@ export const messages = {
     // Featured projects (home section)
     "featuredProjects.title": "Dự án nổi bật",
     "featuredProjects.viewAll": "Xem tất cả",
+    // Experience section (home + resume)
+    "experience.title": "Kinh nghiệm",
+    "experience.viewAll": "Toàn bộ quá trình",
+    // Highlights home section
+    "highlights.title": "Điểm nhấn gần đây",
+    "highlights.viewAll": "Xem tất cả",
+    // Highlights page
+    "highlightsPage.eyebrow": "Điểm nhấn",
+    "highlightsPage.titleHead": "Những khoảnh khắc đáng nhớ",
+    "highlightsPage.titleDot": ".",
+    "highlightsPage.intro":
+      "Các buổi nói chuyện, bài báo, giải thưởng, và những khoảnh khắc công khai khác. Bấm vào để xem bối cảnh.",
+    "highlightsPage.open": "Mở",
+    // Education
+    "education.title": "Học vấn",
+    // Skills, stack & certifications
+    "skills.title": "Kỹ năng, Stack & Chứng chỉ",
+    "skills.viewAll": "Bộ công cụ đầy đủ",
+    "skills.techStack": "Tech Stack",
+    "skills.certifications": "Chứng chỉ",
+    "skills.languages": "Ngôn ngữ",
+    "skills.cert.issued": "Cấp ngày",
+    "skills.cert.expires": "Hết hạn",
+    "skills.cert.id": "Mã",
+    "skills.cert.verify": "Xác minh",
+    // Uses page
+    "uses.eyebrow": "Công cụ",
+    "uses.titleHead": "Bộ công cụ hằng ngày",
+    "uses.titleDot": ".",
+    "uses.intro":
+      "Những công cụ tôi dùng mỗi ngày. Danh sách thay đổi theo thời gian. Nếu công cụ nào không còn phù hợp, nó sẽ bị loại.",
+    "uses.dailyCore": "Cốt lõi hàng ngày",
+    "uses.aiTools.subtitle": "{n} agent, không quy trình cố định",
+    "uses.hardwareTag": "Phần cứng /",
+    // Blog page
+    "blog.eyebrow": "Blog",
+    "blog.titleHead": "Ghi chú đang viết",
+    "blog.titleDot": ".",
+    "blog.intro":
+      "Những bài viết thỉnh thoảng về các quyết định kỹ thuật, công cụ AI, và bài học từ việc ship sản phẩm. Dựa trên MDX, nên mỗi bài sẽ có code, sơ đồ, và embed.",
+    "blog.empty.heading": "Sắp có bài viết.",
+    "blog.empty.body": "Ba bản nháp đang được hoàn thiện. Quay lại sớm nhé.",
+    "blog.drafts.heading": "Bản nháp trong pipeline",
+    "blog.drafts.queued": "{n} đang chờ",
+    "blog.signupFooter":
+      "Phần đăng ký email sẽ xuất hiện ngay khi bài đầu tiên được ship.",
+    "blog.soon": "Sắp ra",
+    // 404 page
+    "notFound.eyebrow": "404",
+    "notFound.titleHead": "Không có gì ở đây",
+    "notFound.titleDot": ".",
+    "notFound.body":
+      "Trang bạn vừa mở không tồn tại, đã đổi tên, hoặc chưa từng tồn tại. Không có telemetry, không có broker, không có gì để debug. Thử một trong các trang dưới đây.",
+    "notFound.home": "Trang chủ",
+    "notFound.projects": "Dự án",
+    "notFound.about": "Giới thiệu",
+    "notFound.resume": "Hồ sơ",
+    "notFound.status": "Trạng thái",
+    "notFound.routeMissing": "không tìm thấy route",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

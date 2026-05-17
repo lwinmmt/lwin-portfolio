@@ -4,26 +4,28 @@ import {
   certifications,
   spokenLanguages,
 } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
-export function SkillsStack() {
+export async function SkillsStack() {
+  const t = await getT();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
         <h2 className="font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-          Skills, Stack &amp; Certifications
+          {t("skills.title")}
         </h2>
         <Link
           href="/uses"
           className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
-          Full toolkit
+          {t("skills.viewAll")}
         </Link>
       </div>
 
       <div className="space-y-8">
         <div>
           <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-            Tech Stack
+            {t("skills.techStack")}
           </h3>
           <div className="space-y-3.5">
             {skillGroups.map((group) => (
@@ -55,7 +57,7 @@ export function SkillsStack() {
 
         <div>
           <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-            Certifications
+            {t("skills.certifications")}
           </h3>
           <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
             {certifications.map((cert) => (
@@ -68,12 +70,12 @@ export function SkillsStack() {
                     {cert.name}
                   </div>
                   <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-                    {cert.issuer} &middot; Issued {cert.issuedDate}
-                    {cert.expiresDate && ` · Expires ${cert.expiresDate}`}
+                    {cert.issuer} &middot; {t("skills.cert.issued")} {cert.issuedDate}
+                    {cert.expiresDate && ` · ${t("skills.cert.expires")} ${cert.expiresDate}`}
                   </div>
                   {cert.credentialId && (
                     <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                      ID {cert.credentialId}
+                      {t("skills.cert.id")} {cert.credentialId}
                     </div>
                   )}
                 </div>
@@ -84,7 +86,7 @@ export function SkillsStack() {
                     rel="noopener noreferrer"
                     className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-fg-muted)] transition-all hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
                   >
-                    Verify
+                    {t("skills.cert.verify")}
                     <svg
                       width="9"
                       height="9"
@@ -106,7 +108,7 @@ export function SkillsStack() {
 
         <div>
           <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-            Languages
+            {t("skills.languages")}
           </h3>
           <div className="flex flex-wrap gap-2">
             {spokenLanguages.map((lang) => (

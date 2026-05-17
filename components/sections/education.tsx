@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { education, type EducationEntry } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
-export function Education() {
+export async function Education() {
+  const t = await getT();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
         <h2 className="font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-          Education
+          {t("education.title")}
         </h2>
       </div>
       <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">

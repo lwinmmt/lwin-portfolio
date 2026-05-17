@@ -1,19 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { highlights, type Highlight } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
-export function Highlights() {
+export async function Highlights() {
+  const t = await getT();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
         <h2 className="font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-          Recent Highlights
+          {t("highlights.title")}
         </h2>
         <Link
           href="/highlights"
           className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
-          View all
+          {t("highlights.viewAll")}
         </Link>
       </div>
       <div className="grid gap-3.5 sm:grid-cols-2">
