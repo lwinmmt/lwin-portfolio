@@ -22,10 +22,17 @@ export function ProjectLightboxGallery({
   cover,
   gallery,
   title,
+  coverPosition,
 }: {
   cover?: LightboxImage;
   gallery?: LightboxImage[];
   title: string;
+  /** Optional CSS object-position override for the inline cover
+   *  image on the project page (NOT the modal — modal uses
+   *  object-contain so the whole image always shows). Used when the
+   *  source photo is portrait and the subject is not at the top,
+   *  e.g. the Osiris booth photo where faces sit in the middle. */
+  coverPosition?: string;
 }) {
   const t = useT();
   const images: LightboxImage[] = [
@@ -82,7 +89,16 @@ export function ProjectLightboxGallery({
             fill
             priority
             sizes="(max-width: 860px) 100vw, 720px"
-            className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+            // Default `object-top` keeps the top of dashboard / chart
+            // screenshots in view, but for subject photos with the face
+            // mid-frame (Osiris booth) we honor an explicit
+            // coverPosition so the head stays in the crop.
+            style={
+              coverPosition ? { objectPosition: coverPosition } : undefined
+            }
+            className={`object-cover transition-transform duration-500 group-hover:scale-[1.02] ${
+              coverPosition ? "" : "object-top"
+            }`}
           />
           <ZoomBadge size="md" />
         </button>

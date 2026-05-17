@@ -121,6 +121,7 @@ export default async function ProjectPage({
                 ? { src: project.imageSrc, alt: `${title} cover` }
                 : undefined
             }
+            coverPosition={project.coverFocus}
             gallery={(project.gallery ?? []).map((src, idx) => ({
               src,
               alt: `${title}, photo ${idx + 1}`,
