@@ -12,6 +12,12 @@ export const profile = {
   currentOrgFullName: "Vietnam Technology & Telecommunication Joint Stock Company",
   currentOrgLink: "https://vntt.com.vn/",
   location: "Ho Chi Minh City",
+  // Current location pin for the hero globe. Edit these three fields
+  // when the owner moves; the globe label + live time follow.
+  locationShort: "HCMC",
+  locationCoords: { lat: 10.7769, lng: 106.7009 },
+  locationTimezone: "Asia/Ho_Chi_Minh",
+  locationGmtLabel: "GMT+7",
   email: "lwinmmt@gmail.com",
   github: "https://github.com/lwinmmt",
   linkedin: "https://linkedin.com/in/lwinmmt",

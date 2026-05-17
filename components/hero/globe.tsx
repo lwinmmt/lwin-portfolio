@@ -1,164 +1,252 @@
 "use client";
 
-import createGlobe from "cobe";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { profile } from "@/lib/content";
 
-// Cobe globe (~5KB WebGL). Falls back from the attempted three.js +
-// react-globe.gl integration which crashed on h3-js polygon
-// decomposition (the hex computation library three-globe uses
-// internally cannot handle certain Natural Earth polygons even after
-// filtering antimeridian-crossing countries).
+// Pure CSS 3D Fibonacci dot sphere. ~700 dots positioned via golden-
+// angle spiral on a unit sphere, each oriented outward with
+// backface-visibility so back-facing dots disappear naturally as the
+// sphere rotates. Drag overrides the auto-rotation.
 //
-// To revisit the three.js path: read /tmp/cobe-vs-threejs-notes.md
-// (not committed) or git log for the abandoned attempt. The fix is
-// either (a) write custom three.js without three-globe's hex layer,
-// or (b) use polygonsData instead of hexPolygonsData.
+// Single labeled pin marking the owner's current location (sourced
+// from lib/content/profile.ts). To move the pin, edit
+// `locationShort`, `locationCoords`, `locationTimezone`,
+// `locationGmtLabel` in profile.ts; everything else follows.
 //
-// Cobe v2: needs manual globe.update({ phi }) in a RAF loop. The
-// `onRender` callback only existed in v1.
+// No markers beyond the one pin, no arcs, no city chip row. The
+// earlier multi-city narrative was rejected and the simpler
+// rotating dot field is what landed best with the owner.
 
-const DISPLAY_SIZE = 380;
-const INITIAL_PHI = 4.6;
-const AUTO_ROTATE_SPEED = 0.0028;
-const DRAG_SENSITIVITY = 0.005;
+const SIZE = 380;
+const RADIUS = (SIZE / 2) * 0.92;
+const NUM_DOTS = 700;
+const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
+const DRAG_SENSITIVITY = 0.4;
+const PIN_SIZE = 8; // ruby dot diameter, px
+// Initial phi rotation so the location pin sits roughly under the
+// camera on first paint. Computed from the pin's longitude.
+const INITIAL_PHI_DEG = -profile.locationCoords.lng;
+
+type SphereDot = { x: number; y: number; z: number; lat: number; lng: number };
+
+function fibSphere(n: number): SphereDot[] {
+  const dots: SphereDot[] = [];
+  const goldenAngle = Math.PI * (Math.sqrt(5) - 1);
+  for (let i = 0; i < n; i++) {
+    const y = 1 - (i / (n - 1)) * 2;
+    const r = Math.sqrt(1 - y * y);
+    const theta = goldenAngle * i;
+    const x = Math.cos(theta) * r;
+    const z = Math.sin(theta) * r;
+    const lat = Math.asin(y);
+    const lng = Math.atan2(z, x);
+    dots.push({ x, y, z, lat, lng });
+  }
+  return dots;
+}
+
+function latLngToVec(latDeg: number, lngDeg: number) {
+  const lat = (latDeg * Math.PI) / 180;
+  const lng = (lngDeg * Math.PI) / 180;
+  return {
+    x: Math.cos(lat) * Math.sin(lng),
+    y: Math.sin(lat),
+    z: Math.cos(lat) * Math.cos(lng),
+    lat,
+    lng,
+  };
+}
+
+// Live local time in the configured timezone, HH:MM 12-hour. Updates
+// once per minute. Independent of the viewer's clock.
+function formatLocalTime(now: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(now);
+}
 
 export function HeroGlobe() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const visibleRef = useRef(true);
-  const [mounted, setMounted] = useState(false);
-  const [reduced, setReduced] = useState(false);
+  const dots = useMemo(() => fibSphere(NUM_DOTS), []);
+  const pinVec = useMemo(
+    () =>
+      latLngToVec(
+        profile.locationCoords.lat,
+        profile.locationCoords.lng,
+      ),
+    [],
+  );
+  const rotatorRef = useRef<HTMLDivElement | null>(null);
+  const phi = useRef(INITIAL_PHI_DEG);
+  const dragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartPhi = useRef(0);
 
+  // SSR/CSR mismatch guard: render placeholder time until mounted.
+  const [mounted, setMounted] = useState(false);
+  const [now, setNow] = useState<Date>(() => new Date(0));
   useEffect(() => {
     setMounted(true);
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(id);
   }, []);
 
+  // Auto-rotate loop. Pointer drag overrides via direct transform
+  // writes, so the RAF tick just keeps phi advancing when idle.
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    const node = wrapperRef.current;
-    if (!node || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        visibleRef.current = entries[0]?.isIntersecting ?? true;
-      },
-      { rootMargin: "150px" },
-    );
-    io.observe(node);
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!canvasRef.current || !mounted) return;
-    const canvas = canvasRef.current;
-
-    // Deep-navy sphere + crisp white continent dots, matching the
-    // reference image. Three things drive the 'crisp dots' look:
-    //   - baseColor near pure white so dots have maximum contrast
-    //   - mapBrightness LOW (4 not 8) so 16-32k overlapping samples do
-    //     not blob into a solid mass
-    //   - glowColor almost black so the sphere is dark enough for
-    //     white dots to read against
-    const baseColor: [number, number, number] = [0.95, 0.97, 1.0]; // near-white, slight cool tint
-    const glowColor: [number, number, number] = [0.02, 0.05, 0.15]; // very deep navy, almost black
-
-    let phi = INITIAL_PHI;
-    let phiOffset = 0;
-    let dragging = false;
-    let dragStartX = 0;
-    let dragStartPhi = 0;
-
-    const globe = createGlobe(canvas, {
-      devicePixelRatio:
-        typeof window !== "undefined" ? window.devicePixelRatio : 2,
-      width: DISPLAY_SIZE * 2,
-      height: DISPLAY_SIZE * 2,
-      phi: INITIAL_PHI,
-      theta: 0.3,
-      dark: 1,
-      diffuse: 1.4,
-      mapSamples: 32000,
-      mapBrightness: 4,
-      baseColor,
-      markerColor: baseColor,
-      glowColor,
-      markers: [],
-    });
-
-    let rafId = 0;
+    let raf = 0;
     const tick = () => {
-      if (visibleRef.current) {
-        if (!dragging && !reduced) phi += AUTO_ROTATE_SPEED;
+      if (!dragging.current && rotatorRef.current) {
+        phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
+        rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
       }
-      globe.update({ phi: phi + phiOffset });
-      rafId = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
-    const onPointerDown = (e: PointerEvent) => {
-      dragging = true;
-      dragStartX = e.clientX;
-      dragStartPhi = phiOffset;
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-      canvas.style.cursor = "grabbing";
-    };
-    const onPointerMove = (e: PointerEvent) => {
-      if (!dragging) return;
-      const delta = e.clientX - dragStartX;
-      phiOffset = dragStartPhi + delta * DRAG_SENSITIVITY;
-    };
-    const endDrag = () => {
-      dragging = false;
-      canvas.style.cursor = "grab";
-    };
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    dragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartPhi.current = phi.current;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    if (rotatorRef.current) rotatorRef.current.style.cursor = "grabbing";
+  }, []);
 
-    canvas.style.cursor = "grab";
-    canvas.addEventListener("pointerdown", onPointerDown);
-    canvas.addEventListener("pointermove", onPointerMove);
-    canvas.addEventListener("pointerup", endDrag);
-    canvas.addEventListener("pointercancel", endDrag);
-    canvas.addEventListener("pointerleave", endDrag);
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!dragging.current || !rotatorRef.current) return;
+      const delta = e.clientX - dragStartX.current;
+      phi.current = dragStartPhi.current + delta * DRAG_SENSITIVITY;
+      rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+    },
+    [],
+  );
 
-    return () => {
-      cancelAnimationFrame(rafId);
-      canvas.removeEventListener("pointerdown", onPointerDown);
-      canvas.removeEventListener("pointermove", onPointerMove);
-      canvas.removeEventListener("pointerup", endDrag);
-      canvas.removeEventListener("pointercancel", endDrag);
-      canvas.removeEventListener("pointerleave", endDrag);
-      globe.destroy();
-    };
-  }, [mounted, reduced]);
+  const endDrag = useCallback(() => {
+    dragging.current = false;
+    if (rotatorRef.current) rotatorRef.current.style.cursor = "grab";
+  }, []);
+
+  const liveTime = mounted
+    ? formatLocalTime(now, profile.locationTimezone)
+    : null;
 
   return (
     <div
-      ref={wrapperRef}
-      className="mx-auto"
-      style={{ width: "100%", maxWidth: DISPLAY_SIZE }}
+      className="mx-auto flex flex-col items-center"
+      style={{ width: "100%", maxWidth: SIZE }}
     >
       <div
-        className="relative"
+        className="globe-wrap relative"
         style={{
           width: "100%",
           aspectRatio: "1 / 1",
+          perspective: "1400px",
+          perspectiveOrigin: "center",
           touchAction: "none",
         }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
       >
-        <canvas
-          ref={canvasRef}
+        <div
+          ref={rotatorRef}
+          className="absolute inset-0"
           style={{
-            width: "100%",
-            height: "100%",
-            display: "block",
+            transformStyle: "preserve-3d",
+            transform: `rotateY(${INITIAL_PHI_DEG}deg)`,
+            cursor: "grab",
+            willChange: "transform",
           }}
+        >
+          {dots.map((d, i) => (
+            <span
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "50%",
+                width: 1.8,
+                height: 1.8,
+                backgroundColor: "var(--color-fg-soft)",
+                opacity: 0.45,
+                transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px) rotateY(${d.lng}rad) rotateX(${-d.lat}rad)`,
+                backfaceVisibility: "hidden",
+              }}
+            />
+          ))}
+
+          {/* Single location pin. Ruby dot with a pulsing ring that
+              expands and fades out. backface-visibility hides it when
+              the pin's surface normal points away from the camera. */}
+          <span
+            className="pointer-events-none absolute"
+            style={{
+              left: "50%",
+              top: "50%",
+              width: PIN_SIZE,
+              height: PIN_SIZE,
+              transform: `translate(-50%, -50%) translate3d(${(pinVec.x * RADIUS).toFixed(2)}px, ${(-pinVec.y * RADIUS).toFixed(2)}px, ${(pinVec.z * RADIUS).toFixed(2)}px) rotateY(${pinVec.lng}rad) rotateX(${-pinVec.lat}rad)`,
+              backfaceVisibility: "hidden",
+            }}
+          >
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 rounded-full"
+              style={{
+                backgroundColor: "var(--color-ruby)",
+                boxShadow: "0 0 8px var(--color-ruby), 0 0 2px var(--color-ruby)",
+              }}
+            />
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 rounded-full animate-pin-pulse"
+              style={{
+                border: "1.5px solid var(--color-ruby)",
+              }}
+            />
+          </span>
+        </div>
+
+        {/* Soft glow under the sphere. Sits behind everything via -z-10. */}
+        <div
           aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 14%, transparent) 0%, transparent 62%)",
+            filter: "blur(8px)",
+          }}
         />
+
+        {/* Live location label, anchored to the upper-right area of the
+            globe wrap. Always visible regardless of pin orientation; the
+            label is about CURRENT location, not a rotating sphere
+            marker. Glass-style chip matching the rest of the page. */}
+        <div
+          className="glass-chip absolute top-3 right-3 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
+          aria-label={`Currently in ${profile.location}`}
+        >
+          <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
+            {profile.locationShort}
+          </span>
+          <span className="text-[var(--color-fg-faint)]">·</span>
+          <span className="tabular-nums">{liveTime ?? "--:--"}</span>
+          <span className="text-[var(--color-fg-faint)]">·</span>
+          <span className="text-[var(--color-fg-faint)]">
+            {profile.locationGmtLabel}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
+        Drag to rotate.
       </div>
     </div>
   );
