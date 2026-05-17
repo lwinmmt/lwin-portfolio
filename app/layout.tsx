@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
 import { MotionProvider } from "@/components/providers/motion-provider";
@@ -87,6 +89,13 @@ export default function RootLayout({
             {children}
           </MotionProvider>
         </ThemeProvider>
+        {/* Vercel Analytics (page views, referrers) + Speed Insights
+            (real-user Core Web Vitals). Both ship tiny inline scripts
+            that only beacon in production on the lwinmmt.com /
+            lwin-portfolio.vercel.app domain — no data is collected
+            from local dev. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
