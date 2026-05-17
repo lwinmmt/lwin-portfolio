@@ -235,7 +235,7 @@ export const messages = {
     "notFound.titleHead": "Nothing here",
     "notFound.titleDot": ".",
     "notFound.body":
-      "The page you tried to open is missing, was renamed, or never existed. No telemetry, no broker, nothing to debug here. Try one of these instead.",
+      "The page you tried to open is missing, was renamed, or never existed. Try one of these instead.",
     "notFound.home": "Home",
     "notFound.projects": "Projects",
     "notFound.about": "About",
@@ -470,7 +470,7 @@ export const messages = {
     "notFound.titleHead": "Không có gì ở đây",
     "notFound.titleDot": ".",
     "notFound.body":
-      "Trang bạn vừa mở không tồn tại, đã đổi tên, hoặc chưa từng tồn tại. Không có telemetry, không có broker, không có gì để debug. Thử một trong các trang dưới đây.",
+      "Trang bạn vừa mở không tồn tại, đã đổi tên, hoặc chưa từng tồn tại. Thử một trong các trang dưới đây.",
     "notFound.home": "Trang chủ",
     "notFound.projects": "Dự án",
     "notFound.about": "Giới thiệu",

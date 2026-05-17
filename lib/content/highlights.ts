@@ -49,11 +49,13 @@ export const highlights: Highlight[] = [
     // rig with the IIE poster behind. Same WCS 2024 booth, just a
     // composition where his face has room.
     imageSrc: "/images/highlights/osiris-wcs-2024-rig.jpg",
-    // Portrait source (1200x1600). Faces sit around 35-40% from the
-    // top; rig + plants occupy the lower half. Anchor at 30% so
-    // both heads sit comfortably in the visible band instead of
-    // being pushed against the top edge of the card crop.
-    coverFocus: "center 30%",
+    // Portrait source (1200x1600) — same rig photo the Hydroponics
+    // project page uses. coverFocus matches that page's framing
+    // (center 55%) so both surfaces show the same crop with both
+    // Lwin and his colleague's heads visible. h-56 home card height
+    // (set in CardCover) gives this portrait subject enough vertical
+    // room for the framing to land cleanly.
+    coverFocus: "center 55%",
   },
   {
     title: "Featured in Singapore Business Review",

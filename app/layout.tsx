@@ -20,14 +20,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Lwin MMT, AI and IIoT Engineer",
+    default: "Lwin AI and IIoT Engineer",
     template: "%s | Lwin MMT",
   },
   description:
     "I build IoT systems and ship products end-to-end. Cloud, hardware, and the operating system in between. Currently AI & IIoT Engineer at VNTT, Ho Chi Minh City.",
   metadataBase: new URL("https://lwinmmt.com"),
   openGraph: {
-    title: "Lwin MMT, AI and IIoT Engineer",
+    title: "Lwin AI and IIoT Engineer",
     description:
       "Engineer by training. Founder by accident. Daily AI-tools operator. Currently at VNTT, HCMC.",
     url: "https://lwinmmt.com",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lwin MMT, AI and IIoT Engineer",
+    title: "Lwin AI and IIoT Engineer",
     description:
       "Engineer by training. Founder by accident. Daily AI-tools operator.",
   },

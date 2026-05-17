@@ -33,12 +33,12 @@ export function CardCover({
   // `md` bumped from h-36 (144px) to h-44 (176px) so portrait
   // subject photos (Inno2, Osiris booth) don't lose head-tops to
   // the default object-cover middle band on landscape crops.
-  // `sm` (home highlights) bumped from h-32 (128px) to h-48
-  // (192px) for the same reason — at h-32 the WCS rig and
-  // PM Club team photos were cropping heads at the top edge
-  // because there wasn't enough vertical room for portrait/
-  // mid-height subjects on a wide card.
-  const heightClass = height === "sm" ? "h-48" : "h-44";
+  // `sm` (home highlights) bumped from h-32 to h-56 (224px) to
+  // match the Hydroponics project card's framing — that card
+  // shows both heads at full size and we want the WCS highlight
+  // to read the same way. h-48 was still tight; h-56 gives the
+  // portrait subject photo enough room for both faces.
+  const heightClass = height === "sm" ? "h-56" : "h-44";
   const bgClass =
     background === "card" ? "bg-[var(--color-bg-card)]" : "bg-[var(--color-bg-warm)]";
   return (
