@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
+import { m as motion } from "framer-motion";
 import { SidebarIcon } from "@/components/sidebar/sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
 import { navContact, type NavLink } from "@/lib/content";
@@ -79,20 +80,40 @@ export function MobileDock() {
           // h-11 w-11 = 44x44, the WCAG-AA minimum touch target.
           // The previous h-9 (36px) was below recommendation and
           // mistaps were easy with adjacent items.
-          const itemClass =
-            "flex h-11 w-11 items-center justify-center rounded-full transition-colors " +
-            (active
-              ? "bg-[var(--color-fg)] text-[var(--color-bg)]"
-              : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]");
-
+          //
+          // Sliding pill: the active tab gets a motion.span with a
+          // shared layoutId, so framer-motion animates the dark fill
+          // between tabs instead of hard-swapping. Same trick the
+          // desktop sidebar uses for the theme + locale toggles.
           return (
             <Link
               key={item.href}
               href={localeHref(item.href, locale)}
               aria-label={label}
-              className={itemClass}
+              className="relative flex h-11 w-11 items-center justify-center rounded-full"
             >
-              <SidebarIcon name={item.icon} className="h-[18px] w-[18px]" />
+              {active && (
+                <motion.span
+                  layoutId="mobile-dock-pill"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full bg-[var(--color-fg)]"
+                  transition={{
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 32,
+                    mass: 0.7,
+                  }}
+                />
+              )}
+              <SidebarIcon
+                name={item.icon}
+                className={
+                  "relative z-10 h-[18px] w-[18px] transition-colors " +
+                  (active
+                    ? "text-[var(--color-bg)]"
+                    : "text-[var(--color-fg-muted)]")
+                }
+              />
             </Link>
           );
         })}
@@ -102,14 +123,21 @@ export function MobileDock() {
           aria-label={t("nav.aria.more")}
           aria-expanded={sheetOpen}
           aria-controls="mobile-more-sheet"
+          // No layoutId here. The More button stays a separate
+          // surface from the main dock tabs so the route pill
+          // doesn't fly off to it (the route stays the active
+          // page even when the sheet is open). Sheet-open state
+          // gets a subtle outline + accent color instead of a
+          // full dark fill so it reads as "menu opener pressed"
+          // rather than "currently the active page".
           className={
-            "flex h-11 w-11 items-center justify-center rounded-full transition-colors " +
+            "relative flex h-11 w-11 items-center justify-center rounded-full transition-colors " +
             (sheetOpen
-              ? "bg-[var(--color-fg)] text-[var(--color-bg)]"
+              ? "bg-[var(--color-hover-mute)] text-[var(--color-fg)]"
               : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
           }
         >
-          <SidebarIcon name="more" className="h-[18px] w-[18px]" />
+          <SidebarIcon name="more" className="relative z-10 h-[18px] w-[18px]" />
         </button>
       </nav>
 
@@ -356,23 +384,39 @@ function ThemePill() {
         {t("theme.label")}
       </div>
       <div className="flex gap-1">
-        {modes.map((m) => {
-          const active = mounted && theme === m.id;
+        {modes.map((mode) => {
+          const active = mounted && theme === mode.id;
           return (
             <button
-              key={m.id}
+              key={mode.id}
               type="button"
-              onClick={() => setTheme(m.id)}
+              onClick={() => setTheme(mode.id)}
               aria-pressed={active}
-              aria-label={m.label}
-              className={
-                "flex h-9 flex-1 items-center justify-center rounded-md text-[12px] transition-colors " +
-                (active
-                  ? "bg-[var(--color-fg)] text-[var(--color-bg)]"
-                  : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
-              }
+              aria-label={mode.label}
+              className="relative flex h-9 flex-1 items-center justify-center rounded-md text-[12px] transition-colors"
             >
-              <SidebarIcon name={m.icon} className="h-[14px] w-[14px]" />
+              {active && (
+                <motion.span
+                  layoutId="mobile-theme-pill"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-md bg-[var(--color-fg)]"
+                  transition={{
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 32,
+                    mass: 0.7,
+                  }}
+                />
+              )}
+              <SidebarIcon
+                name={mode.icon}
+                className={
+                  "relative z-10 h-[14px] w-[14px] transition-colors " +
+                  (active
+                    ? "text-[var(--color-bg)]"
+                    : "text-[var(--color-fg-muted)]")
+                }
+              />
             </button>
           );
         })}
@@ -412,14 +456,31 @@ function LocalePill() {
               onClick={() => switchTo(l)}
               aria-pressed={active}
               aria-label={LOCALE_NAMES[l].long}
-              className={
-                "h-9 flex-1 rounded-md font-mono text-[11px] font-medium uppercase tracking-[0.14em] transition-colors " +
-                (active
-                  ? "bg-[var(--color-fg)] text-[var(--color-bg)]"
-                  : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
-              }
+              className="relative h-9 flex-1 rounded-md font-mono text-[11px] font-medium uppercase tracking-[0.14em] transition-colors"
             >
-              {LOCALE_NAMES[l].short}
+              {active && (
+                <motion.span
+                  layoutId="mobile-locale-pill"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-md bg-[var(--color-fg)]"
+                  transition={{
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 32,
+                    mass: 0.7,
+                  }}
+                />
+              )}
+              <span
+                className={
+                  "relative z-10 " +
+                  (active
+                    ? "text-[var(--color-bg)]"
+                    : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
+                }
+              >
+                {LOCALE_NAMES[l].short}
+              </span>
             </button>
           );
         })}
