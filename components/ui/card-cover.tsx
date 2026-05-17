@@ -30,7 +30,10 @@ export function CardCover({
    *  the source is portrait and the subject lives off-center. */
   objectPosition?: string;
 }) {
-  const heightClass = height === "sm" ? "h-32" : "h-36";
+  // `md` bumped from h-36 (144px) to h-44 (176px) so portrait
+  // subject photos (Inno2, Osiris booth) don't lose head-tops to
+  // the default object-cover middle band on landscape crops.
+  const heightClass = height === "sm" ? "h-32" : "h-44";
   const bgClass =
     background === "card" ? "bg-[var(--color-bg-card)]" : "bg-[var(--color-bg-warm)]";
   return (

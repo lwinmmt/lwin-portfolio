@@ -3,6 +3,7 @@ import { MobileDock } from "@/components/dock/mobile-dock";
 import { KeyboardNav } from "@/components/layout/keyboard-nav";
 import { LocaleSwap } from "@/components/layout/locale-swap";
 import { CmdPalette } from "@/components/cmd-palette/cmd-palette";
+import { LocalePromptBanner } from "@/components/ui/locale-prompt-banner";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
@@ -19,6 +20,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </LocaleSwap>
       </main>
       <MobileDock />
+      <LocalePromptBanner />
     </>
   );
 }

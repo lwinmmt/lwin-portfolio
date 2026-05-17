@@ -169,7 +169,7 @@ export default async function UsesPage() {
               )}
               <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
                 {stack.items.map((item) => (
-                  <StackChip key={item.name} item={item} locale={locale} />
+                  <StackChip key={item.name} item={item} />
                 ))}
               </div>
             </section>
@@ -195,7 +195,7 @@ export default async function UsesPage() {
               )}
               <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
                 {iotStack.items.map((item) => (
-                  <StackChip key={item.name} item={item} locale={locale} />
+                  <StackChip key={item.name} item={item} />
                 ))}
               </div>
             </section>
@@ -227,29 +227,12 @@ export default async function UsesPage() {
   );
 }
 
-function StackChip({ item, locale }: { item: UsesItem; locale: Locale }) {
-  const detail = item.detail
-    ? pickLocalized(item.detail, item.detailVi, locale)
-    : undefined;
-  // When the chip carries a detail, make the wrapper focusable so
-  // keyboard users can reveal the tooltip with Tab. Also gives the
-  // tooltip a native browser fallback via the `title` attribute in
-  // case the styled span is clipped by a scrolling parent.
-  const interactive = Boolean(detail);
-  return (
-    <span
-      className="group relative inline-flex items-center"
-      tabIndex={interactive ? 0 : undefined}
-      title={detail}
-    >
-      <span className="tag-chip cursor-default">{item.name}</span>
-      {detail && (
-        <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-bg)] opacity-0 shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
-          {detail}
-        </span>
-      )}
-    </span>
-  );
+function StackChip({ item }: { item: UsesItem }) {
+  // Plain chip, no hover tooltip. The detail copy lived in a styled
+  // tooltip that the user flagged as unnecessary; the DetailListGroup
+  // sections below still surface item.detail inline where it earns
+  // its space.
+  return <span className="tag-chip cursor-default">{item.name}</span>;
 }
 
 function DetailListGroup({

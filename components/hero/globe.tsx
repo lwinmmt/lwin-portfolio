@@ -536,12 +536,13 @@ export function HeroGlobe() {
 
       {/* The chip content is asymmetric ("HCMC" short, "5:48 PM"
           longer in the middle, "GMT+7" on the right), so centering
-          the chip BOX puts the time text slightly left of the globe
-          center axis. translateX(10px) nudges the chip right so the
-          time reads centered under the sphere. */}
+          the chip BOX puts the time text noticeably left of the globe
+          center axis. translateX(22px) shifts the chip right so the
+          time text reads centered under the sphere. Bumped from
+          10px after the user flagged it as still off-center. */}
       <div
         className="glass-chip mt-4 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
-        style={{ transform: "translateX(10px)" }}
+        style={{ transform: "translateX(22px)" }}
         aria-label={`Currently in ${profile.location}`}
       >
         <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">

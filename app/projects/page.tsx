@@ -208,7 +208,11 @@ function ProjectCard({
   // class just controls the inner card chrome.
   const cardClass =
     "beam-card lift-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]";
-  const imgHeight = featured ? "h-52" : "h-36";
+  // Non-featured h-36 (144px) was clipping portrait subject heads on
+  // top-biased crops; h-44 (176px) gives the cover photo enough
+  // vertical room without making non-featured cards look like
+  // mini-features.
+  const imgHeight = featured ? "h-52" : "h-44";
 
   return (
     <article className={cardClass}>
