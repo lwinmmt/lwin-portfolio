@@ -74,6 +74,34 @@ export const messages = {
     "about.interests.investing": "Investing",
     "about.interests.education": "Developer YouTube",
     "about.interests.gamingPast": "Used to Play",
+    // Resume page
+    "resume.eyebrow": "Resume",
+    "resume.byline":
+      "**Information Systems student** at **Singapore Management University**. Currently **AI & IIoT Engineer at VNTT**, Ho Chi Minh City.",
+    "resume.cta.download": "Download PDF",
+    "resume.section.experience": "Experience",
+    "resume.experienceCount": "{n} roles",
+    "resume.section.education": "Education",
+    "resume.section.skills": "Skills",
+    "resume.section.certifications": "Certifications",
+    "resume.section.awards": "Awards",
+    "resume.section.languages": "Languages",
+    "resume.cert.issued": "Issued",
+    "resume.cert.expires": "Expires",
+    "resume.cert.id": "ID",
+    "resume.cert.verify": "Verify",
+    "resume.endYear.now": "NOW",
+    // Resume role highlights (ROLE_HIGHLIGHTS in app/resume/page.tsx)
+    "resume.highlight.vntt":
+      "Learning production-scale industrial IoT on EdgeX Foundry.",
+    "resume.highlight.nepseeds":
+      "5 years bootstrapped, NEA phytosanitary + CITES compliance, 98% on-time fulfillment.",
+    "resume.highlight.osiris":
+      "SMU BIG grant. World Cities Summit 2024 showcase to Ministers Indranee Rajah + Desmond Lee.",
+    "resume.highlight.w2":
+      "360-site NEA wastewater monitoring. Contributed to LHL IDM Smart Nation Award 2022.",
+    "resume.highlight.sp-iot":
+      "5G Autonomous Surveillance Vehicle. Featured at SP Engineering Show 2021.",
   },
   vi: {
     // Sidebar navigation
@@ -142,6 +170,34 @@ export const messages = {
     "about.interests.investing": "Đầu tư",
     "about.interests.education": "YouTube Lập trình",
     "about.interests.gamingPast": "Đã từng chơi",
+    // Resume page
+    "resume.eyebrow": "Hồ sơ",
+    "resume.byline":
+      "**Sinh viên ngành Hệ thống Thông tin** tại **Đại học Quản lý Singapore**. Hiện tại là **Kỹ sư AI & IIoT tại VNTT**, TP. Hồ Chí Minh.",
+    "resume.cta.download": "Tải PDF",
+    "resume.section.experience": "Kinh nghiệm",
+    "resume.experienceCount": "{n} vai trò",
+    "resume.section.education": "Học vấn",
+    "resume.section.skills": "Kỹ năng",
+    "resume.section.certifications": "Chứng chỉ",
+    "resume.section.awards": "Giải thưởng",
+    "resume.section.languages": "Ngôn ngữ",
+    "resume.cert.issued": "Cấp ngày",
+    "resume.cert.expires": "Hết hạn",
+    "resume.cert.id": "Mã",
+    "resume.cert.verify": "Xác minh",
+    "resume.endYear.now": "HIỆN NAY",
+    // Resume role highlights
+    "resume.highlight.vntt":
+      "Học IoT công nghiệp quy mô sản xuất với EdgeX Foundry.",
+    "resume.highlight.nepseeds":
+      "5 năm bootstrap, tuân thủ NEA phytosanitary và CITES, giao hàng đúng hạn 98%.",
+    "resume.highlight.osiris":
+      "Quỹ SMU BIG. Trưng bày tại World Cities Summit 2024 cho các Bộ trưởng Indranee Rajah và Desmond Lee.",
+    "resume.highlight.w2":
+      "Giám sát nước thải NEA tại 360 điểm. Đóng góp cho Giải thưởng Smart Nation LHL IDM 2022.",
+    "resume.highlight.sp-iot":
+      "Xe Giám sát Tự hành 5G. Trưng bày tại SP Engineering Show 2021.",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

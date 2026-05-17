@@ -12,6 +12,9 @@ import {
   spokenLanguages,
   awards,
 } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
+import { renderRich } from "@/lib/i18n/rich";
+import type { MessageKey } from "@/lib/i18n/messages";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -20,14 +23,14 @@ export const metadata: Metadata = {
 
 const RESUME_PDF = "/resume/lwinmmt-resume.pdf";
 
-// One-line achievement highlights for key roles. Kept here, not on the
-// shared type, because they are resume-page specific.
-const ROLE_HIGHLIGHTS: Record<string, string> = {
-  vntt: "Learning production-scale industrial IoT on EdgeX Foundry.",
-  nepseeds: "5 years bootstrapped, NEA phytosanitary + CITES compliance, 98% on-time fulfillment.",
-  osiris: "SMU BIG grant. World Cities Summit 2024 showcase to Ministers Indranee Rajah + Desmond Lee.",
-  w2: "360-site NEA wastewater monitoring. Contributed to LHL IDM Smart Nation Award 2022.",
-  "sp-iot": "5G Autonomous Surveillance Vehicle. Featured at SP Engineering Show 2021.",
+// Role id -> message key for the achievement highlight line. Strings
+// live in lib/i18n/messages so they translate.
+const ROLE_HIGHLIGHT_KEY: Record<string, MessageKey> = {
+  vntt: "resume.highlight.vntt",
+  nepseeds: "resume.highlight.nepseeds",
+  osiris: "resume.highlight.osiris",
+  w2: "resume.highlight.w2",
+  "sp-iot": "resume.highlight.sp-iot",
 };
 
 // Role-to-case-study mapping. When a role has a corresponding project,
@@ -39,7 +42,8 @@ const ROLE_CASE_STUDY: Record<string, string> = {
   "sp-iot": "asv-5g-autonomous",
 };
 
-export default function ResumePage() {
+export default async function ResumePage() {
+  const t = await getT();
   return (
     <DashboardShell>
       {/* Bento-style identity card */}
@@ -56,24 +60,13 @@ export default function ResumePage() {
             />
             <div className="min-w-0">
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-                Resume
+                {t("resume.eyebrow")}
               </div>
               <h1 className="mt-2 font-sans text-[clamp(1.875rem,4vw,2.5rem)] font-bold leading-[1.04] tracking-[-0.035em] text-[var(--color-fg)]">
                 {profile.name}<span className="text-[var(--color-ruby)]">.</span>
               </h1>
               <p className="mt-2 max-w-[520px] text-[14.5px] leading-snug text-[var(--color-fg-muted)]">
-                <strong className="font-semibold text-[var(--color-fg)]">
-                  {profile.studentRole}
-                </strong>{" "}
-                at{" "}
-                <strong className="font-semibold text-[var(--color-fg)]">
-                  {profile.school}
-                </strong>
-                . Currently{" "}
-                <strong className="font-semibold text-[var(--color-ruby-deep)]">
-                  {profile.currentRole} at {profile.currentOrg}
-                </strong>
-                , Ho Chi Minh City.
+                {renderRich(t("resume.byline"))}
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
                 <EmailButton
@@ -131,13 +124,17 @@ export default function ResumePage() {
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
             </span>
-            Download PDF
+            {t("resume.cta.download")}
           </a>
         </div>
 
       </header>
 
-      <Section title="Experience" count={1} subcount={`${experience.length} roles`}>
+      <Section
+        title={t("resume.section.experience")}
+        count={1}
+        subcount={t("resume.experienceCount").replace("{n}", String(experience.length))}
+      >
         {/* Year-axis ruler: each role row gets its end-year as a margin
             label, turning the timeline into a chronological ruler instead
             of a generic bullet list. */}
@@ -146,8 +143,10 @@ export default function ResumePage() {
             // Extract the most recent year from the dates string, e.g.
             // "May 2026 to Present" -> "Now"; "Mar 2019 to Jul 2019" -> "2019".
             const endYear = /to Present|present/i.test(r.dates)
-              ? "NOW"
+              ? t("resume.endYear.now")
               : (r.dates.match(/\b(20\d{2})\b/g) ?? []).pop() ?? "";
+            const highlightKey = ROLE_HIGHLIGHT_KEY[r.id];
+            const highlight = highlightKey ? t(highlightKey) : null;
             return (
               <li key={r.id} className="relative pb-6 last:pb-0">
                 {/* Year label floating in the left margin */}
@@ -179,7 +178,7 @@ export default function ResumePage() {
                 <div className="mt-0.5 font-sans text-[12.5px] text-[var(--color-fg-muted)]">
                   {r.role}
                 </div>
-                {ROLE_HIGHLIGHTS[r.id] && (
+                {highlight && (
                   <div className="mt-1 flex items-start gap-2 font-mono text-[11px] leading-[1.55] text-[var(--color-fg-soft)]">
                     <span aria-hidden="true" className="text-[var(--color-fg-faint)]">
                       &rarr;
@@ -189,10 +188,10 @@ export default function ResumePage() {
                         href={`/projects/${ROLE_CASE_STUDY[r.id]}`}
                         className="underline decoration-[var(--color-border-default)] decoration-1 underline-offset-[3px] transition-colors hover:text-[var(--color-fg)] hover:decoration-[var(--color-ruby-deep)]"
                       >
-                        {ROLE_HIGHLIGHTS[r.id]}
+                        {highlight}
                       </Link>
                     ) : (
-                      <span>{ROLE_HIGHLIGHTS[r.id]}</span>
+                      <span>{highlight}</span>
                     )}
                   </div>
                 )}
@@ -202,7 +201,7 @@ export default function ResumePage() {
         </ul>
       </Section>
 
-      <Section title="Education" count={2}>
+      <Section title={t("resume.section.education")} count={2}>
         <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
           {education.map((e) => (
             <li
@@ -225,7 +224,7 @@ export default function ResumePage() {
         </ul>
       </Section>
 
-      <Section title="Skills" count={3}>
+      <Section title={t("resume.section.skills")} count={3}>
         <div className="space-y-4">
           {skillGroups.map((group) => (
             <div key={group.id}>
@@ -244,7 +243,7 @@ export default function ResumePage() {
         </div>
       </Section>
 
-      <Section title="Certifications" count={4}>
+      <Section title={t("resume.section.certifications")} count={4}>
         <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
           {certifications.map((c) => (
             <li
@@ -256,12 +255,12 @@ export default function ResumePage() {
                   {c.name}
                 </div>
                 <div className="mt-0.5 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-                  {c.issuer} &middot; Issued {c.issuedDate}
-                  {c.expiresDate && ` · Expires ${c.expiresDate}`}
+                  {c.issuer} &middot; {t("resume.cert.issued")} {c.issuedDate}
+                  {c.expiresDate && ` · ${t("resume.cert.expires")} ${c.expiresDate}`}
                 </div>
                 {c.credentialId && (
                   <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                    ID {c.credentialId}
+                    {t("resume.cert.id")} {c.credentialId}
                   </div>
                 )}
               </div>
@@ -272,7 +271,7 @@ export default function ResumePage() {
                   rel="noopener noreferrer"
                   className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-fg-muted)] transition-all hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
                 >
-                  Verify
+                  {t("resume.cert.verify")}
                   <svg
                     width="9"
                     height="9"
@@ -294,7 +293,7 @@ export default function ResumePage() {
         </ul>
       </Section>
 
-      <Section title="Awards" count={5}>
+      <Section title={t("resume.section.awards")} count={5}>
         <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
           {awards.map((a) => (
             <li
@@ -322,7 +321,7 @@ export default function ResumePage() {
         </ul>
       </Section>
 
-      <Section title="Languages" count={6}>
+      <Section title={t("resume.section.languages")} count={6}>
         <div className="flex flex-wrap gap-2">
           {spokenLanguages.map((lang) => (
             <div
