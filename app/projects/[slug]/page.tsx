@@ -69,6 +69,11 @@ export default async function ProjectPage({
     project.descriptionVi,
     locale,
   );
+  const caseStudy = pickLocalized(
+    project.caseStudy,
+    project.caseStudyVi,
+    locale,
+  );
 
   const related = projects
     .filter((p) => p.slug !== project.slug && p.category === project.category)
@@ -141,9 +146,9 @@ export default async function ProjectPage({
             </div>
           )}
 
-          {project.caseStudy && project.caseStudy.length > 0 ? (
+          {caseStudy && caseStudy.length > 0 ? (
             <div className="mt-12 flex flex-col gap-10">
-              {project.caseStudy.map((section, idx) => (
+              {caseStudy.map((section, idx) => (
                 <CaseStudyBlock key={section.heading} section={section} index={idx} />
               ))}
             </div>

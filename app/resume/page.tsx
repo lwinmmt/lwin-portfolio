@@ -239,7 +239,7 @@ export default async function ResumePage() {
           {skillGroups.map((group) => (
             <div key={group.id}>
               <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-                {group.label}
+                {pickLocalized(group.label, group.labelVi, locale)}
               </div>
               <div className="flex flex-wrap gap-2">
                 {group.items.map((item) => (
