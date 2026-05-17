@@ -11,8 +11,10 @@ import {
   skillGroups,
   spokenLanguages,
   awards,
+  EMPLOYMENT_TYPE_VI,
 } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
 import { renderRich } from "@/lib/i18n/rich";
 import type { MessageKey } from "@/lib/i18n/messages";
 
@@ -44,6 +46,7 @@ const ROLE_CASE_STUDY: Record<string, string> = {
 
 export default async function ResumePage() {
   const t = await getT();
+  const locale = await getLocale();
   return (
     <DashboardShell>
       {/* Bento-style identity card */}
@@ -147,6 +150,13 @@ export default async function ResumePage() {
               : (r.dates.match(/\b(20\d{2})\b/g) ?? []).pop() ?? "";
             const highlightKey = ROLE_HIGHLIGHT_KEY[r.id];
             const highlight = highlightKey ? t(highlightKey) : null;
+            const role = pickLocalized(r.role, r.roleVi, locale);
+            const typeLabel =
+              r.type === undefined
+                ? undefined
+                : locale === "vi"
+                  ? EMPLOYMENT_TYPE_VI[r.type]
+                  : r.type;
             return (
               <li key={r.id} className="relative pb-6 last:pb-0">
                 {/* Year label floating in the left margin */}
@@ -165,9 +175,9 @@ export default async function ResumePage() {
                     <span className="font-sans text-[14px] font-semibold text-[var(--color-fg)]">
                       {r.company}
                     </span>
-                    {r.type && (
+                    {typeLabel && (
                       <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-                        {r.type}
+                        {typeLabel}
                       </span>
                     )}
                   </div>
@@ -176,7 +186,7 @@ export default async function ResumePage() {
                   </div>
                 </div>
                 <div className="mt-0.5 font-sans text-[12.5px] text-[var(--color-fg-muted)]">
-                  {r.role}
+                  {role}
                 </div>
                 {highlight && (
                   <div className="mt-1 flex items-start gap-2 font-mono text-[11px] leading-[1.55] text-[var(--color-fg-soft)]">
@@ -213,7 +223,7 @@ export default async function ResumePage() {
                   {e.school}
                 </div>
                 <div className="mt-0.5 font-sans text-[12.5px] text-[var(--color-fg-muted)]">
-                  {e.degree}
+                  {pickLocalized(e.degree, e.degreeVi, locale)}
                 </div>
               </div>
               <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
@@ -302,14 +312,14 @@ export default async function ResumePage() {
             >
               <div className="min-w-0 flex-1">
                 <div className="font-sans text-[14px] font-semibold text-[var(--color-fg)]">
-                  {a.title}
+                  {pickLocalized(a.title, a.titleVi, locale)}
                 </div>
                 <div className="mt-0.5 font-sans text-[12.5px] text-[var(--color-fg-muted)]">
                   {a.issuer}
                 </div>
                 {a.description && (
                   <p className="mt-1 text-[12.5px] leading-snug text-[var(--color-fg-muted)]">
-                    {a.description}
+                    {pickLocalized(a.description, a.descriptionVi, locale)}
                   </p>
                 )}
               </div>

@@ -13,9 +13,11 @@ import {
   type Activity as ActivityType,
   type Award as AwardType,
 } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
 import { renderRich } from "@/lib/i18n/rich";
 import type { MessageKey } from "@/lib/i18n/messages";
+import type { Locale } from "@/lib/i18n/types";
 
 export const metadata: Metadata = {
   title: "About",
@@ -36,6 +38,7 @@ const INTEREST_LABEL_KEY: Record<string, MessageKey> = {
 
 export default async function AboutPage() {
   const t = await getT();
+  const locale = await getLocale();
   const citizenshipNote = t("about.citizenshipNote");
 
   return (
@@ -126,7 +129,7 @@ export default async function AboutPage() {
         {/* Wider left padding so the logo markers do not crowd the text. */}
         <ul className="relative ml-3 flex flex-col border-l-2 border-[var(--color-border-default)] pl-11">
           {communityService.map((c) => (
-            <CommunityServiceRow key={c.id} {...c} />
+            <CommunityServiceRow key={c.id} entry={c} locale={locale} />
           ))}
         </ul>
       </Section>
@@ -135,7 +138,7 @@ export default async function AboutPage() {
       <Section title={t("about.section.activities")} count={2}>
         <ul className="grid gap-3.5 sm:grid-cols-3">
           {activities.map((a) => (
-            <ActivityCard key={a.id} {...a} />
+            <ActivityCard key={a.id} entry={a} locale={locale} />
           ))}
         </ul>
       </Section>
@@ -144,7 +147,7 @@ export default async function AboutPage() {
       <Section title={t("about.section.awards")} count={3}>
         <ul className="grid gap-3.5 sm:grid-cols-2">
           {awards.map((aw) => (
-            <AwardCard key={aw.id} {...aw} />
+            <AwardCard key={aw.id} entry={aw} locale={locale} />
           ))}
         </ul>
       </Section>
@@ -155,13 +158,14 @@ export default async function AboutPage() {
           {personalInterests.map((g) => {
             const labelKey = INTEREST_LABEL_KEY[g.id];
             const label = labelKey ? t(labelKey) : g.label;
+            const items = pickLocalized(g.items, g.itemsVi, locale);
             return (
               <div key={g.id}>
                 <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
                   {label}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {g.items.map((item) => (
+                  {items.map((item) => (
                     <span key={item} className="tag-chip">
                       {item}
                     </span>
@@ -209,12 +213,19 @@ function Section({
 }
 
 function CommunityServiceRow({
-  org,
-  role,
-  dates,
-  description,
-  logoSrc,
-}: CommunityRole) {
+  entry,
+  locale,
+}: {
+  entry: CommunityRole;
+  locale: Locale;
+}) {
+  const { org, dates, logoSrc } = entry;
+  const role = pickLocalized(entry.role, entry.roleVi, locale);
+  const description = pickLocalized(
+    entry.description,
+    entry.descriptionVi,
+    locale,
+  );
   return (
     <li className="relative pb-7 last:pb-0">
       <span
@@ -251,7 +262,18 @@ function CommunityServiceRow({
   );
 }
 
-function ActivityCard({ org, role, dates, description, logoSrc }: ActivityType) {
+function ActivityCard({
+  entry,
+  locale,
+}: {
+  entry: ActivityType;
+  locale: Locale;
+}) {
+  const { org, dates, logoSrc } = entry;
+  const role = pickLocalized(entry.role, entry.roleVi, locale);
+  const description = entry.description
+    ? pickLocalized(entry.description, entry.descriptionVi, locale)
+    : undefined;
   return (
     <li className="lift-card rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-5">
       <div className="mb-3 flex items-start gap-2.5">
@@ -289,7 +311,18 @@ function ActivityCard({ org, role, dates, description, logoSrc }: ActivityType) 
   );
 }
 
-function AwardCard({ title, issuer, date, description, imageSrc }: AwardType) {
+function AwardCard({
+  entry,
+  locale,
+}: {
+  entry: AwardType;
+  locale: Locale;
+}) {
+  const { issuer, date, imageSrc } = entry;
+  const title = pickLocalized(entry.title, entry.titleVi, locale);
+  const description = entry.description
+    ? pickLocalized(entry.description, entry.descriptionVi, locale)
+    : undefined;
   // Awards with images get a hero treatment with banner image.
   if (imageSrc) {
     return (

@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { highlights, type Highlight } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
+import type { Locale } from "@/lib/i18n/types";
 
 export const metadata: Metadata = {
   title: "Highlights",
@@ -14,6 +16,7 @@ type BentoLayout = "side-by-side" | "stacked" | "text-only";
 
 export default async function HighlightsPage() {
   const t = await getT();
+  const locale = await getLocale();
   const openLabel = t("highlightsPage.open");
   // Highlights order in lib/content/highlights.ts is intentional and
   // maps directly to bento slots. Destructure by name so the layout is
@@ -44,6 +47,7 @@ export default async function HighlightsPage() {
             className="md:col-span-2 lg:col-span-5"
             layout="side-by-side"
             openLabel={openLabel}
+            locale={locale}
           />
         )}
         {wcs && (
@@ -52,6 +56,7 @@ export default async function HighlightsPage() {
             className="md:col-span-1 lg:col-span-3"
             layout="side-by-side"
             openLabel={openLabel}
+            locale={locale}
           />
         )}
         {pmclub && (
@@ -60,6 +65,7 @@ export default async function HighlightsPage() {
             className="md:col-span-1 lg:col-span-2"
             layout="stacked"
             openLabel={openLabel}
+            locale={locale}
           />
         )}
         {cna && (
@@ -68,6 +74,7 @@ export default async function HighlightsPage() {
             className="md:col-span-1 lg:col-span-2"
             layout="stacked"
             openLabel={openLabel}
+            locale={locale}
           />
         )}
         {sbr && (
@@ -76,6 +83,7 @@ export default async function HighlightsPage() {
             className="md:col-span-2 lg:col-span-3"
             layout="text-only"
             openLabel={openLabel}
+            locale={locale}
           />
         )}
       </section>
@@ -88,12 +96,16 @@ function BentoCard({
   className,
   layout,
   openLabel,
+  locale,
 }: {
   h: Highlight;
   className?: string;
   layout: BentoLayout;
   openLabel: string;
+  locale: Locale;
 }) {
+  const title = pickLocalized(h.title, h.titleVi, locale);
+  const description = pickLocalized(h.description, h.descriptionVi, locale);
   const DateChip = () => (
     <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
       {h.date}
@@ -130,7 +142,7 @@ function BentoCard({
           <div className="relative min-h-[180px] w-full overflow-hidden bg-[var(--color-bg-warm)] sm:min-h-[220px] lg:min-h-[280px]">
             <Image
               src={h.imageSrc}
-              alt={h.title}
+              alt={title}
               fill
               sizes="(max-width: 640px) 100vw, 50vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -145,10 +157,10 @@ function BentoCard({
             <DateChip />
           </div>
           <h3 className="mb-2 font-sans text-[clamp(1.05rem,1.6vw,1.35rem)] font-semibold leading-[1.25] tracking-[-0.015em] text-[var(--color-fg)]">
-            {h.title}
+            {title}
           </h3>
           <p className="text-[13px] leading-[1.55] text-[var(--color-fg-muted)]">
-            {h.description}
+            {description}
           </p>
           {h.href && <div className="mt-auto pt-4"><OpenPill /></div>}
         </div>
@@ -161,7 +173,7 @@ function BentoCard({
           <div className="relative min-h-[220px] w-full overflow-hidden bg-[var(--color-bg-warm)]">
             <Image
               src={h.imageSrc}
-              alt={h.title}
+              alt={title}
               fill
               sizes="(max-width: 640px) 100vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -173,10 +185,10 @@ function BentoCard({
             <DateChip />
           </div>
           <h3 className="mb-2 font-sans text-[clamp(0.95rem,1.2vw,1.15rem)] font-semibold leading-[1.3] tracking-[-0.01em] text-[var(--color-fg)]">
-            {h.title}
+            {title}
           </h3>
           <p className="text-[13px] leading-[1.6] text-[var(--color-fg-muted)]">
-            {h.description}
+            {description}
           </p>
           {h.href && <div className="mt-auto pt-4"><OpenPill /></div>}
         </div>
@@ -199,10 +211,10 @@ function BentoCard({
             <DateChip />
           </div>
           <h3 className="mb-3 font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.015em] text-[var(--color-fg)]">
-            {h.title}
+            {title}
           </h3>
           <p className="text-[13.5px] leading-[1.6] text-[var(--color-fg-muted)]">
-            {h.description}
+            {description}
           </p>
           {h.href && <div className="mt-auto pt-5"><OpenPill /></div>}
         </div>

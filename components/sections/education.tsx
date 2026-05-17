@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { education, type EducationEntry } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
+import type { Locale } from "@/lib/i18n/types";
 
 export async function Education() {
   const t = await getT();
+  const locale = await getLocale();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
@@ -13,7 +16,7 @@ export async function Education() {
       </div>
       <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
         {education.map((entry) => (
-          <EducationRow key={entry.id} {...entry} />
+          <EducationRow key={entry.id} entry={entry} locale={locale} />
         ))}
       </ul>
     </section>
@@ -21,13 +24,14 @@ export async function Education() {
 }
 
 function EducationRow({
-  school,
-  schoolLink,
-  degree,
-  dates,
-  initial,
-  logoSrc,
-}: EducationEntry) {
+  entry,
+  locale,
+}: {
+  entry: EducationEntry;
+  locale: Locale;
+}) {
+  const { school, schoolLink, dates, initial, logoSrc } = entry;
+  const degree = pickLocalized(entry.degree, entry.degreeVi, locale);
   const schoolEl = schoolLink ? (
     <a
       href={schoolLink}

@@ -1,10 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { experience, type ExperienceRole } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import {
+  experience,
+  EMPLOYMENT_TYPE_VI,
+  type ExperienceRole,
+} from "@/lib/content";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
+import type { Locale } from "@/lib/i18n/types";
 
 export async function Experience() {
   const t = await getT();
+  const locale = await getLocale();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
@@ -19,8 +26,8 @@ export async function Experience() {
         </Link>
       </div>
       <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
-        {experience.map((role) => (
-          <ExperienceRow key={role.id} {...role} />
+        {experience.map((row) => (
+          <ExperienceRow key={row.id} role={row} locale={locale} />
         ))}
       </ul>
     </section>
@@ -28,14 +35,20 @@ export async function Experience() {
 }
 
 function ExperienceRow({
-  company,
-  companyLink,
-  role,
-  dates,
-  initial,
-  logoSrc,
-  type,
-}: ExperienceRole) {
+  role: r,
+  locale,
+}: {
+  role: ExperienceRole;
+  locale: Locale;
+}) {
+  const { company, companyLink, dates, initial, logoSrc, type } = r;
+  const role = pickLocalized(r.role, r.roleVi, locale);
+  const typeLabel =
+    type === undefined
+      ? undefined
+      : locale === "vi"
+        ? EMPLOYMENT_TYPE_VI[type]
+        : type;
   const companyEl = companyLink ? (
     <a
       href={companyLink}
@@ -74,9 +87,9 @@ function ExperienceRow({
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
           {companyEl}
-          {type && (
+          {typeLabel && (
             <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-              {type}
+              {typeLabel}
             </span>
           )}
         </div>

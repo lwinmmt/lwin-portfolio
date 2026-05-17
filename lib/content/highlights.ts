@@ -4,7 +4,14 @@ export type HighlightTag = "Work" | "Talk" | "Award" | "Press" | "School";
 
 export type Highlight = {
   title: string;
+  /** Optional Vietnamese variant of the title. Skip for proper-noun
+   *  titles ("World Cities Summit 2024"); used when the title carries
+   *  descriptive prose worth translating. */
+  titleVi?: string;
   description: string;
+  /** Optional Vietnamese variant of the description. Keep proper
+   *  nouns and product names in English, translate only prose. */
+  descriptionVi?: string;
   date: string;
   tag: HighlightTag;
   icon: "grid" | "globe" | "trophy" | "camera" | "book";
@@ -15,8 +22,11 @@ export type Highlight = {
 export const highlights: Highlight[] = [
   {
     title: "AI & IIoT Engineer at VNTT",
+    titleVi: "Kỹ sư AI & IIoT tại VNTT",
     description:
       "Production-scale industrial IoT in Ho Chi Minh City. Learning EdgeX, deploying real systems at scale.",
+    descriptionVi:
+      "Hệ thống IoT công nghiệp quy mô production tại TP. Hồ Chí Minh. Học EdgeX, triển khai hệ thống thật ở quy mô lớn.",
     date: "MAY 2026",
     tag: "Work",
     icon: "grid",
@@ -27,6 +37,8 @@ export const highlights: Highlight[] = [
     title: "World Cities Summit 2024",
     description:
       "Showcased Osiris hydroponics IoT to government stakeholders including Ministers Indranee Rajah and Desmond Lee at the SMU IIE booth.",
+    descriptionVi:
+      "Giới thiệu giải pháp IoT thủy canh Osiris cho lãnh đạo chính phủ, bao gồm Bộ trưởng Indranee Rajah và Desmond Lee, tại gian trưng bày của SMU IIE.",
     date: "JUN 2024",
     tag: "Talk",
     icon: "globe",
@@ -35,8 +47,11 @@ export const highlights: Highlight[] = [
   },
   {
     title: "Featured in Singapore Business Review",
+    titleVi: "Được giới thiệu trên Singapore Business Review",
     description:
       "Osiris named among 9 SMU student ventures with promising business ventures in the SBR exclusive feature.",
+    descriptionVi:
+      "Osiris được điểm danh trong số 9 startup sinh viên SMU triển vọng nhất trong bài viết độc quyền của SBR.",
     date: "MAY 2024",
     tag: "Press",
     icon: "book",
@@ -44,8 +59,11 @@ export const highlights: Highlight[] = [
   },
   {
     title: "PM Club Internal Challenge 1st",
+    titleVi: "Giải Nhất Internal Challenge của PM Club",
     description:
       "Won the SMU Product Management Experience Internal Product Challenge with GrabCompare.",
+    descriptionVi:
+      "Đạt giải Nhất tại SMU Product Management Experience Internal Product Challenge với dự án GrabCompare.",
     date: "OCT 2023",
     tag: "Award",
     icon: "trophy",
@@ -54,8 +72,11 @@ export const highlights: Highlight[] = [
   },
   {
     title: "Featured on Channel News Asia",
+    titleVi: "Lên sóng Channel News Asia",
     description:
       "Singapore Indoor Farms project featured on CNA. One Raspberry Pi with DHT22 humidity, a CO2 sensor, and relay-driven lighting and water-pump control. Simple demo rack, but it landed on national TV.",
+    descriptionVi:
+      "Dự án Singapore Indoor Farms được giới thiệu trên CNA. Một Raspberry Pi với cảm biến độ ẩm DHT22, cảm biến CO2 và điều khiển đèn cùng máy bơm nước qua relay. Một bộ demo đơn giản, nhưng lên được truyền hình quốc gia.",
     date: "MAY 2022",
     tag: "Press",
     icon: "camera",

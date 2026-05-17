@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { featuredProjects, type Project } from "@/lib/content";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
+import type { Locale } from "@/lib/i18n/types";
 
 export async function FeaturedProjects() {
   const t = await getT();
+  const locale = await getLocale();
   return (
     <section className="mt-14">
       <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
@@ -20,14 +23,36 @@ export async function FeaturedProjects() {
       </div>
       <div className="grid gap-3.5 sm:grid-cols-2">
         {featuredProjects.map((project, idx) => (
-          <ProjectCard key={project.slug} {...project} priority={idx < 2} />
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            priority={idx < 2}
+            locale={locale}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function ProjectCard(project: Project & { priority?: boolean }) {
+function ProjectCard({
+  project,
+  priority,
+  locale,
+}: {
+  project: Project;
+  priority?: boolean;
+  locale: Locale;
+}) {
+  const title = pickLocalized(project.title, project.titleVi, locale);
+  const description = pickLocalized(
+    project.description,
+    project.descriptionVi,
+    locale,
+  );
+  const course = project.course
+    ? pickLocalized(project.course, project.courseVi, locale)
+    : undefined;
   return (
     <Link
       href={`/projects/${project.slug}`}
@@ -37,12 +62,12 @@ function ProjectCard(project: Project & { priority?: boolean }) {
         <div className="relative h-36 w-full overflow-hidden bg-[var(--color-bg-warm)]">
           <Image
             src={project.imageSrc}
-            alt={`${project.title} cover`}
+            alt={`${title} cover`}
             fill
             // First two cards are above the fold on desktop. Eager-load so
             // the dark-mode empty bg doesn't read as a broken card before
             // the optimizer streams the image in.
-            priority={project.priority}
+            priority={priority}
             sizes="(max-width: 640px) 100vw, 50vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
@@ -50,16 +75,16 @@ function ProjectCard(project: Project & { priority?: boolean }) {
         </div>
       )}
       <div className="flex flex-1 flex-col p-5">
-        {project.course && (
+        {course && (
           <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-            {project.course}
+            {course}
           </div>
         )}
         <h3 className="mb-1.5 font-sans text-[14.5px] font-semibold leading-[1.35] text-[var(--color-fg)]">
-          <span className="card-title-draw">{project.title}</span>
+          <span className="card-title-draw">{title}</span>
         </h3>
         <p className="mb-3 text-[12.5px] leading-[1.5] text-[var(--color-fg-muted)]">
-          {project.description}
+          {description}
         </p>
         {project.tags && project.tags.length > 0 && (
           <div className="mb-3 flex flex-wrap gap-1.5">

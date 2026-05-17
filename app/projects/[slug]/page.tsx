@@ -6,7 +6,8 @@ import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { ESMOSDiagram } from "@/components/esmos/esmos-diagram";
 import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
 import { ProjectLightboxGallery } from "@/components/ui/lightbox";
-import { getT } from "@/lib/i18n/server";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { pickLocalized } from "@/lib/i18n/content";
 import type { MessageKey } from "@/lib/i18n/messages";
 import {
   projects,
@@ -58,7 +59,17 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   const t = await getT();
+  const locale = await getLocale();
   const categoryLabel = t(CATEGORY_LABEL_KEY[project.category]);
+  const title = pickLocalized(project.title, project.titleVi, locale);
+  const description = pickLocalized(
+    project.description,
+    project.descriptionVi,
+    locale,
+  );
+  const course = project.course
+    ? pickLocalized(project.course, project.courseVi, locale)
+    : undefined;
 
   const related = projects
     .filter((p) => p.slug !== project.slug && p.category === project.category)
@@ -84,13 +95,13 @@ export default async function ProjectPage({
       </Link>
 
       <header className="mt-6">
-        {project.course && (
+        {course && (
           <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
-            {project.course}
+            {course}
           </div>
         )}
         <h1 className="mt-2 font-sans text-[clamp(2rem,4.5vw,3.25rem)] font-bold leading-[1.02] tracking-[-0.035em] text-[var(--color-fg)]">
-          {project.title}
+          {title}
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
           <span className="text-[var(--color-ruby)]">{categoryLabel}</span>
@@ -102,20 +113,20 @@ export default async function ProjectPage({
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_240px]">
         <div>
           <ProjectLightboxGallery
-            title={project.title}
+            title={title}
             cover={
               project.imageSrc
-                ? { src: project.imageSrc, alt: `${project.title} cover` }
+                ? { src: project.imageSrc, alt: `${title} cover` }
                 : undefined
             }
             gallery={(project.gallery ?? []).map((src, idx) => ({
               src,
-              alt: `${project.title}, photo ${idx + 1}`,
+              alt: `${title}, photo ${idx + 1}`,
             }))}
           />
 
           <p className="text-[1.0625rem] leading-[1.7] text-[var(--color-fg-soft)]">
-            {project.description}
+            {description}
           </p>
 
           {/* ESMOS architecture diagram, click for full size */}
@@ -166,7 +177,7 @@ export default async function ProjectPage({
                       className="block rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-4 transition-colors hover:border-[var(--color-border-default)]"
                     >
                       <div className="font-sans text-[13.5px] font-semibold text-[var(--color-fg)]">
-                        {p.title}
+                        {pickLocalized(p.title, p.titleVi, locale)}
                       </div>
                       <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
                         {p.dates}

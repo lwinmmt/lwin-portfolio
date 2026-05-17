@@ -11,8 +11,9 @@ import {
   type ProjectCategory,
   type ProjectLiveLink,
 } from "@/lib/content";
-import { useT } from "@/lib/i18n/client";
+import { useLocale, useT } from "@/lib/i18n/client";
 import type { MessageKey } from "@/lib/i18n/messages";
+import { pickLocalized } from "@/lib/i18n/content";
 
 // Map category enum -> display translation key. Enum stays English; the
 // label users see comes from t().
@@ -211,8 +212,18 @@ function ProjectCard({
   project: Project;
   featured?: boolean;
 }) {
+  const locale = useLocale();
   const liveLinks = allLiveLinks(project);
   const attachments = attachmentCount(project);
+  const title = pickLocalized(project.title, project.titleVi, locale);
+  const description = pickLocalized(
+    project.description,
+    project.descriptionVi,
+    locale,
+  );
+  const course = project.course
+    ? pickLocalized(project.course, project.courseVi, locale)
+    : undefined;
   // One canonical card treatment regardless of category. The beam-card
   // rotating border + lift-card hover are universal. Featured cards span
   // both columns and get a taller image banner so the most important
@@ -229,7 +240,7 @@ function ProjectCard({
         <div className={`relative ${imgHeight} w-full overflow-hidden bg-[var(--color-bg-warm)]`}>
           <Image
             src={project.imageSrc}
-            alt={`${project.title} cover`}
+            alt={`${title} cover`}
             fill
             // Featured cards are above the fold and need to paint before
             // lazy-load kicks in: otherwise the empty wrapper reads as a
@@ -250,19 +261,19 @@ function ProjectCard({
         </div>
       )}
       <div className="flex flex-1 flex-col p-5">
-        {project.course && (
+        {course && (
           <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-            {project.course}
+            {course}
           </div>
         )}
         <Link
           href={`/projects/${project.slug}`}
           className="font-sans text-[15px] font-semibold leading-[1.35] text-[var(--color-fg)] transition-colors after:absolute after:inset-0 after:content-[''] hover:text-[var(--color-ruby-deep)] focus-visible:after:rounded-2xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-[var(--color-ruby)]"
         >
-          <span className="card-title-draw">{project.title}</span>
+          <span className="card-title-draw">{title}</span>
         </Link>
         <p className="mt-2 text-[12.5px] leading-[1.55] text-[var(--color-fg-muted)]">
-          {project.description}
+          {description}
         </p>
         {project.tags && project.tags.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5">
