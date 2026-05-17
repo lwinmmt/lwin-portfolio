@@ -3,14 +3,27 @@ import { HeroGlobe } from "@/components/hero/globe";
 import { EmailButton } from "@/components/ui/email-button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { profile } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
 
 // Asymmetric 2-col hero on lg+: text block (greeting, name, intro,
 // 'Right now' chip, CTAs) on the left, globe vertically centered in
 // a narrower right column. On smaller viewports the grid collapses to
 // a single column and the globe falls between the intro paragraph and
 // the 'Right now' chip in natural document order.
+//
+// Server component (async). Reads the request locale via getT() and
+// renders every translatable string from messages.ts. Profile.ts
+// still provides the language-agnostic data (links, email, social
+// handles, school proper noun, org short name).
 
-export function Hero() {
+export async function Hero() {
+  const t = await getT();
+  const currentRole = t("hero.currentRole");
+  const currentOrgFullName = t("hero.currentOrgFullName");
+  const ariaCurrentRole = t("hero.cta.ariaCurrentRole")
+    .replace("{role}", currentRole)
+    .replace("{org}", currentOrgFullName);
+
   return (
     <section className="grid gap-8 lg:grid-cols-[3fr_2fr] lg:gap-10">
       <div
@@ -18,7 +31,7 @@ export function Hero() {
         style={{ animationDelay: "0ms" }}
       >
         <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-          {profile.greeting}
+          {t("hero.greeting")}
         </div>
         <h1 className="mt-3 flex items-baseline gap-[0.05em] font-sans text-[clamp(2.75rem,6vw,4.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
           {profile.name}
@@ -30,11 +43,10 @@ export function Hero() {
         className="max-w-[640px] text-[1.0625rem] leading-[1.65] text-[var(--color-fg-soft)] animate-fade-up lg:col-start-1 lg:row-start-2"
         style={{ animationDelay: "150ms" }}
       >
-        I&rsquo;m an{" "}
         <strong className="font-semibold text-[var(--color-fg)]">
-          {profile.studentRole}
+          {t("hero.studentRole")}
         </strong>{" "}
-        at{" "}
+        {t("hero.intro.atSchool")}{" "}
         <a
           href={profile.schoolLink}
           target="_blank"
@@ -43,11 +55,11 @@ export function Hero() {
         >
           {profile.school}
         </a>
-        . I build{" "}
+        {t("hero.intro.iBuild")}{" "}
         <span className="font-semibold text-[var(--color-ruby-deep)]">
-          IoT systems and ship products end-to-end
+          {t("hero.intro.emphasis")}
         </span>
-        . Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.
+        {t("hero.intro.rest")}
       </p>
 
       {/* Globe: stacked between intro and 'Right now' on mobile (natural
@@ -65,27 +77,27 @@ export function Hero() {
         style={{ animationDelay: "400ms" }}
       >
         <div className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-          Right now
+          {t("hero.rightNow")}
         </div>
         <a
           href={profile.currentOrgLink}
           target="_blank"
           rel="noopener noreferrer"
           className="glass-chip group inline-flex items-center self-start rounded-full px-4 py-2.5 text-[14px] leading-tight text-[var(--color-fg-soft)] transition-all duration-200 hover:-translate-y-px hover:border-[var(--color-fg-muted)]"
-          aria-label={`Currently ${profile.currentRole} at ${profile.currentOrgFullName}, opens in new tab`}
+          aria-label={ariaCurrentRole}
         >
           <span>
             <strong className="font-semibold text-[var(--color-fg)]">
-              {profile.currentRole}
+              {currentRole}
             </strong>{" "}
-            at{" "}
+            {t("hero.currentRole.at")}{" "}
             <strong className="font-semibold text-[var(--color-ruby-deep)] transition-colors group-hover:text-[var(--color-ruby)]">
               {profile.currentOrg}
             </strong>
           </span>
         </a>
         <div className="mt-2 pl-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-          {profile.currentOrgFullName}
+          {currentOrgFullName}
         </div>
       </div>
 
@@ -98,7 +110,7 @@ export function Hero() {
             href="/resume"
             className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:bg-[var(--color-ruby)]"
           >
-            Resume
+            {t("hero.cta.resume")}
           </Link>
         </Magnetic>
         <Magnetic>
@@ -106,7 +118,7 @@ export function Hero() {
             email={profile.email}
             className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
           >
-            Email
+            {t("hero.cta.email")}
           </EmailButton>
         </Magnetic>
         <Magnetic>
@@ -116,7 +128,7 @@ export function Hero() {
             rel="noopener noreferrer"
             className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
           >
-            GitHub
+            {t("hero.cta.github")}
           </a>
         </Magnetic>
         <Magnetic>
@@ -126,7 +138,7 @@ export function Hero() {
             rel="noopener noreferrer"
             className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
           >
-            LinkedIn
+            {t("hero.cta.linkedin")}
           </a>
         </Magnetic>
       </div>

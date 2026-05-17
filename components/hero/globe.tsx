@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { profile } from "@/lib/content";
+import { useLocale, useT } from "@/lib/i18n/client";
+import type { Locale } from "@/lib/i18n/types";
 
 // Pure CSS 3D Fibonacci dot sphere. ~700 dots positioned via golden-
 // angle spiral, each oriented outward so back-facing dots disappear
@@ -120,7 +122,18 @@ function arcTrackPoints(from: SphereDot, to: SphereDot, n: number) {
   return pts;
 }
 
-function formatLocalTime(now: Date, timeZone: string): string {
+function formatLocalTime(now: Date, timeZone: string, locale: Locale): string {
+  // Vietnamese visitors expect 24-hour format (universal in VN tech
+  // and clearer than 'CH' / 'SA' meridiem markers). English keeps
+  // the friendlier 12-hour AM/PM.
+  if (locale === "vi") {
+    return new Intl.DateTimeFormat("vi-VN", {
+      timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(now);
+  }
   return new Intl.DateTimeFormat("en-US", {
     timeZone,
     hour: "numeric",
@@ -130,6 +143,8 @@ function formatLocalTime(now: Date, timeZone: string): string {
 }
 
 export function HeroGlobe() {
+  const t = useT();
+  const locale = useLocale();
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
   const pinVec = useMemo(
     () => latLngToVec(profile.locationCoords.lat, profile.locationCoords.lng),
@@ -252,7 +267,7 @@ export function HeroGlobe() {
   }, []);
 
   const liveTime = mounted
-    ? formatLocalTime(now, profile.locationTimezone)
+    ? formatLocalTime(now, profile.locationTimezone, locale)
     : null;
 
   return (
@@ -378,7 +393,7 @@ export function HeroGlobe() {
       </div>
 
       <div className="mt-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-        Drag to rotate.
+        {t("globe.dragToRotate")}
       </div>
 
       {/* Location chip moved below the 'Drag to rotate' hint per
