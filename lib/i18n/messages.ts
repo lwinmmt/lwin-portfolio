@@ -149,7 +149,6 @@ export const messages = {
     // Project detail page
     "project.back": "All projects",
     "project.archDiagramTitle": "Architecture diagram",
-    "project.archDiagramHint": "Click to expand",
     "project.comingSoon": "Coming soon",
     "project.fullCaseStudyTitle": "Full case study in progress",
     "project.fullCaseStudyBody":
@@ -364,7 +363,6 @@ export const messages = {
     // Project detail page
     "project.back": "Tất cả dự án",
     "project.archDiagramTitle": "Sơ đồ kiến trúc",
-    "project.archDiagramHint": "Bấm để mở rộng",
     "project.comingSoon": "Sắp ra mắt",
     "project.fullCaseStudyTitle": "Case study đầy đủ đang được hoàn thiện",
     "project.fullCaseStudyBody":

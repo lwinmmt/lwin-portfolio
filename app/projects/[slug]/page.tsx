@@ -132,17 +132,13 @@ export default async function ProjectPage({
             {description}
           </p>
 
-          {/* ESMOS architecture diagram, click for full size */}
+          {/* ESMOS architecture diagram, inline. Raw SVG link in the
+              caption for readers who want to open it directly. */}
           {project.diagramType === "esmos" && (
             <div className="mt-10">
-              <div className="mb-3 flex items-baseline justify-between">
-                <h2 className="font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-                  {t("project.archDiagramTitle")}
-                </h2>
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-                  {t("project.archDiagramHint")}
-                </span>
-              </div>
+              <h2 className="mb-3 font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
+                {t("project.archDiagramTitle")}
+              </h2>
               <ESMOSDiagram />
             </div>
           )}
