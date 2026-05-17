@@ -8,16 +8,16 @@ import type { Locale } from "@/lib/i18n/types";
 // Pure CSS 3D Fibonacci dot sphere. ~700 dots positioned via golden-
 // angle spiral, each oriented outward so back-facing dots disappear
 // via backface-visibility as the sphere rotates. Drag overrides the
-// auto-rotation.
+// auto-rotation; on release the rotation coasts with friction before
+// handing back to auto-rotate.
 //
-// Three layers on top of the base sphere:
-//   - One persistent labeled pin marking the owner's current city
-//     (lib/content/profile.ts). Label chip lives BELOW the globe,
-//     not overlaid, so it does not compete with the sphere.
-//   - A pool of random great-circle arcs that spawn continuously
-//     between major cities, each with a moving comet. Evokes the
-//     Stripe payment-paths globe; for an IoT engineer, reads as
-//     'data flowing between deployed devices.'
+// Visual layers, back-to-front:
+//   - Depth mask on the dot field (radial fade toward the limb) so
+//     the sphere reads as a curved surface, not a flat dot cloud.
+//   - Random great-circle arcs with a 4-segment comet trail. Reads
+//     as 'data in flight between deployed devices.'
+//   - Persistent HCMC pin with two staggered pulsing halo rings.
+//   - Soft limb-glow ring framing the silhouette.
 
 const SIZE = 380;
 const RADIUS = (SIZE / 2) * 0.92;
@@ -29,17 +29,22 @@ const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 
 const ARC_TRACK_DOTS = 24;
 const ARC_HEIGHT = 0.18;
-// Faster spawn + more concurrent arcs so the globe always has visible
-// motion. Each arc itself stays the same duration so individual comets
-// still read clearly.
 const ARC_SPAWN_INTERVAL_MS = 800;
 const ARC_MIN_DURATION_MS = 2200;
 const ARC_DURATION_VARIANCE_MS = 1200;
 const MAX_ACTIVE_ARCS = 7;
 
-// Pool of city endpoints for the random arc spawner. Mix of SEA work-
-// relevant cities and global spread so arcs feel like real network
-// traffic rather than a known route.
+// Comet trail: head + 3 trailing shadow dots, each offset behind in
+// time so the comet reads as a streak instead of a single pixel.
+const COMET_TRAIL_OFFSETS = [0, 0.04, 0.08, 0.12] as const;
+const COMET_TRAIL_SIZES = [4.5, 3.4, 2.4, 1.6] as const;
+const COMET_TRAIL_OPACITY = [1, 0.55, 0.3, 0.15] as const;
+
+// Momentum coast on drag release. Decay multiplier per frame; below
+// the stop threshold (deg/frame) we hand back to auto-rotation.
+const COAST_FRICTION = 0.94;
+const COAST_STOP_THRESHOLD = 0.05;
+
 const ARC_POOL: Array<[number, number]> = [
   [16.8409, 96.1735], // Yangon
   [1.3521, 103.8198], // Singapore
@@ -123,9 +128,6 @@ function arcTrackPoints(from: SphereDot, to: SphereDot, n: number) {
 }
 
 function formatLocalTime(now: Date, timeZone: string, locale: Locale): string {
-  // Vietnamese visitors expect 24-hour format (universal in VN tech
-  // and clearer than 'CH' / 'SA' meridiem markers). English keeps
-  // the friendlier 12-hour AM/PM.
   if (locale === "vi") {
     return new Intl.DateTimeFormat("vi-VN", {
       timeZone,
@@ -155,16 +157,23 @@ export function HeroGlobe() {
   const dragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartPhi = useRef(0);
+  // Track the per-frame delta during drag so we can hand it to the
+  // coast loop on release. lastDragX is the previous pointer x, used
+  // to compute velocity each move event.
+  const lastDragX = useRef(0);
+  const dragVelocity = useRef(0);
+  const coastVelocity = useRef(0);
 
   const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState<Date>(() => new Date(0));
   const [arcs, setArcs] = useState<ArcInstance[]>([]);
   const arcsRef = useRef<ArcInstance[]>([]);
-  const arcCometRefs = useRef<Map<number, HTMLSpanElement>>(new Map());
+  // Each arc owns 4 comet refs (head + 3 trail). Keyed by arc id.
+  const arcCometRefs = useRef<Map<number, Array<HTMLSpanElement | null>>>(
+    new Map(),
+  );
   const arcIdRef = useRef(0);
 
-  // Mirror arcs into a ref so the RAF loop can read it without
-  // re-subscribing on every spawn / prune.
   useEffect(() => {
     arcsRef.current = arcs;
   }, [arcs]);
@@ -176,8 +185,6 @@ export function HeroGlobe() {
     return () => clearInterval(id);
   }, []);
 
-  // Spawn a new random arc on an interval. Two distinct endpoints,
-  // randomised duration, pruned by the cleanup interval below.
   useEffect(() => {
     if (!mounted) return;
     const spawn = () => {
@@ -199,12 +206,11 @@ export function HeroGlobe() {
           : next;
       });
     };
-    spawn(); // first one immediately so the globe is not blank on first paint
+    spawn();
     const interval = setInterval(spawn, ARC_SPAWN_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [mounted]);
 
-  // Prune expired arcs.
   useEffect(() => {
     const cleanup = setInterval(() => {
       const nowMs = performance.now();
@@ -215,27 +221,46 @@ export function HeroGlobe() {
     return () => clearInterval(cleanup);
   }, []);
 
-  // Single RAF loop drives auto-rotation AND comet positions. Stable
-  // (no deps) because it reads from arcsRef + arcCometRefs.
   useEffect(() => {
     let raf = 0;
     const tick = () => {
-      if (!dragging.current && rotatorRef.current) {
-        phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
-        rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+      if (rotatorRef.current) {
+        if (dragging.current) {
+          // Pointer drives phi directly during drag; coast velocity is
+          // set in onPointerMove off the pointer delta.
+        } else if (Math.abs(coastVelocity.current) > COAST_STOP_THRESHOLD) {
+          phi.current = (phi.current + coastVelocity.current) % 360;
+          coastVelocity.current *= COAST_FRICTION;
+          rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+        } else {
+          coastVelocity.current = 0;
+          phi.current = (phi.current + AUTO_ROTATE_DEG_PER_FRAME) % 360;
+          rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
+        }
       }
+
       const nowMs = performance.now();
       arcsRef.current.forEach((arc) => {
-        const node = arcCometRefs.current.get(arc.id);
-        if (!node) return;
-        const t = Math.min(1, (nowMs - arc.spawnTime) / arc.durationMs);
-        const p = slerp(arc.fromVec, arc.toVec, t);
-        const elev = 1 + ARC_HEIGHT * Math.sin(t * Math.PI);
-        const tx = (p.x * RADIUS * elev).toFixed(2);
-        const ty = (-p.y * RADIUS * elev).toFixed(2);
-        const tz = (p.z * RADIUS * elev).toFixed(2);
-        node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateY(${p.lng}rad) rotateX(${-p.lat}rad)`;
-        node.style.opacity = String(Math.sin(t * Math.PI));
+        const nodes = arcCometRefs.current.get(arc.id);
+        if (!nodes) return;
+        const headT = Math.min(1, (nowMs - arc.spawnTime) / arc.durationMs);
+        nodes.forEach((node, idx) => {
+          if (!node) return;
+          const offset = COMET_TRAIL_OFFSETS[idx] ?? 0;
+          const tt = headT - offset;
+          if (tt <= 0) {
+            node.style.opacity = "0";
+            return;
+          }
+          const p = slerp(arc.fromVec, arc.toVec, tt);
+          const elev = 1 + ARC_HEIGHT * Math.sin(tt * Math.PI);
+          const tx = (p.x * RADIUS * elev).toFixed(2);
+          const ty = (-p.y * RADIUS * elev).toFixed(2);
+          const tz = (p.z * RADIUS * elev).toFixed(2);
+          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateY(${p.lng}rad) rotateX(${-p.lat}rad)`;
+          const envelope = Math.sin(tt * Math.PI);
+          node.style.opacity = String(envelope * (COMET_TRAIL_OPACITY[idx] ?? 0));
+        });
       });
       raf = requestAnimationFrame(tick);
     };
@@ -246,7 +271,10 @@ export function HeroGlobe() {
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     dragging.current = true;
     dragStartX.current = e.clientX;
+    lastDragX.current = e.clientX;
     dragStartPhi.current = phi.current;
+    dragVelocity.current = 0;
+    coastVelocity.current = 0;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     if (rotatorRef.current) rotatorRef.current.style.cursor = "grabbing";
   }, []);
@@ -256,12 +284,21 @@ export function HeroGlobe() {
       if (!dragging.current || !rotatorRef.current) return;
       const delta = e.clientX - dragStartX.current;
       phi.current = dragStartPhi.current + delta * DRAG_SENSITIVITY;
+      // Per-frame velocity in deg, used for momentum on release.
+      const frameDelta = (e.clientX - lastDragX.current) * DRAG_SENSITIVITY;
+      // Smooth a touch so a single jitter at the end of a drag does
+      // not dominate the coast direction.
+      dragVelocity.current = dragVelocity.current * 0.6 + frameDelta * 0.4;
+      lastDragX.current = e.clientX;
       rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
     },
     [],
   );
 
   const endDrag = useCallback(() => {
+    if (dragging.current) {
+      coastVelocity.current = dragVelocity.current;
+    }
     dragging.current = false;
     if (rotatorRef.current) rotatorRef.current.style.cursor = "grab";
   }, []);
@@ -299,26 +336,40 @@ export function HeroGlobe() {
             willChange: "transform",
           }}
         >
-          {dots.map((d, i) => (
-            <span
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                left: "50%",
-                top: "50%",
-                width: 1.8,
-                height: 1.8,
-                backgroundColor: "var(--color-fg-soft)",
-                opacity: 0.45,
-                transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px) rotateY(${d.lng}rad) rotateX(${-d.lat}rad)`,
-                backfaceVisibility: "hidden",
-              }}
-            />
-          ))}
+          {/* Dot field. Wrapped in its own layer so the depth mask
+              (radial fade to limb) applies only to the base dots and
+              not to the pin / comets. */}
+          <div
+            className="absolute inset-0"
+            style={{
+              transformStyle: "preserve-3d",
+              WebkitMaskImage:
+                "radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0.22) 100%)",
+              maskImage:
+                "radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0.22) 100%)",
+            }}
+          >
+            {dots.map((d, i) => (
+              <span
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  width: 1.8,
+                  height: 1.8,
+                  backgroundColor: "var(--color-fg-soft)",
+                  opacity: 0.55,
+                  transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px) rotateY(${d.lng}rad) rotateX(${-d.lat}rad)`,
+                  backfaceVisibility: "hidden",
+                }}
+              />
+            ))}
+          </div>
 
-          {/* Random data-flow arcs: a static dim ruby track + 1 bright
-              moving comet per arc. Comet position is written from the
-              RAF loop directly into the ref'd DOM node. */}
+          {/* Random data-flow arcs: static dim ruby track + a 4-dot
+              comet trail (head + 3 fading shadow dots). RAF writes
+              each trail dot's position directly into its ref. */}
           {arcs.map((arc) => {
             const track = arcTrackPoints(arc.fromVec, arc.toVec, ARC_TRACK_DOTS);
             return (
@@ -339,47 +390,109 @@ export function HeroGlobe() {
                     }}
                   />
                 ))}
-                <span
-                  ref={(el) => {
-                    if (el) arcCometRefs.current.set(arc.id, el);
-                    else arcCometRefs.current.delete(arc.id);
-                  }}
-                  className="absolute rounded-full"
-                  style={{
-                    left: "50%",
-                    top: "50%",
-                    width: 4.5,
-                    height: 4.5,
-                    backgroundColor: "var(--color-ruby)",
-                    boxShadow:
-                      "0 0 10px var(--color-ruby), 0 0 4px var(--color-ruby)",
-                    opacity: 0,
-                    backfaceVisibility: "hidden",
-                    willChange: "transform, opacity",
-                  }}
-                />
+                {COMET_TRAIL_OFFSETS.map((_, idx) => (
+                  <span
+                    key={`comet-${idx}`}
+                    ref={(el) => {
+                      const list = arcCometRefs.current.get(arc.id) ?? [
+                        null,
+                        null,
+                        null,
+                        null,
+                      ];
+                      list[idx] = el;
+                      if (el) arcCometRefs.current.set(arc.id, list);
+                      else if (list.every((n) => n === null))
+                        arcCometRefs.current.delete(arc.id);
+                    }}
+                    className="absolute rounded-full"
+                    style={{
+                      left: "50%",
+                      top: "50%",
+                      width: COMET_TRAIL_SIZES[idx],
+                      height: COMET_TRAIL_SIZES[idx],
+                      backgroundColor: "var(--color-ruby)",
+                      boxShadow:
+                        idx === 0
+                          ? "0 0 12px var(--color-ruby), 0 0 4px var(--color-ruby)"
+                          : "0 0 6px color-mix(in oklab, var(--color-ruby) 70%, transparent)",
+                      opacity: 0,
+                      backfaceVisibility: "hidden",
+                      willChange: "transform, opacity",
+                    }}
+                  />
+                ))}
               </span>
             );
           })}
 
-          {/* Persistent location pin: single solid ruby dot, no pulsing
-              ring. The chip below the globe handles the labeling; the
-              pin on the sphere just marks the geographic point. */}
-          <span
+          {/* Persistent HCMC pin with two staggered halo rings. The
+              rings sit on the same 3D plane as the pin so they hide
+              via backface-visibility when the pin rotates to the back
+              of the sphere. */}
+          <div
             aria-hidden="true"
-            className="pointer-events-none absolute rounded-full"
+            className="pointer-events-none absolute"
             style={{
               left: "50%",
               top: "50%",
               width: PIN_SIZE,
               height: PIN_SIZE,
-              backgroundColor: "var(--color-ruby)",
-              boxShadow: "0 0 10px var(--color-ruby), 0 0 3px var(--color-ruby)",
               transform: `translate(-50%, -50%) translate3d(${(pinVec.x * RADIUS).toFixed(2)}px, ${(-pinVec.y * RADIUS).toFixed(2)}px, ${(pinVec.z * RADIUS).toFixed(2)}px) rotateY(${pinVec.lng}rad) rotateX(${-pinVec.lat}rad)`,
               backfaceVisibility: "hidden",
+              transformStyle: "preserve-3d",
             }}
-          />
+          >
+            <span
+              className="globe-pin-halo absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "50%",
+                width: PIN_SIZE * 2.2,
+                height: PIN_SIZE * 2.2,
+                border: "1.5px solid var(--color-ruby)",
+                animation: "globe-pin-halo 2.6s ease-out infinite",
+              }}
+            />
+            <span
+              className="globe-pin-halo absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "50%",
+                width: PIN_SIZE * 2.2,
+                height: PIN_SIZE * 2.2,
+                border: "1.5px solid var(--color-ruby)",
+                animation: "globe-pin-halo 2.6s ease-out 1.3s infinite",
+              }}
+            />
+            <span
+              className="absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "50%",
+                width: PIN_SIZE,
+                height: PIN_SIZE,
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "var(--color-ruby)",
+                boxShadow:
+                  "0 0 12px var(--color-ruby), 0 0 4px var(--color-ruby)",
+              }}
+            />
+          </div>
         </div>
+
+        {/* Soft limb-glow ring. Sits OUTSIDE the rotator so it does
+            not spin. Ruby radial fade inward from the silhouette frames
+            the globe as a self-luminous sphere against the page bg. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at center, transparent 58%, color-mix(in oklab, var(--color-ruby) 18%, transparent) 72%, transparent 84%)",
+            mixBlendMode: "screen",
+          }}
+        />
 
         <div
           aria-hidden="true"
@@ -396,9 +509,6 @@ export function HeroGlobe() {
         {t("globe.dragToRotate")}
       </div>
 
-      {/* Location chip moved below the 'Drag to rotate' hint per
-          owner feedback. Floats in the page flow rather than overlaying
-          the sphere. Time updates every minute. */}
       <div
         className="glass-chip mt-3 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
         aria-label={`Currently in ${profile.location}`}
