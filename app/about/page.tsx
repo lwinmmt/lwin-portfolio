@@ -4,7 +4,6 @@ import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { KineticQuote } from "@/components/about/kinetic-quote";
 import {
   profile,
-  bio,
   communityService,
   activities,
   awards,
@@ -14,6 +13,9 @@ import {
   type Activity as ActivityType,
   type Award as AwardType,
 } from "@/lib/content";
+import { getT } from "@/lib/i18n/server";
+import { renderRich } from "@/lib/i18n/rich";
+import type { MessageKey } from "@/lib/i18n/messages";
 
 export const metadata: Metadata = {
   title: "About",
@@ -24,7 +26,18 @@ export const metadata: Metadata = {
 const SMU_BIG_GRANT = "https://iie.smu.edu.sg/acceleration-grant";
 const VNTT_LINK = "https://vntt.com.vn/";
 
-export default function AboutPage() {
+// Map an interest group id to its translation key. About-page only.
+const INTEREST_LABEL_KEY: Record<string, MessageKey> = {
+  motorsports: "about.interests.motorsports",
+  investing: "about.interests.investing",
+  education: "about.interests.education",
+  "gaming-past": "about.interests.gamingPast",
+};
+
+export default async function AboutPage() {
+  const t = await getT();
+  const citizenshipNote = t("about.citizenshipNote");
+
   return (
     <DashboardShell>
       {/* Two-column layout at lg+: bio left, sticky portrait rail right */}
@@ -33,10 +46,10 @@ export default function AboutPage() {
           {/* Header */}
           <header>
             <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-              About
+              {t("about.eyebrow")}
             </div>
             <h1 className="mt-3 font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-              The longer story<span className="text-[var(--color-ruby)]">.</span>
+              {t("about.title")}<span className="text-[var(--color-ruby)]">.</span>
             </h1>
           </header>
 
@@ -57,7 +70,7 @@ export default function AboutPage() {
               />
             </div>
             <div className="flex-1 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-              <div className="text-[var(--color-ruby)]">{bio.citizenshipNote}</div>
+              <div className="text-[var(--color-ruby)]">{citizenshipNote}</div>
               <div className="mt-1 text-[var(--color-fg-soft)]">
                 {spokenLanguages.map((l) => l.name).join(", ")}
               </div>
@@ -66,67 +79,17 @@ export default function AboutPage() {
 
           {/* Pull quote: signature kinetic word-stagger animation. */}
           <KineticQuote
-            text="I tend to build things at the intersection of"
-            emphasis="hardware, cloud, and product."
+            text={t("about.quote.text")}
+            emphasis={t("about.quote.emphasis")}
           />
 
-          {/* Bio prose */}
+          {/* Bio prose. Translation strings carry markdown-ish markup
+              (**bold**, __ruby__, [link](url)) parsed by renderRich. */}
           <div className="mt-8 max-w-[680px] space-y-5 text-[1.0625rem] leading-[1.75] text-[var(--color-fg-soft)]">
-            <p>
-              I&rsquo;m an <Strong>Information Systems student</Strong> at{" "}
-              <Strong>Singapore Management University</Strong>, on a dual track
-              of <Strong>Product Development</Strong> and{" "}
-              <Strong>Business Analytics</Strong>. Before SMU, I did a{" "}
-              <Strong>Diploma in Computer Engineering</Strong> at{" "}
-              <Strong>Singapore Polytechnic</Strong>, which is where most of my
-              hardware and networking foundations came from.
-            </p>
-            <p>
-              The story so far has been a mix of architected production IoT
-              systems (<Strong>NEA wastewater monitoring</Strong> at 360 sites),
-              founding things from scratch (<Strong>Osiris</Strong> hydroponics
-              automation, funded by an{" "}
-              <a
-                href={SMU_BIG_GRANT}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
-              >
-                SMU BIG grant
-              </a>
-              ), and bootstrapping commercial operations (5 years of{" "}
-              <Strong>Nepseeds</Strong> plant e-commerce). Right now I&rsquo;m at{" "}
-              <a
-                href={VNTT_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
-              >
-                Vietnam Technology &amp; Telecommunication (VNTT)
-              </a>{" "}
-              in Ho Chi Minh City learning what production-scale industrial IoT
-              actually feels like, working on{" "}
-              <Strong>EdgeX-based systems</Strong>.
-            </p>
-            <p>
-              I&rsquo;m a heavy daily user of{" "}
-              <Ruby>Claude Code, Gemini, ChatGPT, and Kimi</Ruby> and treat the
-              ability to direct them well as a real competitive skill. Most of
-              my recent project output uses AI-assisted code generation; my
-              contribution sits in <Strong>framing the problem</Strong>, making
-              the <Strong>architecture decisions</Strong>, and{" "}
-              <Strong>validating the output</Strong>.
-            </p>
-            <p>
-              Outside of school and work, I hold a{" "}
-              <Strong>motorcycle and car license</Strong> and I&rsquo;m pursuing
-              a <Strong>Boat License (PPCDL)</Strong>. I follow{" "}
-              <Strong>Theo (t3.gg)</Strong>, <Strong>Mo Bitar</Strong>, and{" "}
-              <Strong>Fireship</Strong> for engineering and dev-tooling
-              content, and I invest consistently in the US stock market. I used
-              to play a lot of Counter Strike Global Offensive, Dota 2, and
-              Minecraft, but not much time for that these days.
-            </p>
+            <p>{renderRich(t("about.bio.p1"))}</p>
+            <p>{renderRich(t("about.bio.p2"))}</p>
+            <p>{renderRich(t("about.bio.p3"))}</p>
+            <p>{renderRich(t("about.bio.p4"))}</p>
           </div>
         </div>
 
@@ -147,9 +110,9 @@ export default function AboutPage() {
             />
           </div>
           <div className="mt-5 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-            <div className="text-[var(--color-ruby)]">{bio.citizenshipNote}</div>
+            <div className="text-[var(--color-ruby)]">{citizenshipNote}</div>
             <div className="mt-2 border-t border-[var(--color-border-soft)] pt-2 text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-              Languages
+              {t("about.languagesLabel")}
             </div>
             <div className="mt-1 text-[var(--color-fg-soft)]">
               {spokenLanguages.map((l) => l.name).join(" / ")}
@@ -159,7 +122,7 @@ export default function AboutPage() {
       </div>
 
       {/* Community Service */}
-      <Section title="Community service and leadership" count={1}>
+      <Section title={t("about.section.communityService")} count={1}>
         {/* Wider left padding so the logo markers do not crowd the text. */}
         <ul className="relative ml-3 flex flex-col border-l-2 border-[var(--color-border-default)] pl-11">
           {communityService.map((c) => (
@@ -169,7 +132,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Activities */}
-      <Section title="Activities and CCAs" count={2}>
+      <Section title={t("about.section.activities")} count={2}>
         <ul className="grid gap-3.5 sm:grid-cols-3">
           {activities.map((a) => (
             <ActivityCard key={a.id} {...a} />
@@ -178,7 +141,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Awards */}
-      <Section title="Awards" count={3}>
+      <Section title={t("about.section.awards")} count={3}>
         <ul className="grid gap-3.5 sm:grid-cols-2">
           {awards.map((aw) => (
             <AwardCard key={aw.id} {...aw} />
@@ -187,39 +150,29 @@ export default function AboutPage() {
       </Section>
 
       {/* Personal interests as a token mosaic */}
-      <Section title="Personal interests" count={4}>
+      <Section title={t("about.section.personalInterests")} count={4}>
         <div className="space-y-5">
-          {personalInterests.map((g) => (
-            <div key={g.id}>
-              <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-                {g.label}
+          {personalInterests.map((g) => {
+            const labelKey = INTEREST_LABEL_KEY[g.id];
+            const label = labelKey ? t(labelKey) : g.label;
+            return (
+              <div key={g.id}>
+                <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
+                  {label}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {g.items.map((item) => (
+                    <span key={item} className="tag-chip">
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {g.items.map((item) => (
-                  <span key={item} className="tag-chip">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Section>
     </DashboardShell>
-  );
-}
-
-function Strong({ children }: { children: React.ReactNode }) {
-  return (
-    <strong className="font-semibold text-[var(--color-fg)]">{children}</strong>
-  );
-}
-
-function Ruby({ children }: { children: React.ReactNode }) {
-  return (
-    <strong className="font-semibold text-[var(--color-ruby-deep)]">
-      {children}
-    </strong>
   );
 }
 

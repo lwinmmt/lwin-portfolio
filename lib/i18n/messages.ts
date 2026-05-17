@@ -47,6 +47,33 @@ export const messages = {
     "hero.cta.ariaCurrentRole": "Currently {role} at {org}, opens in new tab",
     // Globe
     "globe.dragToRotate": "Drag to rotate.",
+    // About page chrome
+    "about.eyebrow": "About",
+    "about.title": "The longer story",
+    "about.citizenshipNote":
+      "Singaporean. Born in Yangon, Myanmar, moved to Singapore at age 1.",
+    "about.languagesLabel": "Languages",
+    "about.section.communityService": "Community service and leadership",
+    "about.section.activities": "Activities and CCAs",
+    "about.section.awards": "Awards",
+    "about.section.personalInterests": "Personal interests",
+    // About kinetic quote
+    "about.quote.text": "I tend to build things at the intersection of",
+    "about.quote.emphasis": "hardware, cloud, and product.",
+    // About bio paragraphs (renderRich-formatted)
+    "about.bio.p1":
+      "I'm an **Information Systems student** at **Singapore Management University**, on a dual track of **Product Development** and **Business Analytics**. Before SMU, I did a **Diploma in Computer Engineering** at **Singapore Polytechnic**, which is where most of my hardware and networking foundations came from.",
+    "about.bio.p2":
+      "The story so far has been a mix of architected production IoT systems (**NEA wastewater monitoring** at 360 sites), founding things from scratch (**Osiris** hydroponics automation, funded by an [SMU BIG grant](https://iie.smu.edu.sg/acceleration-grant)), and bootstrapping commercial operations (5 years of **Nepseeds** plant e-commerce). Right now I'm at [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) in Ho Chi Minh City learning what production-scale industrial IoT actually feels like, working on **EdgeX-based systems**.",
+    "about.bio.p3":
+      "I'm a heavy daily user of __Claude Code, Gemini, ChatGPT, and Kimi__ and treat the ability to direct them well as a real competitive skill. Most of my recent project output uses AI-assisted code generation; my contribution sits in **framing the problem**, making the **architecture decisions**, and **validating the output**.",
+    "about.bio.p4":
+      "Outside of school and work, I hold a **motorcycle and car license** and I'm pursuing a **Boat License (PPCDL)**. I follow **Theo (t3.gg)**, **Mo Bitar**, and **Fireship** for engineering and dev-tooling content, and I invest consistently in the US stock market. I used to play a lot of Counter Strike Global Offensive, Dota 2, and Minecraft, but not much time for that these days.",
+    // About interest group labels
+    "about.interests.motorsports": "Motorsports & Mobility",
+    "about.interests.investing": "Investing",
+    "about.interests.education": "Developer YouTube",
+    "about.interests.gamingPast": "Used to Play",
   },
   vi: {
     // Sidebar navigation
@@ -88,6 +115,33 @@ export const messages = {
     "hero.cta.ariaCurrentRole": "Hiện đang là {role} tại {org}, mở trong tab mới",
     // Globe
     "globe.dragToRotate": "Kéo để xoay.",
+    // About page chrome
+    "about.eyebrow": "Giới thiệu",
+    "about.title": "Câu chuyện dài hơn",
+    "about.citizenshipNote":
+      "Người Singapore. Sinh ra tại Yangon, Myanmar, chuyển đến Singapore khi 1 tuổi.",
+    "about.languagesLabel": "Ngôn ngữ",
+    "about.section.communityService": "Phục vụ cộng đồng và lãnh đạo",
+    "about.section.activities": "Hoạt động và CCA",
+    "about.section.awards": "Giải thưởng",
+    "about.section.personalInterests": "Sở thích cá nhân",
+    // About kinetic quote
+    "about.quote.text": "Tôi thường xây dựng những thứ tại giao điểm của",
+    "about.quote.emphasis": "phần cứng, đám mây và sản phẩm.",
+    // About bio paragraphs (renderRich-formatted)
+    "about.bio.p1":
+      "Tôi là **sinh viên ngành Hệ thống Thông tin** tại **Đại học Quản lý Singapore**, theo học song song hai chuyên ngành **Phát triển Sản phẩm** và **Phân tích Kinh doanh**. Trước SMU, tôi học **Diploma ngành Kỹ thuật Máy tính** tại **Singapore Polytechnic**, nơi tôi xây dựng nền tảng vững chắc về phần cứng và mạng.",
+    "about.bio.p2":
+      "Hành trình đến nay là sự kết hợp giữa kiến trúc các hệ thống IoT quy mô sản xuất (**giám sát nước thải NEA** tại 360 điểm), khởi nghiệp từ con số không (**Osiris** tự động hóa thủy canh, được tài trợ bởi [quỹ SMU BIG](https://iie.smu.edu.sg/acceleration-grant)), và vận hành thương mại bootstrap (5 năm **Nepseeds**, nền tảng thương mại điện tử cây trồng). Hiện tại tôi đang làm tại [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) ở TP. Hồ Chí Minh, học hỏi về IoT công nghiệp quy mô sản xuất với **các hệ thống dựa trên EdgeX**.",
+    "about.bio.p3":
+      "Tôi sử dụng __Claude Code, Gemini, ChatGPT và Kimi__ hàng ngày, và xem khả năng định hướng các công cụ này là một kỹ năng cạnh tranh thực sự. Phần lớn sản phẩm dự án gần đây của tôi đều dùng AI hỗ trợ sinh mã; đóng góp của tôi nằm ở việc **đặt vấn đề**, đưa ra **quyết định kiến trúc**, và **xác thực kết quả**.",
+    "about.bio.p4":
+      "Ngoài giờ học và làm việc, tôi có **bằng lái xe máy và ô tô**, đang học **bằng lái thuyền (PPCDL)**. Tôi theo dõi **Theo (t3.gg)**, **Mo Bitar** và **Fireship** để cập nhật nội dung kỹ thuật và công cụ dev, và đầu tư đều đặn vào thị trường chứng khoán Mỹ. Trước đây tôi chơi nhiều Counter Strike Global Offensive, Dota 2 và Minecraft, nhưng giờ không còn nhiều thời gian cho việc đó.",
+    // About interest group labels
+    "about.interests.motorsports": "Mô tô và Phương tiện",
+    "about.interests.investing": "Đầu tư",
+    "about.interests.education": "YouTube Lập trình",
+    "about.interests.gamingPast": "Đã từng chơi",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 
