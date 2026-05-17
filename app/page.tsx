@@ -7,6 +7,7 @@ import { Experience } from "@/components/sections/experience";
 import { Education } from "@/components/sections/education";
 import { SkillsStack } from "@/components/sections/skills-stack";
 import { PersonJsonLd } from "@/components/structured-data";
+import { Reveal } from "@/components/ui/reveal";
 
 export const metadata: Metadata = {
   // Use full title so we do not double up with the layout template.
@@ -21,12 +22,25 @@ export default function Home() {
   return (
     <DashboardShell>
       <PersonJsonLd />
+      {/* Hero has its own staggered fade-up animations on first paint; the
+          rest of the page sections fade + blur in as they enter the
+          viewport via Reveal. */}
       <Hero />
-      <Experience />
-      <Highlights />
-      <FeaturedProjects />
-      <Education />
-      <SkillsStack />
+      <Reveal>
+        <Experience />
+      </Reveal>
+      <Reveal>
+        <Highlights />
+      </Reveal>
+      <Reveal>
+        <FeaturedProjects />
+      </Reveal>
+      <Reveal>
+        <Education />
+      </Reveal>
+      <Reveal>
+        <SkillsStack />
+      </Reveal>
     </DashboardShell>
   );
 }

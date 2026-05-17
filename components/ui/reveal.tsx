@@ -3,12 +3,17 @@
 import { motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
+// Reveal animation: fade + slide-up + blur-out. The blur is the key
+// detail; it catches the eye at the exact moment the section enters
+// the viewport, like a camera focusing, which is the moment a recruiter
+// is deciding whether to keep reading.
 const variants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 18, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.2, 0.7, 0.3, 1] },
+    filter: "blur(0px)",
+    transition: { duration: 0.6, ease: [0.2, 0.7, 0.3, 1] },
   },
 };
 
