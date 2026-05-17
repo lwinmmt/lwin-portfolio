@@ -5,12 +5,17 @@ import {
   TransformWrapper,
   TransformComponent,
   useControls,
+  type ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
 
 const SVG_PATH = "/diagrams/esmos-architecture.svg";
+// Natural dimensions of the Eraser-exported SVG. Hardcoded so we can
+// compute the fit-to-viewport scale before the image finishes loading.
+const SVG_NATURAL_W = 5237;
+const SVG_NATURAL_H = 3248;
 
-function ZoomControls() {
-  const { zoomIn, zoomOut, resetTransform } = useControls();
+function ZoomControls({ onReset }: { onReset: () => void }) {
+  const { zoomIn, zoomOut } = useControls();
   return (
     <div className="pointer-events-auto absolute right-3 top-3 z-10 flex items-center gap-1 rounded-lg border border-white/10 bg-[rgba(15,23,42,0.7)] p-1 backdrop-blur">
       <button
@@ -31,7 +36,7 @@ function ZoomControls() {
       </button>
       <button
         type="button"
-        onClick={() => resetTransform()}
+        onClick={onReset}
         className="rounded px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-white/80 transition-colors hover:bg-white/10 hover:text-white"
       >
         Reset
@@ -51,8 +56,36 @@ export function ESMOSDiagram() {
   const [open, setOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  // The pan/zoom canvas wrapper (white rounded area inside the modal).
+  // Measured to compute the fit-to-viewport transform on open.
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  // Imperative handle from react-zoom-pan-pinch. We use it to push an
+  // explicit transform when the modal opens; the library's
+  // `centerOnInit` ran with zero-size content (img loaded async) and
+  // left the diagram pinned at (0, 0) so the user saw a blank canvas
+  // until they dragged.
+  const transformRef = useRef<ReactZoomPanPinchRef | null>(null);
 
   const close = useCallback(() => setOpen(false), []);
+
+  // Recenters the diagram at a scale that fits it entirely inside the
+  // stage with a small margin. Called when the modal opens AND when
+  // the inline img reports onLoad (in case the natural dimensions hint
+  // arrived before the stage was laid out).
+  const fitToView = useCallback(() => {
+    const stage = stageRef.current;
+    const ref = transformRef.current;
+    if (!stage || !ref) return;
+    const cw = stage.clientWidth;
+    const ch = stage.clientHeight;
+    if (cw <= 0 || ch <= 0) return;
+    // 0.95 leaves visible breathing room around the diagram so it
+    // doesn't crash into the rounded container edges.
+    const scale = Math.min(cw / SVG_NATURAL_W, ch / SVG_NATURAL_H) * 0.95;
+    const x = (cw - SVG_NATURAL_W * scale) / 2;
+    const y = (ch - SVG_NATURAL_H * scale) / 2;
+    ref.setTransform(x, y, scale, 0);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -64,13 +97,16 @@ export function ESMOSDiagram() {
     document.body.style.overflow = "hidden";
     // Move keyboard focus into the modal for screen readers and keyboard users.
     modalRef.current?.focus();
+    // Defer one frame so the stage has been laid out before we measure.
+    const raf = requestAnimationFrame(fitToView);
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = original;
+      cancelAnimationFrame(raf);
       // Return focus to the trigger when the modal closes.
       triggerRef.current?.focus();
     };
-  }, [open, close]);
+  }, [open, close, fitToView]);
 
   return (
     <>
@@ -137,29 +173,33 @@ export function ESMOSDiagram() {
               Close (Esc)
             </button>
           </div>
-          <div className="relative flex-1 overflow-hidden rounded-lg bg-white">
+          <div
+            ref={stageRef}
+            className="relative flex-1 overflow-hidden rounded-lg bg-white"
+          >
             {/*
               react-zoom-pan-pinch v4 quirks worth preserving:
-              - The SVG is 5237x3248 at natural size; initialScale 0.18
-                fits the whole thing into a typical desktop viewport at
-                first paint, then the user zooms IN.
+              - The SVG is 5237x3248 at natural size. We compute the
+                fit-to-stage scale imperatively on open (see fitToView
+                in the effect above) instead of relying on a hardcoded
+                initialScale, which was wrong on most viewports and
+                left the user with a blank canvas to drag around.
               - smoothStep is gone in v4; use a single `step` for wheel.
-              - DO NOT pass contentClass forcing h-full/w-full. The img
-                needs its natural dimensions so the wrapper can compute
-                the correct centered transform; constraining the content
-                box made the diagram render off-screen.
+              - Explicit width/height on the img reserves layout space
+                so the wrapper can compute its content box immediately
+                instead of waiting for the SVG to fetch + parse.
             */}
             <TransformWrapper
-              initialScale={0.18}
-              minScale={0.15}
+              ref={transformRef}
+              initialScale={1}
+              minScale={0.05}
               maxScale={6}
               wheel={{ step: 0.15 }}
               pinch={{ step: 5 }}
               doubleClick={{ mode: "zoomIn", step: 0.6 }}
               limitToBounds={false}
-              centerOnInit
             >
-              <ZoomControls />
+              <ZoomControls onReset={fitToView} />
               <TransformComponent
                 wrapperClass="!h-full !w-full"
                 wrapperStyle={{ height: "100%", width: "100%" }}
@@ -168,8 +208,11 @@ export function ESMOSDiagram() {
                 <img
                   src={SVG_PATH}
                   alt="ESMOS multi-cloud APAC architecture v9.4, full size"
+                  width={SVG_NATURAL_W}
+                  height={SVG_NATURAL_H}
                   className="block max-w-none select-none"
                   draggable={false}
+                  onLoad={fitToView}
                 />
               </TransformComponent>
             </TransformWrapper>

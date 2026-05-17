@@ -25,7 +25,7 @@ const OUTPUTS: Record<number, string[]> = {
     "Ho Chi Minh City • GMT+7",
   ],
   2: ["esmos/  royce-connect/  smart-greenhouse/  multi-cloud/"],
-  3: ["xlwinmmtx@gmail.com"],
+  3: ["lwinmmt@gmail.com"],
 };
 
 export function HeroTerminal() {
@@ -36,6 +36,7 @@ export function HeroTerminal() {
       username="lwin@portfolio"
       typingSpeed={45}
       delayBetweenCommands={900}
+      enableSound
     />
   );
 }

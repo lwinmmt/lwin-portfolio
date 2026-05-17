@@ -387,10 +387,12 @@ export function Terminal({
 
         {/* Scrollable content. Native scrollbar hidden across engines
             to keep the chrome clean; the content auto-scrolls to the
-            bottom as new lines land. */}
+            bottom as new lines land. Height tuned so the terminal sits
+            visually shorter than the globe variant — keeps the right
+            column from looking like a wall of black on the hero. */}
         <div
           ref={contentRef}
-          className="h-80 overflow-y-auto p-4 font-mono [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="h-64 overflow-y-auto p-4 font-mono [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {lines.map((line, i) => (
             <div key={i} className="leading-relaxed whitespace-pre-wrap">

@@ -22,13 +22,18 @@ import { profile } from "@/lib/content";
 // gave the right column a second visual mass below the globe; without
 // it the globe needs more presence to balance the text block on the
 // left. 15% larger felt right against the 3fr_2fr grid.
+//
+// SIZE is now the *ceiling*. The runtime canvas size matches the
+// actual wrapper width (via ResizeObserver) and is clamped to SIZE.
+// That stops the canvas overflowing its wrapper on narrow columns
+// and pushing into the variant-switcher pill that sits below it.
 const SIZE = 440;
 // 0.88 leaves enough margin between the sphere silhouette and the
-// canvas edge that arcs bowing up to (1 + ARC_HEIGHT) * RADIUS still
+// canvas edge that arcs bowing up to (1 + ARC_HEIGHT) * RADIUS_FACTOR
 // fit fully inside the canvas instead of getting clipped at the top.
 // (Previous 0.92 + 0.18 elevation pushed the arc apex past the canvas
-// edge.)
-const RADIUS = (SIZE / 2) * 0.88;
+// edge.) Per-frame `radius` is `(actualSize / 2) * RADIUS_FACTOR`.
+const RADIUS_FACTOR = 0.88;
 const NUM_DOTS = 1200;
 const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
 const DRAG_SENSITIVITY = 0.4;
@@ -168,6 +173,9 @@ function buildTrack(from: Vec3, to: Vec3, n: number) {
 export function HeroGlobe() {
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  // Measured to scale the canvas backing store to the column width
+  // every time the layout changes (window resize, sidebar collapse).
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   // phi: rotation around Y axis (auto-spin + horizontal drag)
   // theta: rotation around X axis (vertical drag, clamped)
@@ -286,25 +294,48 @@ export function HeroGlobe() {
   }, [mounted]);
 
   // The single RAF loop drives auto-rotation, coast, and every draw.
+  // Canvas size tracks the wrapper width every time the layout shifts
+  // (window resize, locale toggle, theme flip, sidebar collapse) so the
+  // drawing area always matches the wrapper bounds. Without this the
+  // canvas was pinned at SIZE px and overflowed its wrapper on
+  // narrower columns, bleeding into the variant-switcher pill below.
   useEffect(() => {
     if (!mounted) return;
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const wrapper = wrapperRef.current;
+    if (!canvas || !wrapper) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // High-DPI canvas. Backing store at devicePixelRatio so circles
-    // render crisp on retina; logical drawing uses the SIZE units
-    // because we scale the context once.
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = SIZE * dpr;
-    canvas.height = SIZE * dpr;
-    canvas.style.width = `${SIZE}px`;
-    canvas.style.height = `${SIZE}px`;
-    ctx.scale(dpr, dpr);
+    // Dynamic per-render values. `applySize` keeps them in sync with
+    // the wrapper. We also store the previous values to skip work when
+    // nothing changed (resize observer fires on every paint sometimes).
+    let actualSize = 0;
+    let cometRadius = 0;
+    let dpr = 0;
 
-    const cx = SIZE / 2;
-    const cy = SIZE / 2;
+    const applySize = () => {
+      const w = Math.max(1, Math.round(wrapper.clientWidth));
+      const clamped = Math.min(SIZE, w);
+      const nextDpr = window.devicePixelRatio || 1;
+      if (clamped === actualSize && nextDpr === dpr) return;
+      actualSize = clamped;
+      dpr = nextDpr;
+      cometRadius = (actualSize / 2) * RADIUS_FACTOR;
+      canvas.width = actualSize * dpr;
+      canvas.height = actualSize * dpr;
+      canvas.style.width = `${actualSize}px`;
+      canvas.style.height = `${actualSize}px`;
+      // setTransform replaces (not multiplies) so resizes reset the
+      // DPR scale cleanly. ctx.scale(dpr,dpr) would accumulate on
+      // each call.
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    applySize();
+
+    const ro = new ResizeObserver(applySize);
+    ro.observe(wrapper);
+
     let raf = 0;
 
     const tick = () => {
@@ -326,7 +357,10 @@ export function HeroGlobe() {
       const sinTheta = Math.sin(thetaRad);
       const cosTheta = Math.cos(thetaRad);
 
-      ctx.clearRect(0, 0, SIZE, SIZE);
+      const cx = actualSize / 2;
+      const cy = actualSize / 2;
+
+      ctx.clearRect(0, 0, actualSize, actualSize);
       // Reset shadow state at frame start. Without this, the dot loop
       // below would inherit `shadowBlur > 0` left over from the last
       // arc's comet head when an arc-free frame transitions in, and
@@ -350,10 +384,10 @@ export function HeroGlobe() {
         const y2 = d.y * cosTheta - z1 * sinTheta;
         const z2 = d.y * sinTheta + z1 * cosTheta;
         if (z2 < -0.02) continue; // back-of-sphere, hide
-        const zScaled = z2 * RADIUS;
+        const zScaled = z2 * cometRadius;
         const scale = FOCAL / (FOCAL - zScaled);
-        const sx = x1 * RADIUS * scale + cx;
-        const sy = -y2 * RADIUS * scale + cy;
+        const sx = x1 * cometRadius * scale + cx;
+        const sy = -y2 * cometRadius * scale + cy;
         const r = 1.05 * scale;
         ctx.beginPath();
         ctx.arc(sx, sy, r, 0, Math.PI * 2);
@@ -396,7 +430,7 @@ export function HeroGlobe() {
             pathActive = false;
             continue;
           }
-          const r = RADIUS * elev;
+          const r = cometRadius * elev;
           const zS = z2 * r;
           const scale = FOCAL / (FOCAL - zS);
           const sx = x1 * r * scale + cx;
@@ -424,7 +458,7 @@ export function HeroGlobe() {
           const y2 = p.y * cosTheta - z1 * sinTheta;
           const z2 = p.y * sinTheta + z1 * cosTheta;
           if (z2 < -0.02) continue;
-          const r = RADIUS * elev;
+          const r = cometRadius * elev;
           const zS = z2 * r;
           const scale = FOCAL / (FOCAL - zS);
           const sx = x1 * r * scale + cx;
@@ -450,7 +484,10 @@ export function HeroGlobe() {
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, [mounted, dots]);
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -496,6 +533,7 @@ export function HeroGlobe() {
       style={{ width: "100%", maxWidth: SIZE }}
     >
       <div
+        ref={wrapperRef}
         className="globe-wrap relative"
         style={{
           width: "100%",
