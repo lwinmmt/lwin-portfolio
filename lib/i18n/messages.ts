@@ -30,6 +30,7 @@ export const messages = {
     "nav.aria.cmdPalette": "Open command palette",
     "nav.aria.more": "More",
     "nav.aria.moreSheet": "More navigation",
+    "nav.skipToMain": "Skip to main content",
     // Sidebar chrome
     "sidebar.subtitle": "AI & IIoT Engineer",
     "sidebar.search": "Search",
@@ -169,6 +170,7 @@ export const messages = {
     // these strings are display-only)
     "projects.category.Coursework": "Coursework",
     "projects.category.Projects": "Projects",
+    "projects.empty": "No projects match this filter yet.",
     // Project detail page
     "project.back": "All projects",
     "project.archDiagramTitle": "Architecture diagram",
@@ -266,6 +268,7 @@ export const messages = {
     "nav.aria.cmdPalette": "Mở bảng lệnh",
     "nav.aria.more": "Thêm",
     "nav.aria.moreSheet": "Điều hướng thêm",
+    "nav.skipToMain": "Bỏ qua đến nội dung chính",
     // Sidebar chrome
     "sidebar.subtitle": "Kỹ sư AI & IIoT",
     "sidebar.search": "Tìm kiếm",
@@ -403,6 +406,7 @@ export const messages = {
     "projects.count.many": "{n} dự án",
     "projects.category.Coursework": "Bài tập",
     "projects.category.Projects": "Dự án",
+    "projects.empty": "Chưa có dự án nào khớp với bộ lọc này.",
     // Project detail page
     "project.back": "Tất cả dự án",
     "project.archDiagramTitle": "Sơ đồ kiến trúc",

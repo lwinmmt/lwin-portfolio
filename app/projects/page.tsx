@@ -125,6 +125,25 @@ export default function ProjectsPage() {
         </div>
       </header>
 
+      {/* Defensive empty state. Today the filter chips only surface
+          categories that have entries, so this code path is
+          theoretically unreachable — but if a future filter (or a
+          search) ever returns zero matches, the page no longer ends
+          on a row of chips with empty space below. */}
+      {(() => {
+        const visibleCount = grouped.filter(
+          (g) => filter === null || filter === g.category,
+        ).length;
+        if (visibleCount > 0) return null;
+        return (
+          <div className="mt-14 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-8 text-center">
+            <p className="font-sans text-[14px] text-[var(--color-fg-muted)]">
+              {t("projects.empty")}
+            </p>
+          </div>
+        );
+      })()}
+
       <AnimatePresence mode="popLayout">
         {grouped.map(({ category, items }) => {
           const hidden = filter !== null && filter !== category;

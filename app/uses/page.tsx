@@ -37,7 +37,11 @@ export default async function UsesPage() {
   // IoT and Stack get full-width treatment below.
   return (
     <DashboardShell>
-      <figure>
+      {/* <figure> would announce a graphic landmark expecting an
+          accompanying <figcaption>. This page is a tools listing
+          (text + tag chips), not a figure. <article> matches the
+          self-contained-content semantic. */}
+      <article>
         <header>
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
             {t("uses.eyebrow")}
@@ -222,7 +226,7 @@ export default async function UsesPage() {
           )}
         </div>
 
-      </figure>
+      </article>
     </DashboardShell>
   );
 }

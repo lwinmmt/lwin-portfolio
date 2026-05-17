@@ -11,7 +11,7 @@ import { Reveal } from "@/components/ui/reveal";
 export const metadata: Metadata = {
   // Use full title so we do not double up with the layout template.
   title: {
-    absolute: "Lwin AI and IIoT Engineer",
+    absolute: "Lwin, AI and IIoT Engineer",
   },
   description:
     "Information Systems student at Singapore Management University. AI & IIoT Engineer at VNTT in Ho Chi Minh City. I build IoT systems and ship products end-to-end.",

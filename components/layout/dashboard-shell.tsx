@@ -5,6 +5,11 @@ import { LocaleSwap } from "@/components/layout/locale-swap";
 import { CmdPalette } from "@/components/cmd-palette/cmd-palette";
 import { LocalePromptBanner } from "@/components/ui/locale-prompt-banner";
 
+// Sync (not async) because some pages — like /projects — are
+// "use client" and import DashboardShell into the client bundle.
+// Async server components can't run inside a client module graph.
+// The skip-to-main-content link lives in app/layout.tsx instead,
+// which is a true server component and CAN call getT().
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
     <>
