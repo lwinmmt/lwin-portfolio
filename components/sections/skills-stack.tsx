@@ -120,13 +120,10 @@ export async function SkillsStack() {
             {spokenLanguages.map((lang) => (
               <div
                 key={lang.name}
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] py-1.5 pr-3 pl-3"
+                className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] px-3 py-1.5"
               >
                 <span className="font-sans text-[13px] font-medium text-[var(--color-fg)]">
                   {lang.name}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-                  {lang.level}
                 </span>
               </div>
             ))}

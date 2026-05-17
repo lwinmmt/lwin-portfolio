@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { motion } from "framer-motion";
 import { SidebarIcon } from "./sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -28,13 +30,15 @@ export function Sidebar() {
       className="fixed top-0 left-0 z-40 hidden h-dvh w-[260px] flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 lg:flex"
     >
       <div className="flex items-center gap-3 px-3 pb-6">
-        {/* Plain img for maximum compatibility, bypasses Next.js Image quirks */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        {/* next/image so this above-the-fold avatar gets format
+            negotiation (AVIF/WebP), automatic srcset, and the right
+            priority hint. Fixed 44px display size. */}
+        <Image
           src={profile.photoSrc}
           alt={`${profile.name} portrait`}
           width={44}
           height={44}
+          priority
           className="h-11 w-11 flex-shrink-0 rounded-full border border-[var(--color-border-default)] object-cover"
         />
         <div className="leading-tight">
@@ -94,7 +98,7 @@ export function Sidebar() {
 
       <LanguageSwitcher />
 
-      <div className="mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1">
+      <div className="relative mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1">
         {(["light", "dark", "system"] as const).map((mode) => {
           const isActiveTheme = mounted && theme === mode;
           const label =
@@ -109,14 +113,30 @@ export function Sidebar() {
               type="button"
               onClick={() => setTheme(mode)}
               className={
-                "flex-1 rounded-[7px] py-1.5 text-[11.5px] font-medium transition-colors " +
+                "relative flex-1 rounded-[7px] py-1.5 text-[11.5px] font-medium transition-colors " +
                 (isActiveTheme
-                  ? "bg-[var(--color-bg-card)] text-[var(--color-fg)] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                  ? "text-[var(--color-fg)]"
                   : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
               }
               aria-pressed={isActiveTheme}
             >
-              {label}
+              {/* Sliding active background, framer-motion shared
+                  layout. Matches the EN/VI switcher's behavior so
+                  the two adjacent pill toggles read as one pattern. */}
+              {isActiveTheme && (
+                <motion.span
+                  layoutId="theme-switch-pill"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-[7px] bg-[var(--color-bg-card)] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                  transition={{
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 32,
+                    mass: 0.7,
+                  }}
+                />
+              )}
+              <span className="relative z-10">{label}</span>
             </button>
           );
         })}

@@ -41,12 +41,6 @@
      bento text-only card gradient). Other tag colors were removed
      when the highlight tag chips were taken off the cards. */
   --tag-press: #047857;
-  /* Globe sphere body tint. Subtle radial shade that lives BEHIND
-     the dots so the sphere reads as a textured object instead of
-     points floating in air. Light mode: very faint gray shading. */
-  --globe-body-hi: rgba(0, 0, 0, 0.04);
-  --globe-body-mid: rgba(0, 0, 0, 0.025);
-  --globe-body-lo: rgba(0, 0, 0, 0.01);
 }
 
 /* Dark theme tokens */
@@ -80,11 +74,6 @@
   --aurora-amber: rgba(217, 119, 6, 0.06);
   /* Tag accent. See light-mode block for context. */
   --tag-press: #34D399;
-  /* Globe sphere body tint. Dark mode: slightly lighter than the
-     page bg so the sphere has presence against a near-black canvas. */
-  --globe-body-hi: rgba(255, 255, 255, 0.06);
-  --globe-body-mid: rgba(255, 255, 255, 0.035);
-  --globe-body-lo: rgba(255, 255, 255, 0.015);
 }
 
 @theme inline {
@@ -319,21 +308,25 @@
   .locale-fade-in { animation: none !important; }
 }
 
-/* Card title underline draw. Apply to a span around the title text
-   inside any card with `group` on its outer wrapper; the underline
-   draws left-to-right on group-hover in the ruby brand color (NOT
-   currentColor) so it reads consistently across cards regardless of
-   the title's own text color. */
+/* Card title underline draw + colored title on hover.
+   Apply to a span around the title text inside any card with `group`
+   on its outer wrapper. On group-hover the ruby underline sweeps
+   left-to-right AND the title color shifts to ruby-deep, giving the
+   whole site one consistent card-hover vocabulary. */
 .card-title-draw {
   background-image: linear-gradient(var(--color-ruby), var(--color-ruby));
   background-size: 0% 1.5px;
   background-repeat: no-repeat;
   background-position: 0 100%;
-  transition: background-size 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background-size 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s ease;
 }
 .group:hover .card-title-draw,
-.group:focus-visible .card-title-draw {
+.group:focus-visible .card-title-draw,
+.group:focus-within .card-title-draw {
   background-size: 100% 1.5px;
+  color: var(--color-ruby-deep);
 }
 
 /* Tabular numerals everywhere so numbers do not dance during animations

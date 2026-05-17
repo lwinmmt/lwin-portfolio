@@ -1,6 +1,7 @@
-"use client";
-
 // Inline SVG icons matched to the Lucide vocabulary, sized for the sidebar.
+// Pure render function — no hooks, no event handlers, no browser APIs.
+// Marking it "use client" forced it into the client bundle for no reason;
+// dropped so this component can render on the server.
 type Props = { name: string; className?: string };
 
 export function SidebarIcon({ name, className = "h-[15px] w-[15px]" }: Props) {
