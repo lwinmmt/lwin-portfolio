@@ -1,35 +1,41 @@
-// Sidebar navigation groups. Shortcut letters power the keyboard shortcuts (future feature).
+// Sidebar navigation groups. Shortcut letters power the keyboard shortcuts.
+//
+// `label` is the English fallback / English-only consumers like the cmd
+// palette and keyboard-nav use it as-is. `labelKey` is the i18n key the
+// sidebar uses via useT() to render the localized label.
 
 import { profile } from "./profile";
+import type { MessageKey } from "@/lib/i18n/messages";
 
 export type NavLink = {
   href: string;
   label: string;
+  labelKey: MessageKey;
   shortcut?: string;
   icon: string;
   external?: boolean;
 };
 
 export const navItems: NavLink[] = [
-  { href: "/", label: "Home", shortcut: "1", icon: "home" },
-  { href: "/about", label: "About", shortcut: "2", icon: "user" },
-  { href: "/projects", label: "Projects", shortcut: "3", icon: "code" },
-  { href: "/blog", label: "Blog", shortcut: "4", icon: "pen" },
-  { href: "/uses", label: "Uses", shortcut: "5", icon: "laptop" },
+  { href: "/", label: "Home", labelKey: "nav.home", shortcut: "1", icon: "home" },
+  { href: "/about", label: "About", labelKey: "nav.about", shortcut: "2", icon: "user" },
+  { href: "/projects", label: "Projects", labelKey: "nav.projects", shortcut: "3", icon: "code" },
+  { href: "/blog", label: "Blog", labelKey: "nav.blog", shortcut: "4", icon: "pen" },
+  { href: "/uses", label: "Uses", labelKey: "nav.uses", shortcut: "5", icon: "laptop" },
 ];
 
 export const navResources: NavLink[] = [
-  { href: "/highlights", label: "Highlights", shortcut: "6", icon: "medal" },
-  { href: "/resume", label: "Resume", shortcut: "7", icon: "file" },
-  { href: "/studio", label: "Studio", icon: "laptop" },
+  { href: "/highlights", label: "Highlights", labelKey: "nav.highlights", shortcut: "6", icon: "medal" },
+  { href: "/resume", label: "Resume", labelKey: "nav.resume", shortcut: "7", icon: "file" },
+  { href: "/studio", label: "Studio", labelKey: "nav.studio", icon: "laptop" },
 ];
 
 export const navContact: NavLink[] = [
   // No keyboard shortcuts on stay-in-touch items: they are not pages, they
   // open mail clients or external sites. Visual badges would suggest they
   // are navigable like the rest of the nav, which they are not.
-  { href: `mailto:${profile.email}`, label: "Email", icon: "mail" },
-  { href: "https://wa.me/6593849006", label: "WhatsApp", icon: "whatsapp", external: true },
-  { href: profile.github, label: "GitHub", icon: "github", external: true },
-  { href: profile.linkedin, label: "LinkedIn", icon: "linkedin", external: true },
+  { href: `mailto:${profile.email}`, label: "Email", labelKey: "nav.email", icon: "mail" },
+  { href: "https://wa.me/6593849006", label: "WhatsApp", labelKey: "nav.whatsapp", icon: "whatsapp", external: true },
+  { href: profile.github, label: "GitHub", labelKey: "nav.github", icon: "github", external: true },
+  { href: profile.linkedin, label: "LinkedIn", labelKey: "nav.linkedin", icon: "linkedin", external: true },
 ];

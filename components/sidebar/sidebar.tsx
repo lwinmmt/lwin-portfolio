@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { SidebarIcon } from "./sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { profile, navItems, navResources, navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
+import { useT } from "@/lib/i18n/client";
 
 export function Sidebar() {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
+  const t = useT();
   // next-themes resolves the active mode on the client only. Gate the
   // active-button styling to avoid a hydration mismatch warning.
   const [mounted, setMounted] = useState(false);
@@ -37,7 +40,7 @@ export function Sidebar() {
             {profile.name}<span className="text-[var(--color-ruby)]">.</span>
           </div>
           <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
-            AI &amp; IIoT Engineer
+            {t("sidebar.subtitle")}
           </div>
         </div>
       </div>
@@ -45,12 +48,12 @@ export function Sidebar() {
       <NavSection items={navItems} pathname={pathname} />
 
       <div className="px-3 pt-3 pb-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
-        Resources
+        {t("nav.section.resources")}
       </div>
       <NavSection items={navResources} pathname={pathname} />
 
       <div className="px-3 pt-3 pb-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
-        Stay in touch
+        {t("nav.section.stayInTouch")}
       </div>
       <NavSection items={navContact} pathname={pathname} />
 
@@ -80,12 +83,14 @@ export function Sidebar() {
           <path d="m21 21-4.3-4.3" />
         </svg>
         <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-muted)]">
-          Search
+          {t("sidebar.search")}
         </span>
         <kbd className="ml-auto rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] font-mono text-[10px] text-[var(--color-fg-faint)]">
           &#8984;K
         </kbd>
       </button>
+
+      <LanguageSwitcher />
 
       <div className="mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1">
         {(["light", "dark", "system"] as const).map((mode) => {
@@ -114,6 +119,7 @@ export function Sidebar() {
 }
 
 function NavSection({ items, pathname }: { items: NavLink[]; pathname: string }) {
+  const t = useT();
   return (
     <nav className="flex flex-col gap-[1px]">
       {items.map((item) => {
@@ -124,10 +130,11 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
             ? "bg-[var(--color-bg-card)] text-[var(--color-fg)] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_0_0_1px_var(--color-border-default)]"
             : "text-[var(--color-fg-muted)] hover:bg-[var(--color-hover-mute)] hover:text-[var(--color-fg)]");
 
+        const label = t(item.labelKey);
         const inner = (
           <>
             <SidebarIcon name={item.icon} />
-            <span className="flex-1">{item.label}</span>
+            <span className="flex-1">{label}</span>
             {item.shortcut && (
               <span className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] font-mono text-[10px] text-[var(--color-fg-faint)]">
                 {item.shortcut}
@@ -148,6 +155,7 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
               className={className + " w-full"}
               tooltipPlacement="right"
               layout="block"
+              ariaLabel={label}
             >
               {inner}
             </EmailButton>
@@ -162,6 +170,7 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
               target="_blank"
               rel="noopener noreferrer"
               className={className}
+              aria-label={label}
             >
               {inner}
             </a>
@@ -169,7 +178,7 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
         }
 
         return (
-          <Link key={item.href} href={item.href} className={className}>
+          <Link key={item.href} href={item.href} className={className} aria-label={label}>
             {inner}
           </Link>
         );

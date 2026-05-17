@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { cookies, headers } from "next/headers";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
-import { LanguageBanner } from "@/components/ui/language-banner";
+import { LocaleProvider } from "@/lib/i18n/client";
+import { getLocale } from "@/lib/i18n/server";
 import "./globals.css";
-
-// Parse the Accept-Language header for the visitor's primary language.
-// Format: `en-US,en;q=0.9,vi;q=0.8` -> we want the FIRST token's base.
-function primaryLanguageFrom(header: string | null): string {
-  if (!header) return "";
-  const first = header.split(",")[0]?.split(";")[0]?.trim() ?? "";
-  return first.toLowerCase();
-}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,18 +50,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Server-side language detection: read Accept-Language, only show the
-  // banner to visitors whose primary browser language is Vietnamese.
-  // Dismissal persists via the 'lb' cookie so return visitors do not
-  // see it again.
-  const [h, c] = await Promise.all([headers(), cookies()]);
-  const primary = primaryLanguageFrom(h.get("accept-language"));
-  const dismissed = c.get("lb")?.value === "1";
-  const showLangBanner = !dismissed && primary.startsWith("vi");
+  // Locale resolution: explicit cookie wins, else Accept-Language
+  // (Vietnamese browsers auto-flip), else English. The whole tree
+  // reads from this single source via the LocaleProvider so any
+  // client component can call useLocale() / useT() without prop
+  // drilling.
+  const locale = await getLocale();
 
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
@@ -80,9 +70,10 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ConsoleBranding />
-          {showLangBanner && <LanguageBanner />}
-          {children}
+          <LocaleProvider locale={locale}>
+            <ConsoleBranding />
+            {children}
+          </LocaleProvider>
         </ThemeProvider>
       </body>
     </html>
