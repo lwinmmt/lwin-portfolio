@@ -10,5 +10,5 @@ export type SpokenLanguage = {
 export const spokenLanguages: SpokenLanguage[] = [
   { name: "English", level: "Native" },
   { name: "Burmese", level: "Native" },
-  { name: "Mandarin Chinese", level: "Proficient" },
+  { name: "Chinese", level: "Proficient" },
 ];

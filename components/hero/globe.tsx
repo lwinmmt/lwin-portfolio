@@ -5,39 +5,36 @@ import { profile } from "@/lib/content";
 import { useLocale, useT } from "@/lib/i18n/client";
 import type { Locale } from "@/lib/i18n/types";
 
-// Pure CSS 3D Fibonacci dot sphere. ~700 dots positioned via golden-
-// angle spiral, each oriented outward so back-facing dots disappear
-// via backface-visibility as the sphere rotates. Drag overrides the
-// auto-rotation; on release the rotation coasts with friction before
-// handing back to auto-rotate.
+// CSS 3D Fibonacci dot sphere. ~800 dots positioned via a golden-angle
+// spiral and dropped into 3D space behind a CSS perspective. Dots do
+// NOT rotate to face the camera and we do NOT use backface-visibility;
+// every dot is visible at all times so the silhouette reads as a full
+// ball rather than a crescent of front-facing dots.
 //
-// Visual layers, back-to-front:
-//   - Depth mask on the dot field (radial fade toward the limb) so
-//     the sphere reads as a curved surface, not a flat dot cloud.
-//   - Random great-circle arcs with a 4-segment comet trail. Reads
-//     as 'data in flight between deployed devices.'
-//   - Persistent HCMC pin with two staggered pulsing halo rings.
-//   - Soft limb-glow ring framing the silhouette.
+// Layers, back to front:
+//   - Ambient ruby fog behind the sphere (very faint).
+//   - Full-coverage dot field on a rotating parent.
+//   - Great-circle data-flow arcs with a 4-segment comet trail.
+//   - Location chip overlaid at the bottom of the globe.
+//
+// No HCMC pin or halo; the chip carries the location label below.
 
 const SIZE = 380;
 const RADIUS = (SIZE / 2) * 0.92;
-const NUM_DOTS = 700;
+const NUM_DOTS = 820;
 const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
 const DRAG_SENSITIVITY = 0.4;
-const PIN_SIZE = 8;
 const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 
 const ARC_TRACK_DOTS = 24;
 const ARC_HEIGHT = 0.18;
-const ARC_SPAWN_INTERVAL_MS = 800;
-const ARC_MIN_DURATION_MS = 2200;
+const ARC_SPAWN_INTERVAL_MS = 900;
+const ARC_MIN_DURATION_MS = 2400;
 const ARC_DURATION_VARIANCE_MS = 1200;
-const MAX_ACTIVE_ARCS = 7;
+const MAX_ACTIVE_ARCS = 6;
 
-// Comet trail: head + 3 trailing shadow dots, each offset behind in
-// time so the comet reads as a streak instead of a single pixel.
 const COMET_TRAIL_OFFSETS = [0, 0.04, 0.08, 0.12] as const;
-const COMET_TRAIL_SIZES = [4.5, 3.4, 2.4, 1.6] as const;
+const COMET_TRAIL_SIZES = [4.2, 3.2, 2.2, 1.5] as const;
 const COMET_TRAIL_OPACITY = [1, 0.55, 0.3, 0.15] as const;
 
 // Momentum coast on drag release. Decay multiplier per frame; below
@@ -148,18 +145,11 @@ export function HeroGlobe() {
   const t = useT();
   const locale = useLocale();
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
-  const pinVec = useMemo(
-    () => latLngToVec(profile.locationCoords.lat, profile.locationCoords.lng),
-    [],
-  );
   const rotatorRef = useRef<HTMLDivElement | null>(null);
   const phi = useRef(INITIAL_PHI_DEG);
   const dragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartPhi = useRef(0);
-  // Track the per-frame delta during drag so we can hand it to the
-  // coast loop on release. lastDragX is the previous pointer x, used
-  // to compute velocity each move event.
   const lastDragX = useRef(0);
   const dragVelocity = useRef(0);
   const coastVelocity = useRef(0);
@@ -168,7 +158,6 @@ export function HeroGlobe() {
   const [now, setNow] = useState<Date>(() => new Date(0));
   const [arcs, setArcs] = useState<ArcInstance[]>([]);
   const arcsRef = useRef<ArcInstance[]>([]);
-  // Each arc owns 4 comet refs (head + 3 trail). Keyed by arc id.
   const arcCometRefs = useRef<Map<number, Array<HTMLSpanElement | null>>>(
     new Map(),
   );
@@ -226,8 +215,7 @@ export function HeroGlobe() {
     const tick = () => {
       if (rotatorRef.current) {
         if (dragging.current) {
-          // Pointer drives phi directly during drag; coast velocity is
-          // set in onPointerMove off the pointer delta.
+          // Pointer drives phi directly during drag.
         } else if (Math.abs(coastVelocity.current) > COAST_STOP_THRESHOLD) {
           phi.current = (phi.current + coastVelocity.current) % 360;
           coastVelocity.current *= COAST_FRICTION;
@@ -257,7 +245,7 @@ export function HeroGlobe() {
           const tx = (p.x * RADIUS * elev).toFixed(2);
           const ty = (-p.y * RADIUS * elev).toFixed(2);
           const tz = (p.z * RADIUS * elev).toFixed(2);
-          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px) rotateY(${p.lng}rad) rotateX(${-p.lat}rad)`;
+          node.style.transform = `translate(-50%, -50%) translate3d(${tx}px, ${ty}px, ${tz}px)`;
           const envelope = Math.sin(tt * Math.PI);
           node.style.opacity = String(envelope * (COMET_TRAIL_OPACITY[idx] ?? 0));
         });
@@ -284,10 +272,7 @@ export function HeroGlobe() {
       if (!dragging.current || !rotatorRef.current) return;
       const delta = e.clientX - dragStartX.current;
       phi.current = dragStartPhi.current + delta * DRAG_SENSITIVITY;
-      // Per-frame velocity in deg, used for momentum on release.
       const frameDelta = (e.clientX - lastDragX.current) * DRAG_SENSITIVITY;
-      // Smooth a touch so a single jitter at the end of a drag does
-      // not dominate the coast direction.
       dragVelocity.current = dragVelocity.current * 0.6 + frameDelta * 0.4;
       lastDragX.current = e.clientX;
       rotatorRef.current.style.transform = `rotateY(${phi.current}deg)`;
@@ -326,6 +311,18 @@ export function HeroGlobe() {
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
       >
+        {/* Ambient ruby fog. Sits behind the sphere; very low intensity
+            so the globe is the focus, not the glow. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 5%, transparent) 0%, transparent 55%)",
+            filter: "blur(10px)",
+          }}
+        />
+
         <div
           ref={rotatorRef}
           className="absolute inset-0"
@@ -336,40 +333,31 @@ export function HeroGlobe() {
             willChange: "transform",
           }}
         >
-          {/* Dot field. Light radial fade toward the limb so the
-              sphere reads as curved, but the floor stays high enough
-              that limb dots remain visible. */}
-          <div
-            className="absolute inset-0"
-            style={{
-              transformStyle: "preserve-3d",
-              WebkitMaskImage:
-                "radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,0.75) 100%)",
-              maskImage:
-                "radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,0.75) 100%)",
-            }}
-          >
-            {dots.map((d, i) => (
-              <span
-                key={i}
-                className="absolute rounded-full"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  width: 1.8,
-                  height: 1.8,
-                  backgroundColor: "var(--color-fg-soft)",
-                  opacity: 0.7,
-                  transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px) rotateY(${d.lng}rad) rotateX(${-d.lat}rad)`,
-                  backfaceVisibility: "hidden",
-                }}
-              />
-            ))}
-          </div>
+          {/* Full-coverage dot field. Every dot renders at all phi:
+              no per-dot rotation, no backface-visibility hide. The
+              CSS perspective makes back-of-sphere dots appear slightly
+              smaller, giving natural depth without computing per-frame
+              opacity for 800 elements. Front and back dots both show,
+              so the silhouette reads as a full sphere. */}
+          {dots.map((d, i) => (
+            <span
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                left: "50%",
+                top: "50%",
+                width: 1.6,
+                height: 1.6,
+                backgroundColor: "var(--color-fg-soft)",
+                opacity: 0.5,
+                transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px)`,
+              }}
+            />
+          ))}
 
-          {/* Random data-flow arcs: static dim ruby track + a 4-dot
-              comet trail (head + 3 fading shadow dots). RAF writes
-              each trail dot's position directly into its ref. */}
+          {/* Random data-flow arcs. Dim ruby track + a 4-dot comet
+              trail (head + 3 fading shadow dots). RAF writes each
+              trail dot's position directly into its ref each frame. */}
           {arcs.map((arc) => {
             const track = arcTrackPoints(arc.fromVec, arc.toVec, ARC_TRACK_DOTS);
             return (
@@ -384,9 +372,8 @@ export function HeroGlobe() {
                       width: 1.1,
                       height: 1.1,
                       backgroundColor: "var(--color-ruby)",
-                      opacity: 0.32,
-                      transform: `translate(-50%, -50%) translate3d(${(pt.p.x * RADIUS * pt.elev).toFixed(2)}px, ${(-pt.p.y * RADIUS * pt.elev).toFixed(2)}px, ${(pt.p.z * RADIUS * pt.elev).toFixed(2)}px) rotateY(${pt.p.lng}rad) rotateX(${-pt.p.lat}rad)`,
-                      backfaceVisibility: "hidden",
+                      opacity: 0.28,
+                      transform: `translate(-50%, -50%) translate3d(${(pt.p.x * RADIUS * pt.elev).toFixed(2)}px, ${(-pt.p.y * RADIUS * pt.elev).toFixed(2)}px, ${(pt.p.z * RADIUS * pt.elev).toFixed(2)}px)`,
                     }}
                   />
                 ))}
@@ -414,10 +401,9 @@ export function HeroGlobe() {
                       backgroundColor: "var(--color-ruby)",
                       boxShadow:
                         idx === 0
-                          ? "0 0 12px var(--color-ruby), 0 0 4px var(--color-ruby)"
-                          : "0 0 6px color-mix(in oklab, var(--color-ruby) 70%, transparent)",
+                          ? "0 0 8px var(--color-ruby)"
+                          : "0 0 4px color-mix(in oklab, var(--color-ruby) 60%, transparent)",
                       opacity: 0,
-                      backfaceVisibility: "hidden",
                       willChange: "transform, opacity",
                     }}
                   />
@@ -425,81 +411,28 @@ export function HeroGlobe() {
               </span>
             );
           })}
-
-          {/* Persistent HCMC pin with two staggered halo rings. The
-              rings sit on the same 3D plane as the pin so they hide
-              via backface-visibility when the pin rotates to the back
-              of the sphere. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute"
-            style={{
-              left: "50%",
-              top: "50%",
-              width: PIN_SIZE,
-              height: PIN_SIZE,
-              transform: `translate(-50%, -50%) translate3d(${(pinVec.x * RADIUS).toFixed(2)}px, ${(-pinVec.y * RADIUS).toFixed(2)}px, ${(pinVec.z * RADIUS).toFixed(2)}px) rotateY(${pinVec.lng}rad) rotateX(${-pinVec.lat}rad)`,
-              backfaceVisibility: "hidden",
-              transformStyle: "preserve-3d",
-            }}
-          >
-            <span
-              className="globe-pin-halo absolute rounded-full"
-              style={{
-                left: "50%",
-                top: "50%",
-                width: PIN_SIZE * 2.2,
-                height: PIN_SIZE * 2.2,
-                border: "1px solid var(--color-ruby)",
-                animation: "globe-pin-halo 2.8s ease-out infinite",
-              }}
-            />
-            <span
-              className="absolute rounded-full"
-              style={{
-                left: "50%",
-                top: "50%",
-                width: PIN_SIZE,
-                height: PIN_SIZE,
-                transform: "translate(-50%, -50%)",
-                backgroundColor: "var(--color-ruby)",
-                boxShadow: "0 0 6px var(--color-ruby)",
-              }}
-            />
-          </div>
         </div>
 
-        {/* Very subtle ambient fog behind the sphere. Drop further
-            than before so the globe reads as dots-on-paper, not as a
-            red splotch. */}
+        {/* Location chip overlaid on the bottom of the globe. Doesn't
+            rotate with the sphere; floats over the dot field. */}
         <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 4%, transparent) 0%, transparent 55%)",
-            filter: "blur(10px)",
-          }}
-        />
+          className="glass-chip pointer-events-none absolute bottom-3 left-1/2 inline-flex -translate-x-1/2 items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
+          aria-label={`Currently in ${profile.location}`}
+        >
+          <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
+            {profile.locationShort}
+          </span>
+          <span className="text-[var(--color-fg-faint)]">·</span>
+          <span className="tabular-nums">{liveTime ?? "--:--"}</span>
+          <span className="text-[var(--color-fg-faint)]">·</span>
+          <span className="text-[var(--color-fg-faint)]">
+            {profile.locationGmtLabel}
+          </span>
+        </div>
       </div>
 
       <div className="mt-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
         {t("globe.dragToRotate")}
-      </div>
-
-      <div
-        className="glass-chip mt-3 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
-        aria-label={`Currently in ${profile.location}`}
-      >
-        <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
-          {profile.locationShort}
-        </span>
-        <span className="text-[var(--color-fg-faint)]">·</span>
-        <span className="tabular-nums">{liveTime ?? "--:--"}</span>
-        <span className="text-[var(--color-fg-faint)]">·</span>
-        <span className="text-[var(--color-fg-faint)]">
-          {profile.locationGmtLabel}
-        </span>
       </div>
     </div>
   );

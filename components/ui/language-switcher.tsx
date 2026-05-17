@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { motion } from "framer-motion";
 import { useLocale, useT } from "@/lib/i18n/client";
 import { LOCALES, LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 
@@ -31,7 +32,7 @@ export function LanguageSwitcher() {
 
   return (
     <div
-      className="mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1"
+      className="relative mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1"
       aria-label={t("switcher.aria")}
     >
       {LOCALES.map((l) => {
@@ -42,15 +43,32 @@ export function LanguageSwitcher() {
             type="button"
             onClick={() => switchTo(l)}
             className={
-              "flex-1 rounded-[7px] py-1.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.12em] transition-colors " +
+              "relative flex-1 rounded-[7px] py-1.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.12em] transition-colors " +
               (isActive
-                ? "bg-[var(--color-bg-card)] text-[var(--color-fg)] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                ? "text-[var(--color-fg)]"
                 : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
             }
             aria-pressed={isActive}
             aria-label={LOCALE_NAMES[l].long}
           >
-            {LOCALE_NAMES[l].short}
+            {/* Sliding active background. layoutId tells framer-motion
+                this is the same element across renders, so when the
+                active button changes the pill animates to the new
+                position instead of swapping instantly. */}
+            {isActive && (
+              <motion.span
+                layoutId="locale-switch-pill"
+                aria-hidden="true"
+                className="absolute inset-0 rounded-[7px] bg-[var(--color-bg-card)] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                transition={{
+                  type: "spring",
+                  stiffness: 380,
+                  damping: 32,
+                  mass: 0.7,
+                }}
+              />
+            )}
+            <span className="relative z-10">{LOCALE_NAMES[l].short}</span>
           </button>
         );
       })}

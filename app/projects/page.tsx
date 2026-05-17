@@ -280,98 +280,25 @@ function ProjectCard({
             ))}
           </div>
         )}
-        <div className="relative z-10 mt-auto flex items-center justify-between gap-3 pt-4">
-          <div className="flex items-center gap-2 font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
-            <span>{project.dates}</span>
-            {attachments > 0 && (
-              <span
-                className="inline-flex items-center gap-0.5"
-                aria-label={`${attachments} attachments`}
-              >
-                <PaperclipIcon />
-                {attachments}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5">
-            {liveLinks.map((l) => (
-              <PrimaryChip key={l.url} href={l.url} label={l.label} />
-            ))}
-            {project.repoLink && (
-              <PrimaryChip href={project.repoLink} label="Code" />
-            )}
-            {project.videoLink && (
-              <IconChip
-                href={project.videoLink}
-                label="Video"
-                icon={<PlayIcon />}
-              />
-            )}
-            {project.slidesLink && (
-              <IconChip
-                href={project.slidesLink}
-                label="Slides"
-                icon={<SlidesIcon />}
-              />
-            )}
-            {project.pdfLink && (
-              <IconChip
-                href={project.pdfLink}
-                label="PDF"
-                icon={<DocumentIcon />}
-              />
-            )}
-            {project.newsLink && (
-              <IconChip
-                href={project.newsLink}
-                label="Press"
-                icon={<NewspaperIcon />}
-              />
-            )}
-          </div>
+        {/* Card footer: dates + attachment count only. Live / repo /
+            press / video / slides / PDF chips are NOT rendered here.
+            Clicking the card takes the user to the detail page which
+            surfaces all of those, so duplicating them here just clutters
+            the card. */}
+        <div className="relative z-10 mt-auto flex items-center gap-2 pt-4 font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
+          <span>{project.dates}</span>
+          {attachments > 0 && (
+            <span
+              className="inline-flex items-center gap-0.5"
+              aria-label={`${attachments} attachments`}
+            >
+              <PaperclipIcon />
+              {attachments}
+            </span>
+          )}
         </div>
       </div>
     </article>
-  );
-}
-
-function PrimaryChip({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-    >
-      {label}
-    </a>
-  );
-}
-
-function IconChip({
-  href,
-  label,
-  icon,
-}: {
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <span className="group relative inline-flex">
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label}
-        className="flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-[var(--color-fg-faint)] transition-colors hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-      >
-        {icon}
-      </a>
-      <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[var(--color-bg)] opacity-0 transition-opacity duration-150 group-hover:opacity-100">
-        {label}
-      </span>
-    </span>
   );
 }
 
@@ -388,37 +315,6 @@ const svgProps = {
   focusable: false as const,
 };
 
-function PlayIcon() {
-  return (
-    <svg {...svgProps}>
-      <polygon points="6 4 20 12 6 20 6 4" />
-    </svg>
-  );
-}
-function SlidesIcon() {
-  return (
-    <svg {...svgProps}>
-      <rect x="3" y="5" width="18" height="13" rx="1.5" />
-      <path d="M7 9h10M7 13h6" />
-    </svg>
-  );
-}
-function DocumentIcon() {
-  return (
-    <svg {...svgProps}>
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14 2 14 8 20 8" />
-    </svg>
-  );
-}
-function NewspaperIcon() {
-  return (
-    <svg {...svgProps}>
-      <path d="M4 4h14v16H4z" />
-      <path d="M8 8h6M8 12h6M8 16h4" />
-    </svg>
-  );
-}
 function PaperclipIcon() {
   return (
     <svg {...svgProps} width={9} height={9}>

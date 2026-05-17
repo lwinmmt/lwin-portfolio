@@ -10,6 +10,7 @@ import {
   profile,
   type NavLink,
 } from "@/lib/content";
+import { useModKey } from "@/lib/use-mod-key";
 
 type PaletteItem = {
   id: string;
@@ -101,6 +102,7 @@ export function CmdPalette() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+  const modKey = useModKey();
 
   const items = useMemo(buildItems, []);
 
@@ -310,7 +312,7 @@ export function CmdPalette() {
           </span>
           <span className="inline-flex items-center gap-2">
             <kbd className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] text-[var(--color-fg-soft)]">
-              ⌘K
+              {modKey.glyph}K
             </kbd>
             Toggle
           </span>

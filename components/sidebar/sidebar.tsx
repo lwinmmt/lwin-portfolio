@@ -10,11 +10,13 @@ import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { profile, navItems, navResources, navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
 import { useT } from "@/lib/i18n/client";
+import { useModKey } from "@/lib/use-mod-key";
 
 export function Sidebar() {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const t = useT();
+  const modKey = useModKey();
   // next-themes resolves the active mode on the client only. Gate the
   // active-button styling to avoid a hydration mismatch warning.
   const [mounted, setMounted] = useState(false);
@@ -86,7 +88,7 @@ export function Sidebar() {
           {t("sidebar.search")}
         </span>
         <kbd className="ml-auto rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] font-mono text-[10px] text-[var(--color-fg-faint)]">
-          &#8984;K
+          {modKey.glyph}K
         </kbd>
       </button>
 

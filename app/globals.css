@@ -290,26 +290,6 @@
 .animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .animate-fade-in { animation: fade-in 0.6s ease-out both; }
 
-/* HCMC pin halo. Two staggered rings expand out from the pin then
-   fade. The rings live on the rotating sphere so they hide via
-   backface-visibility when the pin spins to the back of the globe. */
-@keyframes globe-pin-halo {
-  0% {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0.45;
-  }
-  80% {
-    opacity: 0;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(2.2);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .globe-pin-halo { animation: none !important; }
-}
-
 /* Locale swap animation. LocaleSwap (components/layout/locale-swap.tsx)
    keys its wrapper by the current locale, so flipping EN <-> VI
    remounts the wrapper and replays this keyframe. The chrome (sidebar,

@@ -481,8 +481,8 @@ export const projects: Project[] = [
   },
   {
     slug: "cisco-wan-architecture",
-    title: "Cisco WAN Architecture",
-    titleVi: "Kiến trúc WAN trên Cisco",
+    title: "Three-Branch Hub-and-Spoke WAN (Cisco)",
+    titleVi: "Hệ thống WAN Hub-and-Spoke 3 chi nhánh (Cisco)",
     course: "Diploma in Computer Engineering, Singapore Polytechnic",
     courseVi: "Cao đẳng Kỹ thuật Máy tính, Singapore Polytechnic",
     description:
@@ -495,8 +495,8 @@ export const projects: Project[] = [
   },
   {
     slug: "windows-server-2012-r2-enterprise",
-    title: "Windows Server 2012 R2 Enterprise Infrastructure",
-    titleVi: "Hạ tầng doanh nghiệp Windows Server 2012 R2",
+    title: "Windows Server 2012 R2 Datacenter (4 Roles, Active Directory)",
+    titleVi: "Datacenter Windows Server 2012 R2 (4 vai trò, Active Directory)",
     course: "Diploma in Computer Engineering, Singapore Polytechnic",
     courseVi: "Cao đẳng Kỹ thuật Máy tính, Singapore Polytechnic",
     description:
@@ -509,8 +509,8 @@ export const projects: Project[] = [
   },
   {
     slug: "cisco-enterprise-lan",
-    title: "Cisco Enterprise Network Architecture (LAN)",
-    titleVi: "Kiến trúc mạng LAN doanh nghiệp trên Cisco",
+    title: "Multi-Site Enterprise LAN with OSPF (Cisco)",
+    titleVi: "Mạng LAN doanh nghiệp đa điểm với OSPF (Cisco)",
     course: "Diploma in Computer Engineering, Singapore Polytechnic",
     courseVi: "Cao đẳng Kỹ thuật Máy tính, Singapore Polytechnic",
     description:
