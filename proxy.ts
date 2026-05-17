@@ -34,7 +34,9 @@ function safeStringEqual(a: string, b: string): boolean {
   if (a.length !== b.length) {
     // Burn the same loop on the length-mismatch path so callers cannot
     // distinguish a length difference from a content difference purely
-    // by response time.
+    // by response time. `dummy` is intentionally never read — the work
+    // is the point, not the value.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let dummy = 0;
     for (let i = 0; i < a.length; i++) dummy |= a.charCodeAt(i) ^ 0xff;
     return false;

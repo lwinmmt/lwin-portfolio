@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "@/lib/i18n/client";
-import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 
 // One-shot floating banner that lets a first-time visitor know the

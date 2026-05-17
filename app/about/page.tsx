@@ -26,9 +26,6 @@ export const metadata: Metadata = {
     "Bio, community service, activities, awards, and personal interests.",
 };
 
-const SMU_BIG_GRANT = "https://iie.smu.edu.sg/acceleration-grant";
-const VNTT_LINK = "https://vntt.com.vn/";
-
 // Map an interest group id to its translation key. About-page only.
 const INTEREST_LABEL_KEY: Record<string, MessageKey> = {
   motorsports: "about.interests.motorsports",

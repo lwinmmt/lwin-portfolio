@@ -99,11 +99,6 @@ function BentoCard({
 }) {
   const title = pickLocalized(h.title, h.titleVi, locale);
   const description = pickLocalized(h.description, h.descriptionVi, locale);
-  const DateChip = () => (
-    <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
-      {formatDates(h.date, locale)}
-    </span>
-  );
 
   // No explicit "Open" pill on bento cards: the whole card is the
   // link target and the lift-card hover already signals clickability.
@@ -131,7 +126,9 @@ function BentoCard({
         )}
         <div className="flex flex-col p-5 sm:p-6">
           <div className="mb-4 flex items-center justify-end">
-            <DateChip />
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
+              {formatDates(h.date, locale)}
+            </span>
           </div>
           <h3 className="mb-2 font-sans text-[clamp(1.05rem,1.6vw,1.35rem)] font-semibold leading-[1.25] tracking-[-0.015em] text-[var(--color-fg)]">
             <span className="card-title-draw">{title}</span>
@@ -159,7 +156,9 @@ function BentoCard({
         )}
         <div className="flex flex-1 flex-col p-5 sm:p-6">
           <div className="mb-3 flex items-center justify-start">
-            <DateChip />
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
+              {formatDates(h.date, locale)}
+            </span>
           </div>
           <h3 className="mb-2 font-sans text-[clamp(0.95rem,1.2vw,1.15rem)] font-semibold leading-[1.3] tracking-[-0.01em] text-[var(--color-fg)]">
             <span className="card-title-draw">{title}</span>
@@ -184,7 +183,9 @@ function BentoCard({
         />
         <div className="relative flex flex-1 flex-col">
           <div className="mb-4 flex items-center justify-end">
-            <DateChip />
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
+              {formatDates(h.date, locale)}
+            </span>
           </div>
           <h3 className="mb-3 font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.015em] text-[var(--color-fg)]">
             <span className="card-title-draw">{title}</span>

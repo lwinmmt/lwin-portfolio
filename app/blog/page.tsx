@@ -38,7 +38,7 @@ export default async function BlogPage() {
         />
         <div className="relative">
           <div className="font-mono text-[2.75rem] font-bold leading-none text-[var(--color-border-default)]">
-            //
+            {"//"}
           </div>
           <h2 className="mt-5 font-sans text-[1.5rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
             {t("blog.empty.heading")}

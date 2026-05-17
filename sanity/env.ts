@@ -30,7 +30,7 @@ function assertValue<T>(v: T | undefined, errorMessage: string): T {
     // sane defaults so the app does not hard-crash. Pages still read from
     // lib/content. The Studio at /studio will not load until env vars are set.
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
+       
       console.warn(errorMessage);
     }
     return "" as T;

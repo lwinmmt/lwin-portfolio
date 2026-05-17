@@ -31,9 +31,9 @@ export function ConsoleBranding() {
     if (w.__lwinmmt_console) return;
     w.__lwinmmt_console = true;
 
-    // eslint-disable-next-line no-console
+     
     console.log(TITLE_LINE, STYLE_TITLE, STYLE_ROLE, STYLE_EMAIL);
-    // eslint-disable-next-line no-console
+     
     console.log(CTA_LINE, STYLE_CTA);
   }, []);
 
