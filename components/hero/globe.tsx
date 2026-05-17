@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { profile } from "@/lib/content";
-import { useLocale, useT } from "@/lib/i18n/client";
+import { useLocale } from "@/lib/i18n/client";
 import type { Locale } from "@/lib/i18n/types";
 
 // CSS 3D Fibonacci dot sphere. ~800 dots positioned via a golden-angle
@@ -21,17 +21,21 @@ import type { Locale } from "@/lib/i18n/types";
 
 const SIZE = 380;
 const RADIUS = (SIZE / 2) * 0.92;
-const NUM_DOTS = 820;
+const NUM_DOTS = 1100;
 const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
 const DRAG_SENSITIVITY = 0.4;
 const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 
+// Dense, frequent data-flow arcs to simulate the feel of a global
+// payments / messaging network. Tuned to feel busy without becoming
+// noise: shorter spawn cadence, more concurrent arcs, slightly faster
+// transit.
 const ARC_TRACK_DOTS = 24;
 const ARC_HEIGHT = 0.18;
-const ARC_SPAWN_INTERVAL_MS = 900;
-const ARC_MIN_DURATION_MS = 2400;
-const ARC_DURATION_VARIANCE_MS = 1200;
-const MAX_ACTIVE_ARCS = 6;
+const ARC_SPAWN_INTERVAL_MS = 450;
+const ARC_MIN_DURATION_MS = 2000;
+const ARC_DURATION_VARIANCE_MS = 1000;
+const MAX_ACTIVE_ARCS = 14;
 
 const COMET_TRAIL_OFFSETS = [0, 0.04, 0.08, 0.12] as const;
 const COMET_TRAIL_SIZES = [4.2, 3.2, 2.2, 1.5] as const;
@@ -43,18 +47,45 @@ const COAST_FRICTION = 0.94;
 const COAST_STOP_THRESHOLD = 0.05;
 
 const ARC_POOL: Array<[number, number]> = [
+  // SEA + APAC
   [16.8409, 96.1735], // Yangon
   [1.3521, 103.8198], // Singapore
   [10.7769, 106.7009], // HCMC
-  [35.6762, 139.6503], // Tokyo
-  [40.7128, -74.006], // NYC
-  [51.5074, -0.1278], // London
-  [-33.8688, 151.2093], // Sydney
-  [22.3193, 114.1694], // Hong Kong
-  [-23.5505, -46.6333], // Sao Paulo
+  [21.0285, 105.8542], // Hanoi
   [13.7563, 100.5018], // Bangkok
-  [37.7749, -122.4194], // San Francisco
+  [3.139, 101.6869], // Kuala Lumpur
+  [-6.2088, 106.8456], // Jakarta
+  [14.5995, 120.9842], // Manila
+  [22.3193, 114.1694], // Hong Kong
+  [35.6762, 139.6503], // Tokyo
+  [37.5665, 126.978], // Seoul
+  [31.2304, 121.4737], // Shanghai
+  [39.9042, 116.4074], // Beijing
+  [-33.8688, 151.2093], // Sydney
+  [-37.8136, 144.9631], // Melbourne
+  [-36.8485, 174.7633], // Auckland
+  [28.6139, 77.209], // Delhi
+  [19.076, 72.8777], // Mumbai
+  [12.9716, 77.5946], // Bangalore
+  // EU + ME + AF
+  [51.5074, -0.1278], // London
+  [48.8566, 2.3522], // Paris
+  [52.52, 13.405], // Berlin
+  [55.7558, 37.6173], // Moscow
+  [41.0082, 28.9784], // Istanbul
   [25.276987, 55.296249], // Dubai
+  [-1.2921, 36.8219], // Nairobi
+  [-26.2041, 28.0473], // Johannesburg
+  [-33.9249, 18.4241], // Cape Town
+  // Americas
+  [40.7128, -74.006], // NYC
+  [37.7749, -122.4194], // San Francisco
+  [47.6062, -122.3321], // Seattle
+  [34.0522, -118.2437], // Los Angeles
+  [49.2827, -123.1207], // Vancouver
+  [19.4326, -99.1332], // Mexico City
+  [-23.5505, -46.6333], // Sao Paulo
+  [-34.6037, -58.3816], // Buenos Aires
 ];
 
 type SphereDot = { x: number; y: number; z: number; lat: number; lng: number };
@@ -142,7 +173,6 @@ function formatLocalTime(now: Date, timeZone: string, locale: Locale): string {
 }
 
 export function HeroGlobe() {
-  const t = useT();
   const locale = useLocale();
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
   const rotatorRef = useRef<HTMLDivElement | null>(null);
@@ -346,10 +376,10 @@ export function HeroGlobe() {
               style={{
                 left: "50%",
                 top: "50%",
-                width: 1.6,
-                height: 1.6,
+                width: 2,
+                height: 2,
                 backgroundColor: "var(--color-fg-soft)",
-                opacity: 0.5,
+                opacity: 0.6,
                 transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px)`,
               }}
             />
@@ -431,9 +461,6 @@ export function HeroGlobe() {
         </div>
       </div>
 
-      <div className="mt-3 font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-        {t("globe.dragToRotate")}
-      </div>
     </div>
   );
 }

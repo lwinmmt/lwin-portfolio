@@ -28,14 +28,6 @@ const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
 
 const CATEGORY_ORDER: ProjectCategory[] = ["Projects", "Coursework"];
 
-// Visual accent dot beside each section heading. Matches the tag color
-// vocabulary so the page categorization reads as a system, not arbitrary
-// headings.
-const CATEGORY_ACCENT: Record<ProjectCategory, string> = {
-  Projects: "bg-[var(--tag-work)]",
-  Coursework: "bg-[var(--tag-school)]",
-};
-
 // Count of attached proof artifacts. Used as a small paperclip indicator
 // in the card footer so cards without uploads do not look empty.
 function attachmentCount(p: Project): number {
@@ -125,19 +117,13 @@ export default function ProjectsPage() {
               exit={{ opacity: 0, y: 8 }}
               transition={{ duration: 0.4, ease: [0.2, 0.7, 0.3, 1] }}
             >
-              {/* Section header: accent dot + bold category title.
-                  No "Category" eyebrow above; the section title alone
-                  carries the meaning. */}
+              {/* Section header: just the category title. The accent
+                  dot and "Category" eyebrow are gone; the bold heading
+                  carries the meaning by itself. */}
               <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
-                <div className="flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className={`h-2 w-2 rounded-full ${CATEGORY_ACCENT[category]}`}
-                  />
-                  <h2 className="font-sans text-[1.5rem] font-bold tracking-[-0.025em] text-[var(--color-fg)] sm:text-[1.75rem]">
-                    {t(CATEGORY_LABEL_KEY[category])}
-                  </h2>
-                </div>
+                <h2 className="font-sans text-[1.5rem] font-bold tracking-[-0.025em] text-[var(--color-fg)] sm:text-[1.75rem]">
+                  {t(CATEGORY_LABEL_KEY[category])}
+                </h2>
                 <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
                   {(items.length === 1
                     ? t("projects.count.one")

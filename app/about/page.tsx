@@ -275,40 +275,42 @@ function ActivityCard({
     ? pickLocalized(entry.description, entry.descriptionVi, locale)
     : undefined;
   return (
-    <li className="lift-card flex gap-3 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-5">
-      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border-default)] bg-white">
-        {logoSrc ? (
-          <Image
-            src={logoSrc}
-            alt=""
-            width={40}
-            height={40}
-            className="h-8 w-8 object-contain"
-          />
-        ) : (
-          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[var(--color-fg-faint)]" />
-        )}
+    <li className="lift-card rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-5">
+      {/* Top row: small logo + org + dates inline. Below: role and
+          description span the full card width so the prose has room
+          to breathe instead of being squeezed into a column next to
+          the logo. */}
+      <div className="flex items-center gap-2.5">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border-default)] bg-white">
+          {logoSrc ? (
+            <Image
+              src={logoSrc}
+              alt=""
+              width={32}
+              height={32}
+              className="h-6 w-6 object-contain"
+            />
+          ) : (
+            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[var(--color-fg-faint)]" />
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="truncate font-sans text-[13px] font-semibold leading-tight text-[var(--color-fg)]">
+            {org}
+          </div>
+          <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">
+            {dates}
+          </div>
+        </div>
       </div>
-      {/* All textual content lives in one column to the right of the
-          logo. Previously role + description sat below the logo+org
-          group at full card width, which broke vertical alignment
-          with the org heading. */}
-      <div className="min-w-0 flex-1">
-        <div className="font-sans text-[13.5px] font-semibold leading-tight text-[var(--color-fg)]">
-          {org}
-        </div>
-        <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-          {dates}
-        </div>
-        <div className="mt-2 font-sans text-[12.5px] font-medium text-[var(--color-fg-muted)]">
-          {role}
-        </div>
-        {description && (
-          <p className="mt-2 text-[12.5px] leading-[1.55] text-[var(--color-fg-soft)]">
-            {description}
-          </p>
-        )}
+      <div className="mt-4 font-sans text-[12.5px] font-semibold text-[var(--color-fg)]">
+        {role}
       </div>
+      {description && (
+        <p className="mt-1.5 text-[12.5px] leading-[1.6] text-[var(--color-fg-soft)]">
+          {description}
+        </p>
+      )}
     </li>
   );
 }
