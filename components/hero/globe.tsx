@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { profile } from "@/lib/content";
-import { useLocale } from "@/lib/i18n/client";
-import type { Locale } from "@/lib/i18n/types";
 
 // Canvas-rendered Fibonacci dot globe. Previous version used ~1500
 // absolutely-positioned <span> dots + ~600 arc-track spans (re-mounted
@@ -163,25 +161,7 @@ function buildTrack(from: Vec3, to: Vec3, n: number) {
   return pts;
 }
 
-function formatLocalTime(now: Date, timeZone: string, locale: Locale): string {
-  if (locale === "vi") {
-    return new Intl.DateTimeFormat("vi-VN", {
-      timeZone,
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(now);
-  }
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  }).format(now);
-}
-
 export function HeroGlobe() {
-  const locale = useLocale();
   const dots = useMemo(() => fibSphere(NUM_DOTS), []);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -219,15 +199,11 @@ export function HeroGlobe() {
   });
 
   const [mounted, setMounted] = useState(false);
-  const [now, setNow] = useState<Date>(() => new Date(0));
   const arcsRef = useRef<ArcInstance[]>([]);
   const arcIdRef = useRef(0);
 
   useEffect(() => {
     setMounted(true);
-    setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 60_000);
-    return () => clearInterval(id);
   }, []);
 
   // Resolve --color-fg-soft and --color-ruby into concrete rgb strings
@@ -510,10 +486,6 @@ export function HeroGlobe() {
     dragging.current = false;
   }, []);
 
-  const liveTime = mounted
-    ? formatLocalTime(now, profile.locationTimezone, locale)
-    : null;
-
   return (
     <div
       className="mx-auto flex flex-col items-center"
@@ -547,26 +519,6 @@ export function HeroGlobe() {
           className="absolute inset-0 m-auto"
           aria-hidden="true"
         />
-      </div>
-
-      {/* Symmetric grid layout instead of an inline-flex with a
-          magic-number translateX nudge. The three columns are
-          [1fr_auto_1fr], so the time text is in the auto-sized
-          middle column with equal flexible space on both sides.
-          This means the chip's own center IS the time text's center,
-          and the visual center is preserved regardless of how long
-          the location or GMT label happens to be in any locale. */}
-      <div
-        className="glass-chip mt-4 grid grid-cols-[1fr_auto_1fr] items-baseline gap-x-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
-        aria-label={`Currently in ${profile.location}`}
-      >
-        <span className="text-right font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
-          {profile.locationShort}
-        </span>
-        <span className="tabular-nums">{liveTime ?? "--:--"}</span>
-        <span className="text-left text-[var(--color-fg-faint)]">
-          {profile.locationGmtLabel}
-        </span>
       </div>
     </div>
   );

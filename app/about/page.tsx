@@ -191,7 +191,7 @@ function Section({
 }) {
   const num = count ? count.toString().padStart(2, "0") : undefined;
   return (
-    <section className="relative mt-14">
+    <section className="relative mt-20">
       {/* Watermark numeral as design texture. Positioned well clear of
           the heading so it reads as architectural detail, not background. */}
       {num && (
@@ -325,12 +325,15 @@ function AwardCard({
   entry: AwardType;
   locale: Locale;
 }) {
-  const { issuer, date, imageSrc } = entry;
+  const { issuer, imageSrc } = entry;
   const title = pickLocalized(entry.title, entry.titleVi, locale);
   const description = entry.description
     ? pickLocalized(entry.description, entry.descriptionVi, locale)
     : undefined;
   // Awards with images get a hero treatment with banner image.
+  // Dates intentionally NOT rendered on award cards — clutter without
+  // adding signal. The resume timeline is the source of truth for
+  // when things happened.
   if (imageSrc) {
     return (
       <li className="lift-card flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]">
@@ -351,13 +354,8 @@ function AwardCard({
           <div className="font-sans text-[13.5px] font-semibold leading-tight text-[var(--color-fg)]">
             {title}
           </div>
-          <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span className="font-sans text-[12px] text-[var(--color-fg-muted)]">
-              {issuer}
-            </span>
-            <span className="font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-              {date}
-            </span>
+          <div className="mt-1 font-sans text-[12px] text-[var(--color-fg-muted)]">
+            {issuer}
           </div>
           {description && (
             <p className="mt-2 text-[12px] leading-[1.55] text-[var(--color-fg-soft)]">
@@ -375,13 +373,8 @@ function AwardCard({
       <div className="font-sans text-[13.5px] font-semibold leading-tight text-[var(--color-fg)]">
         {title}
       </div>
-      <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-        <span className="font-sans text-[12px] text-[var(--color-fg-muted)]">
-          {issuer}
-        </span>
-        <span className="font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-          {date}
-        </span>
+      <div className="mt-1 font-sans text-[12px] text-[var(--color-fg-muted)]">
+        {issuer}
       </div>
       {description && (
         <p className="mt-2 text-[12px] leading-[1.55] text-[var(--color-fg-soft)]">

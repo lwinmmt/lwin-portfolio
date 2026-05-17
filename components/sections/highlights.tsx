@@ -34,7 +34,7 @@ function HighlightCard({ h, locale }: { h: Highlight; locale: Locale }) {
   const title = pickLocalized(h.title, h.titleVi, locale);
   const description = pickLocalized(h.description, h.descriptionVi, locale);
   const inner = (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] transition-all duration-300 hover:-translate-y-px hover:border-[var(--color-border-default)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.05)]">
+    <div className="lift-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]">
       {h.imageSrc && (
         <CardCover
           src={h.imageSrc}

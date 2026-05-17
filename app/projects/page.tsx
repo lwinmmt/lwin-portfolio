@@ -204,14 +204,14 @@ function ProjectCard({
   const course = project.course
     ? pickLocalized(project.course, project.courseVi, locale)
     : undefined;
-  // One canonical card treatment regardless of category. The beam-card
-  // rotating border + lift-card hover are universal. Featured cards span
-  // both columns and get a taller image banner so the most important
-  // project in the category anchors the page visually.
-  // col-span on featured is applied to the motion wrapper now; this card
-  // class just controls the inner card chrome.
+  // One canonical card treatment regardless of category. lift-card
+  // handles the hover lift + shadow + border colour shift using
+  // translateZ(0) so it does not subpixel-jitter on retina. The old
+  // beam-card rotating ruby ring was removed — the user found it
+  // visually noisy and the Highlights cards (no beam) read cleaner.
+  // Featured cards span both columns and get a taller image banner.
   const cardClass =
-    "beam-card lift-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]";
+    "lift-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]";
   // Non-featured h-36 (144px) was clipping portrait subject heads on
   // top-biased crops; h-44 (176px) gives the cover photo enough
   // vertical room without making non-featured cards look like

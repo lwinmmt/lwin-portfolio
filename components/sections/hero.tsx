@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroGlobe } from "@/components/hero/globe";
+import { LocationChip } from "@/components/hero/location-chip";
 import { EmailButton } from "@/components/ui/email-button";
 import { profile } from "@/lib/content";
 import { getT } from "@/lib/i18n/server";
@@ -100,6 +101,7 @@ export async function Hero() {
         <div className="mt-2 pl-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
           {currentOrgFullName}
         </div>
+        <LocationChip />
       </div>
 
       <div

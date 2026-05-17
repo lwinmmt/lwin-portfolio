@@ -56,7 +56,7 @@ function ProjectCard({
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="beam-card group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)]"
+      className="lift-card group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)]"
     >
       {project.imageSrc && (
         <CardCover
