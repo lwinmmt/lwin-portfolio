@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type EmailButtonProps = {
   email: string;
@@ -33,6 +33,16 @@ export function EmailButton({
 }: EmailButtonProps) {
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear the toast timer on unmount so a pending setCopied doesn't
+  // fire on an unmounted node. React warns about that and it leaks
+  // the timer.
+  useEffect(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    },
+    [],
+  );
 
   async function handleClick() {
     try {

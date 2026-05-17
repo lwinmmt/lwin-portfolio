@@ -11,6 +11,13 @@ import type { ReactNode } from "react";
 // `transition` lives on the element (not inside the variant) so the
 // per-instance `delay` prop can stagger reveals. Putting it in both
 // places means framer-motion picks one and silently drops the other.
+//
+// CAUTION: the visible state keeps `filter: blur(0px)` and `transform`,
+// which create a containing block for `position: fixed` descendants.
+// Don't render a fixed modal/dialog inside a <Reveal> — it will be
+// trapped in this stacking context (sidebar / hero switcher will
+// appear in front of it). Use createPortal to escape, like the
+// lightbox does in components/ui/lightbox.tsx.
 const variants: Variants = {
   hidden: { opacity: 0, y: 18, filter: "blur(8px)" },
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },

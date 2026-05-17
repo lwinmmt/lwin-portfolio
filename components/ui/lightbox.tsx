@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useT } from "@/lib/i18n/client";
 
 export type LightboxImage = { src: string; alt: string };
@@ -41,6 +42,10 @@ export function ProjectLightboxGallery({
   ];
   const galleryStart = cover ? 1 : 0;
   const [active, setActive] = useState<number | null>(null);
+  // Portal needs document.body, which is undefined during SSR. Defer
+  // mounting until after hydration so createPortal doesn't crash.
+  const [portalReady, setPortalReady] = useState(false);
+  useEffect(() => setPortalReady(true), []);
 
   const close = useCallback(() => setActive(null), []);
   const prev = useCallback(
@@ -129,22 +134,31 @@ export function ProjectLightboxGallery({
         </div>
       )}
 
-      {active !== null && (
-        <LightboxModal
-          image={images[active]}
-          index={active}
-          total={images.length}
-          onClose={close}
-          onPrev={prev}
-          onNext={next}
-          labels={{
-            dialog: t("lightbox.aria.viewer"),
-            close: t("lightbox.close"),
-            prev: t("lightbox.previous"),
-            next: t("lightbox.next"),
-          }}
-        />
-      )}
+      {/* Portal the modal directly to document.body so it escapes
+          this page's stacking context. Without the portal, the page
+          wrapper (LocaleSwap) applies a `filter: blur(0)` post-
+          animation which creates a containing block for fixed
+          descendants — the modal would only cover the page body, NOT
+          the sidebar or the hero variant switcher. */}
+      {portalReady &&
+        active !== null &&
+        createPortal(
+          <LightboxModal
+            image={images[active]}
+            index={active}
+            total={images.length}
+            onClose={close}
+            onPrev={prev}
+            onNext={next}
+            labels={{
+              dialog: t("lightbox.aria.viewer"),
+              close: t("lightbox.close"),
+              prev: t("lightbox.previous"),
+              next: t("lightbox.next"),
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }
@@ -202,7 +216,11 @@ function LightboxModal({
       // "did the click do anything?" perception bug the solid colour
       // was supposed to fix. Backdrop is now opaque from frame one;
       // the image inside gets its own quick fade if any.
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(8,8,8,0.97)] p-6"
+      //
+      // z-[70] sits above z-[60] (cmd palette) and z-50 (hero variant
+      // switcher) so the modal always wins the stacking war. The
+      // sidebar at z-40 and the locale prompt at z-40 are also below.
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-[rgba(8,8,8,0.97)] p-6"
     >
       {/* Plain img: the source images are already optimized webp/avif
           at sensible sizes. Going through next/image with width+height
@@ -215,15 +233,20 @@ function LightboxModal({
         className="block max-h-[88vh] max-w-[92vw] rounded-lg object-contain shadow-2xl"
       />
 
+      {/* Close pill in the top-right. White-on-black with an explicit
+          "Close (Esc)" label so it reads as a button at a glance —
+          the previous bg-white/10 icon-only sat almost invisibly
+          against the 97%-opaque black backdrop. */}
       <button
         type="button"
         onClick={onClose}
         aria-label={labels.close}
-        className="absolute right-5 top-5 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+        className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg)] shadow-lg transition-colors hover:bg-[var(--color-ruby)] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M6 18 18 6M6 6l12 12" />
         </svg>
+        {labels.close} (Esc)
       </button>
 
       {total > 1 && (
