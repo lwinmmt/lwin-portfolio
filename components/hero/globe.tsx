@@ -3,39 +3,28 @@
 import createGlobe from "cobe";
 import { useEffect, useRef, useState } from "react";
 
-// Cobe-backed globe restyled toward the Aceternity / GitHub aesthetic:
-// deep navy continents, blue atmospheric halo, brighter dot definition.
-// Stays at ~5KB instead of the 380KB three.js + three-globe + R3F path,
-// which has three confirmed failure modes under Next.js 16 + Turbopack.
+// Cobe globe (~5KB WebGL). Falls back from the attempted three.js +
+// react-globe.gl integration which crashed on h3-js polygon
+// decomposition (the hex computation library three-globe uses
+// internally cannot handle certain Natural Earth polygons even after
+// filtering antimeridian-crossing countries).
 //
-// Globe is forced to its own dark navy palette regardless of page
-// theme; like Aceternity, it is a distinct object that contrasts
-// against its container rather than blending.
+// To revisit the three.js path: read /tmp/cobe-vs-threejs-notes.md
+// (not committed) or git log for the abandoned attempt. The fix is
+// either (a) write custom three.js without three-globe's hex layer,
+// or (b) use polygonsData instead of hexPolygonsData.
 //
-// Markers are decorative only: six small ruby pulses scattered across
-// world cities, no labels, no arcs, no implied narrative. The earlier
-// 3-hub story ("born / schooled / working linked by arcs") was rejected.
-//
-// Wires: drag-to-rotate, auto-rotate when idle, prefers-reduced-motion
-// (no auto-rotate), IntersectionObserver pause when scrolled off-screen.
-//
-// IMPORTANT: Cobe v2 does NOT support the `onRender` callback that v1
-// had (and that the README example still shows). In v2 you must call
-// `globe.update({ phi: ... })` from your own RAF loop or the globe
-// renders exactly once at init and never animates.
+// Cobe v2: needs manual globe.update({ phi }) in a RAF loop. The
+// `onRender` callback only existed in v1.
 
-const DISPLAY_SIZE = 420;
-const INITIAL_PHI = 4.6; // SE Asia roughly under the camera at first paint
-const AUTO_ROTATE_SPEED = 0.0028; // radians per frame
-const DRAG_SENSITIVITY = 0.005; // pixels to radians
-
-// Globe is decorative only. No markers (the earlier red markers read as
-// jarring against the cream page), no arcs, no city narrative.
+const DISPLAY_SIZE = 460;
+const INITIAL_PHI = 4.6;
+const AUTO_ROTATE_SPEED = 0.0028;
+const DRAG_SENSITIVITY = 0.005;
 
 export function HeroGlobe() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-
   const visibleRef = useRef(true);
   const [mounted, setMounted] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -65,17 +54,15 @@ export function HeroGlobe() {
     return () => io.disconnect();
   }, []);
 
-  // Create the Cobe globe. Forced dark palette regardless of page
-  // theme so the globe stays visually distinct (Aceternity move).
   useEffect(() => {
     if (!canvasRef.current || !mounted) return;
     const canvas = canvasRef.current;
 
-    // Warm-gray palette that integrates with the cream page bg. In
-    // light mode (`dark: 0`), Cobe inverts the rendering so continents
-    // show up as DARK dots on the LIGHT sphere set by glowColor.
-    const baseColor: [number, number, number] = [0.22, 0.20, 0.18]; // warm dark gray dots
-    const glowColor: [number, number, number] = [0.96, 0.95, 0.92]; // cream halo, matches bg-warm
+    // Warm-gray palette that integrates with the cream page bg.
+    // dark: 0 inverts the rendering so continents appear as DARK dots
+    // on the LIGHT cream sphere set by glowColor.
+    const baseColor: [number, number, number] = [0.22, 0.20, 0.18];
+    const glowColor: [number, number, number] = [0.96, 0.95, 0.92];
 
     let phi = INITIAL_PHI;
     let phiOffset = 0;
@@ -100,8 +87,6 @@ export function HeroGlobe() {
       markers: [],
     });
 
-    // Manual RAF loop. Cobe v2 needs explicit update() calls; without
-    // this the globe renders exactly once at init and stays frozen.
     let rafId = 0;
     const tick = () => {
       if (visibleRef.current) {
