@@ -15,6 +15,7 @@ import {
 } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import { renderRich } from "@/lib/i18n/rich";
 import type { MessageKey } from "@/lib/i18n/messages";
 
@@ -182,7 +183,7 @@ export default async function ResumePage() {
                     )}
                   </div>
                   <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                    {r.dates}
+                    {formatDates(r.dates, locale)}
                   </div>
                 </div>
                 <div className="mt-0.5 font-sans text-[12.5px] text-[var(--color-fg-muted)]">
@@ -227,7 +228,7 @@ export default async function ResumePage() {
                 </div>
               </div>
               <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                {e.dates}
+                {formatDates(e.dates, locale)}
               </div>
             </li>
           ))}
@@ -324,7 +325,7 @@ export default async function ResumePage() {
                 )}
               </div>
               <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                {a.date}
+                {formatDates(a.date, locale)}
               </div>
             </li>
           ))}

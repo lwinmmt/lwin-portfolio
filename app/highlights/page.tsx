@@ -5,6 +5,7 @@ import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { highlights, type Highlight } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import type { Locale } from "@/lib/i18n/types";
 
 export const metadata: Metadata = {
@@ -100,7 +101,7 @@ function BentoCard({
   const description = pickLocalized(h.description, h.descriptionVi, locale);
   const DateChip = () => (
     <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[var(--color-fg-faint)]">
-      {h.date}
+      {formatDates(h.date, locale)}
     </span>
   );
 

@@ -13,6 +13,7 @@ import {
 import { useLocale, useT } from "@/lib/i18n/client";
 import type { MessageKey } from "@/lib/i18n/messages";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 
 // Map category enum -> display translation key. Enum stays English; the
 // label users see comes from t().
@@ -289,7 +290,7 @@ function ProjectCard({
             surfaces all of those, so duplicating them here just clutters
             the card. */}
         <div className="relative z-10 mt-auto flex items-center gap-2 pt-4 font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
-          <span>{project.dates}</span>
+          <span>{formatDates(project.dates, locale)}</span>
           {attachments > 0 && (
             <span
               className="inline-flex items-center gap-0.5"

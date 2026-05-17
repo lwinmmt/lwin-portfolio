@@ -8,6 +8,7 @@ import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
 import { ProjectLightboxGallery } from "@/components/ui/lightbox";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import type { MessageKey } from "@/lib/i18n/messages";
 import {
   projects,
@@ -108,7 +109,7 @@ export default async function ProjectPage({
           {title}
         </h1>
         <div className="mt-3 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-          {project.dates}
+          {formatDates(project.dates, locale)}
         </div>
       </header>
 
@@ -186,7 +187,7 @@ export default async function ProjectPage({
                         </span>
                       </h3>
                       <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                        {p.dates}
+                        {formatDates(p.dates, locale)}
                       </div>
                     </Link>
                   </li>

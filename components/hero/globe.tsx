@@ -272,9 +272,12 @@ export function HeroGlobe() {
           ARC_MIN_DURATION_MS + Math.random() * ARC_DURATION_VARIANCE_MS,
         track: buildTrack(fromVec, toVec, ARC_TRACK_DOTS),
       };
-      arcsRef.current = [...arcsRef.current, arc];
+      // Mutate in place. Spread + slice were allocating two fresh
+      // arrays on every arc spawn (~2/sec); push + splice mutate the
+      // existing ref array so the RAF loop iterates the same memory.
+      arcsRef.current.push(arc);
       if (arcsRef.current.length > MAX_ACTIVE_ARCS) {
-        arcsRef.current = arcsRef.current.slice(-MAX_ACTIVE_ARCS);
+        arcsRef.current.splice(0, arcsRef.current.length - MAX_ACTIVE_ARCS);
       }
     };
     spawn();

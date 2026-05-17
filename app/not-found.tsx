@@ -33,19 +33,19 @@ export default async function NotFound() {
           </Link>
           <Link
             href="/projects"
-            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+            className="btn-secondary"
           >
             {t("notFound.projects")}
           </Link>
           <Link
             href="/about"
-            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+            className="btn-secondary"
           >
             {t("notFound.about")}
           </Link>
           <Link
             href="/resume"
-            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+            className="btn-secondary"
           >
             {t("notFound.resume")}
           </Link>

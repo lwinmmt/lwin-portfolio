@@ -3,6 +3,7 @@ import { EntityLogo } from "@/components/ui/entity-logo";
 import { EntityNameLink } from "@/components/ui/entity-name-link";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import type { Locale } from "@/lib/i18n/types";
 
 export async function Education() {
@@ -48,7 +49,7 @@ function EducationRow({
         </div>
       </div>
       <div className="whitespace-nowrap pt-0.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-        {dates}
+        {formatDates(dates, locale)}
       </div>
     </li>
   );

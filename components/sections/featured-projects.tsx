@@ -3,6 +3,7 @@ import { featuredProjects, type Project } from "@/lib/content";
 import { CardCover } from "@/components/ui/card-cover";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import type { MessageKey } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -98,7 +99,7 @@ function ProjectCard({
           </div>
         )}
         <div className="mt-auto pt-2 font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
-          {project.dates}
+          {formatDates(project.dates, locale)}
         </div>
       </div>
     </Link>

@@ -119,7 +119,7 @@ export async function Hero() {
         </Link>
         <EmailButton
           email={profile.email}
-          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+          className="btn-secondary"
         >
           {t("hero.cta.email")}
         </EmailButton>
@@ -127,7 +127,7 @@ export async function Hero() {
           href={profile.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+          className="btn-secondary"
         >
           {t("hero.cta.github")}
         </a>
@@ -135,7 +135,7 @@ export async function Hero() {
           href={profile.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+          className="btn-secondary"
         >
           {t("hero.cta.linkedin")}
         </a>

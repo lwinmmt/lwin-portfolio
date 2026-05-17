@@ -3,7 +3,13 @@ import { highlights, type Highlight } from "@/lib/content";
 import { CardCover } from "@/components/ui/card-cover";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import type { Locale } from "@/lib/i18n/types";
+
+// Hoist the slice so it's computed once at module load, not on every
+// server render of /. The home page caps highlights at 4; the full
+// list lives at /highlights.
+const HOME_HIGHLIGHTS = highlights.slice(0, 4);
 
 export async function Highlights() {
   const t = await getT();
@@ -22,7 +28,7 @@ export async function Highlights() {
         </Link>
       </div>
       <div className="grid gap-3.5 sm:grid-cols-2">
-        {highlights.slice(0, 4).map((h) => (
+        {HOME_HIGHLIGHTS.map((h) => (
           <HighlightCard key={h.title} h={h} locale={locale} />
         ))}
       </div>
@@ -52,7 +58,7 @@ function HighlightCard({ h, locale }: { h: Highlight; locale: Locale }) {
           {description}
         </p>
         <div className="mt-auto font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
-          {h.date}
+          {formatDates(h.date, locale)}
         </div>
       </div>
     </div>

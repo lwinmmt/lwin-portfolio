@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# lwinmmt.com
 
-## Getting Started
+Personal portfolio for **Lwin MMT** — AI & IIoT Engineer at VNTT, Information Systems student at Singapore Management University. Built with Next.js 16 (App Router), React 19, Tailwind v4, and Sanity (CMS, headless).
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js 16 + React 19 (App Router, Turbopack)
+- **Styling**: Tailwind v4 + CSS variables, `framer-motion` for sliding pills
+- **CMS**: Sanity v5 (`/studio` route, Basic-Auth gated via `proxy.ts`)
+- **i18n**: custom EN/VN stack, cookie + `Accept-Language` resolution, message bundles in `lib/i18n/messages.ts`
+- **Hosting**: Vercel
+
+## Local dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.local.example .env.local   # fill in Sanity vars if you want /studio
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Site at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Folder layout
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/                  Next.js App Router routes
+  about/              /about
+  highlights/         /highlights (bento)
+  projects/           /projects + /projects/[slug] + opengraph-image
+  resume/             /resume
+  uses/               /uses
+  studio/             Sanity Studio (Basic-Auth gated by proxy.ts)
+components/
+  hero/               Hero variants (globe canvas, terminal mock)
+  layout/             DashboardShell + KeyboardNav + LocaleSwap
+  sections/           Home page sections (FeaturedProjects, Highlights, …)
+  sidebar/            Desktop sidebar
+  dock/               Mobile dock
+  cmd-palette/        Cmd+K palette
+  esmos/              ESMOS architecture diagram (used in one project page)
+  about/              About-page-only components (KineticQuote)
+  ui/                 Shared primitives (CardCover, Lightbox, EmailButton, …)
+lib/
+  i18n/               Locale resolution, message bundles, date formatter
+  content/            Typed content tables (projects, highlights, …)
+  nav-utils.ts        Sidebar nav config
+  og-tokens.ts        OG image colour tokens
+  use-mod-key.ts      Cmd-vs-Ctrl platform hook
+public/
+  diagrams/           ESMOS architecture SVG
+  files/projects/     PDF case studies
+  images/highlights/  Highlight cover images
+  logos/              Org logos
+  sounds/             Terminal keystroke audio sprite
+sanity/               Sanity schemas + client
+proxy.ts              Basic-Auth gate for /studio (Next 16 proxy convention)
+next.config.ts        CSP + security headers
+```
 
-## Learn More
+## i18n
 
-To learn more about Next.js, take a look at the following resources:
+Strings:
+- Static UI copy lives in `lib/i18n/messages.ts` — keyed by dotted-namespace strings (`hero.cta.resume`, etc.). Access via `getT()` in server components, `useT()` in client components.
+- Content tables (projects, highlights, awards) carry parallel `*Vi` siblings (e.g. `title` + `titleVi`); the renderer picks via `pickLocalized(en, vi, locale)`.
+- Dates are stored once in English and run through `formatDates(dates, locale)` at render — VN gets numeric months + "đến nay" instead of "to Present".
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Locale resolution:
+- Explicit cookie wins → else `Accept-Language` → else `en`.
+- Switcher writes the cookie + calls `router.refresh()`; `LocaleSwap` re-keys the page body so the swap animates.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Studio
 
-## Deploy on Vercel
+`/studio` is gated by HTTP Basic Auth in `proxy.ts`. Set `STUDIO_USERNAME` + `STUDIO_PASSWORD` in `.env.local` (or Vercel project env) to unlock; without them the gate stays closed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Hero variant
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The hero right column renders one of two variants chosen randomly per visit:
+- **globe** — canvas Fibonacci dot sphere with arc paths between APAC + global cities
+- **terminal** — auto-typing mock shell session (`whoami`, `cat about.md`, `ls projects/`, `echo $EMAIL`)
+
+A small `swap` pill at the top-right of the stage flips to the other variant in place. Refresh re-randomizes.
+
+## Deploy
+
+1. Push to GitHub.
+2. Import in Vercel.
+3. Set env vars (`NEXT_PUBLIC_SANITY_*`, `STUDIO_USERNAME`, `STUDIO_PASSWORD`) in the Vercel project settings.
+4. Add custom domain in Vercel → set DNS to point at Vercel.
+
+## License
+
+All content (text, images, project case studies) © Lwin MMT. Code is yours to learn from; please don't ship a verbatim clone as your own portfolio.

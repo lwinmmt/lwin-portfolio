@@ -15,6 +15,7 @@ import {
 } from "@/lib/content";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import { formatDates } from "@/lib/i18n/dates";
 import { renderRich } from "@/lib/i18n/rich";
 import type { MessageKey } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/types";
@@ -249,7 +250,7 @@ function CommunityServiceRow({
           {org}
         </div>
         <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-          {dates}
+          {formatDates(dates, locale)}
         </div>
       </div>
       <div className="mt-1 font-sans text-[12.5px] font-medium text-[var(--color-fg-muted)]">
@@ -302,7 +303,7 @@ function ActivityCard({
             {org}
           </div>
           <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-            {dates}
+            {formatDates(dates, locale)}
           </div>
         </div>
       </div>
