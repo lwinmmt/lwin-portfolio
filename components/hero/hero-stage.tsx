@@ -34,11 +34,17 @@ export function HeroStage() {
   const other: HeroVariant = variant === "globe" ? "terminal" : "globe";
 
   return (
-    // `relative` so the switcher button can absolutely position against
-    // the stage's top-right. Stage takes the column's full width on
-    // lg+ via the parent grid cell; each variant is mx-auto centered
-    // inside it.
-    <div className="relative">
+    // pt-9 reserves a 36px strip above the variant for the switcher
+    // pill. Without it the pill landed on the terminal's title bar
+    // (rectangular variant — title bar fills the top-right corner)
+    // while looking fine against the globe (round, recedes from the
+    // corner). Reserving the strip keeps placement consistent across
+    // both variants and stops the overlap.
+    //
+    // `relative` so the switcher can absolutely position into that
+    // strip. Stage takes the column's full width on lg+ via the
+    // parent grid cell; each variant is mx-auto centered inside it.
+    <div className="relative pt-9">
       {variant === "globe" ? <HeroGlobe /> : <HeroTerminal />}
 
       {hydrated && (
@@ -46,10 +52,7 @@ export function HeroStage() {
           type="button"
           onClick={() => setVariant(other)}
           aria-label={t("hero.variant.aria").replace("{variant}", other)}
-          // z-10 keeps the button above the canvas / terminal chrome.
-          // bg-white/backdrop-blur lets it work cleanly against both
-          // the light card (globe) and dark terminal title bar.
-          className="absolute right-0 top-0 z-10 inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-surface-2)] px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--color-fg-muted)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur transition-colors hover:text-[var(--color-fg)]"
+          className="absolute right-0 top-0 inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-surface-2)] px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--color-fg-muted)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur transition-colors hover:text-[var(--color-fg)]"
         >
           <SwapIcon />
           {other}
