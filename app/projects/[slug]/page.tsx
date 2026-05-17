@@ -18,9 +18,8 @@ import {
 } from "@/lib/content";
 
 const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
-  Production: "projects.category.Production",
-  Coursework: "projects.category.Coursework",
   Projects: "projects.category.Projects",
+  Coursework: "projects.category.Coursework",
 };
 
 type Params = { slug: string };

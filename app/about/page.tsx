@@ -275,38 +275,40 @@ function ActivityCard({
     ? pickLocalized(entry.description, entry.descriptionVi, locale)
     : undefined;
   return (
-    <li className="lift-card rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-5">
-      <div className="mb-3 flex items-start gap-2.5">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border-default)] bg-white">
-          {logoSrc ? (
-            <Image
-              src={logoSrc}
-              alt=""
-              width={40}
-              height={40}
-              className="h-8 w-8 object-contain"
-            />
-          ) : (
-            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[var(--color-fg-faint)]" />
-          )}
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="font-sans text-[13.5px] font-semibold leading-tight text-[var(--color-fg)]">
-            {org}
-          </div>
-          <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-            {dates}
-          </div>
-        </div>
+    <li className="lift-card flex gap-3 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-5">
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border-default)] bg-white">
+        {logoSrc ? (
+          <Image
+            src={logoSrc}
+            alt=""
+            width={40}
+            height={40}
+            className="h-8 w-8 object-contain"
+          />
+        ) : (
+          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[var(--color-fg-faint)]" />
+        )}
       </div>
-      <div className="mb-2 font-sans text-[12.5px] font-medium text-[var(--color-fg-muted)]">
-        {role}
+      {/* All textual content lives in one column to the right of the
+          logo. Previously role + description sat below the logo+org
+          group at full card width, which broke vertical alignment
+          with the org heading. */}
+      <div className="min-w-0 flex-1">
+        <div className="font-sans text-[13.5px] font-semibold leading-tight text-[var(--color-fg)]">
+          {org}
+        </div>
+        <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
+          {dates}
+        </div>
+        <div className="mt-2 font-sans text-[12.5px] font-medium text-[var(--color-fg-muted)]">
+          {role}
+        </div>
+        {description && (
+          <p className="mt-2 text-[12.5px] leading-[1.55] text-[var(--color-fg-soft)]">
+            {description}
+          </p>
+        )}
       </div>
-      {description && (
-        <p className="text-[12.5px] leading-[1.55] text-[var(--color-fg-soft)]">
-          {description}
-        </p>
-      )}
     </li>
   );
 }

@@ -9,16 +9,11 @@ import { LOCALES, LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 // pattern. Writes the locale cookie and refreshes so the server re-reads
 // it on next request.
 //
-// The switch wraps the cookie write + router.refresh() in
-// document.startViewTransition when available, so the browser captures
-// snapshots of the old and new DOM and cross-fades between them.
-// Falls back to a plain refresh on browsers without the API.
-
-type DocumentWithViewTransition = Document & {
-  startViewTransition?: (cb: () => void | Promise<void>) => {
-    finished: Promise<void>;
-  };
-};
+// Visible swap animation is handled in components/layout/locale-swap.tsx:
+// it keys the main content wrapper by the current locale, so when the
+// server re-render lands, React unmounts the old subtree and mounts the
+// new one, replaying the .locale-fade-in keyframe (fade + slide + blur).
+// The sidebar lives outside the swap and stays still through the flip.
 
 export function LanguageSwitcher() {
   const locale = useLocale();
@@ -28,26 +23,10 @@ export function LanguageSwitcher() {
 
   const switchTo = (next: Locale) => {
     if (next === locale || isPending) return;
-    const apply = () => {
-      document.cookie = `locale=${next}; path=/; max-age=31536000; samesite=lax`;
-      startTransition(() => {
-        router.refresh();
-      });
-    };
-    const doc = document as DocumentWithViewTransition;
-    if (typeof doc.startViewTransition === "function") {
-      doc.startViewTransition(() => {
-        apply();
-        // Give the refresh a beat to land before the transition resolves
-        // and the cross-fade completes. Long enough for the server
-        // response, short enough that the user does not perceive lag.
-        return new Promise<void>((resolve) => {
-          window.setTimeout(resolve, 280);
-        });
-      });
-      return;
-    }
-    apply();
+    document.cookie = `locale=${next}; path=/; max-age=31536000; samesite=lax`;
+    startTransition(() => {
+      router.refresh();
+    });
   };
 
   return (

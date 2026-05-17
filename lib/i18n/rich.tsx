@@ -38,6 +38,13 @@ export function renderRich(text: string): ReactNode {
     }
     const linkMatch = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
     if (linkMatch) {
+      // Strip wrapping **...** so `[**Foundry**](url)` renders as a
+      // single semibold link instead of leaking literal asterisks.
+      const rawLabel = linkMatch[1];
+      const label =
+        rawLabel.startsWith("**") && rawLabel.endsWith("**")
+          ? rawLabel.slice(2, -2)
+          : rawLabel;
       return (
         <a
           key={i}
@@ -46,7 +53,7 @@ export function renderRich(text: string): ReactNode {
           rel="noopener noreferrer"
           className="font-semibold text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
         >
-          {linkMatch[1]}
+          {label}
         </a>
       );
     }

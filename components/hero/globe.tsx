@@ -336,18 +336,17 @@ export function HeroGlobe() {
             willChange: "transform",
           }}
         >
-          {/* Dot field. Wrapped in its own layer so the depth mask
-              (gentle radial fade toward the limb) applies only to the
-              base dots and not to the pin / comets. Soft falloff,
-              edge dots still readable; previous version killed them. */}
+          {/* Dot field. Light radial fade toward the limb so the
+              sphere reads as curved, but the floor stays high enough
+              that limb dots remain visible. */}
           <div
             className="absolute inset-0"
             style={{
               transformStyle: "preserve-3d",
               WebkitMaskImage:
-                "radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0.85) 75%, rgba(0,0,0,0.6) 100%)",
+                "radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,0.75) 100%)",
               maskImage:
-                "radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0.85) 75%, rgba(0,0,0,0.6) 100%)",
+                "radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0.9) 80%, rgba(0,0,0,0.75) 100%)",
             }}
           >
             {dots.map((d, i) => (
@@ -360,7 +359,7 @@ export function HeroGlobe() {
                   width: 1.8,
                   height: 1.8,
                   backgroundColor: "var(--color-fg-soft)",
-                  opacity: 0.55,
+                  opacity: 0.7,
                   transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px) rotateY(${d.lng}rad) rotateX(${-d.lat}rad)`,
                   backfaceVisibility: "hidden",
                 }}
@@ -451,19 +450,8 @@ export function HeroGlobe() {
                 top: "50%",
                 width: PIN_SIZE * 2.2,
                 height: PIN_SIZE * 2.2,
-                border: "1.5px solid var(--color-ruby)",
-                animation: "globe-pin-halo 2.6s ease-out infinite",
-              }}
-            />
-            <span
-              className="globe-pin-halo absolute rounded-full"
-              style={{
-                left: "50%",
-                top: "50%",
-                width: PIN_SIZE * 2.2,
-                height: PIN_SIZE * 2.2,
-                border: "1.5px solid var(--color-ruby)",
-                animation: "globe-pin-halo 2.6s ease-out 1.3s infinite",
+                border: "1px solid var(--color-ruby)",
+                animation: "globe-pin-halo 2.8s ease-out infinite",
               }}
             />
             <span
@@ -475,35 +463,22 @@ export function HeroGlobe() {
                 height: PIN_SIZE,
                 transform: "translate(-50%, -50%)",
                 backgroundColor: "var(--color-ruby)",
-                boxShadow:
-                  "0 0 12px var(--color-ruby), 0 0 4px var(--color-ruby)",
+                boxShadow: "0 0 6px var(--color-ruby)",
               }}
             />
           </div>
         </div>
 
-        {/* Soft limb-glow ring. Localized to a circle inscribed in
-            the wrap so the glow traces the silhouette instead of
-            washing the whole square. No blend mode; on light bg the
-            previous screen-blend stacked with the bg ruby into an
-            orange blob. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute rounded-full"
-          style={{
-            inset: "4%",
-            boxShadow:
-              "0 0 22px color-mix(in oklab, var(--color-ruby) 10%, transparent), inset 0 0 18px color-mix(in oklab, var(--color-ruby) 5%, transparent)",
-          }}
-        />
-
+        {/* Very subtle ambient fog behind the sphere. Drop further
+            than before so the globe reads as dots-on-paper, not as a
+            red splotch. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 7%, transparent) 0%, transparent 62%)",
-            filter: "blur(8px)",
+              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 4%, transparent) 0%, transparent 55%)",
+            filter: "blur(10px)",
           }}
         />
       </div>

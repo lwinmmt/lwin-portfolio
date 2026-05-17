@@ -215,8 +215,8 @@ export const personalInterests: InterestGroup[] = [
     id: "investing",
     label: "Investing",
     labelVi: "Đầu tư",
-    items: ["US stock market (consistent contributions)"],
-    itemsVi: ["Thị trường chứng khoán Mỹ (đóng góp đều đặn)"],
+    items: ["US stock market"],
+    itemsVi: ["Thị trường chứng khoán Mỹ"],
   },
   {
     id: "education",

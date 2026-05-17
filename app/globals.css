@@ -295,14 +295,14 @@
    backface-visibility when the pin spins to the back of the globe. */
 @keyframes globe-pin-halo {
   0% {
-    transform: translate(-50%, -50%) scale(0.45);
-    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.45;
   }
   80% {
     opacity: 0;
   }
   100% {
-    transform: translate(-50%, -50%) scale(2.6);
+    transform: translate(-50%, -50%) scale(2.2);
     opacity: 0;
   }
 }
@@ -310,34 +310,28 @@
   .globe-pin-halo { animation: none !important; }
 }
 
-/* Language switch cross-fade. The LanguageSwitcher wraps the cookie
-   write + router.refresh() in document.startViewTransition; the
-   browser fades the outgoing snapshot to the incoming one. Slow the
-   default 250ms a touch so the swap reads as intentional. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 360ms;
-  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+/* Locale swap animation. LocaleSwap (components/layout/locale-swap.tsx)
+   keys its wrapper by the current locale, so flipping EN <-> VI
+   remounts the wrapper and replays this keyframe. The chrome (sidebar,
+   header) lives outside the swap and stays still; only the page body
+   fades and slides in, mirroring the feel of a fresh page load. */
+@keyframes locale-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
-::view-transition-old(root) {
-  animation-name: vt-fade-out;
-}
-::view-transition-new(root) {
-  animation-name: vt-fade-in;
-}
-@keyframes vt-fade-out {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-4px); }
-}
-@keyframes vt-fade-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+.locale-fade-in {
+  animation: locale-fade-in 380ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
+  .locale-fade-in { animation: none !important; }
 }
 
 /* Card title underline draw. Apply to a span around the title text

@@ -1,6 +1,6 @@
 // Projects data. Featured 4 surface on home; full list lives at /projects.
 
-export type ProjectCategory = "Production" | "Coursework" | "Projects";
+export type ProjectCategory = "Projects" | "Coursework";
 
 export type ProjectLiveLink = { url: string; label: string };
 
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     descriptionVi:
       "Pipeline chạy trên Azure cho hệ thống giám sát nước thải COVID-19 của NEA tại 360 điểm. Hơn 100 RTU công nghiệp Tastek (gắn SIM tích hợp) truyền dữ liệu trực tiếp qua mạng di động về một Azure VM duy nhất chạy Mosquitto, database và dashboard. Cảnh báo Twilio WhatsApp gửi tới kỹ sư trực. Góp phần vào giải Lee Hsien Loong IDM Smart Nation Award 2022. Được Straits Times đưa tin.",
     dates: "Oct 2020 to Jul 2021",
-    category: "Production",
+    category: "Projects",
     tags: ["Azure", "MQTT", "Mosquitto", "Twilio"],
     imageSrc: "/images/projects/inno2-nea-wastewater/cover.webp",
     newsLink:
@@ -176,7 +176,7 @@ export const projects: Project[] = [
     descriptionVi:
       "Tự động hóa tưới tiêu và chiếu sáng cho các doanh nghiệp thủy canh vừa và nhỏ, dùng ESP32. Pipeline dữ liệu trên AWS S3. Được tài trợ bởi quỹ SMU BIG. Trình diễn cho Bộ trưởng Indranee Rajah và Desmond Lee tại World Cities Summit 2024.",
     dates: "Dec 2023 to Jul 2024",
-    category: "Production",
+    category: "Projects",
     tags: ["ESP32", "AWS", "MQTT", "Hardware"],
     liveLink: "https://osiris.so/",
     newsLink:
@@ -237,7 +237,7 @@ export const projects: Project[] = [
     descriptionVi:
       "Bộ thiết bị Raspberry Pi với cảm biến độ ẩm DHT22, cảm biến CO2 và điều khiển đèn trồng cây cùng máy bơm nước qua relay. Triển khai dưới dạng một rack demo tại một trang trại trong nhà ở phía tây Singapore. Được Channel News Asia đưa tin vào tháng 5 năm 2022.",
     dates: "2021 to 2022",
-    category: "Production",
+    category: "Projects",
     tags: ["Raspberry Pi", "DHT22", "Relays", "Hardware"],
     imageSrc: "/images/highlights/cna-singapore-indoor-farm.webp",
     caseStudy: [
@@ -427,7 +427,7 @@ export const projects: Project[] = [
     descriptionVi:
       "Đồ án tốt nghiệp đóng góp vào chiếc xe tự hành 5G SAE Level 3 đầu tiên của SP. Dẫn dắt nhóm IoT 5 người xây dashboard giám sát trên cloud bằng React, Node.js và MySQL. Firmware Node-RED chạy trên Raspberry Pi thu telemetry qua MQTT, cảnh báo các nguy cơ môi trường và ngưỡng pin. Trưng bày tại SP Engineering Show 2021.",
     dates: "Sep 2020 to Feb 2021",
-    category: "Coursework",
+    category: "Projects",
     tags: ["React", "Node.js", "MQTT", "Node-RED", "Raspberry Pi"],
     imageSrc: "/images/projects/asv-5g-autonomous/dashboard.jpg",
     gallery: [

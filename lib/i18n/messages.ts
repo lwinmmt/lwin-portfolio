@@ -64,7 +64,7 @@ export const messages = {
     "about.bio.p1":
       "I'm an **Information Systems student** at **Singapore Management University**, on a dual track of **Product Development** and **Business Analytics**. Before SMU, I did a **Diploma in Computer Engineering** at **Singapore Polytechnic**, which is where most of my hardware and networking foundations came from.",
     "about.bio.p2":
-      "The story so far has been a mix of architected production IoT systems (**NEA wastewater monitoring** at 360 sites), founding things from scratch (**Osiris** hydroponics automation, funded by an [SMU BIG grant](https://iie.smu.edu.sg/acceleration-grant)), and bootstrapping commercial operations (5 years of **Nepseeds** plant e-commerce). Right now I'm at [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) in Ho Chi Minh City learning what production-scale industrial IoT actually feels like, working on **EdgeX-based systems**.",
+      "The story so far has been a mix of architected production IoT systems (**wastewater monitoring** at 360 sites), founding things from scratch (**Osiris** smart vertical farm, funded by an [SMU BIG grant](https://iie.smu.edu.sg/acceleration-grant)), and bootstrapping commercial operations (5 years of **Nepseeds** plant e-commerce). Right now I'm at [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) in Ho Chi Minh City learning what production-scale industrial IoT actually feels like, working on [**EdgeX Foundry**](https://docs.edgexfoundry.org/4.0/).",
     "about.bio.p3":
       "I'm a heavy daily user of __Claude Code, Gemini, ChatGPT, and Kimi__ and treat the ability to direct them well as a real competitive skill. Most of my recent project output uses AI-assisted code generation; my contribution sits in **framing the problem**, making the **architecture decisions**, and **validating the output**.",
     "about.bio.p4":
@@ -99,21 +99,19 @@ export const messages = {
     "resume.highlight.osiris":
       "SMU BIG grant. World Cities Summit 2024 showcase to Ministers Indranee Rajah + Desmond Lee.",
     "resume.highlight.w2":
-      "360-site NEA wastewater monitoring. Contributed to LHL IDM Smart Nation Award 2022.",
+      "360-site wastewater monitoring. Contributed to LHL IDM Smart Nation Award 2022.",
     "resume.highlight.sp-iot":
       "5G Autonomous Surveillance Vehicle. Featured at SP Engineering Show 2021.",
     // Projects list page
     "projects.eyebrow": "Projects",
     "projects.title": "Projects & Coursework",
     "projects.description":
-      "Grouped by category. Production work has hit real users. Coursework projects are Singapore Management University and Singapore Polytechnic related. Projects are things I started myself.",
+      "Projects are things I built, shipped, or have run for real users. Coursework projects are Singapore Management University and Singapore Polytechnic related.",
     "projects.filter.all": "All",
-    "projects.section.categoryLabel": "Category",
     "projects.count.one": "{n} project",
     "projects.count.many": "{n} projects",
     // Project category display labels (the enum value drives logic;
     // these strings are display-only)
-    "projects.category.Production": "Production",
     "projects.category.Coursework": "Coursework",
     "projects.category.Projects": "Projects",
     // Project detail page
@@ -251,7 +249,7 @@ export const messages = {
     "about.bio.p1":
       "Tôi là **sinh viên ngành Hệ thống Thông tin** tại **Đại học Quản lý Singapore**, theo học song song hai chuyên ngành **Phát triển Sản phẩm** và **Phân tích Kinh doanh**. Trước SMU, tôi học **Diploma ngành Kỹ thuật Máy tính** tại **Singapore Polytechnic**, nơi tôi xây dựng nền tảng vững chắc về phần cứng và mạng.",
     "about.bio.p2":
-      "Hành trình đến nay là sự kết hợp giữa kiến trúc các hệ thống IoT quy mô sản xuất (**giám sát nước thải NEA** tại 360 điểm), khởi nghiệp từ con số không (**Osiris** tự động hóa thủy canh, được tài trợ bởi [quỹ SMU BIG](https://iie.smu.edu.sg/acceleration-grant)), và vận hành thương mại bootstrap (5 năm **Nepseeds**, nền tảng thương mại điện tử cây trồng). Hiện tại tôi đang làm tại [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) ở TP. Hồ Chí Minh, học hỏi về IoT công nghiệp quy mô sản xuất với **các hệ thống dựa trên EdgeX**.",
+      "Hành trình đến nay là sự kết hợp giữa kiến trúc các hệ thống IoT quy mô sản xuất (**giám sát nước thải** tại 360 điểm), khởi nghiệp từ con số không (**Osiris** trang trại thẳng đứng thông minh, được tài trợ bởi [quỹ SMU BIG](https://iie.smu.edu.sg/acceleration-grant)), và vận hành thương mại bootstrap (5 năm **Nepseeds**, nền tảng thương mại điện tử cây trồng). Hiện tại tôi đang làm tại [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) ở TP. Hồ Chí Minh, học hỏi về IoT công nghiệp quy mô sản xuất trên [**EdgeX Foundry**](https://docs.edgexfoundry.org/4.0/).",
     "about.bio.p3":
       "Tôi sử dụng __Claude Code, Gemini, ChatGPT và Kimi__ hàng ngày, và xem khả năng định hướng các công cụ này là một kỹ năng cạnh tranh thực sự. Phần lớn sản phẩm dự án gần đây của tôi đều dùng AI hỗ trợ sinh mã; đóng góp của tôi nằm ở việc **đặt vấn đề**, đưa ra **quyết định kiến trúc**, và **xác thực kết quả**.",
     "about.bio.p4":
@@ -286,21 +284,19 @@ export const messages = {
     "resume.highlight.osiris":
       "Quỹ SMU BIG. Trưng bày tại World Cities Summit 2024 cho các Bộ trưởng Indranee Rajah và Desmond Lee.",
     "resume.highlight.w2":
-      "Giám sát nước thải NEA tại 360 điểm. Đóng góp cho Giải thưởng Smart Nation LHL IDM 2022.",
+      "Giám sát nước thải tại 360 điểm. Đóng góp cho Giải thưởng Smart Nation LHL IDM 2022.",
     "resume.highlight.sp-iot":
       "Xe Giám sát Tự hành 5G. Trưng bày tại SP Engineering Show 2021.",
     // Projects list page
     "projects.eyebrow": "Dự án",
     "projects.title": "Dự án và Bài tập",
     "projects.description":
-      "Phân loại theo nhóm. Production là các sản phẩm thực tế đã có người dùng. Coursework là các dự án thuộc Đại học Quản lý Singapore và Singapore Polytechnic. Projects là những thứ tôi tự khởi xướng.",
+      "Dự án là những thứ tôi đã xây, đã ship, hoặc đang vận hành cho người dùng thật. Bài tập là các dự án thuộc Đại học Quản lý Singapore và Singapore Polytechnic.",
     "projects.filter.all": "Tất cả",
-    "projects.section.categoryLabel": "Nhóm",
     "projects.count.one": "{n} dự án",
     "projects.count.many": "{n} dự án",
-    "projects.category.Production": "Production",
     "projects.category.Coursework": "Bài tập",
-    "projects.category.Projects": "Dự án cá nhân",
+    "projects.category.Projects": "Dự án",
     // Project detail page
     "project.back": "Tất cả dự án",
     "project.archDiagramTitle": "Sơ đồ kiến trúc",

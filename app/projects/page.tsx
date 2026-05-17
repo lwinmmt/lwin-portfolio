@@ -18,28 +18,22 @@ import { pickLocalized } from "@/lib/i18n/content";
 // Map category enum -> display translation key. Enum stays English; the
 // label users see comes from t().
 const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
-  Production: "projects.category.Production",
-  Coursework: "projects.category.Coursework",
   Projects: "projects.category.Projects",
+  Coursework: "projects.category.Coursework",
 };
 
 // Page-level metadata is set via the route segment's metadata.ts where
 // possible, but since this is a client component we let the layout's
 // title template handle the tab title.
 
-const CATEGORY_ORDER: ProjectCategory[] = [
-  "Production",
-  "Coursework",
-  "Projects",
-];
+const CATEGORY_ORDER: ProjectCategory[] = ["Projects", "Coursework"];
 
 // Visual accent dot beside each section heading. Matches the tag color
-// vocabulary so the page categorization reads as a system, not three
-// arbitrary headings.
+// vocabulary so the page categorization reads as a system, not arbitrary
+// headings.
 const CATEGORY_ACCENT: Record<ProjectCategory, string> = {
-  Production: "bg-[var(--tag-work)]",
+  Projects: "bg-[var(--tag-work)]",
   Coursework: "bg-[var(--tag-school)]",
-  Projects: "bg-[var(--tag-award)]",
 };
 
 // Count of attached proof artifacts. Used as a small paperclip indicator
@@ -131,17 +125,16 @@ export default function ProjectsPage() {
               exit={{ opacity: 0, y: 8 }}
               transition={{ duration: 0.4, ease: [0.2, 0.7, 0.3, 1] }}
             >
-              {/* Editorial section header: small mono eyebrow + large bold title. */}
+              {/* Section header: accent dot + bold category title.
+                  No "Category" eyebrow above; the section title alone
+                  carries the meaning. */}
               <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
-                <div>
-                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-fg-faint)]">
-                    <span
-                      aria-hidden="true"
-                      className={`h-1.5 w-1.5 rounded-full ${CATEGORY_ACCENT[category]}`}
-                    />
-                    {t("projects.section.categoryLabel")}
-                  </div>
-                  <h2 className="mt-1 font-sans text-[1.5rem] font-bold tracking-[-0.025em] text-[var(--color-fg)] sm:text-[1.75rem]">
+                <div className="flex items-center gap-3">
+                  <span
+                    aria-hidden="true"
+                    className={`h-2 w-2 rounded-full ${CATEGORY_ACCENT[category]}`}
+                  />
+                  <h2 className="font-sans text-[1.5rem] font-bold tracking-[-0.025em] text-[var(--color-fg)] sm:text-[1.75rem]">
                     {t(CATEGORY_LABEL_KEY[category])}
                   </h2>
                 </div>
@@ -185,14 +178,14 @@ export default function ProjectsPage() {
                     // resolve against.
                     className={
                       "flex h-full flex-col" +
-                      (category === "Production" && i === 0
+                      (category === "Projects" && i === 0
                         ? " sm:col-span-2"
                         : "")
                     }
                   >
                     <ProjectCard
                       project={project}
-                      featured={category === "Production" && i === 0}
+                      featured={category === "Projects" && i === 0}
                     />
                   </motion.div>
                 ))}

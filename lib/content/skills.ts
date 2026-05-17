@@ -18,7 +18,7 @@ export const skillGroups: SkillGroup[] = [
     id: "cloud-iot",
     label: "Cloud & IoT",
     items: [
-      "AWS (EC2, S3, ASG, IoT Core)",
+      "Amazon Web Services",
       "Azure Fundamentals",
       "MQTT",
       "Node-RED",
