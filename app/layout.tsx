@@ -24,9 +24,22 @@ const geistMono = Geist_Mono({
 // so EN and VI visitors get language-matched social previews. This
 // root-level fallback only applies to error pages or routes that
 // somehow render outside the [lang] tree.
+//
+// formatDetection: turn off iOS Safari's auto data-detectors. Without
+// this, anything that looks like an email or phone number in plain
+// text (e.g. the email line at the bottom of the hero terminal
+// variant) gets a blue underline + tappable styling injected by the
+// OS. The deliberate email link in EmailButton is a real <a
+// href="mailto:"> anchor, which still works fine because it has its
+// own href — data detectors only kick in on plain text.
 export const metadata: Metadata = {
   metadataBase: new URL("https://lwinmmt.com"),
   title: "Lwin MMT",
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
+  },
   // Icons resolved automatically from app/icon.svg and app/apple-icon.svg.
 };
 
