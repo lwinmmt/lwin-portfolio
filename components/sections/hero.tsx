@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { HeroGlobe } from "@/components/hero/globe";
-import { AnimatedName } from "@/components/hero/animated-name";
 import { EmailButton } from "@/components/ui/email-button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { profile } from "@/lib/content";
@@ -22,7 +21,7 @@ export function Hero() {
           {profile.greeting}
         </div>
         <h1 className="mt-3 flex items-baseline gap-[0.05em] font-sans text-[clamp(2.75rem,6vw,4.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-          <AnimatedName name={profile.name} />
+          {profile.name}
           <span className="text-[var(--color-ruby)]">.</span>
         </h1>
       </div>

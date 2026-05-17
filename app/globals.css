@@ -290,13 +290,6 @@
 .animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .animate-fade-in { animation: fade-in 0.6s ease-out both; }
 
-/* Hero globe location pin: pulsing ring expanding outward from the pin. */
-@keyframes pin-pulse {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.6); opacity: 0; }
-}
-.animate-pin-pulse { animation: pin-pulse 1.6s ease-out infinite; }
-
 /* Card title underline draw. Apply to a span around the title text
    inside any card with `group` on its outer wrapper; the underline
    draws left-to-right on group-hover. Uses linear-gradient instead
@@ -319,25 +312,6 @@
    tnum; this just turns the feature on globally. */
 html {
   font-feature-settings: "tnum" 1, "cv11" 1;
-}
-
-/* Subtle ~2.5% SVG noise grain overlay. The Vercel / Linear move:
-   makes flat color feel material instead of synthetic. Fixed so it
-   stays put while scrolling. pointer-events none so it does not eat
-   clicks. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-size: 200px 200px;
-}
-/* Quiet the grain in reduced-motion mode (noise is visually 'busy'). */
-@media (prefers-reduced-motion: reduce) {
-  body::before { display: none; }
 }
 /* Custom Leaflet map pin */
 .map-pin {

@@ -27,10 +27,13 @@ const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 
 const ARC_TRACK_DOTS = 24;
 const ARC_HEIGHT = 0.18;
-const ARC_SPAWN_INTERVAL_MS = 1700;
-const ARC_MIN_DURATION_MS = 2400;
-const ARC_DURATION_VARIANCE_MS = 1600;
-const MAX_ACTIVE_ARCS = 4;
+// Faster spawn + more concurrent arcs so the globe always has visible
+// motion. Each arc itself stays the same duration so individual comets
+// still read clearly.
+const ARC_SPAWN_INTERVAL_MS = 800;
+const ARC_MIN_DURATION_MS = 2200;
+const ARC_DURATION_VARIANCE_MS = 1200;
+const MAX_ACTIVE_ARCS = 7;
 
 // Pool of city endpoints for the random arc spawner. Mix of SEA work-
 // relevant cities and global spread so arcs feel like real network
@@ -330,11 +333,11 @@ export function HeroGlobe() {
                   style={{
                     left: "50%",
                     top: "50%",
-                    width: 3.5,
-                    height: 3.5,
+                    width: 4.5,
+                    height: 4.5,
                     backgroundColor: "var(--color-ruby)",
                     boxShadow:
-                      "0 0 6px var(--color-ruby), 0 0 2px var(--color-ruby)",
+                      "0 0 10px var(--color-ruby), 0 0 4px var(--color-ruby)",
                     opacity: 0,
                     backfaceVisibility: "hidden",
                     willChange: "transform, opacity",
@@ -344,35 +347,23 @@ export function HeroGlobe() {
             );
           })}
 
-          {/* Persistent location pin: ruby dot + pulsing ring. */}
+          {/* Persistent location pin: single solid ruby dot, no pulsing
+              ring. The chip below the globe handles the labeling; the
+              pin on the sphere just marks the geographic point. */}
           <span
-            className="pointer-events-none absolute"
+            aria-hidden="true"
+            className="pointer-events-none absolute rounded-full"
             style={{
               left: "50%",
               top: "50%",
               width: PIN_SIZE,
               height: PIN_SIZE,
+              backgroundColor: "var(--color-ruby)",
+              boxShadow: "0 0 10px var(--color-ruby), 0 0 3px var(--color-ruby)",
               transform: `translate(-50%, -50%) translate3d(${(pinVec.x * RADIUS).toFixed(2)}px, ${(-pinVec.y * RADIUS).toFixed(2)}px, ${(pinVec.z * RADIUS).toFixed(2)}px) rotateY(${pinVec.lng}rad) rotateX(${-pinVec.lat}rad)`,
               backfaceVisibility: "hidden",
             }}
-          >
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full"
-              style={{
-                backgroundColor: "var(--color-ruby)",
-                boxShadow:
-                  "0 0 8px var(--color-ruby), 0 0 2px var(--color-ruby)",
-              }}
-            />
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full animate-pin-pulse"
-              style={{
-                border: "1.5px solid var(--color-ruby)",
-              }}
-            />
-          </span>
+          />
         </div>
 
         <div
