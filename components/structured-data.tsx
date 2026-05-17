@@ -5,11 +5,27 @@ import { profile } from "@/lib/content";
 // accept these \uXXXX escapes, so the rendered structured data still
 // validates. Today the payload is fully server-controlled (profile +
 // project metadata), but defensive encoding costs nothing.
+//
+// U+2028 (LINE SEPARATOR) and U+2029 (PARAGRAPH SEPARATOR) get the
+// same treatment. They are legal inside JSON string values but were
+// historically illegal in raw JavaScript source, so an inline
+// <script>...</script> containing them could break in older parsers.
+//
+// The two regexes are built via the RegExp constructor with explicit
+// `\u` escape sequences — writing the literal characters inside a
+// /.../ regex literal would inject real line-terminator bytes into
+// this source file, which the JS parser treats as the end of the
+// regex and the file would not compile.
+const U2028 = new RegExp(" ", "g");
+const U2029 = new RegExp(" ", "g");
+
 function safeJsonLd(data: unknown): string {
   return JSON.stringify(data)
     .replace(/</g, "\\u003c")
     .replace(/>/g, "\\u003e")
-    .replace(/&/g, "\\u0026");
+    .replace(/&/g, "\\u0026")
+    .replace(U2028, "\\u2028")
+    .replace(U2029, "\\u2029");
 }
 
 /**
@@ -22,24 +38,19 @@ export function PersonJsonLd() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: profile.name,
+    alternateName: "Lwin Min Min Thant",
     jobTitle: profile.currentRole,
-    worksFor: {
-      "@type": "Organization",
-      name: profile.currentOrgFullName,
-      url: profile.currentOrgLink,
-    },
-    alumniOf: {
-      "@type": "CollegeOrUniversity",
-      name: profile.school,
-      url: profile.schoolLink,
-    },
+    worksFor: { "@type": "Organization", name: profile.currentOrg },
     url: "https://lwinmmt.com",
-    email: `mailto:${profile.email}`,
+    email: profile.email,
     sameAs: [profile.github, profile.linkedin],
     address: {
       "@type": "PostalAddress",
       addressLocality: profile.location,
     },
+    image: profile.photoSrc,
+    description:
+      "Information Systems student at Singapore Management University. AI & IIoT Engineer at VNTT in Ho Chi Minh City. I build IoT systems and ship products end-to-end.",
   };
   return (
     <script
@@ -51,8 +62,8 @@ export function PersonJsonLd() {
 }
 
 /**
- * JSON-LD BreadcrumbList for project case study pages. Helps Google
- * render breadcrumbs in search results.
+ * JSON-LD BreadcrumbList for project detail pages. Helps Google show
+ * Home > Projects > [project title] in rich results.
  */
 export function ProjectBreadcrumbsJsonLd({
   slug,
@@ -61,21 +72,23 @@ export function ProjectBreadcrumbsJsonLd({
   slug: string;
   title: string;
 }) {
+  const base = "https://lwinmmt.com";
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Projects",
-        item: "https://lwinmmt.com/projects",
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: base },
       {
         "@type": "ListItem",
         position: 2,
+        name: "Projects",
+        item: `${base}/projects`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
         name: title,
-        item: `https://lwinmmt.com/projects/${slug}`,
+        item: `${base}/projects/${slug}`,
       },
     ],
   };

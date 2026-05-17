@@ -1,5 +1,6 @@
 import { education, type EducationEntry } from "@/lib/content";
 import { EntityLogo } from "@/components/ui/entity-logo";
+import { EntityNameLink } from "@/components/ui/entity-name-link";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import type { Locale } from "@/lib/i18n/types";
@@ -32,21 +33,6 @@ function EducationRow({
 }) {
   const { school, schoolLink, dates, initial, logoSrc } = entry;
   const degree = pickLocalized(entry.degree, entry.degreeVi, locale);
-  const schoolEl = schoolLink ? (
-    <a
-      href={schoolLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="font-sans text-[14px] font-semibold leading-tight text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
-    >
-      {school}
-    </a>
-  ) : (
-    <span className="font-sans text-[14px] font-semibold leading-tight text-[var(--color-fg)]">
-      {school}
-    </span>
-  );
-
   return (
     <li className="flex items-start gap-3 py-3.5">
       <EntityLogo
@@ -56,7 +42,7 @@ function EducationRow({
         className="mt-0.5"
       />
       <div className="min-w-0 flex-1">
-        {schoolEl}
+        <EntityNameLink name={school} href={schoolLink} />
         <div className="mt-0.5 font-sans text-[12.5px] leading-snug text-[var(--color-fg-muted)]">
           {degree}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useCallback, useContext, type ReactNode } from "react";
 import { messages, type MessageKey } from "./messages";
 import { DEFAULT_LOCALE, type Locale } from "./types";
 
@@ -26,8 +26,15 @@ export function useLocale(): Locale {
   return useContext(LocaleContext);
 }
 
+// useCallback so the translator identity is stable for the lifetime
+// of the locale. Without this, consumers that put `t` in a useMemo
+// dependency array (e.g. CmdPalette.buildItems) would rebuild on
+// every parent render even when the locale itself never changed.
 export function useT() {
   const locale = useLocale();
-  return (key: MessageKey): string =>
-    messages[locale][key] ?? messages[DEFAULT_LOCALE][key] ?? key;
+  return useCallback(
+    (key: MessageKey): string =>
+      messages[locale][key] ?? messages[DEFAULT_LOCALE][key] ?? key,
+    [locale],
+  );
 }

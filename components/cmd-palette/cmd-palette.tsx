@@ -162,6 +162,16 @@ export function CmdPalette() {
 
   const flat = useMemo(() => grouped.flatMap((g) => g.items), [grouped]);
 
+  // Pre-compute item -> flat-index map so the per-row render below
+  // can do an O(1) Map.get(item) lookup instead of flat.indexOf(item)
+  // O(n) scan. With ~30 items and ~30 rows, the previous code did
+  // ~900 comparisons per keystroke. Now it does zero.
+  const flatIndex = useMemo(() => {
+    const m = new Map<PaletteItem, number>();
+    for (let i = 0; i < flat.length; i++) m.set(flat[i], i);
+    return m;
+  }, [flat]);
+
   const close = useCallback(() => {
     setOpen(false);
     setQuery("");
@@ -298,7 +308,7 @@ export function CmdPalette() {
                   {t(GROUP_LABEL_KEY[group])}
                 </div>
                 {rows.map((item) => {
-                  const flatIdx = flat.indexOf(item);
+                  const flatIdx = flatIndex.get(item) ?? -1;
                   const isActive = flatIdx === activeIdx;
                   return (
                     <button

@@ -5,6 +5,7 @@ import {
   type ExperienceRole,
 } from "@/lib/content";
 import { EntityLogo } from "@/components/ui/entity-logo";
+import { EntityNameLink } from "@/components/ui/entity-name-link";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import type { Locale } from "@/lib/i18n/types";
@@ -49,27 +50,12 @@ function ExperienceRow({
       : locale === "vi"
         ? EMPLOYMENT_TYPE_VI[type]
         : type;
-  const companyEl = companyLink ? (
-    <a
-      href={companyLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="font-sans text-[14px] font-semibold leading-tight text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
-    >
-      {company}
-    </a>
-  ) : (
-    <span className="font-sans text-[14px] font-semibold leading-tight text-[var(--color-fg)]">
-      {company}
-    </span>
-  );
-
   return (
     <li className="flex items-center gap-3 py-3.5">
       <EntityLogo logoSrc={logoSrc} initial={initial} name={company} />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-          {companyEl}
+          <EntityNameLink name={company} href={companyLink} />
           {typeLabel && (
             <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
               {typeLabel}

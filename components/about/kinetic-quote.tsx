@@ -2,6 +2,19 @@
 
 import { motion } from "framer-motion";
 
+// Static variants. Defined once at module load so we do not allocate
+// a fresh `{ hidden, visible }` object for every word on every render
+// (the quote can run 20+ words; with two passes this used to mean
+// 40+ allocations per parent re-render).
+const WORD_VARIANTS = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const EASE = [0.2, 0.7, 0.3, 1] as const;
+const WORD_DELAY_STEP = 0.05;
+const WORD_DURATION = 0.5;
+
 /**
  * Signature moment for /about. Splits the pull quote word-by-word so each
  * word fades + slides up in stagger. Last word gets a ruby underline.
@@ -30,18 +43,15 @@ export function KineticQuote({
         <motion.span
           key={`l-${i}`}
           className="inline-block whitespace-pre"
-          variants={{
-            hidden: { opacity: 0, y: 18 },
-            visible: { opacity: 1, y: 0 },
-          }}
+          variants={WORD_VARIANTS}
           transition={{
-            duration: 0.5,
-            delay: i * 0.05,
-            ease: [0.2, 0.7, 0.3, 1],
+            duration: WORD_DURATION,
+            delay: i * WORD_DELAY_STEP,
+            ease: EASE,
           }}
         >
           {w}
-          {i < leadWords.length - 1 ? " " : " "}
+          {" "}
         </motion.span>
       ))}
       <span className="inline-block border-b-[3px] border-[var(--color-ruby)] pb-0.5">
@@ -49,14 +59,11 @@ export function KineticQuote({
           <motion.span
             key={`t-${i}`}
             className="inline-block whitespace-pre"
-            variants={{
-              hidden: { opacity: 0, y: 18 },
-              visible: { opacity: 1, y: 0 },
-            }}
+            variants={WORD_VARIANTS}
             transition={{
-              duration: 0.5,
-              delay: (totalLead + i) * 0.05,
-              ease: [0.2, 0.7, 0.3, 1],
+              duration: WORD_DURATION,
+              delay: (totalLead + i) * WORD_DELAY_STEP,
+              ease: EASE,
             }}
           >
             {w}
