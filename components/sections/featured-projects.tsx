@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { featuredProjects, type Project } from "@/lib/content";
+import { CardCover } from "@/components/ui/card-cover";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import type { Locale } from "@/lib/i18n/types";
@@ -59,20 +59,14 @@ function ProjectCard({
       className="beam-card group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(0,0,0,0.04)]"
     >
       {project.imageSrc && (
-        <div className="relative h-36 w-full overflow-hidden bg-[var(--color-bg-warm)]">
-          <Image
-            src={project.imageSrc}
-            alt={`${title} cover`}
-            fill
-            // First two cards are above the fold on desktop. Eager-load so
-            // the dark-mode empty bg doesn't read as a broken card before
-            // the optimizer streams the image in.
-            priority={priority}
-            sizes="(max-width: 640px) 100vw, 50vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-bg-warm)] via-transparent to-transparent" />
-        </div>
+        <CardCover
+          src={project.imageSrc}
+          alt={`${title} cover`}
+          height="md"
+          // First two cards are above the fold on desktop. Eager-load
+          // so the dark-mode empty bg does not read as a broken card.
+          priority={priority}
+        />
       )}
       <div className="flex flex-1 flex-col p-5">
         {course && (

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { education, type EducationEntry } from "@/lib/content";
+import { EntityLogo } from "@/components/ui/entity-logo";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import type { Locale } from "@/lib/i18n/types";
@@ -49,24 +49,12 @@ function EducationRow({
 
   return (
     <li className="flex items-start gap-3 py-3.5">
-      {logoSrc ? (
-        <div className="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border-default)] bg-white">
-          <Image
-            src={logoSrc}
-            alt={`${school} logo`}
-            width={44}
-            height={44}
-            className="h-9 w-9 object-contain"
-          />
-        </div>
-      ) : (
-        <div
-          aria-hidden="true"
-          className="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] font-mono text-[12px] font-semibold tracking-[0.04em] text-[var(--color-fg)]"
-        >
-          {initial}
-        </div>
-      )}
+      <EntityLogo
+        logoSrc={logoSrc}
+        initial={initial}
+        name={school}
+        className="mt-0.5"
+      />
       <div className="min-w-0 flex-1">
         {schoolEl}
         <div className="mt-0.5 font-sans text-[12.5px] leading-snug text-[var(--color-fg-muted)]">

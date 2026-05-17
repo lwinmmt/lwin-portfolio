@@ -24,7 +24,14 @@ export function LanguageSwitcher() {
 
   const switchTo = (next: Locale) => {
     if (next === locale || isPending) return;
-    document.cookie = `locale=${next}; path=/; max-age=31536000; samesite=lax`;
+    // Mark the cookie Secure when the page is served over HTTPS so
+    // it cannot be sent in cleartext during a downgrade attack. Skip
+    // the flag on http://localhost so the cookie still works in dev.
+    const secure =
+      typeof window !== "undefined" && window.location.protocol === "https:"
+        ? "; Secure"
+        : "";
+    document.cookie = `locale=${next}; path=/; max-age=31536000; samesite=lax${secure}`;
     startTransition(() => {
       router.refresh();
     });

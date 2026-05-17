@@ -27,7 +27,10 @@ const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
 const DRAG_SENSITIVITY = 0.4;
 const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 
-const ARC_TRACK_DOTS = 36;
+// Number of polyline segments along each arc. A smooth stroked
+// great-circle line needs noticeably fewer points than the discrete-
+// dot version did.
+const ARC_TRACK_DOTS = 26;
 const ARC_HEIGHT = 0.18;
 const ARC_SPAWN_INTERVAL_MS = 500;
 const ARC_MIN_DURATION_MS = 2200;
@@ -360,8 +363,15 @@ export function HeroGlobe() {
           continue;
         }
 
-        // Static track dots (very small ruby points along the arc).
-        ctx.fillStyle = palette.current.arcTrack;
+        // Arc path — drawn as a single continuous stroked polyline
+        // through the projected track points. Reads as one curved
+        // ruby thread instead of a string of separated dots. Stripe
+        // / Aceternity style.
+        ctx.strokeStyle = palette.current.arcTrack;
+        ctx.lineWidth = 1.1;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
         const track = arc.track;
         for (let i = 0; i < track.length; i++) {
           const { p, elev } = track[i];
@@ -374,10 +384,10 @@ export function HeroGlobe() {
           const scale = FOCAL / (FOCAL - zS);
           const sx = x1 * r * scale + cx;
           const sy = -y2 * r * scale + cy;
-          ctx.beginPath();
-          ctx.arc(sx, sy, 0.85 * scale, 0, Math.PI * 2);
-          ctx.fill();
+          if (i === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
         }
+        ctx.stroke();
 
         // Comet trail: head + 3 fading shadow dots. Each segment is
         // at headT - offset and slerps along (from, to).
@@ -497,7 +507,7 @@ export function HeroGlobe() {
       </div>
 
       <div
-        className="glass-chip mt-4 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
+        className="glass-chip mt-8 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
         aria-label={`Currently in ${profile.location}`}
       >
         <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">

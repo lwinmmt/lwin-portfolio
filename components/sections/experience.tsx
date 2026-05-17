@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   experience,
   EMPLOYMENT_TYPE_VI,
   type ExperienceRole,
 } from "@/lib/content";
+import { EntityLogo } from "@/components/ui/entity-logo";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import type { Locale } from "@/lib/i18n/types";
@@ -66,24 +66,7 @@ function ExperienceRow({
 
   return (
     <li className="flex items-center gap-3 py-3.5">
-      {logoSrc ? (
-        <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--color-border-default)] bg-white">
-          <Image
-            src={logoSrc}
-            alt={`${company} logo`}
-            width={44}
-            height={44}
-            className="h-9 w-9 object-contain"
-          />
-        </div>
-      ) : (
-        <div
-          aria-hidden="true"
-          className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] font-mono text-[12px] font-semibold tracking-[0.04em] text-[var(--color-fg)]"
-        >
-          {initial}
-        </div>
-      )}
+      <EntityLogo logoSrc={logoSrc} initial={initial} name={company} />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
           {companyEl}
