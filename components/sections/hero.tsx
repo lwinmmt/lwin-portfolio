@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { HeroGlobe } from "@/components/hero/globe";
+import { AnimatedName } from "@/components/hero/animated-name";
 import { EmailButton } from "@/components/ui/email-button";
+import { Magnetic } from "@/components/ui/magnetic";
 import { profile } from "@/lib/content";
 
 // Asymmetric 2-col hero on lg+: text block (greeting, name, intro,
@@ -20,7 +22,7 @@ export function Hero() {
           {profile.greeting}
         </div>
         <h1 className="mt-3 flex items-baseline gap-[0.05em] font-sans text-[clamp(2.75rem,6vw,4.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-          {profile.name}
+          <AnimatedName name={profile.name} />
           <span className="text-[var(--color-ruby)]">.</span>
         </h1>
       </div>
@@ -92,34 +94,42 @@ export function Hero() {
         className="flex flex-wrap gap-2 animate-fade-up lg:col-start-1 lg:row-start-4"
         style={{ animationDelay: "500ms" }}
       >
-        <Link
-          href="/resume"
-          className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:-translate-y-px hover:bg-[var(--color-ruby)]"
-        >
-          Resume
-        </Link>
-        <EmailButton
-          email={profile.email}
-          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-        >
-          Email
-        </EmailButton>
-        <a
-          href={profile.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-        >
-          GitHub
-        </a>
-        <a
-          href={profile.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-        >
-          LinkedIn
-        </a>
+        <Magnetic>
+          <Link
+            href="/resume"
+            className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:bg-[var(--color-ruby)]"
+          >
+            Resume
+          </Link>
+        </Magnetic>
+        <Magnetic>
+          <EmailButton
+            email={profile.email}
+            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+          >
+            Email
+          </EmailButton>
+        </Magnetic>
+        <Magnetic>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+          >
+            GitHub
+          </a>
+        </Magnetic>
+        <Magnetic>
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+          >
+            LinkedIn
+          </a>
+        </Magnetic>
       </div>
     </section>
   );
