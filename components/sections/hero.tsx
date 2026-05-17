@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { HeroGlobe } from "@/components/hero/globe";
 import { EmailButton } from "@/components/ui/email-button";
-import { Magnetic } from "@/components/ui/magnetic";
 import { profile } from "@/lib/content";
 import { getT } from "@/lib/i18n/server";
 
@@ -105,42 +104,34 @@ export async function Hero() {
         className="flex flex-wrap gap-2 animate-fade-up lg:col-start-1 lg:row-start-4"
         style={{ animationDelay: "500ms" }}
       >
-        <Magnetic>
-          <Link
-            href="/resume"
-            className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:bg-[var(--color-ruby)]"
-          >
-            {t("hero.cta.resume")}
-          </Link>
-        </Magnetic>
-        <Magnetic>
-          <EmailButton
-            email={profile.email}
-            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-          >
-            {t("hero.cta.email")}
-          </EmailButton>
-        </Magnetic>
-        <Magnetic>
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-          >
-            {t("hero.cta.github")}
-          </a>
-        </Magnetic>
-        <Magnetic>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-          >
-            {t("hero.cta.linkedin")}
-          </a>
-        </Magnetic>
+        <Link
+          href="/resume"
+          className="inline-flex items-center rounded-full bg-[var(--color-fg)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-bg)] transition-all duration-200 hover:-translate-y-px hover:bg-[var(--color-ruby)]"
+        >
+          {t("hero.cta.resume")}
+        </Link>
+        <EmailButton
+          email={profile.email}
+          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+        >
+          {t("hero.cta.email")}
+        </EmailButton>
+        <a
+          href={profile.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+        >
+          {t("hero.cta.github")}
+        </a>
+        <a
+          href={profile.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-2)] px-[18px] py-[11px] font-sans text-sm font-medium text-[var(--color-fg-muted)] backdrop-blur transition-all duration-200 hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+        >
+          {t("hero.cta.linkedin")}
+        </a>
       </div>
     </section>
   );

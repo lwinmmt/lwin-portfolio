@@ -2,10 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { featuredProjects, type Project } from "@/lib/content";
 
-function hasAnyLiveLink(p: Project) {
-  return Boolean(p.liveLink) || (p.liveLinks && p.liveLinks.length > 0);
-}
-
 export function FeaturedProjects() {
   return (
     <section className="mt-14">
@@ -57,14 +53,9 @@ function ProjectCard(project: Project & { priority?: boolean }) {
             {project.course}
           </div>
         )}
-        <div className="mb-1.5 flex flex-wrap items-baseline gap-x-2">
-          <h3 className="font-sans text-[14.5px] font-semibold leading-[1.35] text-[var(--color-fg)]">
-            <span className="card-title-draw">{project.title}</span>
-          </h3>
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--color-ruby)]">
-            {project.category}
-          </span>
-        </div>
+        <h3 className="mb-1.5 font-sans text-[14.5px] font-semibold leading-[1.35] text-[var(--color-fg)]">
+          <span className="card-title-draw">{project.title}</span>
+        </h3>
         <p className="mb-3 text-[12.5px] leading-[1.5] text-[var(--color-fg-muted)]">
           {project.description}
         </p>
@@ -80,24 +71,10 @@ function ProjectCard(project: Project & { priority?: boolean }) {
             ))}
           </div>
         )}
-        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-          <div className="font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
-            {project.dates}
-          </div>
-          <div className="flex gap-1.5">
-            {hasAnyLiveLink(project) && <ProofChip label="Live" />}
-            {project.newsLink && <ProofChip label="Press" />}
-          </div>
+        <div className="mt-auto pt-2 font-mono text-[10.5px] tracking-[0.06em] text-[var(--color-fg-faint)]">
+          {project.dates}
         </div>
       </div>
     </Link>
-  );
-}
-
-function ProofChip({ label }: { label: string }) {
-  return (
-    <span className="rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.08em] text-[var(--color-fg-muted)]">
-      {label}
-    </span>
   );
 }

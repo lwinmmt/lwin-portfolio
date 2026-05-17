@@ -292,19 +292,19 @@
 
 /* Card title underline draw. Apply to a span around the title text
    inside any card with `group` on its outer wrapper; the underline
-   draws left-to-right on group-hover. Uses linear-gradient instead
-   of a pseudo-element so it works on inline text without needing
-   the title to be positioned. */
+   draws left-to-right on group-hover in the ruby brand color (NOT
+   currentColor) so it reads consistently across cards regardless of
+   the title's own text color. */
 .card-title-draw {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
+  background-image: linear-gradient(var(--color-ruby), var(--color-ruby));
+  background-size: 0% 1.5px;
   background-repeat: no-repeat;
   background-position: 0 100%;
   transition: background-size 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .group:hover .card-title-draw,
 .group:focus-visible .card-title-draw {
-  background-size: 100% 1px;
+  background-size: 100% 1.5px;
 }
 
 /* Tabular numerals everywhere so numbers do not dance during animations
