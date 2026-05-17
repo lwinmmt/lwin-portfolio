@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { motion } from "framer-motion";
 import { useLocale, useT } from "@/lib/i18n/client";
+import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { LOCALES, LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 
 // Sidebar language switcher. Pill matching the theme toggle's visual
@@ -24,14 +25,7 @@ export function LanguageSwitcher() {
 
   const switchTo = (next: Locale) => {
     if (next === locale || isPending) return;
-    // Mark the cookie Secure when the page is served over HTTPS so
-    // it cannot be sent in cleartext during a downgrade attack. Skip
-    // the flag on http://localhost so the cookie still works in dev.
-    const secure =
-      typeof window !== "undefined" && window.location.protocol === "https:"
-        ? "; Secure"
-        : "";
-    document.cookie = `locale=${next}; path=/; max-age=31536000; samesite=lax${secure}`;
+    writeLocaleCookie(next);
     startTransition(() => {
       router.refresh();
     });

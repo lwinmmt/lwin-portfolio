@@ -132,7 +132,7 @@ function BentoCard({
             <DateChip />
           </div>
           <h3 className="mb-2 font-sans text-[clamp(1.05rem,1.6vw,1.35rem)] font-semibold leading-[1.25] tracking-[-0.015em] text-[var(--color-fg)]">
-            {title}
+            <span className="card-title-draw">{title}</span>
           </h3>
           <p className="text-[13px] leading-[1.55] text-[var(--color-fg-muted)]">
             {description}
@@ -159,7 +159,7 @@ function BentoCard({
             <DateChip />
           </div>
           <h3 className="mb-2 font-sans text-[clamp(0.95rem,1.2vw,1.15rem)] font-semibold leading-[1.3] tracking-[-0.01em] text-[var(--color-fg)]">
-            {title}
+            <span className="card-title-draw">{title}</span>
           </h3>
           <p className="text-[13px] leading-[1.6] text-[var(--color-fg-muted)]">
             {description}
@@ -184,7 +184,7 @@ function BentoCard({
             <DateChip />
           </div>
           <h3 className="mb-3 font-sans text-[clamp(1.125rem,1.8vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.015em] text-[var(--color-fg)]">
-            {title}
+            <span className="card-title-draw">{title}</span>
           </h3>
           <p className="text-[13.5px] leading-[1.6] text-[var(--color-fg-muted)]">
             {description}

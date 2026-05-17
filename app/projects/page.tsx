@@ -27,6 +27,22 @@ const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
 
 const CATEGORY_ORDER: ProjectCategory[] = ["Projects", "Coursework"];
 
+// Module-scope variants so framer-motion doesn't see a fresh object
+// reference on every parent render (filter click re-renders the
+// whole tree). Same pattern Reveal + KineticQuote use.
+const REVEAL_EASE = [0.2, 0.7, 0.3, 1] as const;
+const GRID_VARIANTS = {
+  visible: { transition: { staggerChildren: 0.06 } },
+};
+const CARD_VARIANTS = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: REVEAL_EASE },
+  },
+};
+
 // Count of attached proof artifacts. Used as a small paperclip indicator
 // in the card footer so cards without uploads do not look empty.
 function attachmentCount(p: Project): number {
@@ -137,24 +153,12 @@ export default function ProjectsPage() {
                 className="grid gap-3.5 sm:grid-cols-2"
                 initial="hidden"
                 animate="visible"
-                variants={{
-                  visible: { transition: { staggerChildren: 0.06 } },
-                }}
+                variants={GRID_VARIANTS}
               >
                 {items.map((project, i) => (
                   <motion.div
                     key={project.slug}
-                    variants={{
-                      hidden: { opacity: 0, y: 16 },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        transition: {
-                          duration: 0.45,
-                          ease: [0.2, 0.7, 0.3, 1],
-                        },
-                      },
-                    }}
+                    variants={CARD_VARIANTS}
                     // flex flex-col h-full so framer-motion's inline style
                     // does not collapse the wrapper height. With this the
                     // grid item stretches to the tallest sibling and the
@@ -251,12 +255,14 @@ function ProjectCard({
             {course}
           </div>
         )}
-        <Link
-          href={`/projects/${project.slug}`}
-          className="font-sans text-[15px] font-semibold leading-[1.35] text-[var(--color-fg)] transition-colors after:absolute after:inset-0 after:content-[''] hover:text-[var(--color-ruby-deep)] focus-visible:after:rounded-2xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-[var(--color-ruby)]"
-        >
-          <span className="card-title-draw">{title}</span>
-        </Link>
+        <h3 className="font-sans text-[15px] font-semibold leading-[1.35] text-[var(--color-fg)]">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="transition-colors after:absolute after:inset-0 after:content-[''] hover:text-[var(--color-ruby-deep)] focus-visible:after:rounded-2xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-[var(--color-ruby)]"
+          >
+            <span className="card-title-draw">{title}</span>
+          </Link>
+        </h3>
         <p className="mt-2 text-[12.5px] leading-[1.55] text-[var(--color-fg-muted)]">
           {description}
         </p>

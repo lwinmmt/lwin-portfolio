@@ -44,7 +44,7 @@ function HighlightCard({ h, locale }: { h: Highlight; locale: Locale }) {
         />
       )}
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="mb-1.5 font-sans text-[14.5px] font-semibold leading-[1.35] text-[var(--color-fg)]">
+        <h3 className="mb-1.5 font-sans text-[15px] font-semibold leading-[1.35] text-[var(--color-fg)]">
           <span className="card-title-draw">{title}</span>
         </h3>
         <p className="mb-3 text-[12.5px] leading-[1.5] text-[var(--color-fg-muted)]">

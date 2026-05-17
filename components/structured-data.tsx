@@ -11,13 +11,14 @@ import { profile } from "@/lib/content";
 // historically illegal in raw JavaScript source, so an inline
 // <script>...</script> containing them could break in older parsers.
 //
-// The two regexes are built via the RegExp constructor with explicit
-// `\u` escape sequences — writing the literal characters inside a
-// /.../ regex literal would inject real line-terminator bytes into
-// this source file, which the JS parser treats as the end of the
-// regex and the file would not compile.
-const U2028 = new RegExp(" ", "g");
-const U2029 = new RegExp(" ", "g");
+// Both regex sources use explicit \uXXXX escape sequences (NOT literal
+// characters). Writing the literal U+2028 / U+2029 bytes into this
+// file is editor-hostile: a linter or save-hook normalising "invisible
+// whitespace" to ASCII space silently turns these into ASCII-space
+// replacers and breaks the defence-in-depth escaping. The constructor
+// form keeps the source file ASCII-only.
+const U2028 = new RegExp(String.fromCharCode(0x2028), "g");
+const U2029 = new RegExp(String.fromCharCode(0x2029), "g");
 
 function safeJsonLd(data: unknown): string {
   return JSON.stringify(data)

@@ -191,7 +191,7 @@ function Section({
 }) {
   const num = count ? count.toString().padStart(2, "0") : undefined;
   return (
-    <section className="relative mt-20">
+    <section className="relative mt-14">
       {/* Watermark numeral as design texture. Positioned well clear of
           the heading so it reads as architectural detail, not background. */}
       {num && (
@@ -202,7 +202,7 @@ function Section({
           {num}
         </span>
       )}
-      <div className="relative mb-6 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
+      <div className="relative mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
         <h2 className="font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
           {title}
         </h2>

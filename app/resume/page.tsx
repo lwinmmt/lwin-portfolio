@@ -362,9 +362,9 @@ function Section({
 }) {
   const num = count ? count.toString().padStart(2, "0") : undefined;
   return (
-    <section className="mt-10">
-      <div className="mb-4 flex items-end justify-between border-b border-[var(--color-border-default)] pb-2">
-        <h2 className="flex items-baseline font-sans text-[1.125rem] font-semibold tracking-[-0.015em] text-[var(--color-fg)]">
+    <section className="mt-14">
+      <div className="mb-5 flex items-end justify-between border-b border-[var(--color-border-default)] pb-3">
+        <h2 className="flex items-baseline font-sans text-[1.375rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
           {num && <span className="section-counter">{num}</span>}
           {title}
         </h2>

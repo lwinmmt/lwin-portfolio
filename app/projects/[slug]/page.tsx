@@ -177,11 +177,13 @@ export default async function ProjectPage({
                   <li key={p.slug}>
                     <Link
                       href={`/projects/${p.slug}`}
-                      className="block rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-4 transition-colors hover:border-[var(--color-border-default)]"
+                      className="group block rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-4 transition-colors hover:border-[var(--color-border-default)]"
                     >
-                      <div className="font-sans text-[13.5px] font-semibold text-[var(--color-fg)]">
-                        {pickLocalized(p.title, p.titleVi, locale)}
-                      </div>
+                      <h3 className="font-sans text-[13.5px] font-semibold text-[var(--color-fg)]">
+                        <span className="card-title-draw">
+                          {pickLocalized(p.title, p.titleVi, locale)}
+                        </span>
+                      </h3>
                       <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
                         {p.dates}
                       </div>

@@ -44,8 +44,16 @@ export function CardCover({
         fill
         priority={priority}
         sizes={sizes}
+        // Match the crop default of the two other cover surfaces
+        // (projects list and project detail) so the same image is
+        // framed identically on the home card, the index card, and
+        // the detail cover. Without the object-top fallback,
+        // CardCover quietly defaulted to browser "center" and the
+        // same project image looked subtly different on every page.
         style={objectPosition ? { objectPosition } : undefined}
-        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+          objectPosition ? "" : "object-top"
+        }`}
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-bg-warm)] via-transparent to-transparent" />
     </div>

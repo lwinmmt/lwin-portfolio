@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "@/lib/i18n/client";
+import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { LOCALE_NAMES, type Locale } from "@/lib/i18n/types";
 
 // One-shot floating banner that lets a first-time visitor know the
@@ -44,15 +45,20 @@ export function LocalePromptBanner() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [, startTransition] = useTransition();
+  // Tracks whether localStorage is usable for persisting the
+  // dismissal flag. When it isn't (Firefox strict mode, private
+  // browsing with storage blocked, etc.) we still show the banner —
+  // just without remembering the dismissal across reloads. The
+  // earlier implementation suppressed the banner entirely for those
+  // visitors, which is the wrong default.
+  const canPersist = useRef(true);
 
   useEffect(() => {
-    // Check dismissal flag. Only show to first-time visitors.
     try {
       const dismissed = localStorage.getItem(STORAGE_KEY);
       if (dismissed) return;
     } catch {
-      // localStorage blocked (private mode etc) — silently skip.
-      return;
+      canPersist.current = false;
     }
     // Small delay so the banner doesn't appear during the hero
     // fade-in animation.
@@ -61,10 +67,12 @@ export function LocalePromptBanner() {
   }, []);
 
   const dismiss = () => {
-    try {
-      localStorage.setItem(STORAGE_KEY, "1");
-    } catch {
-      // ignore
+    if (canPersist.current) {
+      try {
+        localStorage.setItem(STORAGE_KEY, "1");
+      } catch {
+        canPersist.current = false;
+      }
     }
     setVisible(false);
   };
@@ -94,7 +102,11 @@ export function LocalePromptBanner() {
     <div
       role="status"
       aria-live="polite"
-      className="glass-overlay animate-fade-up fixed bottom-5 right-5 z-40 hidden max-w-[340px] items-center gap-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-4 py-3 shadow-[0_8px_24px_rgba(0,0,0,0.08)] sm:flex"
+      // lg+ only. At sm/md viewports the mobile dock lives bottom-
+      // center; a bottom-right banner would collide with it. At lg+
+      // the sidebar (and its EN/VI toggle) is visible, so the banner
+      // is a true first-time-visitor prompt and doesn't fight chrome.
+      className="glass-overlay animate-fade-up fixed bottom-5 right-5 z-40 hidden max-w-[340px] items-center gap-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-4 py-3 shadow-[0_8px_24px_rgba(0,0,0,0.08)] lg:flex"
     >
       <span className="font-sans text-[12.5px] leading-tight text-[var(--color-fg-soft)]">
         {copy.also}{" "}

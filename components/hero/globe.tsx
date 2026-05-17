@@ -201,14 +201,21 @@ export function HeroGlobe() {
   // Resolved palette colors. We read these from CSS vars on mount and
   // again on every theme flip via the MutationObserver below; the
   // canvas needs raw rgb strings, not CSS var references.
+  //
+  // `cometRgb` stores the resolved ruby as the "R, G, B" string only,
+  // so the comet trail loop below can compose rgba(comet, alpha)
+  // strings for each trail segment without doing a fragile string
+  // replace on the full rgba(...) value.
   const palette = useRef<{
     dot: string;
     arcTrack: string;
     cometCore: string;
+    cometRgb: string;
   }>({
     dot: "rgba(120, 113, 108, 0.78)",
     arcTrack: "rgba(180, 58, 44, 0.5)",
     cometCore: "rgba(211, 73, 57, 1)",
+    cometRgb: "211, 73, 57",
   });
 
   const [mounted, setMounted] = useState(false);
@@ -238,10 +245,12 @@ export function HeroGlobe() {
       // a slice; named colors and hsl are not used by the design.
       const dotRgb = hexToRgb(fgSoft);
       const rubyRgb = hexToRgb(ruby);
+      const resolvedRuby = rubyRgb ?? "211, 73, 57";
       palette.current = {
         dot: dotRgb ? `rgba(${dotRgb}, 0.78)` : "rgba(120, 113, 108, 0.78)",
-        arcTrack: rubyRgb ? `rgba(${rubyRgb}, 0.5)` : "rgba(180, 58, 44, 0.5)",
-        cometCore: rubyRgb ? `rgba(${rubyRgb}, 1)` : "rgba(211, 73, 57, 1)",
+        arcTrack: `rgba(${resolvedRuby}, 0.5)`,
+        cometCore: `rgba(${resolvedRuby}, 1)`,
+        cometRgb: resolvedRuby,
       };
     };
     readPalette();
@@ -338,6 +347,12 @@ export function HeroGlobe() {
       const cosTheta = Math.cos(thetaRad);
 
       ctx.clearRect(0, 0, SIZE, SIZE);
+      // Reset shadow state at frame start. Without this, the dot loop
+      // below would inherit `shadowBlur > 0` left over from the last
+      // arc's comet head when an arc-free frame transitions in, and
+      // every dot would render with an unintended ruby glow.
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = "transparent";
 
       // === Dots ===
       // Back-hemisphere cull: skip dots whose rotated z is on the far
@@ -444,7 +459,7 @@ export function HeroGlobe() {
           } else {
             ctx.shadowBlur = 0;
           }
-          ctx.fillStyle = palette.current.cometCore.replace(", 1)", `, ${alpha})`);
+          ctx.fillStyle = `rgba(${palette.current.cometRgb}, ${alpha})`;
           ctx.beginPath();
           ctx.arc(sx, sy, radius, 0, Math.PI * 2);
           ctx.fill();
@@ -534,24 +549,22 @@ export function HeroGlobe() {
         />
       </div>
 
-      {/* The chip content is asymmetric ("HCMC" short, "5:48 PM"
-          longer in the middle, "GMT+7" on the right), so centering
-          the chip BOX puts the time text noticeably left of the globe
-          center axis. translateX(22px) shifts the chip right so the
-          time text reads centered under the sphere. Bumped from
-          10px after the user flagged it as still off-center. */}
+      {/* Symmetric grid layout instead of an inline-flex with a
+          magic-number translateX nudge. The three columns are
+          [1fr_auto_1fr], so the time text is in the auto-sized
+          middle column with equal flexible space on both sides.
+          This means the chip's own center IS the time text's center,
+          and the visual center is preserved regardless of how long
+          the location or GMT label happens to be in any locale. */}
       <div
-        className="glass-chip mt-4 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
-        style={{ transform: "translateX(22px)" }}
+        className="glass-chip mt-4 grid grid-cols-[1fr_auto_1fr] items-baseline gap-x-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
         aria-label={`Currently in ${profile.location}`}
       >
-        <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
+        <span className="text-right font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
           {profile.locationShort}
         </span>
-        <span className="text-[var(--color-fg-faint)]">·</span>
         <span className="tabular-nums">{liveTime ?? "--:--"}</span>
-        <span className="text-[var(--color-fg-faint)]">·</span>
-        <span className="text-[var(--color-fg-faint)]">
+        <span className="text-left text-[var(--color-fg-faint)]">
           {profile.locationGmtLabel}
         </span>
       </div>

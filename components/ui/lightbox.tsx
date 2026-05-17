@@ -196,22 +196,24 @@ function LightboxModal({
       aria-modal="true"
       aria-label={labels.dialog}
       onClick={onClose}
-      // Solid backdrop. The previous bg-black/85 + backdrop-blur let the
-      // page content bleed through the modal, which read as a "did the
-      // click do anything?" bug rather than a fullscreen viewer.
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(8,8,8,0.97)] p-6 animate-fade-in"
+      // Solid backdrop with NO fade-in. The previous animate-fade-in
+      // ran the 97%-opaque black up from opacity 0 over 600ms, which
+      // meant the page bled through for the entire fade — the exact
+      // "did the click do anything?" perception bug the solid colour
+      // was supposed to fix. Backdrop is now opaque from frame one;
+      // the image inside gets its own quick fade if any.
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(8,8,8,0.97)] p-6"
     >
-      <div className="relative max-h-full max-w-full" onClick={(e) => e.stopPropagation()}>
-        {/* Plain img: the source images are already optimized webp/avif at
-            sensible sizes. Going through next/image with width+height
-            forces a known intrinsic ratio that does not match every photo. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image.src}
-          alt={image.alt}
-          className="block max-h-[88vh] max-w-[92vw] rounded-lg object-contain shadow-2xl"
-        />
-      </div>
+      {/* Plain img: the source images are already optimized webp/avif
+          at sensible sizes. Going through next/image with width+height
+          forces an intrinsic ratio that does not match every photo. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image.src}
+        alt={image.alt}
+        onClick={(e) => e.stopPropagation()}
+        className="block max-h-[88vh] max-w-[92vw] rounded-lg object-contain shadow-2xl"
+      />
 
       <button
         type="button"
