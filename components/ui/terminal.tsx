@@ -367,7 +367,7 @@ export function Terminal({
   return (
     <div
       ref={containerRef}
-      className={`mx-auto w-full max-w-md font-mono text-xs ${className ?? ""}`}
+      className={`mx-auto w-full max-w-lg font-mono text-xs ${className ?? ""}`}
     >
       <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-2xl">
         {/* Title bar (mac-style traffic lights + tab title) */}

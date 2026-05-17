@@ -21,7 +21,7 @@ const OUTPUTS: Record<number, string[]> = {
   0: ["lwin mmt"],
   1: [
     "AI & IIoT Engineer @ VNTT",
-    "Info Systems senior @ SMU",
+    "Info Systems student @ SMU",
     "Ho Chi Minh City • GMT+7",
   ],
   2: ["esmos/  royce-connect/  smart-greenhouse/  multi-cloud/"],

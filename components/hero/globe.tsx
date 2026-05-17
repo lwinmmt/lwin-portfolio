@@ -51,7 +51,10 @@ const ARC_HEIGHT = 0.12;
 const ARC_SPAWN_INTERVAL_MS = 500;
 const ARC_MIN_DURATION_MS = 2200;
 const ARC_DURATION_VARIANCE_MS = 1100;
-const MAX_ACTIVE_ARCS = 12;
+// Dropped from 12 -> 6. Twelve arcs in flight at once read as a busy
+// network diagram; six gives the eye a clearer "data is moving"
+// signal without crowding the sphere. Spawn cadence unchanged.
+const MAX_ACTIVE_ARCS = 6;
 
 const COMET_TRAIL_OFFSETS = [0, 0.04, 0.08, 0.12] as const;
 const COMET_TRAIL_SIZES = [4.2, 3.2, 2.2, 1.4] as const;
