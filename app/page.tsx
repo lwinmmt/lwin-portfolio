@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { Hero } from "@/components/sections/hero";
 import { Highlights } from "@/components/sections/highlights";
-import { FeaturedProjects } from "@/components/sections/featured-projects";
 import { Experience } from "@/components/sections/experience";
 import { Education } from "@/components/sections/education";
 import { SkillsStack } from "@/components/sections/skills-stack";
@@ -32,9 +31,10 @@ export default function Home() {
       <Reveal>
         <Highlights />
       </Reveal>
-      <Reveal>
-        <FeaturedProjects />
-      </Reveal>
+      {/* FeaturedProjects intentionally removed from home — the
+          homepage was getting long and recent highlights already
+          carries the "look what I'm shipping" signal. The full
+          projects list lives at /projects. */}
       <Reveal>
         <Education />
       </Reveal>

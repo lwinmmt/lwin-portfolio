@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useT } from "@/lib/i18n/client";
 import { HeroGlobe } from "./globe";
 import { HeroTerminal } from "./terminal";
@@ -45,7 +46,22 @@ export function HeroStage() {
     // strip. Stage takes the column's full width on lg+ via the
     // parent grid cell; each variant is mx-auto centered inside it.
     <div className="relative pt-9">
-      {variant === "globe" ? <HeroGlobe /> : <HeroTerminal />}
+      {/* AnimatePresence mode="wait" — the outgoing variant fades
+          out completely before the incoming one fades in, so the
+          swap reads as a single smooth transition instead of an
+          instant flip. Framer-motion is already loaded for the
+          sidebar pills, so no extra bundle cost. */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={variant}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.22, ease: [0.2, 0.7, 0.3, 1] }}
+        >
+          {variant === "globe" ? <HeroGlobe /> : <HeroTerminal />}
+        </motion.div>
+      </AnimatePresence>
 
       {hydrated && (
         <button

@@ -66,14 +66,21 @@ export default async function OpengraphImage() {
           </div>
           <div
             style={{
+              // @vercel/og requires explicit display on any container
+              // with multiple children. Without it, the build-time
+              // prerender fails. flex with wrap lets the inline span
+              // flow naturally next to the leading text.
+              display: "flex",
+              flexWrap: "wrap",
               fontSize: 36,
               fontWeight: 500,
               lineHeight: 1.35,
               maxWidth: 940,
               color: FG_MUTED,
+              gap: "0 0.4ch",
             }}
           >
-            Information Systems student at SMU.{" "}
+            <span>Information Systems student at SMU.</span>
             <span style={{ color: RUBY, fontWeight: 600 }}>
               I build IoT systems and ship products end-to-end.
             </span>

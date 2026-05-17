@@ -24,10 +24,15 @@ export const navItems: NavLink[] = [
   { href: "/uses", label: "Uses", labelKey: "nav.uses", shortcut: "5", icon: "laptop" },
 ];
 
+// /studio intentionally NOT listed here. The route + code stay
+// (proxy.ts Basic-Auth gate + sanity/ folder + sanity.config.ts) so
+// when Lwin wires up the CMS later it's a config-flip, not a rewrite.
+// Until then the link doesn't surface anywhere user-visible: not in
+// the sidebar, not in the mobile sheet, not in the cmd palette.
+// Direct /studio access still works for the maintainer.
 export const navResources: NavLink[] = [
   { href: "/highlights", label: "Highlights", labelKey: "nav.highlights", shortcut: "6", icon: "medal" },
   { href: "/resume", label: "Resume", labelKey: "nav.resume", shortcut: "7", icon: "file" },
-  { href: "/studio", label: "Studio", labelKey: "nav.studio", icon: "laptop" },
 ];
 
 export const navContact: NavLink[] = [

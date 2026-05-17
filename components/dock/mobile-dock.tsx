@@ -42,10 +42,14 @@ const DOCK_ITEMS: DockItem[] = [
 // Items shown in the overflow sheet. Internal routes first, then
 // external contact links, then the controls (theme + language) at
 // the bottom as their own toggle blocks.
+// /studio is intentionally absent: the CMS is unconfigured, the
+// route is Basic-Auth-gated by proxy.ts, and a "Studio" link here
+// would look broken. Direct /studio URL still works for the
+// maintainer. See lib/content/nav.ts for the same decision in the
+// sidebar's resources list.
 const SHEET_INTERNAL: DockItem[] = [
   { href: "/highlights", icon: "highlights", labelKey: "nav.highlights" },
   { href: "/blog", icon: "pen", labelKey: "nav.blog" },
-  { href: "/studio", icon: "studio", labelKey: "nav.studio" },
 ];
 
 export function MobileDock() {
