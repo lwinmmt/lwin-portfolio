@@ -21,16 +21,15 @@ import type { Locale } from "@/lib/i18n/types";
 
 const SIZE = 380;
 const RADIUS = (SIZE / 2) * 0.92;
-const NUM_DOTS = 1100;
+const NUM_DOTS = 1500;
 const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
 const DRAG_SENSITIVITY = 0.4;
 const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 
-// Dense, frequent data-flow arcs to simulate the feel of a global
-// payments / messaging network. Tuned to feel busy without becoming
-// noise: shorter spawn cadence, more concurrent arcs, slightly faster
-// transit.
-const ARC_TRACK_DOTS = 24;
+// Dense, frequent data-flow arcs. Track dots are denser now so the
+// arc reads as a continuous line instead of a discrete dot string;
+// the comet still rides the same slerp on top.
+const ARC_TRACK_DOTS = 44;
 const ARC_HEIGHT = 0.18;
 const ARC_SPAWN_INTERVAL_MS = 450;
 const ARC_MIN_DURATION_MS = 2000;
@@ -38,7 +37,7 @@ const ARC_DURATION_VARIANCE_MS = 1000;
 const MAX_ACTIVE_ARCS = 14;
 
 const COMET_TRAIL_OFFSETS = [0, 0.04, 0.08, 0.12] as const;
-const COMET_TRAIL_SIZES = [4.2, 3.2, 2.2, 1.5] as const;
+const COMET_TRAIL_SIZES = [5, 3.6, 2.4, 1.6] as const;
 const COMET_TRAIL_OPACITY = [1, 0.55, 0.3, 0.15] as const;
 
 // Momentum coast on drag release. Decay multiplier per frame; below
@@ -341,15 +340,29 @@ export function HeroGlobe() {
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
       >
-        {/* Ambient ruby fog. Sits behind the sphere; very low intensity
-            so the globe is the focus, not the glow. */}
+        {/* Ambient ruby fog behind the sphere. Very low intensity. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 5%, transparent) 0%, transparent 55%)",
+              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 4%, transparent) 0%, transparent 55%)",
             filter: "blur(10px)",
+          }}
+        />
+
+        {/* Sphere body. A subtle circular shade sitting behind the
+            dots so the sphere reads as a textured object instead of
+            floating points. Bright spot top-left mimics a light
+            source; darker rim gives it weight. CSS vars flip per
+            theme so it works on both light and dark backgrounds. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute rounded-full"
+          style={{
+            inset: "4%",
+            background:
+              "radial-gradient(circle at 32% 28%, var(--globe-body-hi) 0%, var(--globe-body-mid) 45%, var(--globe-body-lo) 100%)",
           }}
         />
 
@@ -379,7 +392,7 @@ export function HeroGlobe() {
                 width: 2,
                 height: 2,
                 backgroundColor: "var(--color-fg-soft)",
-                opacity: 0.6,
+                opacity: 0.78,
                 transform: `translate(-50%, -50%) translate3d(${(d.x * RADIUS).toFixed(2)}px, ${(-d.y * RADIUS).toFixed(2)}px, ${(d.z * RADIUS).toFixed(2)}px)`,
               }}
             />
@@ -399,10 +412,10 @@ export function HeroGlobe() {
                     style={{
                       left: "50%",
                       top: "50%",
-                      width: 1.1,
-                      height: 1.1,
+                      width: 1.4,
+                      height: 1.4,
                       backgroundColor: "var(--color-ruby)",
-                      opacity: 0.28,
+                      opacity: 0.5,
                       transform: `translate(-50%, -50%) translate3d(${(pt.p.x * RADIUS * pt.elev).toFixed(2)}px, ${(-pt.p.y * RADIUS * pt.elev).toFixed(2)}px, ${(pt.p.z * RADIUS * pt.elev).toFixed(2)}px)`,
                     }}
                   />
@@ -443,24 +456,25 @@ export function HeroGlobe() {
           })}
         </div>
 
-        {/* Location chip overlaid on the bottom of the globe. Doesn't
-            rotate with the sphere; floats over the dot field. */}
-        <div
-          className="glass-chip pointer-events-none absolute bottom-3 left-1/2 inline-flex -translate-x-1/2 items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
-          aria-label={`Currently in ${profile.location}`}
-        >
-          <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
-            {profile.locationShort}
-          </span>
-          <span className="text-[var(--color-fg-faint)]">·</span>
-          <span className="tabular-nums">{liveTime ?? "--:--"}</span>
-          <span className="text-[var(--color-fg-faint)]">·</span>
-          <span className="text-[var(--color-fg-faint)]">
-            {profile.locationGmtLabel}
-          </span>
-        </div>
       </div>
 
+      {/* Location chip below the globe in the column flow. Earlier it
+          was overlaid on the sphere; that read as stickered-on rather
+          than a real label. */}
+      <div
+        className="glass-chip mt-4 inline-flex items-baseline gap-2 rounded-full px-3 py-1.5 font-mono text-[10.5px] tracking-[0.08em] text-[var(--color-fg-soft)]"
+        aria-label={`Currently in ${profile.location}`}
+      >
+        <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-fg)]">
+          {profile.locationShort}
+        </span>
+        <span className="text-[var(--color-fg-faint)]">·</span>
+        <span className="tabular-nums">{liveTime ?? "--:--"}</span>
+        <span className="text-[var(--color-fg-faint)]">·</span>
+        <span className="text-[var(--color-fg-faint)]">
+          {profile.locationGmtLabel}
+        </span>
+      </div>
     </div>
   );
 }

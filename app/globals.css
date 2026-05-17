@@ -43,6 +43,12 @@
   --tag-award: #B45309;
   --tag-press: #047857;
   --tag-school: #6D28D9;
+  /* Globe sphere body tint. Subtle radial shade that lives BEHIND
+     the dots so the sphere reads as a textured object instead of
+     points floating in air. Light mode: very faint gray shading. */
+  --globe-body-hi: rgba(0, 0, 0, 0.04);
+  --globe-body-mid: rgba(0, 0, 0, 0.025);
+  --globe-body-lo: rgba(0, 0, 0, 0.01);
 }
 
 /* Dark theme tokens */
@@ -80,6 +86,11 @@
   --tag-award: #F59E0B;
   --tag-press: #34D399;
   --tag-school: #A78BFA;
+  /* Globe sphere body tint. Dark mode: slightly lighter than the
+     page bg so the sphere has presence against a near-black canvas. */
+  --globe-body-hi: rgba(255, 255, 255, 0.06);
+  --globe-body-mid: rgba(255, 255, 255, 0.035);
+  --globe-body-lo: rgba(255, 255, 255, 0.015);
 }
 
 @theme inline {
