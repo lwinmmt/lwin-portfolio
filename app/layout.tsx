@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies, headers } from "next/headers";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
+import { LanguageBanner } from "@/components/ui/language-banner";
 import "./globals.css";
+
+// Parse the Accept-Language header for the visitor's primary language.
+// Format: `en-US,en;q=0.9,vi;q=0.8` -> we want the FIRST token's base.
+function primaryLanguageFrom(header: string | null): string {
+  if (!header) return "";
+  const first = header.split(",")[0]?.split(";")[0]?.trim() ?? "";
+  return first.toLowerCase();
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,11 +53,20 @@ export const metadata: Metadata = {
   // No explicit `icons` block needed: Next.js generates the link tags.
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Server-side language detection: read Accept-Language, only show the
+  // banner to visitors whose primary browser language is Vietnamese.
+  // Dismissal persists via the 'lb' cookie so return visitors do not
+  // see it again.
+  const [h, c] = await Promise.all([headers(), cookies()]);
+  const primary = primaryLanguageFrom(h.get("accept-language"));
+  const dismissed = c.get("lb")?.value === "1";
+  const showLangBanner = !dismissed && primary.startsWith("vi");
+
   return (
     <html
       lang="en"
@@ -62,6 +81,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ConsoleBranding />
+          {showLangBanner && <LanguageBanner />}
           {children}
         </ThemeProvider>
       </body>
