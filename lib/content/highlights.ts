@@ -42,11 +42,18 @@ export const highlights: Highlight[] = [
       "Giới thiệu giải pháp IoT thủy canh Osiris cho lãnh đạo chính phủ, bao gồm Bộ trưởng Indranee Rajah và Desmond Lee, tại gian trưng bày của SMU IIE.",
     date: "JUN 2024",
     href: "https://cityperspectives.smu.edu.sg/special-features/wcs-2024",
-    imageSrc: "/images/highlights/world-cities-summit-2024.webp",
-    // Booth poster occupies the top half; three people stand below
-    // it. Default object-top crops everyone's face off. Push down to
-    // ~65% to land the faces in the visible band.
-    coverFocus: "center 65%",
+    // Swapped from the wide team shot (Lwin at the far-left edge,
+    // his face was getting clipped on every aspect ratio because the
+    // source was already framed with him against the border) to this
+    // closer angle of the booth — Lwin + colleague at the hydroponics
+    // rig with the IIE poster behind. Same WCS 2024 booth, just a
+    // composition where his face has room.
+    imageSrc: "/images/highlights/osiris-wcs-2024-rig.jpg",
+    // Portrait source (1200x1600). Faces sit around 35-40% from the
+    // top; rig + plants occupy the lower half. Anchor at 40% so a
+    // wide-aspect crop (home small card) lands on the faces and a
+    // taller crop (bento side-by-side) still shows the rig context.
+    coverFocus: "center 40%",
   },
   {
     title: "Featured in Singapore Business Review",
