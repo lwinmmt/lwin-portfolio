@@ -28,6 +28,8 @@ export const messages = {
     "nav.aria.mobile": "Primary navigation, mobile",
     "nav.aria.primary": "Primary navigation",
     "nav.aria.cmdPalette": "Open command palette",
+    "nav.aria.more": "More",
+    "nav.aria.moreSheet": "More navigation",
     // Sidebar chrome
     "sidebar.subtitle": "AI & IIoT Engineer",
     "sidebar.search": "Search",
@@ -68,6 +70,7 @@ export const messages = {
     "hero.cta.linkedin": "LinkedIn",
     "hero.cta.ariaCurrentRole": "Currently {role} at {org}, opens in new tab",
     // Theme switcher
+    "theme.label": "Theme",
     "theme.light": "Light",
     "theme.dark": "Dark",
     "theme.auto": "Auto",
@@ -264,6 +267,8 @@ export const messages = {
     "nav.aria.mobile": "Điều hướng chính, mobile",
     "nav.aria.primary": "Điều hướng chính",
     "nav.aria.cmdPalette": "Mở bảng lệnh",
+    "nav.aria.more": "Thêm",
+    "nav.aria.moreSheet": "Điều hướng thêm",
     // Sidebar chrome
     "sidebar.subtitle": "Kỹ sư AI & IIoT",
     "sidebar.search": "Tìm kiếm",
@@ -304,6 +309,7 @@ export const messages = {
     "hero.cta.linkedin": "LinkedIn",
     "hero.cta.ariaCurrentRole": "Hiện đang là {role} tại {org}, mở trong tab mới",
     // Theme switcher
+    "theme.label": "Giao diện",
     "theme.light": "Sáng",
     "theme.dark": "Tối",
     "theme.auto": "Tự động",

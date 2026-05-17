@@ -52,7 +52,11 @@ export function HeroStage() {
           type="button"
           onClick={() => setVariant(other)}
           aria-label={t("hero.variant.aria").replace("{variant}", other)}
-          className="absolute right-0 top-0 inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-surface-2)] px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--color-fg-muted)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur transition-colors hover:text-[var(--color-fg)]"
+          // Larger touch target + readable text size on mobile.
+          // Previous px-2.5 py-1 + text-[9.5px] clocked in at ~18px
+          // tall, under the 30px comfortable tap target and below
+          // legible uppercase mono size.
+          className="absolute right-0 top-0 inline-flex min-h-[30px] items-center gap-1.5 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-surface-2)] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-fg-muted)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur transition-colors hover:text-[var(--color-fg)]"
         >
           <SwapIcon />
           {other}

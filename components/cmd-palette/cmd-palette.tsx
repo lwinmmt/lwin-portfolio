@@ -289,7 +289,11 @@ export function CmdPalette() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
-            className="flex-1 bg-transparent font-sans text-[14px] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-fg-faint)]"
+            // text-[16px] on mobile (not 14) prevents iOS Safari
+            // from zooming the viewport on input focus. Bumps back
+            // to text-[14px] on sm+ where the smaller size reads
+            // better against the surrounding chrome.
+            className="flex-1 bg-transparent font-sans text-[16px] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-fg-faint)] sm:text-[14px]"
             aria-label={t("cmd.aria")}
           />
           <kbd className="rounded bg-[var(--color-hover-mute)] px-1.5 py-[2px] font-mono text-[10px] text-[var(--color-fg-faint)]">

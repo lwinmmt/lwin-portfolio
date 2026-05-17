@@ -241,7 +241,10 @@ function LightboxModal({
         type="button"
         onClick={onClose}
         aria-label={labels.close}
-        className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg)] shadow-lg transition-colors hover:bg-[var(--color-ruby)] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+        // Safe-area inset on top so the pill clears notch / dynamic
+        // island on iOS. min-h-11 satisfies the 44px touch target.
+        style={{ top: "max(20px, env(safe-area-inset-top))" }}
+        className="absolute right-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg)] shadow-lg transition-colors hover:bg-[var(--color-ruby)] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M6 18 18 6M6 6l12 12" />

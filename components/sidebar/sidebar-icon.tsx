@@ -103,6 +103,46 @@ export function SidebarIcon({ name, className = "h-[15px] w-[15px]" }: Props) {
           <path d="M7 17 17 7M7 7h10v10" />
         </svg>
       );
+    case "more":
+      return (
+        <svg className={className} viewBox="0 0 24 24" {...common}>
+          <circle cx="5" cy="12" r="1.4" />
+          <circle cx="12" cy="12" r="1.4" />
+          <circle cx="19" cy="12" r="1.4" />
+        </svg>
+      );
+    case "highlights":
+      return (
+        <svg className={className} viewBox="0 0 24 24" {...common}>
+          <path d="M12 3l2.4 5.6L20 9.7l-4.2 3.9.9 5.7L12 16.8l-4.7 2.5.9-5.7L4 9.7l5.6-1.1L12 3z" />
+        </svg>
+      );
+    case "studio":
+      return (
+        <svg className={className} viewBox="0 0 24 24" {...common}>
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M3 9h18M9 21V9" />
+        </svg>
+      );
+    case "sun":
+      return (
+        <svg className={className} viewBox="0 0 24 24" {...common}>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      );
+    case "moon":
+      return (
+        <svg className={className} viewBox="0 0 24 24" {...common}>
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        </svg>
+      );
+    case "auto":
+      return (
+        <svg className={className} viewBox="0 0 24 24" {...common}>
+          <circle cx="12" cy="12" r="9" />
+        </svg>
+      );
     default:
       return null;
   }
