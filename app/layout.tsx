@@ -19,29 +19,14 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+// Minimal root metadata. The real title/description/OG/Twitter cards
+// are emitted per-locale by app/[lang]/layout.tsx generateMetadata,
+// so EN and VI visitors get language-matched social previews. This
+// root-level fallback only applies to error pages or routes that
+// somehow render outside the [lang] tree.
 export const metadata: Metadata = {
-  title: {
-    default: "Lwin, AI and IIoT Engineer",
-    template: "%s | Lwin MMT",
-  },
-  description:
-    "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.",
   metadataBase: new URL("https://lwinmmt.com"),
-  openGraph: {
-    title: "Lwin, AI and IIoT Engineer",
-    description:
-      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
-    url: "https://lwinmmt.com",
-    siteName: "Lwin MMT",
-    locale: "en_SG",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Lwin, AI and IIoT Engineer",
-    description:
-      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
-  },
+  title: "Lwin MMT",
   // Icons resolved automatically from app/icon.svg and app/apple-icon.svg.
 };
 
@@ -72,9 +57,12 @@ export default function RootLayout({
             top-left of the viewport. Text stays English here at the
             root layout so the page can be fully static — the rest of
             the chrome translates inside [lang]/layout. */}
+        {/* Skip link uses focus-visible (not focus) so it only pops
+            out for keyboard users. A mouse click on the link itself
+            would otherwise leave it briefly visible until blur. */}
         <a
           href="#main-content"
-          className="sr-only fixed left-3 top-3 z-[80] rounded-md bg-[var(--color-fg)] px-3 py-2 font-sans text-sm font-medium text-[var(--color-bg)] focus:not-sr-only focus:outline-none"
+          className="sr-only fixed left-3 top-3 z-[80] rounded-md bg-[var(--color-fg)] px-3 py-2 font-sans text-sm font-medium text-[var(--color-bg)] focus-visible:not-sr-only focus-visible:outline-none"
         >
           Skip to main content
         </a>

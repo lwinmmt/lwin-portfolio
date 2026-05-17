@@ -219,10 +219,16 @@
     border-color: var(--color-fg-muted);
     color: var(--color-fg);
   }
+  /* Active filter chip on /projects. Uses --color-fg (near-black in
+     light mode, near-white in dark) for the text rather than ruby-deep
+     so the 11px label clears WCAG AA contrast (4.5:1 minimum for small
+     text) against the soft ruby fill in both themes. The ruby border
+     + soft ruby fill still mark the active state clearly. */
   .tag-chip-active {
     background: var(--color-ruby-soft);
     border-color: var(--color-ruby);
-    color: var(--color-ruby-deep);
+    color: var(--color-fg);
+    font-weight: 600;
   }
 
   /* Numbered section eyebrow. Use beside an h2 to anchor sections as an

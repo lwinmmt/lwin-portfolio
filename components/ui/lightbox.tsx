@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useT } from "@/lib/i18n/client";
 
@@ -47,7 +47,24 @@ export function ProjectLightboxGallery({
   const [portalReady, setPortalReady] = useState(false);
   useEffect(() => setPortalReady(true), []);
 
-  const close = useCallback(() => setActive(null), []);
+  // Remember which element opened the lightbox so focus can return
+  // there on close. Required by WCAG 2.4.3 (Focus Order). Without
+  // this, Escape leaves focus on document.body and the keyboard
+  // user loses their place in the page.
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
+  const openAt = useCallback((index: number) => {
+    if (typeof document !== "undefined") {
+      lastFocusedRef.current = document.activeElement as HTMLElement | null;
+    }
+    setActive(index);
+  }, []);
+
+  const close = useCallback(() => {
+    setActive(null);
+    // Restore focus on next tick — after the modal is unmounted the
+    // last-focused element is back in the document and focusable.
+    queueMicrotask(() => lastFocusedRef.current?.focus());
+  }, []);
   const prev = useCallback(
     () =>
       setActive((i) =>
@@ -84,7 +101,7 @@ export function ProjectLightboxGallery({
       {cover && (
         <button
           type="button"
-          onClick={() => setActive(0)}
+          onClick={() => openAt(0)}
           aria-label={t("lightbox.open.cover").replace("{title}", title)}
           className="group relative mb-8 block aspect-[16/9] w-full cursor-zoom-in overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-warm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)]"
         >
@@ -115,7 +132,7 @@ export function ProjectLightboxGallery({
             <button
               key={img.src}
               type="button"
-              onClick={() => setActive(galleryStart + idx)}
+              onClick={() => openAt(galleryStart + idx)}
               aria-label={t("lightbox.open.photo")
                 .replace("{title}", title)
                 .replace("{n}", String(idx + 1))}

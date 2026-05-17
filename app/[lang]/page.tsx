@@ -7,15 +7,28 @@ import { Education } from "@/components/sections/education";
 import { SkillsStack } from "@/components/sections/skills-stack";
 import { PersonJsonLd } from "@/components/structured-data";
 import { Reveal } from "@/components/ui/reveal";
+import { messages } from "@/lib/i18n/messages";
+import { LOCALES, type Locale } from "@/lib/i18n/types";
 
-export const metadata: Metadata = {
-  // Use full title so we do not double up with the layout template.
-  title: {
-    absolute: "Lwin, AI and IIoT Engineer",
-  },
-  description:
-    "Information Systems student at Singapore Management University. AI & IIoT Engineer at VNTT in Ho Chi Minh City. I build IoT systems and ship products end-to-end.",
-};
+const VALID_LOCALES: ReadonlySet<string> = new Set(LOCALES);
+
+// Per-locale metadata for the home route. Inherits openGraph + twitter
+// blocks from app/[lang]/layout.tsx generateMetadata. Sets the
+// absolute title so the route-level template does not double-up.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  if (!VALID_LOCALES.has(lang)) return {};
+  const locale = lang as Locale;
+  const m = messages[locale];
+  return {
+    title: { absolute: m["meta.title.default"] },
+    description: m["meta.description"],
+  };
+}
 
 export default function Home() {
   return (

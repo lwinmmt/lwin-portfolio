@@ -35,6 +35,13 @@ function safeJsonLd(data: unknown): string {
  * static metadata, not client state.
  */
 export function PersonJsonLd() {
+  // NOTE: `email` is intentionally omitted from this JSON-LD payload.
+  // Scrapers routinely harvest <script type="application/ld+json">
+  // blocks, so emitting the raw address here would defeat the
+  // mailto-on-click obfuscation done in EmailButton. The schema.org
+  // Person SEO benefit of a machine-readable email is negligible
+  // (Google primarily uses the address for sitelinks, not ranking).
+  // GitHub + LinkedIn sameAs already gives crawlers two contact paths.
   const data = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -43,7 +50,6 @@ export function PersonJsonLd() {
     jobTitle: profile.currentRole,
     worksFor: { "@type": "Organization", name: profile.currentOrg },
     url: "https://lwinmmt.com",
-    email: profile.email,
     sameAs: [profile.github, profile.linkedin],
     address: {
       "@type": "PostalAddress",

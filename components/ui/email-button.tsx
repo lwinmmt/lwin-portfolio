@@ -88,7 +88,12 @@ export function EmailButton({
       </a>
       <span
         aria-live="polite"
-        className={`pointer-events-none absolute z-50 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all duration-200 ${positionBase} ${stateClass}`}
+        // max-w-[90vw] + truncate so the toast cannot overflow the
+        // viewport on narrow phones when the email address is long.
+        // The previous whitespace-nowrap with no width cap let the
+        // tooltip clip the right edge of the screen when the trigger
+        // sat near the left edge of a 360px viewport.
+        className={`pointer-events-none absolute z-50 max-w-[90vw] truncate rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all duration-200 ${positionBase} ${stateClass}`}
       >
         {t("email.toast.copied").replace("{email}", email)}
       </span>

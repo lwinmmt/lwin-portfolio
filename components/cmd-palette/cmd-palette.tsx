@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+// Focus restore + 44px touch targets per WCAG 2.4.3 + 2.5.5.
 import {
   navItems,
   navResources,
@@ -134,6 +135,10 @@ export function CmdPalette() {
   const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  // Remember what was focused before opening so Escape / select can
+  // return keyboard focus there. Without this, dismissing the palette
+  // leaves focus on document.body and the user loses their place.
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
   const router = useRouter();
   const t = useT();
   const locale = useLocale();
@@ -177,6 +182,9 @@ export function CmdPalette() {
     setOpen(false);
     setQuery("");
     setActiveIdx(0);
+    // Restore focus to whatever opened the palette (sidebar Cmd+K
+    // button, the global Cmd+K shortcut from a page link, etc.).
+    queueMicrotask(() => lastFocusedRef.current?.focus());
   }, []);
 
   // Global Cmd+K / Ctrl+K trigger, plus a CustomEvent escape hatch so
@@ -200,6 +208,8 @@ export function CmdPalette() {
   // Focus input when opening, lock body scroll, handle Esc.
   useEffect(() => {
     if (!open) return;
+    // Capture the previously-focused element ONCE per open cycle.
+    lastFocusedRef.current = document.activeElement as HTMLElement | null;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const t = requestAnimationFrame(() => inputRef.current?.focus());
@@ -326,8 +336,12 @@ export function CmdPalette() {
                       type="button"
                       onClick={() => runItem(item)}
                       onMouseEnter={() => setActiveIdx(flatIdx)}
+                      // min-h-11 (44px) meets the WCAG 2.5.5 +
+                      // Apple HIG minimum touch target. Earlier
+                      // py-2 + 13.5px text rendered ~32px tall,
+                      // below the recommended threshold on phones.
                       className={
-                        "flex w-full items-center justify-between gap-3 px-4 py-2 text-left font-sans text-[13.5px] transition-colors " +
+                        "flex min-h-11 w-full items-center justify-between gap-3 px-4 py-2.5 text-left font-sans text-[13.5px] transition-colors " +
                         (isActive
                           ? "bg-[var(--color-hover-mute)] text-[var(--color-fg)]"
                           : "text-[var(--color-fg-soft)] hover:bg-[var(--color-hover-mute)]")

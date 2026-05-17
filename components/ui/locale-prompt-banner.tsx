@@ -122,6 +122,10 @@ export function LocalePromptBanner() {
       <button
         type="button"
         onClick={switchTo}
+        // Spell out the target language in the a11y name so screen
+        // readers announce "Switch to English, button" instead of
+        // a bare "Switch to". The visible label stays concise.
+        aria-label={`${copy.switchTo} ${otherName}`}
         className="rounded-full bg-[var(--color-fg)] px-3 py-1 font-sans text-[11.5px] font-medium text-[var(--color-bg)] transition-colors hover:bg-[var(--color-ruby)]"
       >
         {copy.switchTo}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { SidebarIcon } from "@/components/sidebar/sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
@@ -127,12 +127,50 @@ function MobileMoreSheet({
 }) {
   const t = useT();
   const locale = useLocale();
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  // Remember the element that opened the sheet (the "More" button)
+  // so focus can return there on close. Required by WCAG 2.4.3.
+  const openerRef = useRef<HTMLElement | null>(null);
 
-  // Esc closes + body scroll lock while open.
+  // Esc closes + Tab is trapped inside the sheet + body scroll lock.
+  // Tab trap: when focus would leave the sheet (Tab past last item or
+  // Shift+Tab before first), wrap to the other end. Without this,
+  // Tab from the last sheet button would land on hidden page content
+  // behind the backdrop — disorienting for keyboard users.
   useEffect(() => {
     if (!open) return;
+    openerRef.current = document.activeElement as HTMLElement | null;
+    const node = sheetRef.current;
+    // Move initial focus into the sheet so subsequent Tabs cycle
+    // inside it rather than starting from <body>.
+    queueMicrotask(() => {
+      const first = node?.querySelector<HTMLElement>(
+        'a[href], button:not([disabled])',
+      );
+      first?.focus();
+    });
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab" || !node) return;
+      const focusables = Array.from(
+        node.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => !el.hasAttribute("aria-hidden"));
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -140,6 +178,8 @@ function MobileMoreSheet({
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      // Restore focus to the More button (or whatever opened it).
+      queueMicrotask(() => openerRef.current?.focus());
     };
   }, [open, onClose]);
 
@@ -154,6 +194,7 @@ function MobileMoreSheet({
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm lg:hidden"
     >
       <div
+        ref={sheetRef}
         id="mobile-more-sheet"
         onClick={(e) => e.stopPropagation()}
         style={{

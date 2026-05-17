@@ -34,20 +34,26 @@ const LOCALE_COOKIE = "locale";
 // Constant-time string compare implemented in pure JS so it works in
 // the Edge runtime (proxy defaults to Edge; node:crypto's
 // timingSafeEqual is not available there).
-function safeStringEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) {
-    // Burn the same loop on the length-mismatch path so callers cannot
-    // distinguish a length difference from a content difference purely
-    // by response time. `dummy` is intentionally never read — the work
-    // is the point, not the value.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let dummy = 0;
-    for (let i = 0; i < a.length; i++) dummy |= a.charCodeAt(i) ^ 0xff;
-    return false;
-  }
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) {
-    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+//
+// The loop count is pinned to the EXPECTED string's length, not to the
+// attacker-supplied input's length. Earlier versions iterated
+// `input.length` on the length-mismatch path, which let an attacker
+// probe the expected credential length by timing how long the
+// comparison took for inputs of varying length. Iterating
+// `expected.length` regardless of input length closes that side
+// channel: a 1-char input and a 200-char input both take the same
+// time as the legitimate credential check.
+function safeStringEqual(input: string, expected: string): boolean {
+  const len = expected.length;
+  // Seed diff with the length mismatch so unequal lengths can never
+  // return true even if the prefix happens to match.
+  let diff = input.length ^ len;
+  for (let i = 0; i < len; i++) {
+    // For positions past the end of `input`, use a sentinel that's
+    // outside the valid UTF-16 code unit range so it will never
+    // coincidentally match a legitimate expected character.
+    const ic = i < input.length ? input.charCodeAt(i) : 0xffff;
+    diff |= ic ^ expected.charCodeAt(i);
   }
   return diff === 0;
 }

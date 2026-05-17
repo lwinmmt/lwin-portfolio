@@ -17,6 +17,9 @@ import {
   type ProjectLiveLink,
   type CaseStudySection,
 } from "@/lib/content";
+// Case-study text lives in its own module so the /projects index
+// bundle (a client component) does not ship ~40KB of detail text.
+import { caseStudies } from "@/lib/content/case-studies";
 
 const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
   Projects: "projects.category.Projects",
@@ -70,11 +73,8 @@ export default async function ProjectPage({
     project.descriptionVi,
     locale,
   );
-  const caseStudy = pickLocalized(
-    project.caseStudy,
-    project.caseStudyVi,
-    locale,
-  );
+  const cs = caseStudies[slug];
+  const caseStudy = pickLocalized(cs?.en, cs?.vi, locale);
 
   const related = projects
     .filter((p) => p.slug !== project.slug && p.category === project.category)
@@ -350,10 +350,18 @@ function CaseStudyBlock({
   );
 }
 
+// Allowlist of safe URL schemes for content-sourced project links.
+// Today the URLs are hardcoded in lib/content/projects.ts so the risk
+// is theoretical, but the project is wired up to load content from
+// Sanity Studio (see sanity/), which would let an editor save a
+// javascript: URL. Matches the same guard used in lib/i18n/rich.tsx.
+const SAFE_HREF = /^(https?:|mailto:|\/|#)/i;
+
 function ProjectLink({ href, label }: { href: string; label: string }) {
+  const safe = SAFE_HREF.test(href) ? href : "#";
   return (
     <a
-      href={href}
+      href={safe}
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center justify-between gap-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-3.5 py-2 font-sans text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-all hover:-translate-y-px hover:border-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"

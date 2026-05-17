@@ -37,6 +37,14 @@ const securityHeaders = [
       "form-action 'self'",
     ].join("; "),
   },
+  // HSTS: pin browsers to HTTPS for 2 years. Vercel auto-injects this
+  // on *.vercel.app but NOT on custom domains, so adding it here is
+  // required for lwinmmt.com to get the same protection. `preload`
+  // marks the domain as eligible for the browser HSTS preload list.
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
   {
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
@@ -68,6 +76,12 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["framer-motion"],
   },
   images: {
+    // AVIF first, WebP fallback. Next.js defaults to ["image/webp"]
+    // when this is unset, leaving 30-50% of compression on the table
+    // for all JPEG/PNG sources served through next/image (project
+    // covers, highlight cards, logos). Browsers without AVIF support
+    // fall back to WebP automatically via the Accept header.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

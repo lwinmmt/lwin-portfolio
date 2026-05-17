@@ -8,6 +8,17 @@ import type { Locale } from "./types";
 
 export const messages = {
   en: {
+    // Document meta — emitted via [lang]/layout.tsx generateMetadata so
+    // EN visitors get English OG/Twitter cards and VI visitors get
+    // Vietnamese. Hero copy is mirrored in the description for parity
+    // with social shares.
+    "meta.title.default": "Lwin, AI and IIoT Engineer",
+    "meta.title.template": "%s | Lwin MMT",
+    "meta.description":
+      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.",
+    "meta.og.description":
+      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
+    "a11y.skipToMain": "Skip to main content",
     // Sidebar navigation labels
     "nav.home": "Home",
     "nav.about": "About",
@@ -246,6 +257,14 @@ export const messages = {
     "notFound.routeMissing": "route not found",
   },
   vi: {
+    // Document meta — see EN block.
+    "meta.title.default": "Lwin, Kỹ sư AI & IIoT",
+    "meta.title.template": "%s | Lwin MMT",
+    "meta.description":
+      "Sinh viên ngành Hệ thống Thông tin tại Đại học Quản lý Singapore. Tôi xây dựng hệ thống IoT và đưa sản phẩm ra thị trường, từ đầu đến cuối. Phần cứng, điện toán đám mây, và hệ điều hành ở giữa. Kỹ sư được đào tạo bài bản. Sử dụng công cụ AI hàng ngày.",
+    "meta.og.description":
+      "Sinh viên ngành Hệ thống Thông tin tại Đại học Quản lý Singapore. Tôi xây dựng hệ thống IoT và đưa sản phẩm ra thị trường, từ đầu đến cuối. Kỹ sư được đào tạo bài bản. Sử dụng công cụ AI hàng ngày.",
+    "a11y.skipToMain": "Bỏ qua tới nội dung chính",
     // Sidebar navigation
     "nav.home": "Trang chủ",
     "nav.about": "Giới thiệu",
