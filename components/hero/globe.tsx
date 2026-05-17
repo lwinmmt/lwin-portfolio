@@ -21,7 +21,12 @@ import type { Locale } from "@/lib/i18n/types";
 //   - Random data-flow arcs with 4-segment comet trail.
 
 const SIZE = 380;
-const RADIUS = (SIZE / 2) * 0.92;
+// 0.88 leaves enough margin between the sphere silhouette and the
+// canvas edge that arcs bowing up to (1 + ARC_HEIGHT) * RADIUS still
+// fit fully inside the canvas instead of getting clipped at the top.
+// (Previous 0.92 + 0.18 elevation pushed the arc apex past the canvas
+// edge.)
+const RADIUS = (SIZE / 2) * 0.88;
 const NUM_DOTS = 1200;
 const AUTO_ROTATE_DEG_PER_FRAME = 0.12;
 const DRAG_SENSITIVITY = 0.4;
@@ -31,7 +36,11 @@ const INITIAL_PHI_DEG = -profile.locationCoords.lng;
 // great-circle line needs noticeably fewer points than the discrete-
 // dot version did.
 const ARC_TRACK_DOTS = 26;
-const ARC_HEIGHT = 0.18;
+// Max elevation of an arc above the sphere surface, in radius units.
+// 0.12 keeps the arcs visibly bowed (clearly arching, not flat
+// great-circle paths) while staying within the canvas headroom that
+// the RADIUS factor above reserves.
+const ARC_HEIGHT = 0.12;
 const ARC_SPAWN_INTERVAL_MS = 500;
 const ARC_MIN_DURATION_MS = 2200;
 const ARC_DURATION_VARIANCE_MS = 1100;

@@ -78,7 +78,7 @@ export default async function ResumePage() {
                 >
                   {profile.email}
                 </EmailButton>
-                <span className="text-[var(--color-fg-faint)]">&middot;</span>
+                <span className="text-[var(--color-fg-faint)]">·</span>
                 <a
                   href={profile.github}
                   target="_blank"
@@ -87,7 +87,7 @@ export default async function ResumePage() {
                 >
                   github.com/lwinmmt
                 </a>
-                <span className="text-[var(--color-fg-faint)]">&middot;</span>
+                <span className="text-[var(--color-fg-faint)]">·</span>
                 <a
                   href={profile.linkedin}
                   target="_blank"
@@ -265,7 +265,7 @@ export default async function ResumePage() {
                   {c.name}
                 </div>
                 <div className="mt-0.5 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-                  {c.issuer} &middot; {t("resume.cert.issued")} {c.issuedDate}
+                  {c.issuer} · {t("resume.cert.issued")} {c.issuedDate}
                   {c.expiresDate && ` · ${t("resume.cert.expires")} ${c.expiresDate}`}
                 </div>
                 {c.credentialId && (

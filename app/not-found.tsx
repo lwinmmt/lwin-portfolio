@@ -57,7 +57,7 @@ export default async function NotFound() {
           </div>
           <div className="mt-1.5 font-mono text-[13px] text-[var(--color-fg-soft)]">
             <span className="text-[var(--color-ruby-deep)]">HTTP 404</span>{" "}
-            &middot; {t("notFound.routeMissing")}
+            · {t("notFound.routeMissing")}
           </div>
         </div>
       </section>

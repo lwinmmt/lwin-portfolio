@@ -65,7 +65,11 @@ export default function ProjectsPage() {
         </p>
 
         {/* Filter tabs. Click to show only that category. Click "All" or the active chip to reset. */}
-        <div className="mt-7 flex flex-wrap gap-2">
+        <div
+          className="mt-7 flex flex-wrap gap-2"
+          role="group"
+          aria-label={t("projects.filter.all")}
+        >
           <button
             type="button"
             onClick={() => setFilter(null)}

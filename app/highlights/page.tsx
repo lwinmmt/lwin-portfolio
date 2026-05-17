@@ -146,7 +146,7 @@ function BentoCard({
               fill
               sizes="(max-width: 640px) 100vw, 50vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-              priority={layout === "side-by-side"}
+              priority
             />
           </div>
         ) : (

@@ -107,7 +107,7 @@ export default async function ProjectPage({
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
           <span className="text-[var(--color-ruby)]">{categoryLabel}</span>
-          <span className="text-[var(--color-fg-faint)]">&middot;</span>
+          <span className="text-[var(--color-fg-faint)]">·</span>
           <span>{project.dates}</span>
         </div>
       </header>

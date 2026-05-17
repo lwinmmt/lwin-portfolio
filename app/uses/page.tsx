@@ -245,11 +245,20 @@ function StackChip({ item, locale }: { item: UsesItem; locale: Locale }) {
   const detail = item.detail
     ? pickLocalized(item.detail, item.detailVi, locale)
     : undefined;
+  // When the chip carries a detail, make the wrapper focusable so
+  // keyboard users can reveal the tooltip with Tab. Also gives the
+  // tooltip a native browser fallback via the `title` attribute in
+  // case the styled span is clipped by a scrolling parent.
+  const interactive = Boolean(detail);
   return (
-    <span className="group relative inline-flex items-center">
+    <span
+      className="group relative inline-flex items-center"
+      tabIndex={interactive ? 0 : undefined}
+      title={detail}
+    >
       <span className="tag-chip cursor-default">{item.name}</span>
       {detail && (
-        <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-bg)] opacity-0 shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 group-hover:opacity-100">
+        <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-bg)] opacity-0 shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
           {detail}
         </span>
       )}

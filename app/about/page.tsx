@@ -75,7 +75,7 @@ export default async function AboutPage() {
             <div className="flex-1 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
               <div className="text-[var(--color-ruby)]">{citizenshipNote}</div>
               <div className="mt-1 text-[var(--color-fg-soft)]">
-                {spokenLanguages.map((l) => l.name).join(", ")}
+                {spokenLanguages.map((l) => l.name).join(" / ")}
               </div>
             </div>
           </div>
@@ -295,7 +295,10 @@ function ActivityCard({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate font-sans text-[13px] font-semibold leading-tight text-[var(--color-fg)]">
+          <div
+            className="truncate font-sans text-[13px] font-semibold leading-tight text-[var(--color-fg)]"
+            title={org}
+          >
             {org}
           </div>
           <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">

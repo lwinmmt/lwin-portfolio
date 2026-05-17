@@ -76,7 +76,7 @@ export async function SkillsStack() {
                     {cert.name}
                   </div>
                   <div className="mt-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-                    {cert.issuer} &middot; {t("skills.cert.issued")} {cert.issuedDate}
+                    {cert.issuer} · {t("skills.cert.issued")} {cert.issuedDate}
                     {cert.expiresDate && ` · ${t("skills.cert.expires")} ${cert.expiresDate}`}
                   </div>
                   {cert.credentialId && (
@@ -102,6 +102,8 @@ export async function SkillsStack() {
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      aria-hidden="true"
+                      focusable="false"
                     >
                       <path d="M7 17 17 7M7 7h10v10" />
                     </svg>

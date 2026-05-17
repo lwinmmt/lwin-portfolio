@@ -123,7 +123,7 @@ export function LocationMap() {
           Ho Chi Minh City
         </div>
         <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-          <span className="text-[var(--color-ruby)]">&#9679;</span> 10&deg;48&prime;N &middot; 106&deg;36&prime;E
+          <span className="text-[var(--color-ruby)]">&#9679;</span> 10&deg;48&prime;N · 106&deg;36&prime;E
         </div>
       </div>
     </div>
