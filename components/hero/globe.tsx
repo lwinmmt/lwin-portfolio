@@ -337,16 +337,17 @@ export function HeroGlobe() {
           }}
         >
           {/* Dot field. Wrapped in its own layer so the depth mask
-              (radial fade to limb) applies only to the base dots and
-              not to the pin / comets. */}
+              (gentle radial fade toward the limb) applies only to the
+              base dots and not to the pin / comets. Soft falloff,
+              edge dots still readable; previous version killed them. */}
           <div
             className="absolute inset-0"
             style={{
               transformStyle: "preserve-3d",
               WebkitMaskImage:
-                "radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0.22) 100%)",
+                "radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0.85) 75%, rgba(0,0,0,0.6) 100%)",
               maskImage:
-                "radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0.22) 100%)",
+                "radial-gradient(circle at center, rgba(0,0,0,1) 45%, rgba(0,0,0,0.85) 75%, rgba(0,0,0,0.6) 100%)",
             }}
           >
             {dots.map((d, i) => (
@@ -481,16 +482,18 @@ export function HeroGlobe() {
           </div>
         </div>
 
-        {/* Soft limb-glow ring. Sits OUTSIDE the rotator so it does
-            not spin. Ruby radial fade inward from the silhouette frames
-            the globe as a self-luminous sphere against the page bg. */}
+        {/* Soft limb-glow ring. Localized to a circle inscribed in
+            the wrap so the glow traces the silhouette instead of
+            washing the whole square. No blend mode; on light bg the
+            previous screen-blend stacked with the bg ruby into an
+            orange blob. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute rounded-full"
           style={{
-            background:
-              "radial-gradient(circle at center, transparent 58%, color-mix(in oklab, var(--color-ruby) 18%, transparent) 72%, transparent 84%)",
-            mixBlendMode: "screen",
+            inset: "4%",
+            boxShadow:
+              "0 0 22px color-mix(in oklab, var(--color-ruby) 10%, transparent), inset 0 0 18px color-mix(in oklab, var(--color-ruby) 5%, transparent)",
           }}
         />
 
@@ -499,7 +502,7 @@ export function HeroGlobe() {
           className="pointer-events-none absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 14%, transparent) 0%, transparent 62%)",
+              "radial-gradient(circle at center, color-mix(in oklab, var(--color-ruby) 7%, transparent) 0%, transparent 62%)",
             filter: "blur(8px)",
           }}
         />
