@@ -102,6 +102,39 @@ export const messages = {
       "360-site NEA wastewater monitoring. Contributed to LHL IDM Smart Nation Award 2022.",
     "resume.highlight.sp-iot":
       "5G Autonomous Surveillance Vehicle. Featured at SP Engineering Show 2021.",
+    // Projects list page
+    "projects.eyebrow": "Projects",
+    "projects.title": "Projects & Coursework",
+    "projects.description":
+      "Grouped by category. Production work has hit real users. Coursework projects are Singapore Management University and Singapore Polytechnic related. Projects are things I started myself.",
+    "projects.filter.all": "All",
+    "projects.section.categoryLabel": "Category",
+    "projects.count.one": "{n} project",
+    "projects.count.many": "{n} projects",
+    // Project category display labels (the enum value drives logic;
+    // these strings are display-only)
+    "projects.category.Production": "Production",
+    "projects.category.Coursework": "Coursework",
+    "projects.category.Projects": "Projects",
+    // Project detail page
+    "project.back": "All projects",
+    "project.archDiagramTitle": "Architecture diagram",
+    "project.archDiagramHint": "Click to expand",
+    "project.comingSoon": "Coming soon",
+    "project.fullCaseStudyTitle": "Full case study in progress",
+    "project.fullCaseStudyBody":
+      "Context, role, architecture, implementation highlights, outcomes, and reflections will land here as I expand each project. For ESMOS, the interactive multi-cloud architecture diagram will be embedded inline.",
+    "project.relatedIn": "Related in {category}",
+    "project.aside.stack": "Stack",
+    "project.aside.links": "Links",
+    "project.link.github": "GitHub",
+    "project.link.video": "Video",
+    "project.link.slides": "Slides",
+    "project.link.pdf": "PDF / Report",
+    "project.link.press": "Press",
+    // Featured projects (home section)
+    "featuredProjects.title": "Featured Projects",
+    "featuredProjects.viewAll": "View all",
   },
   vi: {
     // Sidebar navigation
@@ -198,6 +231,37 @@ export const messages = {
       "Giám sát nước thải NEA tại 360 điểm. Đóng góp cho Giải thưởng Smart Nation LHL IDM 2022.",
     "resume.highlight.sp-iot":
       "Xe Giám sát Tự hành 5G. Trưng bày tại SP Engineering Show 2021.",
+    // Projects list page
+    "projects.eyebrow": "Dự án",
+    "projects.title": "Dự án và Bài tập",
+    "projects.description":
+      "Phân loại theo nhóm. Production là các sản phẩm thực tế đã có người dùng. Coursework là các dự án thuộc Đại học Quản lý Singapore và Singapore Polytechnic. Projects là những thứ tôi tự khởi xướng.",
+    "projects.filter.all": "Tất cả",
+    "projects.section.categoryLabel": "Nhóm",
+    "projects.count.one": "{n} dự án",
+    "projects.count.many": "{n} dự án",
+    "projects.category.Production": "Production",
+    "projects.category.Coursework": "Bài tập",
+    "projects.category.Projects": "Dự án cá nhân",
+    // Project detail page
+    "project.back": "Tất cả dự án",
+    "project.archDiagramTitle": "Sơ đồ kiến trúc",
+    "project.archDiagramHint": "Bấm để mở rộng",
+    "project.comingSoon": "Sắp ra mắt",
+    "project.fullCaseStudyTitle": "Case study đầy đủ đang được hoàn thiện",
+    "project.fullCaseStudyBody":
+      "Bối cảnh, vai trò, kiến trúc, điểm nhấn triển khai, kết quả và bài học sẽ được bổ sung khi tôi mở rộng từng dự án. Với ESMOS, sơ đồ kiến trúc đa đám mây sẽ được nhúng trực tiếp.",
+    "project.relatedIn": "Liên quan trong {category}",
+    "project.aside.stack": "Stack",
+    "project.aside.links": "Liên kết",
+    "project.link.github": "GitHub",
+    "project.link.video": "Video",
+    "project.link.slides": "Slides",
+    "project.link.pdf": "PDF / Báo cáo",
+    "project.link.press": "Báo chí",
+    // Featured projects (home section)
+    "featuredProjects.title": "Dự án nổi bật",
+    "featuredProjects.viewAll": "Xem tất cả",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

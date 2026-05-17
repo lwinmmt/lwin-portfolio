@@ -6,12 +6,21 @@ import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { ESMOSDiagram } from "@/components/esmos/esmos-diagram";
 import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
 import { ProjectLightboxGallery } from "@/components/ui/lightbox";
+import { getT } from "@/lib/i18n/server";
+import type { MessageKey } from "@/lib/i18n/messages";
 import {
   projects,
   type Project,
+  type ProjectCategory,
   type ProjectLiveLink,
   type CaseStudySection,
 } from "@/lib/content";
+
+const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
+  Production: "projects.category.Production",
+  Coursework: "projects.category.Coursework",
+  Projects: "projects.category.Projects",
+};
 
 type Params = { slug: string };
 
@@ -48,6 +57,9 @@ export default async function ProjectPage({
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
+  const t = await getT();
+  const categoryLabel = t(CATEGORY_LABEL_KEY[project.category]);
+
   const related = projects
     .filter((p) => p.slug !== project.slug && p.category === project.category)
     .slice(0, 2);
@@ -68,7 +80,7 @@ export default async function ProjectPage({
         href="/projects"
         className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
       >
-        <span aria-hidden="true">&larr;</span> All projects
+        <span aria-hidden="true">&larr;</span> {t("project.back")}
       </Link>
 
       <header className="mt-6">
@@ -81,7 +93,7 @@ export default async function ProjectPage({
           {project.title}
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-muted)]">
-          <span className="text-[var(--color-ruby)]">{project.category}</span>
+          <span className="text-[var(--color-ruby)]">{categoryLabel}</span>
           <span className="text-[var(--color-fg-faint)]">&middot;</span>
           <span>{project.dates}</span>
         </div>
@@ -111,10 +123,10 @@ export default async function ProjectPage({
             <div className="mt-10">
               <div className="mb-3 flex items-baseline justify-between">
                 <h2 className="font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-                  Architecture diagram
+                  {t("project.archDiagramTitle")}
                 </h2>
                 <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-                  Click to expand
+                  {t("project.archDiagramHint")}
                 </span>
               </div>
               <ESMOSDiagram />
@@ -130,16 +142,13 @@ export default async function ProjectPage({
           ) : (
             <section className="mt-12 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6">
               <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ruby)]">
-                Coming soon
+                {t("project.comingSoon")}
               </div>
               <h3 className="mb-2 font-sans text-[16px] font-semibold text-[var(--color-fg)]">
-                Full case study in progress
+                {t("project.fullCaseStudyTitle")}
               </h3>
               <p className="text-[13px] leading-[1.6] text-[var(--color-fg-muted)]">
-                Context, role, architecture, implementation highlights,
-                outcomes, and reflections will land here as I expand each
-                project. For ESMOS, the interactive multi-cloud architecture
-                diagram will be embedded inline.
+                {t("project.fullCaseStudyBody")}
               </p>
             </section>
           )}
@@ -147,7 +156,7 @@ export default async function ProjectPage({
           {related.length > 0 && (
             <section className="mt-12">
               <h3 className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-                Related in {project.category}
+                {t("project.relatedIn").replace("{category}", categoryLabel)}
               </h3>
               <ul className="grid gap-3.5 sm:grid-cols-2">
                 {related.map((p) => (
@@ -174,7 +183,7 @@ export default async function ProjectPage({
           {project.tags && project.tags.length > 0 && (
             <div>
               <h3 className="mb-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-                Stack
+                {t("project.aside.stack")}
               </h3>
               <div className="flex flex-wrap gap-1.5">
                 {project.tags.map((tag) => (
@@ -192,26 +201,26 @@ export default async function ProjectPage({
           {anyLinks && (
             <div>
               <h3 className="mb-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-faint)]">
-                Links
+                {t("project.aside.links")}
               </h3>
               <div className="flex flex-col gap-1.5">
                 {liveLinks.map((l) => (
                   <ProjectLink key={l.url} href={l.url} label={l.label} />
                 ))}
                 {project.repoLink && (
-                  <ProjectLink href={project.repoLink} label="GitHub" />
+                  <ProjectLink href={project.repoLink} label={t("project.link.github")} />
                 )}
                 {project.videoLink && (
-                  <ProjectLink href={project.videoLink} label="Video" />
+                  <ProjectLink href={project.videoLink} label={t("project.link.video")} />
                 )}
                 {project.slidesLink && (
-                  <ProjectLink href={project.slidesLink} label="Slides" />
+                  <ProjectLink href={project.slidesLink} label={t("project.link.slides")} />
                 )}
                 {project.pdfLink && (
-                  <ProjectLink href={project.pdfLink} label="PDF / Report" />
+                  <ProjectLink href={project.pdfLink} label={t("project.link.pdf")} />
                 )}
                 {project.newsLink && (
-                  <ProjectLink href={project.newsLink} label="Press" />
+                  <ProjectLink href={project.newsLink} label={t("project.link.press")} />
                 )}
               </div>
             </div>

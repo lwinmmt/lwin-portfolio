@@ -11,6 +11,16 @@ import {
   type ProjectCategory,
   type ProjectLiveLink,
 } from "@/lib/content";
+import { useT } from "@/lib/i18n/client";
+import type { MessageKey } from "@/lib/i18n/messages";
+
+// Map category enum -> display translation key. Enum stays English; the
+// label users see comes from t().
+const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
+  Production: "projects.category.Production",
+  Coursework: "projects.category.Coursework",
+  Projects: "projects.category.Projects",
+};
 
 // Page-level metadata is set via the route segment's metadata.ts where
 // possible, but since this is a client component we let the layout's
@@ -52,6 +62,7 @@ function allLiveLinks(p: Project): ProjectLiveLink[] {
 }
 
 export default function ProjectsPage() {
+  const t = useT();
   const [filter, setFilter] = useState<ProjectCategory | null>(null);
 
   const grouped = CATEGORY_ORDER.map((cat) => ({
@@ -63,15 +74,13 @@ export default function ProjectsPage() {
     <DashboardShell>
       <header>
         <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-fg-muted)]">
-          Projects
+          {t("projects.eyebrow")}
         </div>
         <h1 className="mt-3 font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-[0.96] tracking-[-0.04em] text-[var(--color-fg)]">
-          Projects &amp; Coursework<span className="text-[var(--color-ruby)]">.</span>
+          {t("projects.title")}<span className="text-[var(--color-ruby)]">.</span>
         </h1>
         <p className="mt-5 max-w-[640px] text-[1rem] leading-[1.6] text-[var(--color-fg-muted)]">
-          Grouped by category. Production work has hit real users. Coursework
-          projects are Singapore Management University and Singapore Polytechnic
-          related. Projects are things I started myself.
+          {t("projects.description")}
         </p>
 
         {/* Filter tabs. Click to show only that category. Click "All" or the active chip to reset. */}
@@ -85,7 +94,7 @@ export default function ProjectsPage() {
             }
             aria-pressed={filter === null}
           >
-            All <span className="text-[var(--color-fg-faint)]">/ {projects.length}</span>
+            {t("projects.filter.all")} <span className="text-[var(--color-fg-faint)]">/ {projects.length}</span>
           </button>
           {grouped.map((g) => {
             const isActive = filter === g.category;
@@ -99,7 +108,7 @@ export default function ProjectsPage() {
                 }
                 aria-pressed={isActive}
               >
-                {g.category}{" "}
+                {t(CATEGORY_LABEL_KEY[g.category])}{" "}
                 <span className="text-[var(--color-fg-faint)]">/ {g.items.length}</span>
               </button>
             );
@@ -129,14 +138,17 @@ export default function ProjectsPage() {
                       aria-hidden="true"
                       className={`h-1.5 w-1.5 rounded-full ${CATEGORY_ACCENT[category]}`}
                     />
-                    Category
+                    {t("projects.section.categoryLabel")}
                   </div>
                   <h2 className="mt-1 font-sans text-[1.5rem] font-bold tracking-[-0.025em] text-[var(--color-fg)] sm:text-[1.75rem]">
-                    {category}
+                    {t(CATEGORY_LABEL_KEY[category])}
                   </h2>
                 </div>
                 <div className="font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-                  {items.length} {items.length === 1 ? "project" : "projects"}
+                  {(items.length === 1
+                    ? t("projects.count.one")
+                    : t("projects.count.many")
+                  ).replace("{n}", String(items.length))}
                 </div>
               </div>
               {/* Staggered grid entrance so cards bloom in rather than pop.
