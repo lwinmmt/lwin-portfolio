@@ -289,6 +289,11 @@ export function CmdPalette() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
+            // 120 chars caps the worst-case main-thread cost of the
+            // per-keystroke filter (toLowerCase + ~30 String.includes).
+            // No legit search this long; a pasted multi-MB string
+            // would otherwise jank the input.
+            maxLength={120}
             // text-[16px] on mobile (not 14) prevents iOS Safari
             // from zooming the viewport on input focus. Bumps back
             // to text-[14px] on sm+ where the smaller size reads

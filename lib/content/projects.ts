@@ -466,6 +466,7 @@ export const projects: Project[] = [
       { url: "https://royceconnect-dashboard.vercel.app/", label: "Ops dashboard" },
     ],
     imageSrc: "/images/projects/royce-connect/dashboard.jpg",
+    gallery: ["/images/projects/royce-connect/mobile.jpg"],
     featured: true,
     caseStudy: [
       {

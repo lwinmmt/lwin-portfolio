@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
+import { MotionProvider } from "@/components/providers/motion-provider";
 import { LocaleProvider } from "@/lib/i18n/client";
 import { getLocale } from "@/lib/i18n/server";
 import "./globals.css";
@@ -71,8 +72,10 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <LocaleProvider locale={locale}>
-            <ConsoleBranding />
-            {children}
+            <MotionProvider>
+              <ConsoleBranding />
+              {children}
+            </MotionProvider>
           </LocaleProvider>
         </ThemeProvider>
       </body>

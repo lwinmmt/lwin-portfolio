@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { useLocale, useT } from "@/lib/i18n/client";
 import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { LOCALES, LOCALE_NAMES, type Locale } from "@/lib/i18n/types";

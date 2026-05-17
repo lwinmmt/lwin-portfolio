@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { m as motion, type Variants } from "framer-motion";
 import type { ReactNode } from "react";
 
 // Reveal animation: fade + slide-up + blur-out. The blur is the key

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 
 // Static variants. Defined once at module load so we do not allocate
 // a fresh `{ hidden, visible }` object for every word on every render

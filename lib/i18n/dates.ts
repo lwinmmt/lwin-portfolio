@@ -5,6 +5,9 @@ import type { Locale } from "./types";
 // look up the number and emit "M/YYYY" so VN reads as "5/2024" instead
 // of "May 2024". Vietnamese convention prefers numeric months in
 // short-form dates.
+// One lookup keyed by lowercase month token. Full names + 3-letter
+// abbreviations both resolve, including "may" which is the same in
+// both forms (so the short-form row deliberately doesn't repeat it).
 const MONTH_NUMBERS: Record<string, number> = {
   january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
   july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,

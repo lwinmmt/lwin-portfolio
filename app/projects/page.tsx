@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import {
   projects,
@@ -59,14 +59,21 @@ function categoryToAnchor(category: ProjectCategory) {
 }
 
 
+// Pre-grouped projects by category. Computed once at module load —
+// `projects` is a static import, never mutates. Previously this lived
+// inside ProjectsPage's render body, which meant a fresh array (with
+// fresh nested arrays) on every keystroke / filter click, defeating
+// AnimatePresence's child identity check and forcing it to remount
+// every group even when only `filter` changed.
+const GROUPED = CATEGORY_ORDER.map((cat) => ({
+  category: cat,
+  items: projects.filter((p) => p.category === cat),
+})).filter((g) => g.items.length > 0);
+
 export default function ProjectsPage() {
   const t = useT();
   const [filter, setFilter] = useState<ProjectCategory | null>(null);
-
-  const grouped = CATEGORY_ORDER.map((cat) => ({
-    category: cat,
-    items: projects.filter((p) => p.category === cat),
-  })).filter((g) => g.items.length > 0);
+  const grouped = GROUPED;
 
   return (
     <DashboardShell>

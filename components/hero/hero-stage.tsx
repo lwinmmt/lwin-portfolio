@@ -1,11 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useT } from "@/lib/i18n/client";
 import { HeroGlobe } from "./globe";
-import { HeroTerminal } from "./terminal";
 import type { HeroVariant } from "./hero-variant";
+
+// Terminal variant is only rendered ~50% of visits (the random pick
+// in useEffect below). next/dynamic + ssr:false defers its chunk to
+// the moment the variant actually selects it — saves the terminal
+// component + key-sound sprite tables off the initial bundle for
+// globe-variant visits. Globe stays a static import because SSR
+// always renders globe first to avoid hydration mismatch.
+const HeroTerminal = dynamic(
+  () => import("./terminal").then((m) => ({ default: m.HeroTerminal })),
+  { ssr: false },
+);
 
 // Hero right-column stage. Two variants:
 //   - "globe"    — canvas Fibonacci dot sphere with arc paths

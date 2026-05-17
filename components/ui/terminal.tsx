@@ -7,12 +7,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 //   1. No `cn()` helper — joined with template literals. Avoids
 //      pulling clsx + tailwind-merge into the dependency tree for one
 //      consumer.
-//   2. `enableSound` defaults to false. The original ships an audio
-//      sprite at /sounds/sound.ogg; we don't ship that file, so the
-//      AudioContext fetch would 404 on every mount.
-//
-// The key-sound sprite tables are kept verbatim so flipping enableSound
-// on later only requires dropping the .ogg in /public/sounds/.
+//   2. `enableSound` defaults to false. The hero terminal variant
+//      (components/hero/terminal.tsx) opts in to sound. The audio
+//      sprite ships at public/sounds/sound.ogg; the AudioContext
+//      fetch resolves there. Anywhere else that consumes Terminal
+//      without enableSound stays silent (no fetch, no decode work).
 
 const KEY_SOUNDS_DOWN: Record<string, [number, number]> = {
   A: [31542, 85], B: [40621, 107], C: [39632, 95], D: [32492, 85],
@@ -67,8 +66,30 @@ function useAudio(enabled: boolean) {
         // or AudioContext is disallowed (e.g. autoplay policy).
       }
     };
-    init();
+    // Defer the 2.5MB audio sprite fetch off the critical path.
+    // requestIdleCallback waits for the browser's main thread to be
+    // idle (after hydration, LCP paint, etc.); the fallback timeout
+    // covers Safari / older Webkit which doesn't ship rIC. Early
+    // characters of the typing animation may play silently if the
+    // sprite isn't decoded yet — acceptable trade for shaving the
+    // upfront network + decode work off the hero load.
+    type IdleWindow = Window & {
+      requestIdleCallback?: (cb: () => void) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const w = window as IdleWindow;
+    let idleId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    if (typeof w.requestIdleCallback === "function") {
+      idleId = w.requestIdleCallback(() => init());
+    } else {
+      timeoutId = setTimeout(init, 1500);
+    }
     return () => {
+      if (idleId !== undefined && typeof w.cancelIdleCallback === "function") {
+        w.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
       ctxRef.current?.close();
     };
   }, [enabled]);

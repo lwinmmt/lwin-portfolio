@@ -45,10 +45,18 @@ export function renderRich(text: string): ReactNode {
         rawLabel.startsWith("**") && rawLabel.endsWith("**")
           ? rawLabel.slice(2, -2)
           : rawLabel;
+      // Scheme allowlist: messages.ts only authors http(s) + mailto
+      // today, but if anyone (future-Lwin, a Sanity-managed copy
+      // import, an LLM that edited the bundle) ever sneaks a
+      // `javascript:`, `data:`, or `vbscript:` URL into a rich
+      // string, we'd render an XSS sink. Gate it to a known-safe
+      // scheme prefix and drop everything else to "#".
+      const rawHref = linkMatch[2];
+      const safeHref = /^(https?:|mailto:|\/|#)/i.test(rawHref) ? rawHref : "#";
       return (
         <a
           key={i}
-          href={linkMatch[2]}
+          href={safeHref}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"

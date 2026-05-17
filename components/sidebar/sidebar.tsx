@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { motion } from "framer-motion";
+import { m as motion } from "framer-motion";
 import { SidebarIcon } from "./sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -30,15 +30,17 @@ export function Sidebar() {
       className="fixed top-0 left-0 z-40 hidden h-dvh w-[260px] flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 lg:flex"
     >
       <div className="flex items-center gap-3 px-3 pb-6">
-        {/* next/image so this above-the-fold avatar gets format
-            negotiation (AVIF/WebP), automatic srcset, and the right
-            priority hint. Fixed 44px display size. */}
+        {/* next/image so this avatar gets format negotiation
+            (AVIF/WebP) + automatic srcset at 44px display size.
+            NOT priority: the sidebar is `lg:flex` (hidden on
+            mobile/tablet) and the avatar is never the LCP element.
+            Adding priority preloaded a 132KB jpg for every visit
+            including mobile, where the image never renders. */}
         <Image
           src={profile.photoSrc}
           alt={`${profile.name} portrait`}
           width={44}
           height={44}
-          priority
           className="h-11 w-11 flex-shrink-0 rounded-full border border-[var(--color-border-default)] object-cover"
         />
         <div className="leading-tight">

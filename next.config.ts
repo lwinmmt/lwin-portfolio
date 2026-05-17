@@ -59,6 +59,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  // Tells Next to convert imports of these packages from "named
+  // imports" of the barrel file into direct module-specific imports
+  // so tree-shaking can drop unused code. framer-motion benefits the
+  // most here — without this the `motion` proxy pulls the full
+  // animation set even when we only use a few features.
+  experimental: {
+    optimizePackageImports: ["framer-motion"],
+  },
   images: {
     remotePatterns: [
       {
