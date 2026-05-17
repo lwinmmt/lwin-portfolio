@@ -247,7 +247,7 @@ function ProjectCard({
           href={`/projects/${project.slug}`}
           className="font-sans text-[15px] font-semibold leading-[1.35] text-[var(--color-fg)] transition-colors after:absolute after:inset-0 after:content-[''] hover:text-[var(--color-ruby-deep)] focus-visible:after:rounded-2xl focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-[var(--color-ruby)]"
         >
-          {project.title}
+          <span className="card-title-draw">{project.title}</span>
         </Link>
         <p className="mt-2 text-[12.5px] leading-[1.55] text-[var(--color-fg-muted)]">
           {project.description}

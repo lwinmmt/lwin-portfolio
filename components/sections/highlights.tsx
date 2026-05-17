@@ -100,7 +100,7 @@ function HighlightCard(h: Highlight) {
           </div>
         )}
         <h3 className="mb-1.5 font-sans text-[14.5px] font-semibold leading-[1.35] text-[var(--color-fg)]">
-          {h.title}{" "}
+          <span className="card-title-draw">{h.title}</span>{" "}
           <span className={`ml-1 font-mono text-[9.5px] uppercase tracking-[0.14em] ${TAG_ACCENT[h.tag]}`}>
             {h.tag}
           </span>

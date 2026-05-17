@@ -297,6 +297,23 @@
 }
 .animate-pin-pulse { animation: pin-pulse 1.6s ease-out infinite; }
 
+/* Card title underline draw. Apply to a span around the title text
+   inside any card with `group` on its outer wrapper; the underline
+   draws left-to-right on group-hover. Uses linear-gradient instead
+   of a pseudo-element so it works on inline text without needing
+   the title to be positioned. */
+.card-title-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.group:hover .card-title-draw,
+.group:focus-visible .card-title-draw {
+  background-size: 100% 1px;
+}
+
 /* Tabular numerals everywhere so numbers do not dance during animations
    (counts, dates, timestamps, time deltas). The Geist fonts include
    tnum; this just turns the feature on globally. */

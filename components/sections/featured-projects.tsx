@@ -59,7 +59,7 @@ function ProjectCard(project: Project & { priority?: boolean }) {
         )}
         <div className="mb-1.5 flex flex-wrap items-baseline gap-x-2">
           <h3 className="font-sans text-[14.5px] font-semibold leading-[1.35] text-[var(--color-fg)]">
-            {project.title}
+            <span className="card-title-draw">{project.title}</span>
           </h3>
           <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--color-ruby)]">
             {project.category}
