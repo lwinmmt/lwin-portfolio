@@ -1,15 +1,19 @@
 import Link from "next/link";
-import { HeroGlobe } from "@/components/hero/globe";
-import { LocationChip } from "@/components/hero/location-chip";
+import { HeroStage } from "@/components/hero/hero-stage";
 import { EmailButton } from "@/components/ui/email-button";
 import { profile } from "@/lib/content";
 import { getT } from "@/lib/i18n/server";
 
 // Asymmetric 2-col hero on lg+: text block (greeting, name, intro,
-// 'Right now' chip, CTAs) on the left, globe vertically centered in
-// a narrower right column. On smaller viewports the grid collapses to
-// a single column and the globe falls between the intro paragraph and
-// the 'Right now' chip in natural document order.
+// 'Right now' chip, CTAs) on the left, hero stage (globe or terminal
+// variant) vertically centered in a narrower right column. On smaller
+// viewports the grid collapses to a single column and the stage falls
+// between the intro paragraph and the 'Right now' chip in natural
+// document order.
+//
+// HeroStage is a client component that swaps between the two variants
+// based on a localStorage-backed preference. Lets us A/B the look
+// without redeploying or editing this file.
 //
 // Server component (async). Reads the request locale via getT() and
 // renders every translatable string from messages.ts. Profile.ts
@@ -62,16 +66,16 @@ export async function Hero() {
         {t("hero.intro.rest")}
       </p>
 
-      {/* Globe: stacked between intro and 'Right now' on mobile (natural
-          document order in a single-column grid). On lg+ it spans the
-          full text-block height and self-ends, so the location chip
-          underneath lines up with the bottom of the CTA button row on
-          the left column. */}
+      {/* Hero stage: stacked between intro and 'Right now' on mobile
+          (natural document order in a single-column grid). On lg+ it
+          spans the full text-block height and self-centers in the
+          column so the visual mass sits at the optical midpoint of the
+          text block on the left, not anchored to the bottom CTA row. */}
       <div
-        className="animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:self-end"
+        className="animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:self-center"
         style={{ animationDelay: "300ms" }}
       >
-        <HeroGlobe />
+        <HeroStage />
       </div>
 
       <div
@@ -101,7 +105,6 @@ export async function Hero() {
         <div className="mt-2 pl-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
           {currentOrgFullName}
         </div>
-        <LocationChip />
       </div>
 
       <div

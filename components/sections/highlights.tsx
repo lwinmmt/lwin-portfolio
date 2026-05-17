@@ -41,6 +41,7 @@ function HighlightCard({ h, locale }: { h: Highlight; locale: Locale }) {
           alt={title}
           height="sm"
           background="card"
+          objectPosition={h.coverFocus}
         />
       )}
       <div className="flex flex-1 flex-col p-5">

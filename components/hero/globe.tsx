@@ -18,7 +18,11 @@ import { profile } from "@/lib/content";
 //   - Momentum coast on release (Y-axis only).
 //   - Random data-flow arcs with 4-segment comet trail.
 
-const SIZE = 380;
+// Bumped from 380 -> 440 after the HCMC chip was retired. The chip
+// gave the right column a second visual mass below the globe; without
+// it the globe needs more presence to balance the text block on the
+// left. 15% larger felt right against the 3fr_2fr grid.
+const SIZE = 440;
 // 0.88 leaves enough margin between the sphere silhouette and the
 // canvas edge that arcs bowing up to (1 + ARC_HEIGHT) * RADIUS still
 // fit fully inside the canvas instead of getting clipped at the top.

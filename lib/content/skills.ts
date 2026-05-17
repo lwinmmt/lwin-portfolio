@@ -25,7 +25,7 @@ export const skillGroups: SkillGroup[] = [
     labelVi: "Cloud & IoT",
     items: [
       "Amazon Web Services",
-      "Azure Fundamentals",
+      "Microsoft Azure",
       "MQTT",
       "Node-RED",
       "EdgeX Foundry",

@@ -13,6 +13,13 @@ export type Highlight = {
   date: string;
   href?: string;
   imageSrc?: string;
+  /** Optional CSS `object-position` value for the cover crop. Cards
+   *  default to `object-top` which works for portrait subjects, but
+   *  some sources have the subject in the lower or off-center region
+   *  (team photos where Lwin is at the edge, wide booth shots where
+   *  faces sit below the poster). Override per-image to keep the
+   *  subject in frame at every aspect ratio. */
+  coverFocus?: string;
 };
 
 export const highlights: Highlight[] = [
@@ -36,6 +43,10 @@ export const highlights: Highlight[] = [
     date: "JUN 2024",
     href: "https://cityperspectives.smu.edu.sg/special-features/wcs-2024",
     imageSrc: "/images/highlights/world-cities-summit-2024.webp",
+    // Booth poster occupies the top half; three people stand below
+    // it. Default object-top crops everyone's face off. Push down to
+    // ~65% to land the faces in the visible band.
+    coverFocus: "center 65%",
   },
   {
     title: "Featured in Singapore Business Review",
@@ -47,6 +58,11 @@ export const highlights: Highlight[] = [
     date: "MAY 2024",
     href: "https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures",
     imageSrc: "/images/highlights/sbr-osiris.jpg",
+    // Composite image: team photo on the left half, giant OSIRIS
+    // wordmark on the right. Default crop centers between them and
+    // lands awkwardly on white. Push left to favor the team and
+    // slightly down so faces (not the booth poster top) anchor.
+    coverFocus: "30% 65%",
   },
   {
     title: "PM Club Internal Challenge 1st",
@@ -58,6 +74,10 @@ export const highlights: Highlight[] = [
     date: "OCT 2023",
     href: "/projects/grabcompare",
     imageSrc: "/images/highlights/pm-club-grabcompare.webp",
+    // GrabCompare slides occupy the top half; six team members
+    // stand below. Lwin is the leftmost. Push down + left so his
+    // face survives narrow horizontal crops on small cards.
+    coverFocus: "30% 70%",
   },
   {
     title: "Featured on Channel News Asia",
