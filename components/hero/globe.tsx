@@ -58,13 +58,15 @@ export function HeroGlobe() {
     if (!canvasRef.current || !mounted) return;
     const canvas = canvasRef.current;
 
-    // Aceternity-style navy palette. The globe now lives in its own
-    // column (right side of the hero), so it does not need to blend
-    // with the cream page bg; it can be a distinct dark object that
-    // pops. `dark: 1` renders dots DIRECTLY (bright dots on dark
-    // sphere) which is what Aceternity does.
-    const baseColor: [number, number, number] = [0.5, 0.7, 1.0]; // bright blue-white continent dots
-    const glowColor: [number, number, number] = [0.08, 0.18, 0.45]; // deep blue atmospheric halo
+    // Deep-navy sphere + crisp white continent dots, matching the
+    // reference image. Three things drive the 'crisp dots' look:
+    //   - baseColor near pure white so dots have maximum contrast
+    //   - mapBrightness LOW (4 not 8) so 16-32k overlapping samples do
+    //     not blob into a solid mass
+    //   - glowColor almost black so the sphere is dark enough for
+    //     white dots to read against
+    const baseColor: [number, number, number] = [0.95, 0.97, 1.0]; // near-white, slight cool tint
+    const glowColor: [number, number, number] = [0.02, 0.05, 0.15]; // very deep navy, almost black
 
     let phi = INITIAL_PHI;
     let phiOffset = 0;
@@ -80,9 +82,9 @@ export function HeroGlobe() {
       phi: INITIAL_PHI,
       theta: 0.3,
       dark: 1,
-      diffuse: 1.5,
+      diffuse: 1.4,
       mapSamples: 32000,
-      mapBrightness: 8,
+      mapBrightness: 4,
       baseColor,
       markerColor: baseColor,
       glowColor,

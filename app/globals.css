@@ -287,63 +287,6 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-/* Sidebar collapsible state. Width is a CSS variable so the main content
-   margin in DashboardShell can react. Element visibility is also driven
-   from the same data attribute so toggling stays in pure CSS (no React
-   re-render). The inline script in app/layout.tsx sets the attribute
-   before first paint to avoid a reflow on load. */
-:root {
-  --sidebar-w: 260px;
-}
-[data-sidebar-collapsed="1"] {
-  --sidebar-w: 64px;
-}
-
-/* Hide labels and detail bits when collapsed. */
-[data-sidebar-collapsed="1"] .sidebar-label,
-[data-sidebar-collapsed="1"] .sidebar-section-label,
-[data-sidebar-collapsed="1"] .sidebar-shortcut,
-[data-sidebar-collapsed="1"] .sidebar-external-icon,
-[data-sidebar-collapsed="1"] .sidebar-profile-text,
-[data-sidebar-collapsed="1"] .sidebar-search-full,
-[data-sidebar-collapsed="1"] .sidebar-theme-row {
-  display: none !important;
-}
-
-/* Re-center nav items so the icon sits in the middle of the narrow rail. */
-[data-sidebar-collapsed="1"] .sidebar-nav-item {
-  justify-content: center;
-  padding-left: 0;
-  padding-right: 0;
-}
-[data-sidebar-collapsed="1"] .sidebar-profile {
-  justify-content: center;
-  padding-left: 0;
-  padding-right: 0;
-}
-[data-sidebar-collapsed="1"] .sidebar-section-spacer {
-  padding-top: 0.5rem;
-}
-
-/* Compact bottom controls only appear when collapsed. */
-.sidebar-compact-only {
-  display: none;
-}
-[data-sidebar-collapsed="1"] .sidebar-compact-only {
-  display: inline-flex;
-}
-
-/* Toggle button icon swap. */
-[data-sidebar-collapsed="1"] .sidebar-toggle-icon--collapse {
-  display: none;
-}
-.sidebar-toggle-icon--expand {
-  display: none;
-}
-[data-sidebar-collapsed="1"] .sidebar-toggle-icon--expand {
-  display: inline-flex;
-}
-
 .animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .animate-fade-in { animation: fade-in 0.6s ease-out both; }
 /* Custom Leaflet map pin */
