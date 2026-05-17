@@ -1,10 +1,9 @@
 // Long-form bio + supporting content for the /about page.
-
-export const bio = {
-  citizenshipNote: "Singaporean. Born in Yangon, Myanmar, moved to Singapore at age 1.",
-  citizenshipNoteVi:
-    "Quốc tịch Singapore. Sinh ra ở Yangon, Myanmar, chuyển đến Singapore lúc 1 tuổi.",
-};
+//
+// (The previous `bio` const carried a citizenship note that was never
+// rendered anywhere. Removed as part of the bloat sweep. If the
+// citizenship line ever needs to surface, add it as an i18n key
+// instead so it routes through pickLocalized properly.)
 
 export type CommunityRole = {
   id: string;

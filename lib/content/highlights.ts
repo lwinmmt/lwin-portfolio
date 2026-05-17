@@ -50,10 +50,10 @@ export const highlights: Highlight[] = [
     // composition where his face has room.
     imageSrc: "/images/highlights/osiris-wcs-2024-rig.jpg",
     // Portrait source (1200x1600). Faces sit around 35-40% from the
-    // top; rig + plants occupy the lower half. Anchor at 40% so a
-    // wide-aspect crop (home small card) lands on the faces and a
-    // taller crop (bento side-by-side) still shows the rig context.
-    coverFocus: "center 40%",
+    // top; rig + plants occupy the lower half. Anchor at 30% so
+    // both heads sit comfortably in the visible band instead of
+    // being pushed against the top edge of the card crop.
+    coverFocus: "center 30%",
   },
   {
     title: "Featured in Singapore Business Review",
@@ -85,9 +85,11 @@ export const highlights: Highlight[] = [
     href: "/projects/grabcompare",
     imageSrc: "/images/highlights/pm-club-grabcompare.webp",
     // GrabCompare slides occupy the top half; six team members
-    // stand below. Lwin is the leftmost. Push down + left so his
-    // face survives narrow horizontal crops on small cards.
-    coverFocus: "30% 70%",
+    // stand below. Lwin is the leftmost. Push slightly left so
+    // his face survives narrow horizontal crops on small cards;
+    // 55% vertical lands on heads instead of waists (70% was
+    // anchoring too low — head-tops were getting clipped).
+    coverFocus: "30% 55%",
   },
   {
     title: "Featured on Channel News Asia",

@@ -184,9 +184,6 @@ export const messages = {
     "project.link.slides": "Slides",
     "project.link.pdf": "PDF / Report",
     "project.link.press": "Press",
-    // Featured projects (home section)
-    "featuredProjects.title": "Featured Projects",
-    "featuredProjects.viewAll": "View all",
     // Experience section (home + resume)
     "experience.title": "Experience",
     "experience.viewAll": "Full timeline",
@@ -421,9 +418,6 @@ export const messages = {
     "project.link.slides": "Slides",
     "project.link.pdf": "PDF / Báo cáo",
     "project.link.press": "Báo chí",
-    // Featured projects (home section)
-    "featuredProjects.title": "Dự án nổi bật",
-    "featuredProjects.viewAll": "Xem tất cả",
     // Experience section (home + resume)
     "experience.title": "Kinh nghiệm",
     "experience.viewAll": "Toàn bộ quá trình",

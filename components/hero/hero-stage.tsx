@@ -36,42 +36,42 @@ export function HeroStage() {
 
   return (
     // pt-9 reserves a 36px strip above the variant for the switcher
-    // pill. Without it the pill landed on the terminal's title bar
-    // (rectangular variant — title bar fills the top-right corner)
-    // while looking fine against the globe (round, recedes from the
-    // corner). Reserving the strip keeps placement consistent across
-    // both variants and stops the overlap.
+    // pill. min-h locks the total stage height so the pill stays in
+    // a constant viewport position when the variant swaps — without
+    // it the outer grid cell's self-center recomputed every time
+    // (globe ~440px tall, terminal ~290px tall) and the chip moved
+    // ~75px vertically with each click. The lock costs ~150px of
+    // empty space below the terminal variant; cheap for a stable UI.
     //
     // `relative` so the switcher can absolutely position into that
-    // strip. Stage takes the column's full width on lg+ via the
-    // parent grid cell; each variant is mx-auto centered inside it.
-    <div className="relative pt-9">
-      {/* AnimatePresence mode="wait" — the outgoing variant fades
-          out completely before the incoming one fades in, so the
-          swap reads as a single smooth transition instead of an
-          instant flip. Framer-motion is already loaded for the
-          sidebar pills, so no extra bundle cost. */}
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={variant}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.22, ease: [0.2, 0.7, 0.3, 1] }}
-        >
-          {variant === "globe" ? <HeroGlobe /> : <HeroTerminal />}
-        </motion.div>
-      </AnimatePresence>
+    // strip. The inner flex column vertically centers whichever
+    // variant is showing inside the locked height.
+    <div className="relative flex min-h-[476px] flex-col pt-9">
+      <div className="flex flex-1 items-center justify-center">
+        {/* AnimatePresence mode="wait" — the outgoing variant fades
+            out completely before the incoming one fades in, so the
+            swap reads as a single smooth transition instead of an
+            instant flip. Framer-motion is already loaded for the
+            sidebar pills, so no extra bundle cost. */}
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={variant}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.22, ease: [0.2, 0.7, 0.3, 1] }}
+            className="w-full"
+          >
+            {variant === "globe" ? <HeroGlobe /> : <HeroTerminal />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {hydrated && (
         <button
           type="button"
           onClick={() => setVariant(other)}
           aria-label={t("hero.variant.aria").replace("{variant}", other)}
-          // Larger touch target + readable text size on mobile.
-          // Previous px-2.5 py-1 + text-[9.5px] clocked in at ~18px
-          // tall, under the 30px comfortable tap target and below
-          // legible uppercase mono size.
           className="absolute right-0 top-0 inline-flex min-h-[30px] items-center gap-1.5 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-surface-2)] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--color-fg-muted)] shadow-[0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur transition-colors hover:text-[var(--color-fg)]"
         >
           <SwapIcon />

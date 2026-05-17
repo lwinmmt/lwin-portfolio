@@ -881,7 +881,3 @@ export const projects: Project[] = [
   },
 ];
 
-// Convenience selectors
-export const featuredProjects = projects.filter((p) => p.featured);
-export const projectsByCategory = (category: ProjectCategory) =>
-  projects.filter((p) => p.category === category);
