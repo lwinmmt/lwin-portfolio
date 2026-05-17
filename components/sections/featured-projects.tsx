@@ -3,6 +3,7 @@ import { featuredProjects, type Project } from "@/lib/content";
 import { CardCover } from "@/components/ui/card-cover";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
+import type { MessageKey } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/types";
 
 export async function FeaturedProjects() {
@@ -28,6 +29,7 @@ export async function FeaturedProjects() {
             project={project}
             priority={idx < 2}
             locale={locale}
+            t={t}
           />
         ))}
       </div>
@@ -39,10 +41,12 @@ function ProjectCard({
   project,
   priority,
   locale,
+  t,
 }: {
   project: Project;
   priority?: boolean;
   locale: Locale;
+  t: (key: MessageKey) => string;
 }) {
   const title = pickLocalized(project.title, project.titleVi, locale);
   const description = pickLocalized(
@@ -61,7 +65,7 @@ function ProjectCard({
       {project.imageSrc && (
         <CardCover
           src={project.imageSrc}
-          alt={`${title} cover`}
+          alt={t("image.alt.cover").replace("{title}", title)}
           height="md"
           // First two cards are above the fold on desktop. Eager-load
           // so the dark-mode empty bg does not read as a broken card.

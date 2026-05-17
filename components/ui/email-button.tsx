@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n/client";
 
 type EmailButtonProps = {
   email: string;
@@ -31,6 +32,7 @@ export function EmailButton({
   tooltipPlacement = "top",
   layout = "inline",
 }: EmailButtonProps) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -79,7 +81,7 @@ export function EmailButton({
         href={`mailto:${email}`}
         onClick={handleClick}
         className={className}
-        aria-label={ariaLabel ?? `Email ${email}`}
+        aria-label={ariaLabel ?? t("email.aria.fallback").replace("{email}", email)}
         title={email}
       >
         {children}
@@ -88,7 +90,7 @@ export function EmailButton({
         aria-live="polite"
         className={`pointer-events-none absolute z-50 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-bg)] shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-all duration-200 ${positionBase} ${stateClass}`}
       >
-        Copied {email}
+        {t("email.toast.copied").replace("{email}", email)}
       </span>
     </span>
   );

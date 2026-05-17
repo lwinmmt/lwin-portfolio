@@ -4,23 +4,34 @@ import path from "node:path";
 // Baseline security headers shipped on every response. Conservative
 // CSP that allows what the app actually needs and nothing more.
 //
-// Why 'unsafe-inline' / 'unsafe-eval' on script-src: Next.js needs
-// the inline bootstrap script for hydration, and Turbopack uses eval
-// for its dev HMR runtime. A nonce-based or hash-based CSP is the
-// next-level fix; not yet warranted on a static portfolio.
+// Why 'unsafe-inline' on script-src: Next.js needs the inline
+// bootstrap script for hydration. A nonce-based CSP is the next-level
+// fix; not yet warranted on a static portfolio.
 //
-// Why https: on img-src + connect-src: next/image proxies external
-// avatars (Sanity CDN), and CartoDB serves map tiles for /about.
+// 'unsafe-eval' is only in dev: Turbopack uses eval for HMR runtime.
+// Production drops it so prod CSP is meaningfully stricter than dev.
+//
+// img-src + connect-src are tightened to the actual origins the app
+// hits — Sanity CDN for next/image proxy + Sanity API for studio
+// fetches. The previous `https:` wildcard let any HTTPS host through.
+const isProd = process.env.NODE_ENV === "production";
+
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  ...(isProd ? [] : ["'unsafe-eval'"]),
+].join(" ");
+
 const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      `script-src ${scriptSrc}`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https:",
+      "img-src 'self' data: https://cdn.sanity.io",
       "font-src 'self' data:",
-      "connect-src 'self' https:",
+      "connect-src 'self' https://*.sanity.io https://*.api.sanity.io wss://*.api.sanity.io",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",

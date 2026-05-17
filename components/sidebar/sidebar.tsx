@@ -26,7 +26,7 @@ export function Sidebar() {
 
   return (
     <aside
-      aria-label="Primary navigation"
+      aria-label={t("nav.aria.primary")}
       className="fixed top-0 left-0 z-40 hidden h-dvh w-[260px] flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 lg:flex"
     >
       <div className="flex items-center gap-3 px-3 pb-6">
@@ -70,7 +70,7 @@ export function Sidebar() {
         type="button"
         onClick={() => window.dispatchEvent(new Event("cmdpalette:open"))}
         className="mb-1 flex items-center gap-2 rounded-lg border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] px-3 py-2 text-left transition-colors hover:border-[var(--color-border-default)]"
-        aria-label="Open command palette"
+        aria-label={t("nav.aria.cmdPalette")}
       >
         <svg
           width="12"

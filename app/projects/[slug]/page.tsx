@@ -118,13 +118,18 @@ export default async function ProjectPage({
             title={title}
             cover={
               project.imageSrc
-                ? { src: project.imageSrc, alt: `${title} cover` }
+                ? {
+                    src: project.imageSrc,
+                    alt: t("image.alt.cover").replace("{title}", title),
+                  }
                 : undefined
             }
             coverPosition={project.coverFocus}
             gallery={(project.gallery ?? []).map((src, idx) => ({
               src,
-              alt: `${title}, photo ${idx + 1}`,
+              alt: t("image.alt.photo")
+                .replace("{title}", title)
+                .replace("{n}", String(idx + 1)),
             }))}
           />
 

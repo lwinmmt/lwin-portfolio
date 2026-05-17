@@ -194,6 +194,7 @@ function ProjectCard({
   featured?: boolean;
 }) {
   const locale = useLocale();
+  const t = useT();
   const attachments = attachmentCount(project);
   const title = pickLocalized(project.title, project.titleVi, locale);
   const description = pickLocalized(
@@ -228,7 +229,7 @@ function ProjectCard({
         <div className={`relative ${imgHeight} w-full overflow-hidden bg-[var(--color-bg-warm)] [isolation:isolate] [mask-image:linear-gradient(#000,#000)]`}>
           <Image
             src={project.imageSrc}
-            alt={`${title} cover`}
+            alt={t("image.alt.cover").replace("{title}", title)}
             fill
             // Featured cards are above the fold and need to paint before
             // lazy-load kicks in: otherwise the empty wrapper reads as a
@@ -292,7 +293,7 @@ function ProjectCard({
           {attachments > 0 && (
             <span
               className="inline-flex items-center gap-0.5"
-              aria-label={`${attachments} attachments`}
+              aria-label={t("projects.aria.attachments").replace("{n}", String(attachments))}
             >
               <PaperclipIcon />
               {attachments}

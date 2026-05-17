@@ -26,9 +26,29 @@ export const messages = {
     "nav.section.stayInTouch": "Stay in touch",
     // Nav aria
     "nav.aria.mobile": "Primary navigation, mobile",
+    "nav.aria.primary": "Primary navigation",
+    "nav.aria.cmdPalette": "Open command palette",
     // Sidebar chrome
     "sidebar.subtitle": "AI & IIoT Engineer",
     "sidebar.search": "Search",
+    // Image alt boilerplate (translated subject + boilerplate noun)
+    "image.alt.cover": "{title} cover",
+    "image.alt.photo": "{title}, photo {n}",
+    "image.alt.logo": "{name} logo",
+    // Email button
+    "email.toast.copied": "Copied {email}",
+    "email.aria.fallback": "Email {email}",
+    // Projects attachments aria
+    "projects.aria.attachments": "{n} attachments",
+    // Hero variant switcher
+    "hero.variant.aria": "Switch to {variant} variant",
+    // Hero terminal mock output
+    "hero.terminal.role": "AI & IIoT Engineer @ VNTT",
+    "hero.terminal.school": "Info Systems student @ SMU",
+    "hero.terminal.location": "Ho Chi Minh City • GMT+7",
+    // ESMOS diagram caption
+    "esmos.diagram.caption": "Architecture v9.4 · Authored in Eraser",
+    "esmos.diagram.rawSvg": "Raw SVG",
     // Language switcher
     "switcher.aria": "Language",
     // Hero
@@ -242,9 +262,29 @@ export const messages = {
     "nav.section.stayInTouch": "Liên hệ",
     // Nav aria
     "nav.aria.mobile": "Điều hướng chính, mobile",
+    "nav.aria.primary": "Điều hướng chính",
+    "nav.aria.cmdPalette": "Mở bảng lệnh",
     // Sidebar chrome
     "sidebar.subtitle": "Kỹ sư AI & IIoT",
     "sidebar.search": "Tìm kiếm",
+    // Image alt boilerplate (translated subject + boilerplate noun)
+    "image.alt.cover": "Ảnh bìa {title}",
+    "image.alt.photo": "{title}, ảnh {n}",
+    "image.alt.logo": "Logo {name}",
+    // Email button
+    "email.toast.copied": "Đã sao chép {email}",
+    "email.aria.fallback": "Gửi email tới {email}",
+    // Projects attachments aria
+    "projects.aria.attachments": "{n} tệp đính kèm",
+    // Hero variant switcher
+    "hero.variant.aria": "Chuyển sang biến thể {variant}",
+    // Hero terminal mock output
+    "hero.terminal.role": "Kỹ sư AI & IIoT @ VNTT",
+    "hero.terminal.school": "Sinh viên Hệ thống Thông tin @ SMU",
+    "hero.terminal.location": "TP. Hồ Chí Minh • GMT+7",
+    // ESMOS diagram caption
+    "esmos.diagram.caption": "Kiến trúc v9.4 · Tạo trong Eraser",
+    "esmos.diagram.rawSvg": "SVG gốc",
     // Language switcher
     "switcher.aria": "Ngôn ngữ",
     // Hero

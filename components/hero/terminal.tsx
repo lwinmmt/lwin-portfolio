@@ -1,14 +1,13 @@
 "use client";
 
 import { Terminal } from "@/components/ui/terminal";
+import { useT } from "@/lib/i18n/client";
 
 // Hero terminal variant — alternative to the canvas globe. Renders an
 // auto-typing mock shell session that "introduces" Lwin via cd / cat /
-// ls / open commands. Commands are tuned to read both as plausible
-// shell output and as a profile blurb in one scan.
-//
-// Mounted by HeroStage; swap is controlled via localStorage so a
-// future visit reloads with the user's previously chosen variant.
+// ls / open commands. The COMMANDS themselves stay English (universal
+// shell syntax — `whoami`, `cat about.md`) but the OUTPUTS describe
+// Lwin's role and translate via i18n keys so VI readers see VI prose.
 
 const COMMANDS = [
   "whoami",
@@ -17,22 +16,22 @@ const COMMANDS = [
   "echo $EMAIL",
 ];
 
-const OUTPUTS: Record<number, string[]> = {
-  0: ["lwin mmt"],
-  1: [
-    "AI & IIoT Engineer @ VNTT",
-    "Info Systems student @ SMU",
-    "Ho Chi Minh City • GMT+7",
-  ],
-  2: ["esmos/  royce-connect/  smart-greenhouse/  multi-cloud/"],
-  3: ["lwinmmt@gmail.com"],
-};
-
 export function HeroTerminal() {
+  const t = useT();
+  const outputs: Record<number, string[]> = {
+    0: ["lwin mmt"],
+    1: [
+      t("hero.terminal.role"),
+      t("hero.terminal.school"),
+      t("hero.terminal.location"),
+    ],
+    2: ["esmos/  royce-connect/  smart-greenhouse/  multi-cloud/"],
+    3: ["lwinmmt@gmail.com"],
+  };
   return (
     <Terminal
       commands={COMMANDS}
-      outputs={OUTPUTS}
+      outputs={outputs}
       username="lwin@portfolio"
       typingSpeed={45}
       delayBetweenCommands={900}

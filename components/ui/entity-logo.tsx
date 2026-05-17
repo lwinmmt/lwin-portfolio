@@ -50,7 +50,11 @@ export function EntityLogo({
       <div className={`${wrapClass} bg-white`}>
         <Image
           src={logoSrc}
-          alt={`${name} logo`}
+          // Drop the "logo" suffix: the alt becomes just the entity
+          // name. Screen readers already announce "image" for an
+          // <img>, so "AWS logo" became "image: AWS logo" — the noun
+          // duplicates context that's redundant.
+          alt={name}
           width={s.img}
           height={s.img}
           className={s.imgClass}

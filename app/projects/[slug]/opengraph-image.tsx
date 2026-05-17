@@ -28,9 +28,10 @@ export async function generateImageMetadata({
 export default async function ProjectOpengraphImage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const project = projects.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const project = projects.find((p) => p.slug === slug);
   const title = project?.title ?? "Project";
   const category = project?.category ?? "Case study";
   const description = project?.description ?? "";

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getT } from "@/lib/i18n/server";
 
 const SVG_PATH = "/diagrams/esmos-architecture.svg";
 const SVG_NATURAL_W = 5237;
@@ -10,7 +11,11 @@ const SVG_NATURAL_H = 3248;
 // click-to-fullscreen modal was removed: react-zoom-pan-pinch never
 // gave a reliable fit-to-view first paint, and the inline image is
 // already legible at section width on every viewport that matters.
-export function ESMOSDiagram() {
+//
+// Async server component: reads i18n via getT() so caption + link
+// labels follow the request locale.
+export async function ESMOSDiagram() {
+  const t = await getT();
   return (
     <figure className="overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-white">
       <Image
@@ -23,7 +28,7 @@ export function ESMOSDiagram() {
       />
       <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 border-t border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] px-4 py-2.5">
         <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-muted)]">
-          Architecture v9.4 · Authored in Eraser
+          {t("esmos.diagram.caption")}
         </span>
         <a
           href={SVG_PATH}
@@ -31,7 +36,7 @@ export function ESMOSDiagram() {
           rel="noopener noreferrer"
           className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-soft)] transition-colors hover:text-[var(--color-ruby)]"
         >
-          Raw SVG
+          {t("esmos.diagram.rawSvg")}
         </a>
       </figcaption>
     </figure>

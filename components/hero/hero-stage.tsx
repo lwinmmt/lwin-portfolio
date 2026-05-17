@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/lib/i18n/client";
 import { HeroGlobe } from "./globe";
 import { HeroTerminal } from "./terminal";
 import type { HeroVariant } from "./hero-variant";
@@ -19,6 +20,7 @@ import type { HeroVariant } from "./hero-variant";
 //     beyond the current page session; a refresh re-randomizes.
 
 export function HeroStage() {
+  const t = useT();
   const [variant, setVariant] = useState<HeroVariant>("globe");
   const [hydrated, setHydrated] = useState(false);
 
@@ -43,7 +45,7 @@ export function HeroStage() {
         <button
           type="button"
           onClick={() => setVariant(other)}
-          aria-label={`Switch to ${other} variant`}
+          aria-label={t("hero.variant.aria").replace("{variant}", other)}
           // z-10 keeps the button above the canvas / terminal chrome.
           // bg-white/backdrop-blur lets it work cleanly against both
           // the light card (globe) and dark terminal title bar.
