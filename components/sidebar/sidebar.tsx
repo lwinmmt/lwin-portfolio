@@ -37,8 +37,26 @@ export function Sidebar() {
   return (
     <aside
       aria-label="Primary navigation"
-      className="fixed top-0 left-0 z-40 hidden h-dvh w-[var(--sidebar-w,260px)] flex-col overflow-hidden border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 transition-[width] duration-200 lg:flex"
+      className="group/sidebar fixed top-0 left-0 z-40 hidden h-dvh w-[var(--sidebar-w,260px)] flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 transition-[width] duration-200 lg:flex"
     >
+      {/* Notion-style edge tab. Pinned to the right edge of the sidebar
+          at vertical center. Hover-reveals from a faint resting state
+          to full opacity. Replaces the chunky 'Collapse' button that
+          used to live at the bottom of the rail. */}
+      <button
+        type="button"
+        onClick={toggleSidebarCollapsed}
+        aria-label="Toggle sidebar"
+        title="Toggle sidebar (Cmd+\\)"
+        className="absolute top-1/2 right-0 z-50 inline-flex h-10 w-5 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-md border border-[var(--color-border-soft)] bg-[var(--color-bg-card)] text-[var(--color-fg-faint)] opacity-0 shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all duration-150 hover:bg-[var(--color-hover-mute)] hover:text-[var(--color-fg)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ruby)] group-hover/sidebar:opacity-100"
+      >
+        <span aria-hidden="true" className="sidebar-toggle-icon--collapse">
+          <ChevronIcon direction="left" />
+        </span>
+        <span aria-hidden="true" className="sidebar-toggle-icon--expand">
+          <ChevronIcon direction="right" />
+        </span>
+      </button>
       <div className="sidebar-profile flex items-center gap-3 px-3 pb-6">
         {/* Plain img for maximum compatibility, bypasses Next.js Image quirks */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -123,25 +141,6 @@ export function Sidebar() {
         })}
       </div>
 
-      {/* Collapse / expand toggle. Single button; CSS swaps the visible
-          chevron icon based on the collapsed state. */}
-      <button
-        type="button"
-        onClick={toggleSidebarCollapsed}
-        className="mt-3 inline-flex h-8 items-center justify-center gap-2 self-stretch rounded-lg border border-transparent text-[var(--color-fg-faint)] transition-colors hover:bg-[var(--color-hover-mute)] hover:text-[var(--color-fg-muted)]"
-        aria-label="Toggle sidebar"
-        title="Toggle sidebar"
-      >
-        <span aria-hidden="true" className="sidebar-toggle-icon--collapse">
-          <ChevronIcon direction="left" />
-        </span>
-        <span aria-hidden="true" className="sidebar-toggle-icon--expand">
-          <ChevronIcon direction="right" />
-        </span>
-        <span className="sidebar-label font-mono text-[10px] uppercase tracking-[0.14em]">
-          Collapse
-        </span>
-      </button>
     </aside>
   );
 }

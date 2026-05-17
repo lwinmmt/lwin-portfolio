@@ -29,18 +29,8 @@ const INITIAL_PHI = 4.6; // SE Asia roughly under the camera at first paint
 const AUTO_ROTATE_SPEED = 0.0028; // radians per frame
 const DRAG_SENSITIVITY = 0.005; // pixels to radians
 
-// Decorative markers. Six cities spread across continents so the globe
-// always has at least 2 to 3 visible regardless of rotation. Ruby color
-// matches the page accent. No labels, no narrative.
-const RUBY: [number, number, number] = [0.72, 0.23, 0.17];
-const DECOR_MARKERS = [
-  { location: [35.68, 139.76] as [number, number], size: 0.05, color: RUBY }, // Tokyo
-  { location: [1.35, 103.82] as [number, number], size: 0.06, color: RUBY }, // Singapore
-  { location: [-33.87, 151.21] as [number, number], size: 0.04, color: RUBY }, // Sydney
-  { location: [51.5, -0.12] as [number, number], size: 0.05, color: RUBY }, // London
-  { location: [40.71, -74.0] as [number, number], size: 0.06, color: RUBY }, // New York
-  { location: [-23.55, -46.63] as [number, number], size: 0.04, color: RUBY }, // Sao Paulo
-];
+// Globe is decorative only. No markers (the earlier red markers read as
+// jarring against the cream page), no arcs, no city narrative.
 
 export function HeroGlobe() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -81,12 +71,11 @@ export function HeroGlobe() {
     if (!canvasRef.current || !mounted) return;
     const canvas = canvasRef.current;
 
-    // Aceternity-style palette: deep navy continents on a slightly
-    // brighter navy sphere, with a blue atmospheric halo. `dark: 1`
-    // tells Cobe to render dots DIRECTLY (bright dots on dark sphere)
-    // rather than inverted (the light-mode mode).
-    const baseColor: [number, number, number] = [0.35, 0.55, 0.95]; // bright blue continents
-    const glowColor: [number, number, number] = [0.05, 0.12, 0.4]; // deep blue halo
+    // Warm-gray palette that integrates with the cream page bg. In
+    // light mode (`dark: 0`), Cobe inverts the rendering so continents
+    // show up as DARK dots on the LIGHT sphere set by glowColor.
+    const baseColor: [number, number, number] = [0.22, 0.20, 0.18]; // warm dark gray dots
+    const glowColor: [number, number, number] = [0.96, 0.95, 0.92]; // cream halo, matches bg-warm
 
     let phi = INITIAL_PHI;
     let phiOffset = 0;
@@ -101,16 +90,14 @@ export function HeroGlobe() {
       height: DISPLAY_SIZE * 2,
       phi: INITIAL_PHI,
       theta: 0.3,
-      dark: 1,
-      diffuse: 1.5,
-      // Denser sampling for sharper continent shapes. 32k vs 16k is
-      // free at this size since Cobe samples in a shader.
-      mapSamples: 32000,
-      mapBrightness: 8,
+      dark: 0,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
       baseColor,
-      markerColor: RUBY,
+      markerColor: baseColor,
       glowColor,
-      markers: DECOR_MARKERS,
+      markers: [],
     });
 
     // Manual RAF loop. Cobe v2 needs explicit update() calls; without
