@@ -7,6 +7,7 @@ import { Education } from "@/components/sections/education";
 import { SkillsStack } from "@/components/sections/skills-stack";
 import { PersonJsonLd } from "@/components/structured-data";
 import { Reveal } from "@/components/ui/reveal";
+import { seedLocaleFromParams } from "@/lib/i18n/server";
 import { messages } from "@/lib/i18n/messages";
 import { LOCALES, type Locale } from "@/lib/i18n/types";
 
@@ -30,7 +31,12 @@ export async function generateMetadata({
   };
 }
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  await seedLocaleFromParams(params);
   return (
     <DashboardShell>
       <PersonJsonLd />

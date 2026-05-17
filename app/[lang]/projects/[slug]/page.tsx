@@ -5,7 +5,7 @@ import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { ESMOSDiagram } from "@/components/esmos/esmos-diagram";
 import { ProjectBreadcrumbsJsonLd } from "@/components/structured-data";
 import { ProjectLightboxGallery } from "@/components/ui/lightbox";
-import { getLocale, getT } from "@/lib/i18n/server";
+import { getLocale, getT, seedLocaleFromParams } from "@/lib/i18n/server";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
 import { localeHref } from "@/lib/i18n/href";
@@ -26,7 +26,7 @@ const CATEGORY_LABEL_KEY: Record<ProjectCategory, MessageKey> = {
   Coursework: "projects.category.Coursework",
 };
 
-type Params = { slug: string };
+type Params = { lang: string; slug: string };
 
 function allLiveLinks(
   p: Project,
@@ -60,6 +60,7 @@ export default async function ProjectPage({
 }: {
   params: Promise<Params>;
 }) {
+  await seedLocaleFromParams(params);
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();

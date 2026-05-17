@@ -19,6 +19,27 @@ export const messages = {
     "meta.og.description":
       "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
     "a11y.skipToMain": "Skip to main content",
+    // Per-route page titles + descriptions. Used by each page's
+    // generateMetadata so the <title> tag and meta description match
+    // the visitor's locale. The route layout's title template wraps
+    // these as "{page} | Lwin MMT".
+    "page.title.about": "About",
+    "page.description.about":
+      "Bio, community service, activities, awards, and personal interests.",
+    "page.title.blog": "Blog",
+    "page.description.blog":
+      "Writing on engineering, AI tools, and shipping products.",
+    "page.title.highlights": "Highlights",
+    "page.description.highlights":
+      "Talks, press, awards, and notable moments.",
+    "page.title.uses": "Uses",
+    "page.description.uses":
+      "Daily AI tools, dev stack, IoT and cloud stack, hardware, and everyday software.",
+    "page.title.resume": "Resume",
+    "page.description.resume": "Web-readable resume with PDF download.",
+    "page.title.projects": "Projects",
+    "page.description.projects":
+      "Selected work across IoT, cloud platforms, and product engineering.",
     // Sidebar navigation labels
     "nav.home": "Home",
     "nav.about": "About",
@@ -265,6 +286,24 @@ export const messages = {
     "meta.og.description":
       "Sinh viên ngành Hệ thống Thông tin tại Đại học Quản lý Singapore. Tôi xây dựng hệ thống IoT và đưa sản phẩm ra thị trường, từ đầu đến cuối. Kỹ sư được đào tạo bài bản. Sử dụng công cụ AI hàng ngày.",
     "a11y.skipToMain": "Bỏ qua tới nội dung chính",
+    // Per-route page titles + descriptions — see EN block.
+    "page.title.about": "Giới thiệu",
+    "page.description.about":
+      "Tiểu sử, hoạt động cộng đồng, sinh hoạt, giải thưởng và sở thích cá nhân.",
+    "page.title.blog": "Blog",
+    "page.description.blog":
+      "Bài viết về kỹ thuật, công cụ AI và việc đưa sản phẩm ra thị trường.",
+    "page.title.highlights": "Điểm nhấn",
+    "page.description.highlights":
+      "Diễn thuyết, báo chí, giải thưởng và những khoảnh khắc đáng nhớ.",
+    "page.title.uses": "Công cụ",
+    "page.description.uses":
+      "Công cụ AI hàng ngày, dev stack, IoT và cloud stack, phần cứng và phần mềm thường dùng.",
+    "page.title.resume": "Sơ yếu lý lịch",
+    "page.description.resume": "Sơ yếu lý lịch dạng web và bản PDF tải về.",
+    "page.title.projects": "Dự án",
+    "page.description.projects":
+      "Một số dự án về IoT, nền tảng cloud và kỹ thuật sản phẩm.",
     // Sidebar navigation
     "nav.home": "Trang chủ",
     "nav.about": "Giới thiệu",

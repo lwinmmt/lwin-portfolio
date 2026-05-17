@@ -23,7 +23,7 @@
 
 import { cache } from "react";
 import { messages, type MessageKey } from "./messages";
-import { DEFAULT_LOCALE, type Locale } from "./types";
+import { DEFAULT_LOCALE, LOCALES, type Locale } from "./types";
 
 type LocaleHolder = { locale: Locale };
 
@@ -35,6 +35,29 @@ const getLocaleHolder = cache((): LocaleHolder => ({
 /** Called once by [lang]/layout.tsx to seed the request's locale. */
 export function setLocaleForRequest(locale: Locale): void {
   getLocaleHolder().locale = locale;
+}
+
+const VALID_LOCALES: ReadonlySet<string> = new Set(LOCALES);
+
+/**
+ * Page helper: awaits params, validates the lang segment, and seeds
+ * the request locale holder. Every server page under app/[lang]/ must
+ * call this BEFORE calling getT() / getLocale() / pickLocalized().
+ *
+ * Why every page, not just the layout: Next.js can render layouts
+ * and pages in parallel, so the layout's setLocaleForRequest is not
+ * guaranteed to have run before the page reads the locale. In
+ * practice the home page happened to work but inner routes (resume,
+ * about, uses, etc.) rendered with the default locale, leaking
+ * English copy onto Vietnamese pages.
+ */
+export async function seedLocaleFromParams(
+  params: Promise<{ lang: string }>,
+): Promise<Locale> {
+  const { lang } = await params;
+  const locale = VALID_LOCALES.has(lang) ? (lang as Locale) : DEFAULT_LOCALE;
+  setLocaleForRequest(locale);
+  return locale;
 }
 
 export function getLocale(): Locale {

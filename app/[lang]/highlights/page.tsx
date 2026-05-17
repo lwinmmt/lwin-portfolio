@@ -4,20 +4,34 @@ import Link from "next/link";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
 import { highlights, type Highlight } from "@/lib/content";
-import { getLocale, getT } from "@/lib/i18n/server";
+import { getLocale, getT, seedLocaleFromParams } from "@/lib/i18n/server";
+import { messages } from "@/lib/i18n/messages";
 import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
 import { localeHref } from "@/lib/i18n/href";
 import type { Locale } from "@/lib/i18n/types";
 
-export const metadata: Metadata = {
-  title: "Highlights",
-  description: "Talks, press, awards, and notable moments.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const locale = await seedLocaleFromParams(params);
+  const m = messages[locale];
+  return {
+    title: m["page.title.highlights"],
+    description: m["page.description.highlights"],
+  };
+}
 
 type BentoLayout = "side-by-side" | "stacked" | "text-only";
 
-export default function HighlightsPage() {
+export default async function HighlightsPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  await seedLocaleFromParams(params);
   const t = getT();
   const locale = getLocale();
   // Highlights order in lib/content/highlights.ts is intentional and
