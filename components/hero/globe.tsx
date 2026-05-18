@@ -14,9 +14,14 @@ import { profile } from "@/lib/content";
 // Behaviour preserved from the DOM version:
 //   - Auto-rotation around Y, paused while dragging.
 //   - Two-axis pointer drag: horizontal -> phi, vertical -> theta
-//     (clamped to +/- 70deg).
+//     (clamped to +/- 70deg). DESKTOP ONLY — see onPointerDown.
 //   - Momentum coast on release (Y-axis only).
 //   - Random data-flow arcs with 4-segment comet trail.
+//
+// Touch input is intentionally NOT handled. On phones / tablets the
+// globe is decorative: a finger landing on it should let the page
+// scroll, not get hijacked into a rotation gesture. Auto-rotation
+// continues so the globe still feels alive on mobile.
 
 // Bumped from 380 -> 440 after the HCMC chip was retired. The chip
 // gave the right column a second visual mass below the globe; without
@@ -497,6 +502,11 @@ export function HeroGlobe() {
   }, [mounted, dots]);
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    // Desktop-only drag. On mobile a touch over the globe should let
+    // the page scroll instead of being captured into a rotation. The
+    // pointerType check leaves mouse + pen (Apple Pencil, Wacom)
+    // working as before while opting touch out entirely.
+    if (e.pointerType === "touch") return;
     dragging.current = true;
     dragStartX.current = e.clientX;
     dragStartY.current = e.clientY;
@@ -544,7 +554,14 @@ export function HeroGlobe() {
         style={{
           width: "100%",
           aspectRatio: "1 / 1",
-          touchAction: "none",
+          // touchAction "auto" so a finger swipe over the globe on
+          // mobile scrolls the page. Previously "none" suppressed
+          // browser-default touch behaviour because we were
+          // capturing all pointer events into the drag handler;
+          // that handler now early-returns on pointerType "touch"
+          // (see onPointerDown), so the browser can keep the
+          // gesture.
+          touchAction: "auto",
           cursor: "grab",
         }}
         onPointerDown={onPointerDown}
