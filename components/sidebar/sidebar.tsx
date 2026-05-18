@@ -3,9 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import { m as motion } from "framer-motion";
 import { SidebarIcon } from "./sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -16,14 +13,9 @@ import { localeHref } from "@/lib/i18n/href";
 import { useModKey } from "@/lib/use-mod-key";
 
 export function Sidebar() {
-  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const t = useT();
   const modKey = useModKey();
-  // next-themes resolves the active mode on the client only. Gate the
-  // active-button styling to avoid a hydration mismatch warning.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   return (
     <aside
@@ -100,50 +92,10 @@ export function Sidebar() {
       </button>
 
       <LanguageSwitcher />
-
-      <div className="relative mt-2 flex gap-1 rounded-[10px] bg-[var(--color-hover-mute)] p-1">
-        {(["light", "dark", "system"] as const).map((mode) => {
-          const isActiveTheme = mounted && theme === mode;
-          const label =
-            mode === "system"
-              ? t("theme.auto")
-              : mode === "light"
-                ? t("theme.light")
-                : t("theme.dark");
-          return (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setTheme(mode)}
-              className={
-                "relative flex-1 rounded-[7px] py-1.5 text-[11.5px] font-medium transition-colors " +
-                (isActiveTheme
-                  ? "text-[var(--color-fg)]"
-                  : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
-              }
-              aria-pressed={isActiveTheme}
-            >
-              {/* Sliding active background, framer-motion shared
-                  layout. Matches the EN/VI switcher's behavior so
-                  the two adjacent pill toggles read as one pattern. */}
-              {isActiveTheme && (
-                <motion.span
-                  layoutId="theme-switch-pill"
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-[7px] bg-[var(--color-bg-card)] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
-                  transition={{
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 32,
-                    mass: 0.7,
-                  }}
-                />
-              )}
-              <span className="relative z-10">{label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {/* Theme toggle removed — site is light-only. forcedTheme="light"
+          in app/layout.tsx overrides system + any stored next-themes
+          value so visitors on Android with dark system theme still
+          get the light render. */}
     </aside>
   );
 }

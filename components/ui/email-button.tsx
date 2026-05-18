@@ -16,13 +16,17 @@ type EmailButtonProps = {
 
 /**
  * Click behavior:
- *   1. Always copy the email to the clipboard so the user can paste it.
- *   2. Also fire the default mailto: navigation. If the user has a mail
- *      client configured, the compose window opens. If not, they still got
- *      the address from the clipboard and see a "Copied" toast.
+ *   - Copy the email to the clipboard, show the "Copied" toast, done.
+ *   - The default mailto: navigation is suppressed (e.preventDefault).
+ *     Previously the anchor also fired the mailto so users with a mail
+ *     client got a compose window — useful on desktop, intrusive on
+ *     mobile (every phone has a default mail app, so a tap always
+ *     yanked the user out of the page). Behaviour now matches across
+ *     platforms: clipboard only.
  *
- * This solves the broken-mailto frustration without breaking native behavior
- * for users who do have a client set up.
+ * The href stays "mailto:..." so right-click "Copy Email Address" still
+ * works on desktop, the anchor still reads as an email link to screen
+ * readers, and long-press on mobile surfaces the OS share/copy sheet.
  */
 export function EmailButton({
   email,
@@ -46,7 +50,12 @@ export function EmailButton({
     [],
   );
 
-  async function handleClick() {
+  async function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    // Suppress the mailto: navigation. On mobile every tap was opening
+    // the OS mail app which felt intrusive; on desktop the user can
+    // still right-click -> Copy Email Address if they want the raw
+    // string, or paste from clipboard after the toast fires.
+    e.preventDefault();
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(email);
@@ -55,7 +64,9 @@ export function EmailButton({
         timerRef.current = setTimeout(() => setCopied(false), 2000);
       }
     } catch {
-      // Clipboard blocked. Mailto still fires below.
+      // Clipboard blocked (browser policy, insecure context, etc.).
+      // No toast in that case; the user can long-press the link to
+      // copy via the OS share/context sheet as a fallback.
     }
   }
 

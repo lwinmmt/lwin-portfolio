@@ -3,7 +3,12 @@ import { MobileDock } from "@/components/dock/mobile-dock";
 import { KeyboardNav } from "@/components/layout/keyboard-nav";
 import { LocaleSwap } from "@/components/layout/locale-swap";
 import { CmdPalette } from "@/components/cmd-palette/cmd-palette";
-import { LocalePromptBanner } from "@/components/ui/locale-prompt-banner";
+// LocalePromptBanner intentionally not rendered — the floating
+// bottom-right "switch language?" prompt felt intrusive when it
+// appeared on the OTHER locale after a manual switch. Sidebar +
+// mobile dock both surface the toggle clearly enough. The component
+// file stays in components/ui/locale-prompt-banner.tsx so it can be
+// re-mounted here if we want to A/B test it later.
 
 // Sync (not async) because some pages — like /projects — are
 // "use client" and import DashboardShell into the client bundle.
@@ -25,7 +30,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         </LocaleSwap>
       </main>
       <MobileDock />
-      <LocalePromptBanner />
     </>
   );
 }

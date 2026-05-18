@@ -79,10 +79,15 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        {/* forcedTheme="light" overrides any previously-stored
+            next-themes value AND the OS-level prefers-color-scheme.
+            This site is light-only for now; the dark CSS variables
+            in globals.css are dead code retained in case we
+            reintroduce a toggle later. Removing the toggle here
+            (sidebar + mobile dock) closes the loop. */}
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          enableSystem
+          forcedTheme="light"
           disableTransitionOnChange
         >
           <MotionProvider>

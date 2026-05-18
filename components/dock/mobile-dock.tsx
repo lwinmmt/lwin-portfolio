@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
 import { m as motion } from "framer-motion";
 import { SidebarIcon } from "@/components/sidebar/sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
@@ -51,7 +50,6 @@ const DOCK_ITEMS: DockItem[] = [
 // sidebar's resources list.
 const SHEET_INTERNAL: DockItem[] = [
   { href: "/highlights", icon: "highlights", labelKey: "nav.highlights" },
-  { href: "/blog", icon: "pen", labelKey: "nav.blog" },
 ];
 
 export function MobileDock() {
@@ -262,10 +260,10 @@ function MobileMoreSheet({
           ))}
         </SheetSection>
 
-        {/* Theme + locale at the bottom — utility controls visually
-            separated from navigation. */}
-        <div className="mt-5 grid grid-cols-2 gap-3 pb-4">
-          <ThemePill />
+        {/* Locale toggle at the bottom — utility control visually
+            separated from navigation. ThemePill was removed when the
+            site went light-only (see app/layout.tsx forcedTheme). */}
+        <div className="mt-5 pb-4">
           <LocalePill />
         </div>
       </div>
@@ -366,64 +364,9 @@ function SheetExternalRow({
   );
 }
 
-function ThemePill() {
-  const { theme, setTheme } = useTheme();
-  const t = useT();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  const modes = [
-    { id: "light", icon: "sun", label: t("theme.light") },
-    { id: "dark", icon: "moon", label: t("theme.dark") },
-    { id: "system", icon: "auto", label: t("theme.auto") },
-  ] as const;
-
-  return (
-    <div className="flex flex-col gap-1.5 rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-2">
-      <div className="px-1 font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-        {t("theme.label")}
-      </div>
-      <div className="flex gap-1">
-        {modes.map((mode) => {
-          const active = mounted && theme === mode.id;
-          return (
-            <button
-              key={mode.id}
-              type="button"
-              onClick={() => setTheme(mode.id)}
-              aria-pressed={active}
-              aria-label={mode.label}
-              className="relative flex h-9 flex-1 items-center justify-center rounded-md text-[12px] transition-colors"
-            >
-              {active && (
-                <motion.span
-                  layoutId="mobile-theme-pill"
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-md bg-[var(--color-fg)]"
-                  transition={{
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 32,
-                    mass: 0.7,
-                  }}
-                />
-              )}
-              <SidebarIcon
-                name={mode.icon}
-                className={
-                  "relative z-10 h-[14px] w-[14px] transition-colors " +
-                  (active
-                    ? "text-[var(--color-bg)]"
-                    : "text-[var(--color-fg-muted)]")
-                }
-              />
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+// ThemePill removed — site is light-only. forcedTheme="light" in
+// app/layout.tsx pins the theme regardless of OS preference or any
+// previously-stored next-themes value.
 
 function LocalePill() {
   const locale = useLocale();

@@ -16,12 +16,13 @@ export type NavLink = {
   external?: boolean;
 };
 
+// /blog is archived (see .archive/blog/README.md). Shortcut numbers
+// re-flow so they stay contiguous (no skipped 4).
 export const navItems: NavLink[] = [
   { href: "/", label: "Home", labelKey: "nav.home", shortcut: "1", icon: "home" },
   { href: "/about", label: "About", labelKey: "nav.about", shortcut: "2", icon: "user" },
   { href: "/projects", label: "Projects", labelKey: "nav.projects", shortcut: "3", icon: "code" },
-  { href: "/blog", label: "Blog", labelKey: "nav.blog", shortcut: "4", icon: "pen" },
-  { href: "/uses", label: "Uses", labelKey: "nav.uses", shortcut: "5", icon: "laptop" },
+  { href: "/uses", label: "Uses", labelKey: "nav.uses", shortcut: "4", icon: "laptop" },
 ];
 
 // /studio intentionally NOT listed here. The route + code stay
@@ -31,8 +32,8 @@ export const navItems: NavLink[] = [
 // the sidebar, not in the mobile sheet, not in the cmd palette.
 // Direct /studio access still works for the maintainer.
 export const navResources: NavLink[] = [
-  { href: "/highlights", label: "Highlights", labelKey: "nav.highlights", shortcut: "6", icon: "medal" },
-  { href: "/resume", label: "Resume", labelKey: "nav.resume", shortcut: "7", icon: "file" },
+  { href: "/highlights", label: "Highlights", labelKey: "nav.highlights", shortcut: "5", icon: "medal" },
+  { href: "/resume", label: "Resume", labelKey: "nav.resume", shortcut: "6", icon: "file" },
 ];
 
 export const navContact: NavLink[] = [
