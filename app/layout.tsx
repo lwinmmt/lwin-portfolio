@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -41,6 +41,18 @@ export const metadata: Metadata = {
     address: false,
   },
   // Icons resolved automatically from app/icon.svg and app/apple-icon.svg.
+};
+
+// color-scheme: "light" emits <meta name="color-scheme" content="light">,
+// the standard hint that tells the browser this is a light-only site.
+// Mainly defends against Android Chrome's "Force Dark Mode for Web
+// Contents" auto-filter which would otherwise invert colours for
+// visitors whose system theme is dark. Browsers honoring the meta tag
+// skip the auto-darken pass; users on the more aggressive "always dark"
+// override still see dark, but that's a user-level setting we can't
+// override from the page.
+export const viewport: Viewport = {
+  colorScheme: "light",
 };
 
 // Root layout is fully static — no cookies(), no headers(), nothing

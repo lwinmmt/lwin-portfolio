@@ -7,6 +7,14 @@
   inherits: false;
 }
 
+/* color-scheme: light reinforces the meta tag in app/layout.tsx so
+   form controls (scrollbars, native inputs) render in light variants
+   on browsers that would otherwise auto-darken them based on the OS
+   prefers-color-scheme value. Belt + suspenders with the <meta> hint. */
+:root {
+  color-scheme: light;
+}
+
 /* Light theme tokens (default) */
 :root {
   --color-bg: #FAFAF7;
