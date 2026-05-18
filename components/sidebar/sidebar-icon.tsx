@@ -34,10 +34,15 @@ export function SidebarIcon({ name, className = "h-[15px] w-[15px]" }: Props) {
         </svg>
       );
     case "code":
+      // Folder icon. The "code" case key is retained for backwards
+      // compat with lib/content/nav.ts; the previous chevron-brackets
+      // `< >` glyph read as "view source" rather than "portfolio of
+      // work". The folder shape reads as a collection of projects at
+      // a glance and aligns better with the User / Home / Resume
+      // metaphors in the rest of the nav.
       return (
         <svg className={className} viewBox="0 0 24 24" {...common}>
-          <polyline points="8 6 2 12 8 18" />
-          <polyline points="16 6 22 12 16 18" />
+          <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
         </svg>
       );
     case "pen":
