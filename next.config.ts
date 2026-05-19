@@ -31,7 +31,11 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https://cdn.sanity.io",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.sanity.io https://*.api.sanity.io wss://*.api.sanity.io",
+      // va.vercel-scripts.com is where the @vercel/analytics script
+      // beacons page views; vitals.vercel-insights.com is the
+      // Speed Insights destination. Both required for the
+      // dashboards to receive any data in production.
+      "connect-src 'self' https://*.sanity.io https://*.api.sanity.io wss://*.api.sanity.io https://va.vercel-scripts.com https://vitals.vercel-insights.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
@@ -73,7 +77,12 @@ const nextConfig: NextConfig = {
   // most here — without this the `motion` proxy pulls the full
   // animation set even when we only use a few features.
   experimental: {
-    optimizePackageImports: ["framer-motion"],
+    // optimizePackageImports rewrites barrel imports into per-icon /
+    // per-export imports at build time so tree-shaking can drop
+    // everything we don't reference. Without phosphor here the
+    // dist/ssr barrel pulls in the entire icon library (~300KB
+    // parsed) on every page that imports SidebarIcon.
+    optimizePackageImports: ["framer-motion", "@phosphor-icons/react"],
   },
   images: {
     // AVIF first, WebP fallback. Next.js defaults to ["image/webp"]

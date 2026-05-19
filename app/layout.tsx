@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConsoleBranding } from "@/components/console-branding";
 import { MotionProvider } from "@/components/providers/motion-provider";
 import "./globals.css";
@@ -91,22 +90,19 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        {/* forcedTheme="light" overrides any previously-stored
-            next-themes value AND the OS-level prefers-color-scheme.
-            This site is light-only for now; the dark CSS variables
-            in globals.css are dead code retained in case we
-            reintroduce a toggle later. Removing the toggle here
-            (sidebar + mobile dock) closes the loop. */}
-        <ThemeProvider
-          attribute="class"
-          forcedTheme="light"
-          disableTransitionOnChange
-        >
-          <MotionProvider>
-            <ConsoleBranding />
-            {children}
-          </MotionProvider>
-        </ThemeProvider>
+        {/* next-themes used to wrap here with forcedTheme="light".
+            With the toggle removed, the dep added ~5KB gz of
+            hydration cost for zero behavioural gain. The light-only
+            guarantee is now enforced entirely by CSS:
+              - color-scheme: light declared on :root + via the
+                viewport meta above
+              - all dark tokens removed from globals.css
+            so there is no JS path that could flip a class to .dark
+            even if a stale localStorage value were present. */}
+        <MotionProvider>
+          <ConsoleBranding />
+          {children}
+        </MotionProvider>
         {/* Vercel Analytics (page views, referrers) + Speed Insights
             (real-user Core Web Vitals). Both ship tiny inline scripts
             that only beacon in production on the lwinmmt.com /

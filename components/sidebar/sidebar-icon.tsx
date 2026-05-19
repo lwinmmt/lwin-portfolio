@@ -21,7 +21,6 @@
 
 import {
   ArrowSquareOut,
-  CircleHalf,
   DotsThree,
   EnvelopeSimple,
   FileText,
@@ -31,10 +30,8 @@ import {
   Laptop,
   LinkedinLogo,
   Medal,
-  Moon,
   Pencil,
   Storefront,
-  Sun,
   User,
   WhatsappLogo,
 } from "@phosphor-icons/react/dist/ssr";
@@ -55,10 +52,11 @@ type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 // gain.
 //
 // Some entries map to icons that are temporarily not surfaced in
-// any nav config (pen for archived /blog, sun/moon/auto for the
-// removed theme toggle, studio for the hidden CMS route). Kept so
-// restoring those routes is a config-file edit rather than also
-// having to re-add icon mappings.
+// any nav config (pen for archived /blog, studio for the hidden CMS
+// route). Kept so restoring those routes is a config-file edit
+// rather than also having to re-add icon mappings. Sun/Moon/CircleHalf
+// (former theme toggle icons) were removed entirely along with the
+// next-themes dependency — the site is light-only.
 const ICONS: Record<string, IconComponent> = {
   // Active nav (sidebar + mobile dock)
   home: House,
@@ -76,9 +74,6 @@ const ICONS: Record<string, IconComponent> = {
   more: DotsThree,
   // Archived / hidden — present so restore is a one-line nav.ts edit
   pen: Pencil, // /blog (archived)
-  sun: Sun, // theme toggle (removed; site is light-only)
-  moon: Moon,
-  auto: CircleHalf,
   studio: Storefront, // /studio (Basic-Auth gated, not in nav)
 };
 
@@ -91,5 +86,9 @@ export function SidebarIcon({
   // aria-hidden on every icon: nav rows carry their own visible
   // labels (Sidebar) or aria-label on the wrapping Link/button
   // (mobile dock). Re-announcing the icon shape would be noise.
-  return <Icon className={className} aria-hidden focusable={false} />;
+  // `focusable="false"` as a string (not boolean) — SVG attribute
+  // values are strings, and React emits a dev-mode warning if you
+  // pass a JS boolean to a non-boolean attribute. The string form
+  // serializes identically and silences the warning.
+  return <Icon className={className} aria-hidden focusable="false" />;
 }

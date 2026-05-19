@@ -50,38 +50,10 @@
   --tag-press: #047857;
 }
 
-/* Dark theme tokens */
-.dark {
-  --color-bg: #0A0908;
-  --color-bg-card: #131110;
-  --color-bg-warm: #1A1815;
-  --color-bg-sidebar: #0C0B0A;
-  --color-surface: rgba(18, 17, 16, 0.55);
-  --color-surface-2: rgba(28, 26, 24, 0.5);
-  --color-surface-3: rgba(20, 19, 17, 0.85);
-  --color-fg: #FAFAF7;
-  --color-fg-soft: #E5E4E0;
-  --color-fg-muted: #A8A29E;
-  --color-fg-faint: #57534E;
-  --color-border-default: rgba(255, 255, 255, 0.08);
-  --color-border-soft: rgba(255, 255, 255, 0.04);
-  --color-border-glass: rgba(255, 255, 255, 0.07);
-  --color-ruby: #D34939;
-  --color-ruby-deep: #B73A2C;
-  --color-ruby-bright: #EF5440;
-  --color-ruby-soft: rgba(211, 73, 57, 0.10);
-  --color-live: #22C55E;
-  --color-grid: rgba(255, 255, 255, 0.025);
-  --color-hover-mute: rgba(255, 255, 255, 0.05);
-  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-glass-overlay: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-map: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 1px 3px rgba(0, 0, 0, 0.3), 0 10px 32px rgba(0, 0, 0, 0.5);
-  --aurora-ruby: rgba(211, 73, 57, 0.10);
-  --aurora-violet: rgba(139, 92, 246, 0.07);
-  --aurora-amber: rgba(217, 119, 6, 0.06);
-  /* Tag accent. See light-mode block for context. */
-  --tag-press: #34D399;
-}
+/* Dark theme tokens removed when the site went light-only and the
+   next-themes dependency was dropped. Light tokens above are the
+   only theme; color-scheme: light is declared via the viewport meta
+   in app/layout.tsx so browsers honor the light-only declaration. */
 
 @theme inline {
   --color-bg: var(--color-bg);
@@ -168,11 +140,6 @@
       0 12px 32px rgba(0, 0, 0, 0.06),
       0 2px 6px rgba(0, 0, 0, 0.04);
     border-color: var(--color-border-default);
-  }
-  .dark .lift-card:hover {
-    box-shadow:
-      0 12px 32px rgba(0, 0, 0, 0.35),
-      0 2px 6px rgba(0, 0, 0, 0.25);
   }
 
   /* Secondary CTA pill. Same visual as the secondary buttons in the

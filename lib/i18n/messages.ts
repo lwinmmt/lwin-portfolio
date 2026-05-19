@@ -102,11 +102,6 @@ export const messages = {
     "hero.cta.github": "GitHub",
     "hero.cta.linkedin": "LinkedIn",
     "hero.cta.ariaCurrentRole": "Currently {role} at {org}, opens in new tab",
-    // Theme switcher
-    "theme.label": "Theme",
-    "theme.light": "Light",
-    "theme.dark": "Dark",
-    "theme.auto": "Auto",
     // Command palette
     "cmd.placeholder": "Type a page, project, or action",
     "cmd.aria": "Search command palette",
@@ -121,7 +116,7 @@ export const messages = {
     "cmd.hint.action": "Action",
     "cmd.footer.navigate": "Navigate",
     "cmd.footer.open": "Open",
-    "cmd.footer.toggle": "Toggle",
+    "cmd.footer.toggle": "Close",
     "cmd.action.resumePdf": "Download resume PDF",
     "cmd.action.email": "Email {email}",
     "cmd.action.github": "Open GitHub profile",
@@ -366,11 +361,6 @@ export const messages = {
     "hero.cta.github": "GitHub",
     "hero.cta.linkedin": "LinkedIn",
     "hero.cta.ariaCurrentRole": "Hiện đang là {role} tại {org}, mở trong tab mới",
-    // Theme switcher
-    "theme.label": "Giao diện",
-    "theme.light": "Sáng",
-    "theme.dark": "Tối",
-    "theme.auto": "Tự động",
     // Command palette
     "cmd.placeholder": "Gõ tên trang, dự án, hoặc thao tác",
     "cmd.aria": "Tìm trong bảng lệnh",
@@ -385,7 +375,7 @@ export const messages = {
     "cmd.hint.action": "Thao tác",
     "cmd.footer.navigate": "Di chuyển",
     "cmd.footer.open": "Mở",
-    "cmd.footer.toggle": "Bật tắt",
+    "cmd.footer.toggle": "Đóng",
     "cmd.action.resumePdf": "Tải hồ sơ PDF",
     "cmd.action.email": "Gửi email tới {email}",
     "cmd.action.github": "Mở hồ sơ GitHub",
