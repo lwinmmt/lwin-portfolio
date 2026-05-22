@@ -212,18 +212,9 @@ export default async function UsesPage({
             block signals reach, not daily use. The featured sections
             above own the "what I reach for" story. */}
         <section className="mt-12 rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] p-7 sm:p-9">
-          <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <h2 className="font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
-              {t("uses.workedWith.label")}
-            </h2>
-            <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-              {workedWithGroups.reduce(
-                (n, g) => n + g.items.length,
-                0,
-              )}{" "}
-              entries
-            </span>
-          </div>
+          <h2 className="font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
+            {t("uses.workedWith.label")}
+          </h2>
           <p className="mt-2 max-w-[560px] text-[13px] leading-[1.55] text-[var(--color-fg-muted)]">
             {t("uses.workedWith.subtitle")}
           </p>
