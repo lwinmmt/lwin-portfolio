@@ -248,6 +248,8 @@ export const messages = {
     "uses.aiTools.subtitle": "{n} agents, no fixed workflow",
     "uses.hardwareTag": "Hardware /",
     "uses.workedWith.label": "Tools I've worked with",
+    "uses.workedWith.subtitle":
+      "Not all daily, all hands-on at some point.",
     // Blog page
     "blog.eyebrow": "Blog",
     "blog.titleHead": "Notes in progress",
@@ -506,6 +508,8 @@ export const messages = {
     "uses.aiTools.subtitle": "{n} agent, không quy trình cố định",
     "uses.hardwareTag": "Phần cứng /",
     "uses.workedWith.label": "Công cụ tôi từng dùng",
+    "uses.workedWith.subtitle":
+      "Không phải tất cả đều hằng ngày, nhưng đều đã thực sự đụng tay vào.",
     // Blog page
     "blog.eyebrow": "Blog",
     "blog.titleHead": "Ghi chú đang viết",

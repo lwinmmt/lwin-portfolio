@@ -215,6 +215,9 @@ export default async function UsesPage({
           <h2 className="font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
             {t("uses.workedWith.label")}
           </h2>
+          <p className="mt-2 max-w-[560px] text-[13px] leading-[1.55] text-[var(--color-fg-muted)]">
+            {t("uses.workedWith.subtitle")}
+          </p>
           <div className="mt-7 flex flex-col gap-6">
             {workedWithGroups.map((g) => (
               <div key={g.id}>
