@@ -1,4 +1,6 @@
-// Daily tools, gear, software. Surfaced on /uses to signal AI-native fluency.
+// Daily tools, gear, software. Surfaced on /uses to signal AI-native
+// fluency for the featured sections, and proven breadth via the
+// "Tools I've worked with" chip block at the bottom.
 
 export type UsesItem = {
   name: string;
@@ -19,6 +21,11 @@ export type UsesGroup = {
   items: UsesItem[];
 };
 
+/** Featured groups — each renders with per-item descriptions and is
+ *  laid out distinctly on the page (AI tools as a hero band,
+ *  Languages as a chip strip with no descriptions, Editor +
+ *  Everyday side-by-side at the bottom with Hardware merged into
+ *  Everyday as a tagged prefix). */
 export const usesGroups: UsesGroup[] = [
   {
     id: "ai-tools",
@@ -56,20 +63,37 @@ export const usesGroups: UsesGroup[] = [
     ],
   },
   {
+    id: "languages",
+    label: "Languages",
+    labelVi: "Ngôn ngữ",
+    items: [
+      // Chip-only — no detail. Names alone carry enough signal for
+      // mainstream languages and HTML/CSS. Python first because it
+      // is the most familiar / most-reached-for.
+      { name: "Python" },
+      { name: "TypeScript / JavaScript" },
+      { name: "SQL" },
+      { name: "HTML" },
+      { name: "CSS" },
+    ],
+  },
+  {
     id: "editor",
     label: "Editor & Terminal",
     labelVi: "Editor & Terminal",
     items: [
       {
         name: "Sublime Text",
-        detail: "Primary editor. Fast, minimal, dependable.",
-        detailVi: "Editor chính. Nhanh, tối giản, đáng tin.",
+        detail:
+          "Scratchpad. Quick notes, paste-and-tidy, off-the-record drafts.",
+        detailVi:
+          "Sổ tay nháp. Ghi nhanh, dán-rồi-dọn, bản nháp tạm.",
         link: "https://www.sublimetext.com",
       },
       {
         name: "VS Code",
-        detail: "Secondary editor when LSP and extensions matter.",
-        detailVi: "Editor phụ khi cần LSP và extension.",
+        detail: "Primary IDE. Where actual code gets written.",
+        detailVi: "IDE chính. Nơi code thực sự được viết.",
         link: "https://code.visualstudio.com",
       },
       {
@@ -83,76 +107,6 @@ export const usesGroups: UsesGroup[] = [
         detail: "macOS package manager.",
         detailVi: "Trình quản lý package cho macOS.",
         link: "https://brew.sh",
-      },
-    ],
-  },
-  {
-    id: "stack",
-    label: "Stack I Reach For",
-    labelVi: "Stack tôi hay dùng",
-    items: [
-      {
-        name: "Next.js",
-        detail: "App Router, server components.",
-        detailVi: "App Router, server components.",
-      },
-      { name: "TypeScript", detail: "Strict mode.", detailVi: "Chế độ strict." },
-      {
-        name: "Tailwind CSS",
-        detail: "Utility-first.",
-        detailVi: "Phương pháp utility-first.",
-      },
-      {
-        name: "shadcn/ui",
-        detail: "Component primitives.",
-        detailVi: "Bộ component primitive.",
-      },
-      {
-        name: "PostgreSQL",
-        detail: "Via Supabase or RDS.",
-        detailVi: "Qua Supabase hoặc RDS.",
-      },
-      {
-        name: "Python",
-        detail: "FastAPI for services, scripting.",
-        detailVi: "FastAPI cho service, scripting.",
-      },
-    ],
-  },
-  {
-    id: "iot-stack",
-    label: "IoT & Cloud Stack",
-    labelVi: "Stack IoT & Cloud",
-    items: [
-      {
-        name: "AWS",
-        detail: "EC2, S3, ASG, IoT Core.",
-        detailVi: "EC2, S3, ASG, IoT Core.",
-      },
-      {
-        name: "Azure",
-        detail: "Fundamentals certified, used for ESMOS DR.",
-        detailVi: "Có chứng chỉ Fundamentals, dùng cho ESMOS DR.",
-      },
-      {
-        name: "MQTT",
-        detail: "Mosquitto broker, fault-tolerant.",
-        detailVi: "Broker Mosquitto, chịu lỗi tốt.",
-      },
-      {
-        name: "Node-RED",
-        detail: "Visual flow for edge logic.",
-        detailVi: "Flow trực quan cho logic ở edge.",
-      },
-      {
-        name: "ESP32 + Raspberry Pi",
-        detail: "Edge hardware.",
-        detailVi: "Phần cứng edge.",
-      },
-      {
-        name: "EdgeX Foundry",
-        detail: "Learning at VNTT, production-scale.",
-        detailVi: "Đang học tại VNTT, quy mô production.",
       },
     ],
   },
@@ -201,13 +155,103 @@ export const usesGroups: UsesGroup[] = [
         link: "https://linear.app",
       },
       {
-        name: "Figma",
-        detail: "When a UI needs sketching.",
-        detailVi: "Khi cần phác thảo UI.",
-        link: "https://figma.com",
+        name: "Comet",
+        detail: "Daily browser. Perplexity's AI-native build.",
+        detailVi: "Trình duyệt chính. Bản AI-native của Perplexity.",
+        link: "https://comet.perplexity.ai",
       },
-      { name: "Vercel", detail: "Hosting.", detailVi: "Hosting.", link: "https://vercel.com" },
-      { name: "GitHub", detail: "Code.", detailVi: "Code.", link: "https://github.com" },
+      {
+        name: "Notion",
+        detail: "Notes, drafts, second brain.",
+        detailVi: "Ghi chú, bản nháp, bộ não thứ hai.",
+        link: "https://notion.so",
+      },
     ],
+  },
+];
+
+/** Tools-I've-worked-with chip block. Each sub-group renders as a
+ *  small uppercase label above a row of name chips, no per-item
+ *  description. The block sits at the bottom of /uses to round out
+ *  the page with proven breadth without claiming daily use. */
+export type WorkedWithGroup = {
+  id: string;
+  label: string;
+  labelVi: string;
+  items: string[];
+};
+
+export const workedWithGroups: WorkedWithGroup[] = [
+  {
+    id: "web-ui",
+    label: "Web & UI",
+    labelVi: "Web & UI",
+    items: [
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "magic ui",
+      "Aceternity UI",
+    ],
+  },
+  {
+    id: "backend-data",
+    label: "Backend & data",
+    labelVi: "Backend & dữ liệu",
+    items: ["Node.js", "PostgreSQL", "MySQL"],
+  },
+  {
+    id: "cloud-deploy",
+    label: "Cloud & deploy",
+    labelVi: "Cloud & triển khai",
+    items: ["AWS", "Azure", "Cloudflare", "Vercel", "Railway", "GitHub"],
+  },
+  {
+    id: "infra-ops",
+    label: "Infra & ops",
+    labelVi: "Infra & ops",
+    items: [
+      "Docker",
+      "VMware",
+      "VirtualBox",
+      "Nginx",
+      "Apache",
+      "Grafana",
+      "Ubuntu",
+      "Windows Server 2012",
+    ],
+  },
+  {
+    id: "iot-embedded",
+    label: "IoT & embedded",
+    labelVi: "IoT & embedded",
+    items: [
+      "ESP32",
+      "Raspberry Pi",
+      "Arduino",
+      "MQTT / Mosquitto",
+      "Node-RED",
+      "EdgeX Foundry",
+      "Industrial RTUs",
+    ],
+  },
+  {
+    id: "networking-security",
+    label: "Networking & security",
+    labelVi: "Mạng & bảo mật",
+    items: [
+      "Cisco Packet Tracer",
+      "Nmap",
+      "Wireshark",
+      "OpenVPN",
+      "WireGuard",
+    ],
+  },
+  {
+    id: "design-diagrams",
+    label: "Design & diagrams",
+    labelVi: "Thiết kế & sơ đồ",
+    items: ["Figma", "Excalidraw", "Eraser"],
   },
 ];

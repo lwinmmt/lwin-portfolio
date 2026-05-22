@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
-import { usesGroups, type UsesItem } from "@/lib/content";
+import { usesGroups, workedWithGroups, type UsesItem } from "@/lib/content";
 import { getLocale, getT, seedLocaleFromParams } from "@/lib/i18n/server";
 import { messages } from "@/lib/i18n/messages";
 import { pickLocalized } from "@/lib/i18n/content";
@@ -30,11 +30,10 @@ export default async function UsesPage({
   const locale = getLocale();
   const hardwareTag = t("uses.hardwareTag");
   const aiTools = usesGroups.find((g) => g.id === "ai-tools");
-  const stack = usesGroups.find((g) => g.id === "stack");
+  const languages = usesGroups.find((g) => g.id === "languages");
   const hardware = usesGroups.find((g) => g.id === "hardware");
   const everyday = usesGroups.find((g) => g.id === "everyday");
   const editor = usesGroups.find((g) => g.id === "editor");
-  const iotStack = usesGroups.find((g) => g.id === "iot-stack");
 
   // Hardware merged into Everyday as a pinned prefix.
   const everydayMerged = everyday
@@ -161,68 +160,35 @@ export default async function UsesPage({
           </section>
         )}
 
-        {/* Split panel: Stack (warm bg) vs IoT/Cloud (card bg). Two
-            sibling cards with intentionally different surface tones so
-            the page reads as three distinguishable zones, not five
-            indistinguishable cards. */}
-        <div className="mt-8 grid gap-5 sm:grid-cols-2">
-          {stack && (
-            <section className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6">
-              <div className="flex items-baseline justify-between">
-                <h2 className="font-sans text-[16px] font-semibold tracking-[-0.01em] text-[var(--color-fg)]">
-                  {pickLocalized(stack.label, stack.labelVi, locale)}
-                </h2>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-                  {stack.items.length}
+        {/* Languages strip. Chip-only, no per-item description —
+            language names alone carry enough signal (Python, SQL,
+            etc.) and stripping the prose keeps the section visually
+            light between the dense AI band above and the side-by-
+            side editor/everyday cards below. */}
+        {languages && (
+          <section className="mt-8 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6">
+            <div className="flex items-baseline justify-between">
+              <h2 className="font-sans text-[16px] font-semibold tracking-[-0.01em] text-[var(--color-fg)]">
+                {pickLocalized(languages.label, languages.labelVi, locale)}
+              </h2>
+              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
+                {languages.items.length}
+              </span>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
+              {languages.items.map((item) => (
+                <span key={item.name} className="tag-chip">
+                  {item.name}
                 </span>
-              </div>
-              {stack.description && (
-                <p className="mt-1 text-[12px] leading-[1.55] text-[var(--color-fg-muted)]">
-                  {pickLocalized(
-                    stack.description,
-                    stack.descriptionVi,
-                    locale,
-                  )}
-                </p>
-              )}
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
-                {stack.items.map((item) => (
-                  <StackChip key={item.name} item={item} locale={locale} />
-                ))}
-              </div>
-            </section>
-          )}
-          {iotStack && (
-            <section className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] p-6">
-              <div className="flex items-baseline justify-between">
-                <h2 className="font-sans text-[16px] font-semibold tracking-[-0.01em] text-[var(--color-fg)]">
-                  {pickLocalized(iotStack.label, iotStack.labelVi, locale)}
-                </h2>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-fg-faint)]">
-                  {iotStack.items.length}
-                </span>
-              </div>
-              {iotStack.description && (
-                <p className="mt-1 text-[12px] leading-[1.55] text-[var(--color-fg-muted)]">
-                  {pickLocalized(
-                    iotStack.description,
-                    iotStack.descriptionVi,
-                    locale,
-                  )}
-                </p>
-              )}
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border-soft)] pt-4">
-                {iotStack.items.map((item) => (
-                  <StackChip key={item.name} item={item} locale={locale} />
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Bottom grid: Editor + Everyday. Transparent fill so they read
-            quieter than the split panel above. Visual weight flows down:
-            AI hero (heaviest) -> split panel (medium) -> these (lightest). */}
+            quieter than the languages strip above. Visual weight flows
+            down: AI hero (heaviest) -> Languages (light strip) ->
+            Editor + Everyday (lightest). */}
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           {editor && (
             <DetailListGroup
@@ -240,33 +206,47 @@ export default async function UsesPage({
           )}
         </div>
 
+        {/* "Tools I've worked with" — broader proven breadth as a
+            chip block. Each sub-group is a small uppercase label
+            over a row of name chips. No per-item description: this
+            block signals reach, not daily use. The featured sections
+            above own the "what I reach for" story. */}
+        <section className="mt-12 rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] p-7 sm:p-9">
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h2 className="font-sans text-[1.25rem] font-semibold tracking-[-0.02em] text-[var(--color-fg)]">
+              {t("uses.workedWith.label")}
+            </h2>
+            <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
+              {workedWithGroups.reduce(
+                (n, g) => n + g.items.length,
+                0,
+              )}{" "}
+              entries
+            </span>
+          </div>
+          <p className="mt-2 max-w-[560px] text-[13px] leading-[1.55] text-[var(--color-fg-muted)]">
+            {t("uses.workedWith.subtitle")}
+          </p>
+          <div className="mt-7 flex flex-col gap-6">
+            {workedWithGroups.map((g) => (
+              <div key={g.id}>
+                <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)]">
+                  {pickLocalized(g.label, g.labelVi, locale)}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {g.items.map((name) => (
+                    <span key={name} className="tag-chip">
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
       </article>
     </DashboardShell>
-  );
-}
-
-function StackChip({ item, locale }: { item: UsesItem; locale: Locale }) {
-  const detail = item.detail
-    ? pickLocalized(item.detail, item.detailVi, locale)
-    : undefined;
-  // When the chip carries a detail, make the wrapper focusable so
-  // keyboard users can reveal the tooltip with Tab. Native title
-  // attribute doubles as a fallback in case the styled span is
-  // clipped by a scrolling parent.
-  const interactive = Boolean(detail);
-  return (
-    <span
-      className="group relative inline-flex items-center"
-      tabIndex={interactive ? 0 : undefined}
-      title={detail}
-    >
-      <span className="tag-chip cursor-default">{item.name}</span>
-      {detail && (
-        <span className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--color-fg)] px-2.5 py-1.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-bg)] opacity-0 shadow-[0_4px_12px_rgba(0,0,0,0.15)] transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 sm:block">
-          {detail}
-        </span>
-      )}
-    </span>
   );
 }
 
