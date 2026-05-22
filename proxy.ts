@@ -142,6 +142,14 @@ export const config = {
   // rewritten. The locale rewrite + Studio gate handle their own
   // path matching above.
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|opengraph-image|icon.svg|images/|files/|diagrams/|logos/|sounds/).*)",
+    // resume/ is excluded because the resume PDF lives at
+    // public/resume/lwinmmt-resume.pdf and the proxy would
+    // otherwise rewrite /resume/lwinmmt-resume.pdf into
+    // /{locale}/resume/lwinmmt-resume.pdf — neither a route nor a
+    // static file, so the download link 404'd. The /resume PAGE
+    // (no trailing slash + path) still hits the proxy and gets
+    // locale-rewritten as expected because the exclude pattern
+    // requires the trailing slash.
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|opengraph-image|icon.svg|images/|files/|diagrams/|logos/|sounds/|resume/).*)",
   ],
 };
