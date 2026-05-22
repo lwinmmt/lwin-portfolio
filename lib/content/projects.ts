@@ -60,9 +60,9 @@ export const projects: Project[] = [
     titleVi: "Inno2: Hệ thống giám sát nước thải trên cloud",
     course: "W2 Industrial Services Hub",
     description:
-      "Azure-hosted pipeline for 360-site NEA COVID-19 wastewater surveillance. 100+ Tastek industrial RTUs (embedded SIM) streaming directly over cellular to a single Azure VM running Mosquitto, the database, and the dashboard. Twilio WhatsApp alerts to the on-call engineers. Contributed to the Lee Hsien Loong IDM Smart Nation Award 2022. Straits Times feature.",
+      "Azure-hosted pipeline for NEA COVID-19 wastewater surveillance. 100+ Tastek industrial RTUs (embedded SIM) streaming directly over cellular to a single Azure VM running Mosquitto, the database, and the dashboard. Twilio WhatsApp alerts to the on-call engineers. Contributed to the Lee Hsien Loong IDM Smart Nation Award 2022. Straits Times feature.",
     descriptionVi:
-      "Pipeline chạy trên Azure cho hệ thống giám sát nước thải COVID-19 của NEA tại 360 điểm. Hơn 100 RTU công nghiệp Tastek (gắn SIM tích hợp) truyền dữ liệu trực tiếp qua mạng di động về một Azure VM duy nhất chạy Mosquitto, database và dashboard. Cảnh báo Twilio WhatsApp gửi tới kỹ sư trực. Góp phần vào giải Lee Hsien Loong IDM Smart Nation Award 2022. Được Straits Times đưa tin.",
+      "Pipeline chạy trên Azure cho hệ thống giám sát nước thải COVID-19 của NEA. Hơn 100 RTU công nghiệp Tastek (gắn SIM tích hợp) truyền dữ liệu trực tiếp qua mạng di động về một Azure VM duy nhất chạy Mosquitto, database và dashboard. Cảnh báo Twilio WhatsApp gửi tới kỹ sư trực. Góp phần vào giải Lee Hsien Loong IDM Smart Nation Award 2022. Được Straits Times đưa tin.",
     dates: "Oct 2020 to Jul 2021",
     category: "Projects",
     tags: ["Azure", "MQTT", "Mosquitto", "Twilio"],

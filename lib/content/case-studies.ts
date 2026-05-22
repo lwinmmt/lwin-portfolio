@@ -19,20 +19,20 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Context",
         body: [
           "In 2020 the National Environment Agency rolled out wastewater surveillance as a community-level COVID-19 early warning system. Inno2 (the W2 Industrial Services Hub initiative I worked on) built the cloud and edge stack that powered the deployment.",
-          "The brief expanded fast. We started at roughly 200 sites and scaled to over 360 across migrant worker dormitories, residential blocks, and treatment facilities, with engineers visiting site cabinets daily to verify uptime.",
+          "We built it from scratch. By the time I rotated off the project, the platform was running across roughly 50 sites — migrant worker dormitories, residential blocks, and treatment facilities — with engineers visiting site cabinets daily to verify uptime. Deployment kept scaling past 360 sites after I left.",
         ],
       },
       {
         heading: "My role",
         body: [
-          "Cloud and IoT engineer on a small team, first as an SP-attached intern then on as a W2 IoT Solutions consultant. I owned the Azure-side architecture and the integration between field RTUs, the broker, and the operations dashboard. I also wrote the alerting logic that pushed offline-device notifications out over Twilio WhatsApp.",
+          "Cloud and IoT engineer on a small team, first as an SP-attached intern then on as a W2 IoT Solutions consultant. I owned the Azure-side architecture and the integration between field RTUs, the broker, and the operations dashboard.",
         ],
       },
       {
         heading: "Architecture",
         bullets: [
-          "100+ Tastek industrial RTUs in the field. Each unit had a SIM card slot, so the RTU dialed straight out to the cloud over cellular. No edge gateway in between.",
-          "One Azure VM running everything: the Mosquitto MQTT broker, the database, and the web dashboard. Plain monolith, no microservices.",
+          "100+ Tastek industrial RTUs in the field. Each unit had a SIM card slot, so the RTU dialed straight out to the cloud over cellular.",
+          "One Azure VM running everything: the Mosquitto MQTT broker, the database, and the web dashboard.",
           "Vertical scaling via an Auto-Scaling Group. When load grew, the VM scaled up rather than out. Basic, but reliable for the workload.",
           "Twilio WhatsApp Business API for alerts. Engineers registered their numbers once, then offline-RTU and threshold-breach notifications landed on WhatsApp.",
         ],
@@ -42,15 +42,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Contributed to the Lee Hsien Loong IDM Smart Nation Award 2022 received by W2.",
           "Featured by [The Straits Times](https://www.straitstimes.com/singapore/wastewater-surveillance-sites-for-covid-19-to-double-by-2022-from-current-200-nea) when NEA announced the doubling of surveillance sites.",
-          "Stayed in regular production use across 360 sites, with the alerting flow catching dropouts before site visits.",
-        ],
-      },
-      {
-        heading: "What I learned",
-        body: [
-          "Field IoT at this scale is mostly about the failure modes you do not see in a demo. Devices reboot in the rain. SIMs roam onto the wrong tower. Reconnect storms surprise you at 3am. The system has to assume every link is lossy and every device is going to lie to you eventually.",
-          "The alerting layer is the product. A dashboard nobody opens is worse than a WhatsApp message that wakes an engineer up at the right moment.",
-          "Single-VM monoliths get a lot of grief, but for this scale it was the right call. Fewer moving parts, fewer pages.",
+          "Stayed in regular production use, with the alerting flow catching dropouts before site visits.",
         ],
       },
     ],
@@ -59,20 +51,20 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Bối cảnh",
         body: [
           "Năm 2020, National Environment Agency triển khai giám sát nước thải như một hệ thống cảnh báo sớm COVID-19 ở cấp cộng đồng. Inno2 (sáng kiến của W2 Industrial Services Hub mà tôi làm) xây dựng tầng cloud và edge phục vụ việc triển khai đó.",
-          "Phạm vi mở rộng nhanh. Chúng tôi bắt đầu khoảng 200 điểm và scale lên hơn 360 điểm, bao gồm ký túc xá lao động nhập cư, khu dân cư, và các nhà máy xử lý. Kỹ sư phải đến các tủ thiết bị mỗi ngày để kiểm tra uptime.",
+          "Chúng tôi xây từ con số 0. Khi tôi rời dự án, hệ thống đang chạy trên khoảng 50 điểm — ký túc xá lao động nhập cư, khu dân cư, và các nhà máy xử lý — với kỹ sư đến các tủ thiết bị mỗi ngày để kiểm tra uptime. Sau khi tôi rời, hệ thống tiếp tục được mở rộng lên hơn 360 điểm.",
         ],
       },
       {
         heading: "Vai trò của tôi",
         body: [
-          "Kỹ sư Cloud và IoT trong một team nhỏ, ban đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Tôi phụ trách kiến trúc phía Azure và việc tích hợp giữa các RTU ngoài thực địa, broker, và dashboard vận hành. Tôi cũng viết logic cảnh báo đẩy thông báo thiết bị offline qua Twilio WhatsApp.",
+          "Kỹ sư Cloud và IoT trong một team nhỏ, ban đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Tôi phụ trách kiến trúc phía Azure và việc tích hợp giữa các RTU ngoài thực địa, broker, và dashboard vận hành.",
         ],
       },
       {
         heading: "Kiến trúc",
         bullets: [
-          "Hơn 100 RTU công nghiệp Tastek tại các điểm. Mỗi unit có khe SIM, nên RTU gọi thẳng lên cloud qua mạng di động. Không có edge gateway ở giữa.",
-          "Một Azure VM chạy mọi thứ: Mosquitto MQTT broker, database, và dashboard web. Monolith thuần, không microservice.",
+          "Hơn 100 RTU công nghiệp Tastek tại các điểm. Mỗi unit có khe SIM, nên RTU gọi thẳng lên cloud qua mạng di động.",
+          "Một Azure VM chạy mọi thứ: Mosquitto MQTT broker, database, và dashboard web.",
           "Scale dọc qua Auto-Scaling Group. Khi load tăng, VM scale up thay vì scale out. Cơ bản, nhưng đáng tin cậy cho workload này.",
           "Twilio WhatsApp Business API cho cảnh báo. Kỹ sư đăng ký số điện thoại một lần, sau đó thông báo RTU offline và vượt ngưỡng tới qua WhatsApp.",
         ],
@@ -82,15 +74,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Góp phần vào giải Lee Hsien Loong IDM Smart Nation Award 2022 mà W2 nhận được.",
           "Được [The Straits Times](https://www.straitstimes.com/singapore/wastewater-surveillance-sites-for-covid-19-to-double-by-2022-from-current-200-nea) đưa tin khi NEA công bố tăng gấp đôi số điểm giám sát.",
-          "Vận hành production đều đặn trên 360 điểm, luồng cảnh báo bắt được các lần mất kết nối trước khi kỹ sư đến hiện trường.",
-        ],
-      },
-      {
-        heading: "Bài học",
-        body: [
-          "IoT thực địa ở quy mô này chủ yếu là về các failure mode mà bạn không nhìn thấy trong demo. Thiết bị reboot khi trời mưa. SIM roam sang sai trạm. Reconnect storm xảy ra lúc 3 giờ sáng. Hệ thống phải giả định mọi link là lossy và mọi thiết bị sẽ lừa bạn sớm muộn.",
-          "Tầng cảnh báo chính là sản phẩm. Một dashboard không ai mở còn tệ hơn một tin nhắn WhatsApp đánh thức kỹ sư đúng lúc.",
-          "Monolith single-VM bị chê nhiều, nhưng với quy mô này thì đây là lựa chọn đúng. Ít phần chuyển động hơn, ít page hơn.",
+          "Vận hành production đều đặn, luồng cảnh báo bắt được các lần mất kết nối trước khi kỹ sư đến hiện trường.",
         ],
       },
     ],
