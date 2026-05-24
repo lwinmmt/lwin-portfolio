@@ -177,9 +177,9 @@ export const projects: Project[] = [
     course: "Final Year Project, Singapore Polytechnic",
     courseVi: "Đồ án tốt nghiệp, Singapore Polytechnic",
     description:
-      "Final Year Project contributing to SP's first SAE Level 3 autonomous 5G vehicle. Led a 5-person IoT subteam building a cloud-based monitoring dashboard in React, Node.js, and MySQL. Node-RED firmware on Raspberry Pi captured telemetry over MQTT, with alerting on environmental hazards and battery thresholds. Featured at SP Engineering Show 2021.",
+      "Final Year Project at Singapore Polytechnic. IoT subsystem for SP's first SAE Level 3 autonomous 5G vehicle. Featured at SP Engineering Show 2021.",
     descriptionVi:
-      "Đồ án tốt nghiệp đóng góp vào chiếc xe tự hành 5G SAE Level 3 đầu tiên của SP. Dẫn dắt nhóm IoT 5 người xây dashboard giám sát trên cloud bằng React, Node.js và MySQL. Firmware Node-RED chạy trên Raspberry Pi thu telemetry qua MQTT, cảnh báo các nguy cơ môi trường và ngưỡng pin. Trưng bày tại SP Engineering Show 2021.",
+      "Đồ án tốt nghiệp tại Singapore Polytechnic. Subsystem IoT cho chiếc xe tự hành 5G SAE Level 3 đầu tiên của SP. Trưng bày tại SP Engineering Show 2021.",
     dates: "Sep 2020 to Feb 2021",
     category: "Projects",
     tags: ["React", "Node.js", "MQTT", "Node-RED", "Raspberry Pi"],
@@ -196,9 +196,9 @@ export const projects: Project[] = [
     titleVi: "Tăng cường bảo mật Windows Server 2000",
     course: "ET0521 Network Vulnerability & Security Tools, Singapore Polytechnic",
     description:
-      "Hardened vulnerable Windows Server 2000 against common exploitation vectors. Restricted DNS zone transfers, deployed IIS Lockdown Tool, replaced insecure remote access with CopSSH, enforced strong password policies via Group Policy. Validated through active penetration testing (nslookup zone transfers, nmap port scanning).",
+      "Blue-team hardening lab on a deliberately vulnerable Windows Server 2000 box.",
     descriptionVi:
-      "Hardening một máy Windows Server 2000 có lỗ hổng trước các vector tấn công phổ biến. Hạn chế DNS zone transfer, triển khai IIS Lockdown Tool, thay remote access không an toàn bằng CopSSH, áp policy mật khẩu mạnh qua Group Policy. Kiểm chứng bằng penetration test chủ động (nslookup zone transfer, quét cổng nmap).",
+      "Bài lab blue-team hardening trên một máy Windows Server 2000 có lỗ hổng cố ý.",
     dates: "Jan 2020 to Feb 2020",
     category: "Coursework",
     tags: ["Windows Server", "Security", "Penetration Testing", "Active Directory"],
@@ -209,9 +209,9 @@ export const projects: Project[] = [
     titleVi: "Hệ thống WAN Hub-and-Spoke 3 chi nhánh (Cisco)",
     course: "ET0718 Wide Area Networks, Singapore Polytechnic",
     description:
-      "Architected hub-and-spoke WAN topology in Cisco Packet Tracer Multi-User mode. Connected 3 branch offices to central HQ across simulated internet backbone with hierarchical IP addressing (172.23.0.0/16), RIPv2 routing with PPP auth, DHCP, and standard/extended ACL policies.",
+      "Three-branch hub-and-spoke WAN, built fully virtual in Cisco Packet Tracer Multi-User Mode.",
     descriptionVi:
-      "Thiết kế topology WAN hub-and-spoke trong Cisco Packet Tracer chế độ Multi-User. Kết nối 3 chi nhánh về trụ sở chính qua backbone internet mô phỏng, với sơ đồ địa chỉ IP phân cấp (172.23.0.0/16), định tuyến RIPv2 kèm xác thực PPP, DHCP và các policy ACL chuẩn / mở rộng.",
+      "WAN hub-and-spoke ba chi nhánh, dựng hoàn toàn ảo trong Cisco Packet Tracer Multi-User Mode.",
     dates: "Dec 2019 to Jan 2020",
     category: "Coursework",
     tags: ["Cisco", "Networking", "ACL", "RIPv2"],
@@ -222,9 +222,9 @@ export const projects: Project[] = [
     titleVi: "Datacenter Windows Server 2012 R2 (4 vai trò, Active Directory)",
     course: "ET0015 Server Management, Singapore Polytechnic",
     description:
-      "Self-hosted virtualized datacenter on VMware Workstation. 4 Windows Server 2012 R2 instances (Domain Controller, DNS/DHCP, File Server, Web Server). Active Directory with hierarchical OUs, scripted bulk user provisioning for 50+ accounts via PowerShell, enforced Group Policies with 5GB storage quotas.",
+      "Self-hosted four-VM Windows Server 2012 R2 datacenter on VMware Workstation, glued together with Active Directory.",
     descriptionVi:
-      "Datacenter ảo hóa tự host trên VMware Workstation. 4 instance Windows Server 2012 R2 (Domain Controller, DNS/DHCP, File Server, Web Server). Active Directory với OU phân cấp, script PowerShell tạo hàng loạt 50+ tài khoản, áp Group Policy kèm quota lưu trữ 5GB.",
+      "Datacenter tự host bốn VM Windows Server 2012 R2 trên VMware Workstation, gắn kết bằng Active Directory.",
     dates: "Jun 2019 to Sep 2019",
     category: "Coursework",
     tags: ["Windows Server", "Active Directory", "PowerShell", "VMware"],
@@ -235,9 +235,9 @@ export const projects: Project[] = [
     titleVi: "Mạng LAN doanh nghiệp đa điểm với OSPF (Cisco)",
     course: "ET0716 LAN Switching and Wireless, Singapore Polytechnic",
     description:
-      "Multi-site enterprise network using 7 Cisco routers and 5 switches in a hybrid environment (Packet Tracer + SP physical server racks). Star-topology LAN supporting 12+ endpoints and 2 internal servers. VLSM IP scheme, OSPF multi-area routing with failover, ACL-based access policies.",
+      "Multi-site enterprise LAN with OSPF. Hybrid build: Cisco Packet Tracer simulation plus SP's physical Cisco rack.",
     descriptionVi:
-      "Mạng doanh nghiệp đa địa điểm với 7 router Cisco và 5 switch trong môi trường hybrid (Packet Tracer + rack server vật lý của SP). LAN topology hình sao hỗ trợ 12+ endpoint và 2 server nội bộ. Sơ đồ IP VLSM, định tuyến OSPF đa vùng có failover, các policy truy cập dựa trên ACL.",
+      "LAN doanh nghiệp đa site với OSPF. Build lai: giả lập Cisco Packet Tracer cộng rack Cisco vật lý của SP.",
     dates: "Jun 2019 to Aug 2019",
     category: "Coursework",
     tags: ["Cisco", "OSPF", "Networking", "VLSM"],
