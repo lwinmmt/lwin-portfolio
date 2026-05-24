@@ -249,9 +249,9 @@ export const projects: Project[] = [
     course: "Nepseeds (self-started)",
     courseVi: "Nepseeds (tự khởi nghiệp)",
     description:
-      "Specialized provider of rare Nepenthes seeds from Southeast Asia, shipping to enthusiasts and collectors worldwide. Bootstrapped since July 2021. nepseeds.com.",
+      "Bootstrapped plant e-commerce. Live at nepseeds.com since July 2021.",
     descriptionVi:
-      "Nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, giao hàng cho người chơi và nhà sưu tập trên toàn cầu. Bootstrap từ tháng 7 năm 2021. nepseeds.com.",
+      "Plant e-commerce bootstrap. Live tại nepseeds.com từ tháng 7 năm 2021.",
     dates: "Jul 2021 to Present",
     category: "Projects",
     tags: ["Shopify", "Operations", "E-Commerce"],

@@ -25,7 +25,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "My role",
         body: [
-          "Cloud and IoT engineer plus team lead. Joined as an SP-attached intern and stayed on as a W2 IoT Solutions consultant. Owned the Azure-side architecture, the integration between field RTUs, the broker, and the operations dashboard, and drove the team's day-to-day direction on what to build next.",
+          "Cloud and IoT engineer plus team lead on a five-person team. Joined as an SP-attached intern and stayed on as a W2 IoT Solutions consultant. Owned the Azure-side architecture, the integration between field RTUs, the broker, and the operations dashboard, and drove the team's day-to-day direction on what to build next.",
         ],
       },
       {
@@ -57,7 +57,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Vai trò của tôi",
         body: [
-          "Kỹ sư Cloud và IoT, kiêm trưởng nhóm. Bắt đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Phụ trách kiến trúc phía Azure, việc tích hợp giữa các RTU thực địa, broker, và dashboard vận hành, đồng thời quyết định nhóm sẽ làm cái gì tiếp theo.",
+          "Kỹ sư Cloud và IoT, kiêm trưởng nhóm trong team năm người. Bắt đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Phụ trách kiến trúc phía Azure, việc tích hợp giữa các RTU thực địa, broker, và dashboard vận hành, đồng thời quyết định nhóm sẽ làm cái gì tiếp theo.",
         ],
       },
       {
@@ -453,6 +453,158 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         body: [
           "Nepseeds là nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, tập trung vào việc giao hàng toàn cầu cho người chơi và nhà sưu tập trên khắp thế giới. Sứ mệnh là làm phong phú thêm cộng đồng chơi Nepenthes bằng cách cung cấp đa dạng hạt giống và thúc đẩy việc trồng các giống cây độc đáo, thú vị.",
           "Chúng tôi tự hào khi thấy khách hàng tự trồng được Nepenthes khỏe mạnh ngay tại nhà, và luôn cố gắng cung cấp hạt giống và dịch vụ chất lượng cao nhất. Trang web ở [nepseeds.com](https://nepseeds.com/).",
+        ],
+      },
+    ],
+  },
+  "windows-server-2000-security": {
+    en: [
+      {
+        heading: "About",
+        body: [
+          "A classic blue-team-versus-red-team lab on a deliberately vulnerable Windows Server 2000 box. Take a known-bad baseline, harden it against the era's common attack vectors (DNS zone transfers, unused IIS features, insecure remote-access stack, weak password policy), then re-run the same probes against the hardened box to confirm every exploit that worked before now failed.",
+          "Built as a Singapore Polytechnic security coursework lab. The specific software is decades old, but the mindset (assume the baseline is broken, harden by removing surface area first, then verify with active probing) maps directly to modern security work.",
+        ],
+      },
+      {
+        heading: "Tools",
+        bullets: [
+          "Windows Server 2000 inside VMware Workstation for the lab environment.",
+          "IIS Lockdown Tool to strip unused IIS modules and reduce attack surface.",
+          "CopSSH (Cygwin-based OpenSSH on Windows) replacing the insecure remote-access stack.",
+          "Group Policy for password complexity, length, and lockout thresholds.",
+          "nmap, nslookup, and standard probing scripts for before-and-after validation.",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Một bài lab blue-team versus red-team kinh điển trên một máy Windows Server 2000 cố tình để lỗ hổng. Lấy một baseline đã biết là yếu, hardening lại chống các vector tấn công phổ biến thời đó (DNS zone transfer, IIS để dư tính năng không dùng, stack remote-access không an toàn, chính sách mật khẩu yếu), rồi chạy lại đúng các probe đó lên máy đã hardening để xác nhận mọi exploit từng work giờ đều fail.",
+          "Xây dựng như một bài lab môn an ninh ở Singapore Polytechnic. Phần mềm cụ thể đã cũ hàng chục năm, nhưng tư duy (giả định baseline đang lỗi, hardening bằng cách giảm bề mặt tấn công trước, sau đó verify bằng probe chủ động) ánh xạ thẳng vào công việc bảo mật hiện đại.",
+        ],
+      },
+      {
+        heading: "Công cụ",
+        bullets: [
+          "Windows Server 2000 trên VMware Workstation cho môi trường lab.",
+          "IIS Lockdown Tool để tắt các module IIS không dùng và giảm bề mặt tấn công.",
+          "CopSSH (OpenSSH chạy trên Windows qua Cygwin) thay cho stack remote-access không an toàn.",
+          "Group Policy cho độ phức tạp, độ dài và ngưỡng khoá tài khoản của mật khẩu.",
+          "nmap, nslookup, và các script probe tiêu chuẩn để verify trước-sau.",
+        ],
+      },
+    ],
+  },
+  "cisco-wan-architecture": {
+    en: [
+      {
+        heading: "About",
+        body: [
+          "Hub-and-spoke WAN topology connecting three branch offices to a central HQ across a simulated internet backbone. Hierarchical IP addressing (172.23.0.0/16), RIPv2 routing with PPP authentication, DHCP per branch, and standard plus extended ACL policies controlling inter-branch and internet-facing traffic.",
+          "Built as a Singapore Polytechnic networking lab. The full topology lived only in Cisco Packet Tracer's Multi-User Mode, with no physical hardware involved. That made it straightforward to spin up failure scenarios and verify the routing converged the way the design intended.",
+        ],
+      },
+      {
+        heading: "Tools",
+        bullets: [
+          "Cisco Packet Tracer (Multi-User Mode) for the full virtual topology.",
+          "Cisco IOS CLI for router and switch configuration.",
+          "RIPv2 with PPP authentication, DHCP, standard and extended ACLs.",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Topology WAN hub-and-spoke nối ba văn phòng chi nhánh về HQ trung tâm qua một internet backbone giả lập. Sơ đồ IP có phân cấp (172.23.0.0/16), routing RIPv2 với xác thực PPP, DHCP từng chi nhánh, cộng với các policy ACL chuẩn và mở rộng để kiểm soát lưu lượng giữa các chi nhánh và ra internet.",
+          "Xây dựng như một bài lab mạng ở Singapore Polytechnic. Toàn bộ topology chỉ chạy trong Cisco Packet Tracer Multi-User Mode, không có phần cứng vật lý. Nhờ vậy mà dựng các kịch bản lỗi và verify routing converge theo đúng thiết kế khá thẳng tiến.",
+        ],
+      },
+      {
+        heading: "Công cụ",
+        bullets: [
+          "Cisco Packet Tracer (Multi-User Mode) cho toàn bộ topology ảo.",
+          "Cisco IOS CLI để cấu hình router và switch.",
+          "RIPv2 với xác thực PPP, DHCP, ACL chuẩn và mở rộng.",
+        ],
+      },
+    ],
+  },
+  "windows-server-2012-r2-enterprise": {
+    en: [
+      {
+        heading: "About",
+        body: [
+          "Self-hosted virtualized datacenter built on VMware Workstation. Four Windows Server 2012 R2 instances split into role-specific machines: Domain Controller, DNS/DHCP, File Server, Web Server. Active Directory configured with hierarchical OUs, scripted bulk user provisioning for 50+ accounts via PowerShell, and enforced Group Policies for password complexity and shared resource access.",
+          "An SP coursework lab on real Windows Server 2012 R2 with VMware Workstation as the hypervisor. The point of the exercise was end-to-end: design the role split, stand up each VM, wire the AD trust, automate the boring bits with PowerShell, then prove the policies actually applied across machines.",
+        ],
+      },
+      {
+        heading: "Tools",
+        bullets: [
+          "Windows Server 2012 R2 across four VMs.",
+          "VMware Workstation as the hypervisor.",
+          "Active Directory + Group Policy.",
+          "PowerShell for bulk user provisioning and policy automation.",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Datacenter ảo tự host trên VMware Workstation. Bốn instance Windows Server 2012 R2 chia theo vai trò: Domain Controller, DNS/DHCP, File Server, Web Server. Active Directory cấu hình với OU phân cấp, script provision bulk 50+ tài khoản qua PowerShell, và Group Policy bắt buộc cho độ phức tạp mật khẩu và quyền truy cập tài nguyên dùng chung.",
+          "Một bài lab môn của SP trên Windows Server 2012 R2 thật với VMware Workstation làm hypervisor. Mục tiêu là end-to-end: thiết kế phân vai trò, dựng từng VM, đấu nối trust AD, tự động hoá phần boilerplate bằng PowerShell, sau đó chứng minh policy thực sự áp xuyên qua các máy.",
+        ],
+      },
+      {
+        heading: "Công cụ",
+        bullets: [
+          "Windows Server 2012 R2 trên bốn VM.",
+          "VMware Workstation làm hypervisor.",
+          "Active Directory + Group Policy.",
+          "PowerShell cho bulk user provisioning và tự động hoá policy.",
+        ],
+      },
+    ],
+  },
+  "cisco-enterprise-lan": {
+    en: [
+      {
+        heading: "About",
+        body: [
+          "Multi-site enterprise network using 7 Cisco routers and 5 switches across a hybrid environment that combined Cisco Packet Tracer simulation with SP's physical Cisco server racks. Star-topology LAN supporting 12+ endpoints and 2 internal servers, with a VLSM IP scheme, OSPF multi-area routing with failover, and ACL-based access policies.",
+          "The hybrid setup was the distinguishing piece: the larger topology lived in Packet Tracer, but the inner LAN was wired up on actual Cisco hardware in the SP networking lab. Verifying behaviour across both halves taught the difference between a clean simulation and the cabling reality.",
+        ],
+      },
+      {
+        heading: "Tools",
+        bullets: [
+          "Cisco Packet Tracer for the simulated outer topology.",
+          "Physical Cisco routers and switches in the SP networking lab for the inner LAN.",
+          "Cisco IOS CLI for configuration.",
+          "OSPF multi-area routing, VLSM addressing, ACL policies.",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Mạng doanh nghiệp đa site dùng 7 router Cisco và 5 switch trong môi trường lai, kết hợp giả lập Cisco Packet Tracer với rack Cisco vật lý của SP. LAN topology hình sao hỗ trợ 12+ endpoint và 2 server nội bộ, với sơ đồ IP VLSM, routing OSPF đa vùng có failover, và policy ACL.",
+          "Phần đặc biệt là setup lai: phần topology lớn nằm trong Packet Tracer, nhưng LAN bên trong thì đấu nối trên phần cứng Cisco thật ở lab mạng của SP. Verify hành vi trên cả hai nửa cho thấy rõ khác biệt giữa giả lập sạch và thực tế cáp dây.",
+        ],
+      },
+      {
+        heading: "Công cụ",
+        bullets: [
+          "Cisco Packet Tracer cho phần topology giả lập bên ngoài.",
+          "Router và switch Cisco vật lý tại lab mạng của SP cho LAN bên trong.",
+          "Cisco IOS CLI để cấu hình.",
+          "OSPF routing đa vùng, định địa chỉ VLSM, policy ACL.",
         ],
       },
     ],
