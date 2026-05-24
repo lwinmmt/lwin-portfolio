@@ -160,7 +160,7 @@ export default async function UsesPage({
           </section>
         )}
 
-        {/* Languages strip. Chip-only, no per-item description —
+        {/* Languages strip. Chip-only, no per-item description.
             language names alone carry enough signal (Python, SQL,
             etc.) and stripping the prose keeps the section visually
             light between the dense AI band above and the side-by-
@@ -206,7 +206,7 @@ export default async function UsesPage({
           )}
         </div>
 
-        {/* "Tools I've worked with" — broader proven breadth as a
+        {/* "Tools I've worked with". Broader proven breadth as a
             chip block. Each sub-group is a small uppercase label
             over a row of name chips. No per-item description: this
             block signals reach, not daily use. The featured sections

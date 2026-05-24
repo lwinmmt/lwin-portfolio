@@ -343,7 +343,7 @@ function AwardCard({
     ? pickLocalized(entry.description, entry.descriptionVi, locale)
     : undefined;
   // Awards with images get a hero treatment with banner image.
-  // Dates intentionally NOT rendered on award cards — clutter without
+  // Dates intentionally NOT rendered on award cards. Clutter without
   // adding signal. The resume timeline is the source of truth for
   // when things happened.
   if (imageSrc) {

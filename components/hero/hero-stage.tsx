@@ -9,7 +9,7 @@ import type { HeroVariant } from "./hero-variant";
 
 // Terminal variant is only rendered ~50% of visits (the random pick
 // in useEffect below). next/dynamic + ssr:false defers its chunk to
-// the moment the variant actually selects it — saves the terminal
+// the moment the variant actually selects it. Saves the terminal
 // component + key-sound sprite tables off the initial bundle for
 // globe-variant visits. Globe stays a static import because SSR
 // always renders globe first to avoid hydration mismatch.
@@ -19,14 +19,14 @@ const HeroTerminal = dynamic(
 );
 
 // Hero right-column stage. Two variants:
-//   - "globe"    — canvas Fibonacci dot sphere with arc paths
-//   - "terminal" — auto-typing mock shell session
+//   - "globe"   . Canvas Fibonacci dot sphere with arc paths
+//   - "terminal". Auto-typing mock shell session
 //
 // Selection rules:
 //   - SSR always renders globe. Keeps the server response stable so
 //     hydration mismatch is impossible.
 //   - On hydration, pick randomly (50/50). Each fresh visit lands on
-//     one variant or the other — neither becomes "the" home page.
+//     one variant or the other. Neither becomes "the" home page.
 //   - The small switcher button at the top-right of the stage lets
 //     the visitor flip to the other variant in place. No persistence
 //     beyond the current page session; a refresh re-randomizes.
@@ -37,7 +37,7 @@ export function HeroStage() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    // Math.random is fine here — this is presentational randomness,
+    // Math.random is fine here. This is presentational randomness,
     // not anything security-sensitive.
     setVariant(Math.random() < 0.5 ? "globe" : "terminal");
     setHydrated(true);
@@ -48,7 +48,7 @@ export function HeroStage() {
   return (
     // pt-9 reserves a 36px strip above the variant for the switcher
     // pill. min-h locks the total stage height so the pill stays in
-    // a constant viewport position when the variant swaps — without
+    // a constant viewport position when the variant swaps. Without
     // it the outer grid cell's self-center recomputed every time
     // (globe ~440px tall, terminal ~290px tall) and the chip moved
     // ~75px vertically with each click. The lock costs ~150px of
@@ -59,7 +59,7 @@ export function HeroStage() {
     // variant is showing inside the locked height.
     <div className="relative flex min-h-[476px] flex-col pt-9">
       <div className="flex flex-1 items-center justify-center">
-        {/* AnimatePresence mode="wait" — the outgoing variant fades
+        {/* AnimatePresence mode="wait". The outgoing variant fades
             out completely before the incoming one fades in, so the
             swap reads as a single smooth transition instead of an
             instant flip. Framer-motion is already loaded for the

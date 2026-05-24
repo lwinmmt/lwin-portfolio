@@ -45,11 +45,11 @@ export const highlights: Highlight[] = [
     // Swapped from the wide team shot (Lwin at the far-left edge,
     // his face was getting clipped on every aspect ratio because the
     // source was already framed with him against the border) to this
-    // closer angle of the booth — Lwin + colleague at the hydroponics
+    // closer angle of the booth. Lwin + colleague at the hydroponics
     // rig with the IIE poster behind. Same WCS 2024 booth, just a
     // composition where his face has room.
     imageSrc: "/images/highlights/osiris-wcs-2024-rig.jpg",
-    // Portrait source (1200x1600) — same rig photo the Hydroponics
+    // Portrait source (1200x1600). Same rig photo the Hydroponics
     // project page uses. coverFocus matches that page's framing
     // (center 55%) so both surfaces show the same crop with both
     // Lwin and his colleague's heads visible. h-56 home card height
@@ -90,7 +90,7 @@ export const highlights: Highlight[] = [
     // stand below. Lwin is the leftmost. Push slightly left so
     // his face survives narrow horizontal crops on small cards;
     // 55% vertical lands on heads instead of waists (70% was
-    // anchoring too low — head-tops were getting clipped).
+    // anchoring too low. Head-tops were getting clipped).
     coverFocus: "30% 55%",
   },
   {

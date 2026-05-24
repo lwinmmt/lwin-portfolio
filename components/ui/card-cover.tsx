@@ -34,7 +34,7 @@ export function CardCover({
   // subject photos (Inno2, Osiris booth) don't lose head-tops to
   // the default object-cover middle band on landscape crops.
   // `sm` (home highlights) bumped from h-32 to h-56 (224px) to
-  // match the Hydroponics project card's framing — that card
+  // match the Hydroponics project card's framing. That card
   // shows both heads at full size and we want the WCS highlight
   // to read the same way. h-48 was still tight; h-56 gives the
   // portrait subject photo enough room for both faces.

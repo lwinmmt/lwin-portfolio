@@ -11,4 +11,4 @@ export * from "./certifications";
 export * from "./languages";
 export * from "./about";
 export * from "./uses";
-// blog archived — see .archive/blog/README.md to restore.
+// blog archived. See .archive/blog/README.md to restore.

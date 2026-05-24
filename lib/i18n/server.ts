@@ -2,7 +2,7 @@
 // cache that the [lang]/layout.tsx populates from the URL segment.
 //
 // The previous version called cookies() + headers() to pick a locale
-// — that marked every public route as `ƒ Dynamic` and forced a
+//. That marked every public route as `ƒ Dynamic` and forced a
 // serverless function invocation on every Vercel navigation, killing
 // the static prefetch path that next/link relies on for instant
 // route transitions.
@@ -13,7 +13,7 @@
 //   2. [lang]/layout.tsx receives the locale via params, calls
 //      setLocaleForRequest(locale) to seed the cache.
 //   3. Server components downstream call getLocale() / getT() and
-//      get the seeded value — synchronously, with no dynamic-API
+//      get the seeded value. Synchronously, with no dynamic-API
 //      reads. Pages can be fully prerendered at build time.
 //
 // The cache trick relies on React's per-request cache(): calling a

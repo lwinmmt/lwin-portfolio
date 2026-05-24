@@ -19,7 +19,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Context",
         body: [
           "In 2020 the National Environment Agency rolled out wastewater surveillance as a community-level COVID-19 early warning system. Inno2 (the W2 Industrial Services Hub initiative I worked on) built the cloud and edge stack that powered the deployment.",
-          "We built it from scratch. By the time I rotated off the project, the platform was running across roughly 50 sites — migrant worker dormitories, residential blocks, and treatment facilities — with engineers visiting site cabinets daily to verify uptime. Deployment kept scaling past 360 sites after I left.",
+          "We built it from scratch. By the time I rotated off the project, the platform was running across roughly 50 sites (migrant worker dormitories, residential blocks, and treatment facilities), with engineers visiting site cabinets daily to verify uptime. Deployment kept scaling past 360 sites after I left.",
         ],
       },
       {
@@ -51,7 +51,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Bối cảnh",
         body: [
           "Năm 2020, National Environment Agency triển khai giám sát nước thải như một hệ thống cảnh báo sớm COVID-19 ở cấp cộng đồng. Inno2 (sáng kiến của W2 Industrial Services Hub mà tôi làm) xây dựng tầng cloud và edge phục vụ việc triển khai đó.",
-          "Chúng tôi xây từ con số 0. Khi tôi rời dự án, hệ thống đang chạy trên khoảng 50 điểm — ký túc xá lao động nhập cư, khu dân cư, và các nhà máy xử lý — với kỹ sư đến các tủ thiết bị mỗi ngày để kiểm tra uptime. Sau khi tôi rời, hệ thống tiếp tục được mở rộng lên hơn 360 điểm.",
+          "Chúng tôi xây từ con số 0. Khi tôi rời dự án, hệ thống đang chạy trên khoảng 50 điểm (ký túc xá lao động nhập cư, khu dân cư, và các nhà máy xử lý), với kỹ sư đến các tủ thiết bị mỗi ngày để kiểm tra uptime. Sau khi tôi rời, hệ thống tiếp tục được mở rộng lên hơn 360 điểm.",
         ],
       },
       {

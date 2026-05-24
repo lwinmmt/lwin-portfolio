@@ -21,7 +21,7 @@ export type UsesGroup = {
   items: UsesItem[];
 };
 
-/** Featured groups — each renders with per-item descriptions and is
+/** Featured groups. Each renders with per-item descriptions and is
  *  laid out distinctly on the page (AI tools as a hero band,
  *  Languages as a chip strip with no descriptions, Editor +
  *  Everyday side-by-side at the bottom with Hardware merged into
@@ -67,7 +67,7 @@ export const usesGroups: UsesGroup[] = [
     label: "Languages",
     labelVi: "Ngôn ngữ",
     items: [
-      // Chip-only — no detail. Names alone carry enough signal for
+      // Chip-only. No detail. Names alone carry enough signal for
       // mainstream languages and HTML/CSS. Python first because it
       // is the most familiar / most-reached-for.
       { name: "Python" },

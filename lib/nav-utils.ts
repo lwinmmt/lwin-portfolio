@@ -9,7 +9,7 @@ import { LOCALES } from "./i18n/types";
 // Strip the leading /{locale} segment from a pathname so route-active
 // checks can compare against bare hrefs (/about, /projects) regardless
 // of which locale the visitor is in. Without this, every nav item
-// lost its active highlight after the URL-segment i18n landed —
+// lost its active highlight after the URL-segment i18n landed.
 // pathname is always /en/about or /vi/about now, never the bare
 // /about that the nav config stores.
 function stripLocalePrefix(pathname: string): string {

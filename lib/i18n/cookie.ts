@@ -7,7 +7,7 @@ import type { Locale } from "./types";
  * keeping it here means a future change (rename, attribute add,
  * max-age tweak) lands in one place instead of three.
  *
- * SameSite=Lax is enough — the cookie is read server-side for
+ * SameSite=Lax is enough. The cookie is read server-side for
  * locale negotiation only; no cross-site auth risk.
  *
  * `Secure` is added only over HTTPS so localhost dev keeps working.

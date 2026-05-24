@@ -10,7 +10,7 @@
 //   - Lazy / per-icon imports keep the bundle small (~1KB gz each).
 //
 // `@phosphor-icons/react/dist/ssr` exports static SVG components that
-// do NOT subscribe to the IconContext provider — safe inside server
+// do NOT subscribe to the IconContext provider. Safe inside server
 // components and lighter than the default `@phosphor-icons/react`
 // entry point, which is "use client" because of the context.
 //
@@ -56,7 +56,7 @@ type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 // route). Kept so restoring those routes is a config-file edit
 // rather than also having to re-add icon mappings. Sun/Moon/CircleHalf
 // (former theme toggle icons) were removed entirely along with the
-// next-themes dependency — the site is light-only.
+// next-themes dependency. The site is light-only.
 const ICONS: Record<string, IconComponent> = {
   // Active nav (sidebar + mobile dock)
   home: House,
@@ -72,7 +72,7 @@ const ICONS: Record<string, IconComponent> = {
   linkedin: LinkedinLogo,
   external: ArrowSquareOut,
   more: DotsThree,
-  // Archived / hidden — present so restore is a one-line nav.ts edit
+  // Archived / hidden. Present so restore is a one-line nav.ts edit
   pen: Pencil, // /blog (archived)
   studio: Storefront, // /studio (Basic-Auth gated, not in nav)
 };
@@ -86,7 +86,7 @@ export function SidebarIcon({
   // aria-hidden on every icon: nav rows carry their own visible
   // labels (Sidebar) or aria-label on the wrapping Link/button
   // (mobile dock). Re-announcing the icon shape would be noise.
-  // `focusable="false"` as a string (not boolean) — SVG attribute
+  // `focusable="false"` as a string (not boolean). SVG attribute
   // values are strings, and React emits a dev-mode warning if you
   // pass a JS boolean to a non-boolean attribute. The string form
   // serializes identically and silences the warning.

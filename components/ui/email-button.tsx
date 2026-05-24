@@ -19,7 +19,7 @@ type EmailButtonProps = {
  *   - Copy the email to the clipboard, show the "Copied" toast, done.
  *   - The default mailto: navigation is suppressed (e.preventDefault).
  *     Previously the anchor also fired the mailto so users with a mail
- *     client got a compose window — useful on desktop, intrusive on
+ *     client got a compose window. Useful on desktop, intrusive on
  *     mobile (every phone has a default mail app, so a tap always
  *     yanked the user out of the page). Behaviour now matches across
  *     platforms: clipboard only.

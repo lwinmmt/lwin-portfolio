@@ -29,7 +29,7 @@ export function ProjectLightboxGallery({
   gallery?: LightboxImage[];
   title: string;
   /** Optional CSS object-position override for the inline cover
-   *  image on the project page (NOT the modal — modal uses
+   *  image on the project page (NOT the modal. Modal uses
    *  object-contain so the whole image always shows). Used when the
    *  source photo is portrait and the subject is not at the top,
    *  e.g. the Osiris booth photo where faces sit in the middle. */
@@ -61,7 +61,7 @@ export function ProjectLightboxGallery({
 
   const close = useCallback(() => {
     setActive(null);
-    // Restore focus on next tick — after the modal is unmounted the
+    // Restore focus on next tick. After the modal is unmounted the
     // last-focused element is back in the document and focusable.
     queueMicrotask(() => lastFocusedRef.current?.focus());
   }, []);
@@ -155,7 +155,7 @@ export function ProjectLightboxGallery({
           this page's stacking context. Without the portal, the page
           wrapper (LocaleSwap) applies a `filter: blur(0)` post-
           animation which creates a containing block for fixed
-          descendants — the modal would only cover the page body, NOT
+          descendants. The modal would only cover the page body, NOT
           the sidebar or the hero variant switcher. */}
       {portalReady &&
         active !== null &&
@@ -229,7 +229,7 @@ function LightboxModal({
       onClick={onClose}
       // Solid backdrop with NO fade-in. The previous animate-fade-in
       // ran the 97%-opaque black up from opacity 0 over 600ms, which
-      // meant the page bled through for the entire fade — the exact
+      // meant the page bled through for the entire fade. The exact
       // "did the click do anything?" perception bug the solid colour
       // was supposed to fix. Backdrop is now opaque from frame one;
       // the image inside gets its own quick fade if any.
@@ -251,7 +251,7 @@ function LightboxModal({
       />
 
       {/* Close pill in the top-right. White-on-black with an explicit
-          "Close (Esc)" label so it reads as a button at a glance —
+          "Close (Esc)" label so it reads as a button at a glance.
           the previous bg-white/10 icon-only sat almost invisibly
           against the 97%-opaque black backdrop. */}
       <button

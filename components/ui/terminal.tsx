@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 // Adapted from the upstream Aceternity / acetern style Terminal block.
 // Two adaptations for this codebase:
-//   1. No `cn()` helper — joined with template literals. Avoids
+//   1. No `cn()` helper. Joined with template literals. Avoids
 //      pulling clsx + tailwind-merge into the dependency tree for one
 //      consumer.
 //   2. `enableSound` defaults to false. The hero terminal variant
@@ -59,7 +59,7 @@ function useAudio(enabled: boolean) {
     // before that first gesture leaves it in `suspended` state and
     // every play call is silently ignored. So we split the work:
     //
-    //   1. PREFETCH the 2.5MB sprite bytes on requestIdleCallback —
+    //   1. PREFETCH the 2.5MB sprite bytes on requestIdleCallback.
     //      no AudioContext yet, no autoplay involvement, no LCP
     //      impact. The bytes warm the browser cache so step 2 is
     //      instant.
@@ -70,8 +70,8 @@ function useAudio(enabled: boolean) {
     //
     // Trade-off: if a visitor lands on the terminal variant and
     // never moves the mouse / never scrolls before the animation
-    // finishes, the typing is silent. Any interaction at all —
-    // even a pointermove on initial load — flips it on for the
+    // finishes, the typing is silent. Any interaction at all.
+    // even a pointermove on initial load. Flips it on for the
     // rest of the session.
     let cachedBytes: ArrayBuffer | null = null;
     let unmounted = false;
@@ -83,7 +83,7 @@ function useAudio(enabled: boolean) {
         const bytes = await res.arrayBuffer();
         if (!unmounted) cachedBytes = bytes;
       } catch {
-        // Silent — terminal stays muted if the sprite is missing.
+        // Silent. Terminal stays muted if the sprite is missing.
       }
     };
 
@@ -105,7 +105,7 @@ function useAudio(enabled: boolean) {
         bufferRef.current = buf;
         readyRef.current = true;
       } catch {
-        // Silent — autoplay still disallowed or decode failed.
+        // Silent. Autoplay still disallowed or decode failed.
       }
     };
 
@@ -458,7 +458,7 @@ export function Terminal({
           </div>
           <div className="flex-1 text-center">
             <span className="truncate text-xs text-neutral-400">
-              {username} — zsh
+              {username}. Zsh
             </span>
           </div>
           <div className="w-[52px]" />
@@ -467,7 +467,7 @@ export function Terminal({
         {/* Scrollable content. Native scrollbar hidden across engines
             to keep the chrome clean; the content auto-scrolls to the
             bottom as new lines land. Height tuned so the terminal sits
-            visually shorter than the globe variant — keeps the right
+            visually shorter than the globe variant. Keeps the right
             column from looking like a wall of black on the hero. */}
         <div
           ref={contentRef}

@@ -14,7 +14,7 @@ import type { ReactNode } from "react";
 //
 // CAUTION: the visible state keeps `filter: blur(0px)` and `transform`,
 // which create a containing block for `position: fixed` descendants.
-// Don't render a fixed modal/dialog inside a <Reveal> — it will be
+// Don't render a fixed modal/dialog inside a <Reveal>. It will be
 // trapped in this stacking context (sidebar / hero switcher will
 // appear in front of it). Use createPortal to escape, like the
 // lightbox does in components/ui/lightbox.tsx.

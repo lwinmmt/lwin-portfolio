@@ -52,7 +52,7 @@ export function EntityLogo({
           src={logoSrc}
           // Drop the "logo" suffix: the alt becomes just the entity
           // name. Screen readers already announce "image" for an
-          // <img>, so "AWS logo" became "image: AWS logo" — the noun
+          // <img>, so "AWS logo" became "image: AWS logo". The noun
           // duplicates context that's redundant.
           alt={name}
           width={s.img}

@@ -107,7 +107,7 @@
 
   /* Baseline focus-visible ring for keyboard users.
      Every interactive element (button, a, input, etc.) gets a ruby
-     outline when focused via keyboard tab — invisible to mouse users
+     outline when focused via keyboard tab. Invisible to mouse users
      thanks to :focus-visible. Specific Tailwind focus-visible:outline
      overrides this on a few surfaces (lightbox uses white-on-black
      for contrast), but the rest of the site no longer leaves keyboard

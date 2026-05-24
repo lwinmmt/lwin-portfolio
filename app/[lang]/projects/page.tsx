@@ -64,7 +64,7 @@ function categoryToAnchor(category: ProjectCategory) {
 }
 
 
-// Pre-grouped projects by category. Computed once at module load —
+// Pre-grouped projects by category. Computed once at module load.
 // `projects` is a static import, never mutates. Previously this lived
 // inside ProjectsPage's render body, which meant a fresh array (with
 // fresh nested arrays) on every keystroke / filter click, defeating
@@ -132,7 +132,7 @@ export default function ProjectsPage() {
 
       {/* Defensive empty state. Today the filter chips only surface
           categories that have entries, so this code path is
-          theoretically unreachable — but if a future filter (or a
+          theoretically unreachable. But if a future filter (or a
           search) ever returns zero matches, the page no longer ends
           on a row of chips with empty space below. */}
       {(() => {
@@ -240,7 +240,7 @@ function ProjectCard({
   // One canonical card treatment regardless of category. lift-card
   // handles the hover lift + shadow + border colour shift using
   // translateZ(0) so it does not subpixel-jitter on retina. The old
-  // beam-card rotating ruby ring was removed — the user found it
+  // beam-card rotating ruby ring was removed. The user found it
   // visually noisy and the Highlights cards (no beam) read cleaner.
   // Featured cards span both columns and get a taller image banner.
   const cardClass =

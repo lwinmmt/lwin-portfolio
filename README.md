@@ -1,6 +1,6 @@
 # lwinmmt.com
 
-Personal portfolio for **Lwin MMT** — AI & IIoT Engineer at VNTT, Information Systems student at Singapore Management University. Built with Next.js 16 (App Router), React 19, Tailwind v4, and Sanity (CMS, headless).
+Personal portfolio for **Lwin MMT**. AI & IIoT Engineer at VNTT, Information Systems student at Singapore Management University. Built with Next.js 16 (App Router), React 19, Tailwind v4, and Sanity (CMS, headless).
 
 ## Stack
 
@@ -60,9 +60,9 @@ next.config.ts        CSP + security headers
 ## i18n
 
 Strings:
-- Static UI copy lives in `lib/i18n/messages.ts` — keyed by dotted-namespace strings (`hero.cta.resume`, etc.). Access via `getT()` in server components, `useT()` in client components.
+- Static UI copy lives in `lib/i18n/messages.ts`. Keyed by dotted-namespace strings (`hero.cta.resume`, etc.). Access via `getT()` in server components, `useT()` in client components.
 - Content tables (projects, highlights, awards) carry parallel `*Vi` siblings (e.g. `title` + `titleVi`); the renderer picks via `pickLocalized(en, vi, locale)`.
-- Dates are stored once in English and run through `formatDates(dates, locale)` at render — VN gets numeric months + "đến nay" instead of "to Present".
+- Dates are stored once in English and run through `formatDates(dates, locale)` at render. VN gets numeric months + "đến nay" instead of "to Present".
 
 Locale resolution:
 - Explicit cookie wins → else `Accept-Language` → else `en`.
@@ -75,8 +75,8 @@ Locale resolution:
 ## Hero variant
 
 The hero right column renders one of two variants chosen randomly per visit:
-- **globe** — canvas Fibonacci dot sphere with arc paths between APAC + global cities
-- **terminal** — auto-typing mock shell session (`whoami`, `cat about.md`, `ls projects/`, `echo $EMAIL`)
+- **globe**. Canvas Fibonacci dot sphere with arc paths between APAC + global cities
+- **terminal**. Auto-typing mock shell session (`whoami`, `cat about.md`, `ls projects/`, `echo $EMAIL`)
 
 A small `swap` pill at the top-right of the stage flips to the other variant in place. Refresh re-randomizes.
 

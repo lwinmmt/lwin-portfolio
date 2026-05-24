@@ -9,7 +9,7 @@ import { LOCALES, type Locale } from "@/lib/i18n/types";
 
 // generateStaticParams returns one entry per supported locale, so
 // every page nested under this segment is prerendered into TWO
-// static HTML pages at build time — one for each locale. Combined
+// static HTML pages at build time. One for each locale. Combined
 // with proxy.ts rewriting bare paths like /about to /{cookie-locale}
 // /about, visitors see clean URLs but Next.js serves cached static
 // HTML from the CDN. Navigation transitions become CDN-fast.

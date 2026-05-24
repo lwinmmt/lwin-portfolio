@@ -162,7 +162,7 @@ function MobileMoreSheet({
   // Tab trap: when focus would leave the sheet (Tab past last item or
   // Shift+Tab before first), wrap to the other end. Without this,
   // Tab from the last sheet button would land on hidden page content
-  // behind the backdrop — disorienting for keyboard users.
+  // behind the backdrop. Disorienting for keyboard users.
   useEffect(() => {
     if (!open) return;
     openerRef.current = document.activeElement as HTMLElement | null;
@@ -248,7 +248,7 @@ function MobileMoreSheet({
         </SheetSection>
 
         {/* External contact + social (reads from the same navContact
-            list the sidebar uses — one source of truth). */}
+            list the sidebar uses. One source of truth). */}
         <SheetSection label={t("nav.section.stayInTouch")}>
           {navContact.map((item) => (
             <SheetExternalRow
@@ -260,7 +260,7 @@ function MobileMoreSheet({
           ))}
         </SheetSection>
 
-        {/* Locale toggle at the bottom — utility control visually
+        {/* Locale toggle at the bottom. Utility control visually
             separated from navigation. ThemePill was removed when the
             site went light-only (see app/layout.tsx forcedTheme). */}
         <div className="mt-5 pb-4">
@@ -364,7 +364,7 @@ function SheetExternalRow({
   );
 }
 
-// ThemePill removed — site is light-only. forcedTheme="light" in
+// ThemePill removed. Site is light-only. forcedTheme="light" in
 // app/layout.tsx pins the theme regardless of OS preference or any
 // previously-stored next-themes value.
 

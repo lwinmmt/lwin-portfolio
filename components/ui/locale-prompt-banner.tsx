@@ -48,7 +48,7 @@ export function LocalePromptBanner() {
   const [, startTransition] = useTransition();
   // Tracks whether localStorage is usable for persisting the
   // dismissal flag. When it isn't (Firefox strict mode, private
-  // browsing with storage blocked, etc.) we still show the banner —
+  // browsing with storage blocked, etc.) we still show the banner.
   // just without remembering the dismissal across reloads. The
   // earlier implementation suppressed the banner entirely for those
   // visitors, which is the wrong default.

@@ -92,7 +92,7 @@ export function Sidebar() {
       </button>
 
       <LanguageSwitcher />
-      {/* Theme toggle removed — site is light-only. forcedTheme="light"
+      {/* Theme toggle removed. Site is light-only. forcedTheme="light"
           in app/layout.tsx overrides system + any stored next-themes
           value so visitors on Android with dark system theme still
           get the light render. */}

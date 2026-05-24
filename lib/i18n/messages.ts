@@ -8,7 +8,7 @@ import type { Locale } from "./types";
 
 export const messages = {
   en: {
-    // Document meta — emitted via [lang]/layout.tsx generateMetadata so
+    // Document meta. Emitted via [lang]/layout.tsx generateMetadata so
     // EN visitors get English OG/Twitter cards and VI visitors get
     // Vietnamese. Hero copy is mirrored in the description for parity
     // with social shares.
@@ -276,7 +276,7 @@ export const messages = {
     "notFound.routeMissing": "route not found",
   },
   vi: {
-    // Document meta — see EN block.
+    // Document meta. See EN block.
     "meta.title.default": "Lwin, Kỹ sư AI & IIoT",
     "meta.title.template": "%s | Lwin MMT",
     "meta.description":
@@ -284,7 +284,7 @@ export const messages = {
     "meta.og.description":
       "Sinh viên ngành Hệ thống Thông tin tại Đại học Quản lý Singapore. Tôi xây dựng hệ thống IoT và đưa sản phẩm ra thị trường, từ đầu đến cuối. Kỹ sư được đào tạo bài bản. Sử dụng công cụ AI hàng ngày.",
     "a11y.skipToMain": "Bỏ qua tới nội dung chính",
-    // Per-route page titles + descriptions — see EN block.
+    // Per-route page titles + descriptions. See EN block.
     "page.title.about": "Giới thiệu",
     "page.description.about":
       "Tiểu sử, hoạt động cộng đồng, sinh hoạt, giải thưởng và sở thích cá nhân.",

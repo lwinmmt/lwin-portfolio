@@ -3,10 +3,10 @@
 import { Terminal } from "@/components/ui/terminal";
 import { useT } from "@/lib/i18n/client";
 
-// Hero terminal variant — alternative to the canvas globe. Renders an
+// Hero terminal variant. Alternative to the canvas globe. Renders an
 // auto-typing mock shell session that "introduces" Lwin via cd / cat /
 // ls / open commands. The COMMANDS themselves stay English (universal
-// shell syntax — `whoami`, `cat about.md`) but the OUTPUTS describe
+// shell syntax. `whoami`, `cat about.md`) but the OUTPUTS describe
 // Lwin's role and translate via i18n keys so VI readers see VI prose.
 
 const COMMANDS = [

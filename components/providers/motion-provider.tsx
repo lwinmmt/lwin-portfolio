@@ -17,7 +17,7 @@ import type { ReactNode } from "react";
 // LAZY FACTORY (not synchronous import): passing a `() => import(...)`
 // arrow to `features` is what makes LazyMotion actually code-split.
 // Importing `domMax` at the top of this module synchronously and
-// passing the object reference defeats the lazy-load entirely — the
+// passing the object reference defeats the lazy-load entirely. The
 // full feature bundle then sits in the root client chunk on every
 // page, costing ~15-20KB gzipped.
 //

@@ -50,7 +50,7 @@ export default async function Home({
       <Reveal>
         <Highlights />
       </Reveal>
-      {/* FeaturedProjects intentionally removed from home — the
+      {/* FeaturedProjects intentionally removed from home. The
           homepage was getting long and recent highlights already
           carries the "look what I'm shipping" signal. The full
           projects list lives at /projects. */}

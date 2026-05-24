@@ -30,7 +30,7 @@ const geistMono = Geist_Mono({
 // variant) gets a blue underline + tappable styling injected by the
 // OS. The deliberate email link in EmailButton is a real <a
 // href="mailto:"> anchor, which still works fine because it has its
-// own href — data detectors only kick in on plain text.
+// own href. Data detectors only kick in on plain text.
 export const metadata: Metadata = {
   metadataBase: new URL("https://lwinmmt.com"),
   title: "Lwin MMT",
@@ -54,7 +54,7 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-// Root layout is fully static — no cookies(), no headers(), nothing
+// Root layout is fully static. No cookies(), no headers(), nothing
 // that would mark routes dynamic. The LocaleProvider + locale-aware
 // content move into app/[lang]/layout.tsx, which prerenders both
 // EN and VI variants at build time via generateStaticParams.
@@ -79,7 +79,7 @@ export default function RootLayout({
             sidebar nav row + utility control first. Visually hidden
             until focused; the focus-visible state pops it to the
             top-left of the viewport. Text stays English here at the
-            root layout so the page can be fully static — the rest of
+            root layout so the page can be fully static. The rest of
             the chrome translates inside [lang]/layout. */}
         {/* Skip link uses focus-visible (not focus) so it only pops
             out for keyboard users. A mouse click on the link itself
@@ -106,7 +106,7 @@ export default function RootLayout({
         {/* Vercel Analytics (page views, referrers) + Speed Insights
             (real-user Core Web Vitals). Both ship tiny inline scripts
             that only beacon in production on the lwinmmt.com /
-            lwin-portfolio.vercel.app domain — no data is collected
+            lwin-portfolio.vercel.app domain. No data is collected
             from local dev. */}
         <Analytics />
         <SpeedInsights />

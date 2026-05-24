@@ -35,7 +35,7 @@ const MONTH_WITH_YEAR =
  *   "2018 to 2021"              -> "2018 đến 2021"
  *
  * Data lives as a single English string per item (no per-item
- * datesVi override needed) — the formatter is deterministic enough
+ * datesVi override needed). The formatter is deterministic enough
  * that one source covers both locales. If a record ever needs a
  * special wording, add a `datesVi` field on the type and pass it
  * through pickLocalized at the callsite.

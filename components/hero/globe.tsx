@@ -8,13 +8,13 @@ import { profile } from "@/lib/content";
 // every spawn) on a CSS-perspective stage. That was the single largest
 // paint + reconciler cost in the app per the perf review. This version
 // draws everything (dots, arc tracks, comet trails) into a single
-// canvas inside a per-frame loop — one DOM node, no React reconcile
+// canvas inside a per-frame loop. One DOM node, no React reconcile
 // pressure on the hot path.
 //
 // Behaviour preserved from the DOM version:
 //   - Auto-rotation around Y, paused while dragging.
 //   - Two-axis pointer drag: horizontal -> phi, vertical -> theta
-//     (clamped to +/- 70deg). DESKTOP ONLY — see onPointerDown.
+//     (clamped to +/- 70deg). DESKTOP ONLY. See onPointerDown.
 //   - Momentum coast on release (Y-axis only).
 //   - Random data-flow arcs with 4-segment comet trail.
 //
@@ -416,7 +416,7 @@ export function HeroGlobe() {
           continue;
         }
 
-        // Arc path — stroked polyline through the projected track
+        // Arc path. Stroked polyline through the projected track
         // points. Back-hemisphere segments are skipped: we break the
         // sub-path when z2 dips below the visibility threshold and
         // resume when it climbs back. Without this break, a single
