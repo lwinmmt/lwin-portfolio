@@ -249,9 +249,9 @@ export const projects: Project[] = [
     course: "Nepseeds (self-started)",
     courseVi: "Nepseeds (tự khởi nghiệp)",
     description:
-      "Specialized provider of rare Nepenthes seeds from Southeast Asia, shipping to enthusiasts and collectors worldwide. End-to-end supply chain for perishable, regulated botanical inventory: NEA phytosanitary certifications and CITES compliance. Bootstrapped since July 2021. nepseeds.com.",
+      "Specialized provider of rare Nepenthes seeds from Southeast Asia, shipping to enthusiasts and collectors worldwide. Bootstrapped since July 2021. nepseeds.com.",
     descriptionVi:
-      "Nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, giao hàng cho người chơi và nhà sưu tập trên toàn cầu. Chuỗi cung ứng đầu cuối cho hàng hóa thực vật dễ hỏng và bị quản lý: chứng nhận kiểm dịch của NEA và tuân thủ CITES. Bootstrap từ tháng 7 năm 2021. nepseeds.com.",
+      "Nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, giao hàng cho người chơi và nhà sưu tập trên toàn cầu. Bootstrap từ tháng 7 năm 2021. nepseeds.com.",
     dates: "Jul 2021 to Present",
     category: "Projects",
     tags: ["Shopify", "Operations", "E-Commerce"],

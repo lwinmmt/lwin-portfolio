@@ -25,7 +25,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "My role",
         body: [
-          "Cloud and IoT engineer, doubling as team lead. The team was five on paper, three day-to-day, and really just me and one other engineer doing the heavy lifting. Joined as an SP-attached intern, stayed on as a W2 IoT Solutions consultant. Owned the Azure-side architecture, the integration between field RTUs, the broker, and the operations dashboard, and steered what the team shipped next.",
+          "Cloud and IoT engineer plus team lead. Joined as an SP-attached intern and stayed on as a W2 IoT Solutions consultant. Owned the Azure-side architecture, the integration between field RTUs, the broker, and the operations dashboard, and drove the team's day-to-day direction on what to build next.",
         ],
       },
       {
@@ -57,7 +57,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Vai trò của tôi",
         body: [
-          "Kỹ sư Cloud và IoT, kiêm trưởng nhóm. Team trên giấy tờ có 5 người, vận hành thực tế là 3, và thực ra chỉ tôi cùng một kỹ sư khác làm phần nặng. Bắt đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Phụ trách kiến trúc phía Azure, việc tích hợp giữa các RTU thực địa, broker, và dashboard vận hành, đồng thời quyết định nhóm sẽ làm cái gì tiếp theo.",
+          "Kỹ sư Cloud và IoT, kiêm trưởng nhóm. Bắt đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Phụ trách kiến trúc phía Azure, việc tích hợp giữa các RTU thực địa, broker, và dashboard vận hành, đồng thời quyết định nhóm sẽ làm cái gì tiếp theo.",
         ],
       },
       {
@@ -91,7 +91,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "My role",
         body: [
-          "Team lead and solution architect, effectively by default: I was the one with the cloud and architecture background, so I drove the regional layout, the failover model, the DR runbook, and the diagram. I authored the Service Design Document that the rest of the deliverables hung off, and wrote the rationale for each non-obvious choice (why Aurora Global over manual replication, why a second cloud for DR, why GCP just for DNS).",
+          "Team lead and solution architect. With the cloud and architecture background on the team, I drove the regional layout, the failover model, the DR runbook, and the diagram. I authored the Service Design Document the rest of the deliverables hung off, and wrote the rationale for each non-obvious choice (why Aurora Global over manual replication, why a second cloud for DR, why GCP just for DNS).",
         ],
       },
       {
@@ -135,7 +135,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Vai trò của tôi",
         body: [
-          "Trưởng nhóm và solution architect, mặc định: tôi là người có nền tảng cloud và kiến trúc, nên tôi dẫn dắt regional layout, mô hình failover, DR runbook, và sơ đồ. Tôi viết Service Design Document mà phần còn lại của các deliverable bám theo, và viết lập luận cho mỗi lựa chọn không hiển nhiên (vì sao chọn Aurora Global thay vì replication thủ công, vì sao cần cloud thứ hai cho DR, vì sao GCP chỉ dùng cho DNS).",
+          "Trưởng nhóm và solution architect. Với nền tảng cloud và kiến trúc trong team, tôi dẫn dắt regional layout, mô hình failover, DR runbook, và sơ đồ. Tôi viết Service Design Document mà phần còn lại của các deliverable bám theo, và viết lập luận cho mỗi lựa chọn không hiển nhiên (vì sao chọn Aurora Global thay vì replication thủ công, vì sao cần cloud thứ hai cho DR, vì sao GCP chỉ dùng cho DNS).",
         ],
       },
       {
@@ -309,33 +309,102 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       },
     ],
   },
-  "windows-server-2000-security": {
+  "royce-connect": {
+    en: [
+      {
+        heading: "About",
+        body: [
+          "IS215 module project. The team picked Royce Dental, a Singapore dental chain, and framed the brief around the two numbers dental chains actually live by: no-show rate and recall conversion. The deliverable was a two-surface product: a patient mobile app for appointments and recall reminders, and an operations dashboard for managers to track retention by outlet and dig into no-show patterns.",
+          "I was project lead. Drove the proposal, the strategic analysis (SWOT, Porter's Five Forces, market sizing), the product framing, and most of the team's deck. Built across both surfaces with the team.",
+        ],
+      },
+      {
+        heading: "Stack",
+        bullets: [
+          "Next.js + TypeScript for the operations dashboard, deployed on Vercel.",
+          "React Native for the patient app. Same TypeScript domain types shared with the web side.",
+          "Preview deploys per branch so the team could iterate fast.",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Project môn IS215. Team chọn Royce Dental, một chuỗi nha khoa ở Singapore, và đóng khung đề bài quanh hai con số mà chuỗi nha khoa thực sự sống bằng: tỉ lệ vắng hẹn (no-show) và recall conversion. Sản phẩm cuối là hai mặt: app mobile cho bệnh nhân để đặt lịch và nhắc hẹn, và dashboard vận hành cho quản lý theo dõi retention theo chi nhánh và phân tích các pattern no-show.",
+          "Tôi là project lead. Phụ trách proposal, phân tích chiến lược (SWOT, Porter's Five Forces, market sizing), framing sản phẩm, và phần lớn deck của team. Làm chung cả hai mặt với team.",
+        ],
+      },
+      {
+        heading: "Stack",
+        bullets: [
+          "Next.js + TypeScript cho operations dashboard, deploy trên Vercel.",
+          "React Native cho app bệnh nhân. Chia sẻ TypeScript domain types với phía web.",
+          "Preview deploy theo branch để iterate nhanh cùng team.",
+        ],
+      },
+    ],
+  },
+  "signpost-collective-dashboard": {
+    en: [
+      {
+        heading: "About",
+        body: [
+          "SMU-X project for Signpost Collective, paired with the coursework deliverable for COR1301 Leadership and Team Building. SMU-X engagements are real external client work: the client team uses what you ship and tells you what does not work, so the feedback loop is much tighter than a normal class brief.",
+          "What the team built was an internal operations dashboard with role-based access (admin and member tiers, different view and edit permissions for each) and analytics views over the metrics their team actually cared about.",
+        ],
+      },
+      {
+        heading: "Stack",
+        bullets: [
+          "Next.js + TypeScript for the dashboard.",
+          "Deployed on Vercel with per-branch preview deploys so the client could review changes before merge.",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Project SMU-X cho Signpost Collective, kết hợp với deliverable cho môn COR1301 Leadership and Team Building. SMU-X là engagement thực tế với khách hàng bên ngoài: team của khách dùng sản phẩm bạn ship và sẽ nói cho bạn biết cái gì không work, nên vòng phản hồi gần hơn nhiều so với đề bài lớp học thông thường.",
+          "Cái team xây là một internal operations dashboard với role-based access (tier admin và member, mỗi bên có quyền view và edit khác nhau) và các analytics view trên những metric mà team họ thực sự quan tâm.",
+        ],
+      },
+      {
+        heading: "Stack",
+        bullets: [
+          "Next.js + TypeScript cho dashboard.",
+          "Deploy trên Vercel với preview deploy theo branch để khách review thay đổi trước khi merge.",
+        ],
+      },
+    ],
+  },
+  "asv-5g-autonomous": {
     en: [
       {
         heading: "Context",
         body: [
-          "A classic blue-team versus red-team exercise on a deliberately vulnerable Windows Server 2000 box. The goal: take a known-bad baseline and harden it against the common attack vectors of that era, then verify the hardening actually held under active probing.",
+          "Final Year Project at Singapore Polytechnic, contributing to the school's first SAE Level 3 autonomous 5G vehicle. The vehicle itself was a multi-team effort across mechatronics, controls, and IoT. My team owned the IoT subsystem: collecting telemetry from the vehicle and surfacing it to a remote operator over 5G.",
         ],
       },
       {
-        heading: "Hardening moves",
+        heading: "My role",
+        body: [
+          "Led the 5-person IoT subteam. Coordinated the split between firmware, cloud, and dashboard work and steered what each phase shipped. On the build side I focused on the cloud and the dashboard integration.",
+        ],
+      },
+      {
+        heading: "Architecture",
         bullets: [
-          "Restricted DNS zone transfers so an external nslookup could no longer dump the zone.",
-          "Deployed the IIS Lockdown Tool to disable unused IIS features and reduce the attack surface.",
-          "Replaced the insecure remote-access stack with CopSSH (Cygwin-based OpenSSH on Windows).",
-          "Enforced strong password policies via Group Policy: complexity, length, lockout thresholds.",
+          "Node-RED firmware on a Raspberry Pi onboard the vehicle. Captured sensor telemetry (environmental + vehicle state) and pushed it out over MQTT through the 5G uplink.",
+          "React + Node.js + MySQL on the cloud side. Live dashboard for the remote operator showing the vehicle's current state, with alerting rules on environmental hazard thresholds.",
+          "5G as the transport. Lower latency and higher uplink throughput than LTE made remote teleop and live telemetry actually feasible at distance.",
         ],
       },
       {
-        heading: "Validation",
+        heading: "Where it stands",
         body: [
-          "Hardening claims are worth nothing without verification. I re-ran the same probes against the hardened box that I had used against the baseline: nslookup zone transfer attempts, nmap port scanning for unexpected open services, attempts to authenticate against the old remote-access surface. Every probe that worked before had to fail after.",
-        ],
-      },
-      {
-        heading: "Why this lab still matters",
-        body: [
-          "The specific software is decades old, but the mindset transfers directly to modern security work: assume a baseline is broken, harden by removing surface area first, then verify with active probing. Most production systems I have touched since (NEA wastewater, Osiris) have had similar broken-by-default assumptions worth challenging.",
+          "Final-year capstone, shipped to demo. The vehicle and the IoT subsystem stayed at SP as part of their autonomous-vehicle research track.",
         ],
       },
     ],
@@ -343,28 +412,47 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Bối cảnh",
         body: [
-          "Một bài tập blue-team đấu red-team kinh điển trên một máy Windows Server 2000 cố tình để lỗ hổng. Mục tiêu: lấy một baseline đã biết là tệ, hardening nó trước các vector tấn công phổ biến của thời đó, rồi xác minh việc hardening có thật sự giữ vững trước khi probing chủ động hay không.",
+          "Final Year Project tại Singapore Polytechnic, đóng góp cho chiếc xe tự hành SAE Level 3 dùng 5G đầu tiên của trường. Chính chiếc xe là dự án đa nhóm trải dài mechatronics, controls, và IoT. Team của tôi phụ trách subsystem IoT: thu telemetry từ xe và đưa lên cho remote operator qua 5G.",
         ],
       },
       {
-        heading: "Các bước hardening",
+        heading: "Vai trò của tôi",
+        body: [
+          "Dẫn dắt subteam IoT 5 người. Điều phối phần chia việc giữa firmware, cloud, và dashboard, đồng thời quyết định mỗi pha sẽ ship cái gì. Về phần build, tôi tập trung vào cloud và việc tích hợp dashboard.",
+        ],
+      },
+      {
+        heading: "Kiến trúc",
         bullets: [
-          "Hạn chế DNS zone transfer để nslookup từ ngoài không thể dump toàn bộ zone.",
-          "Triển khai IIS Lockdown Tool để tắt các tính năng IIS không dùng và giảm bề mặt tấn công.",
-          "Thay stack remote access không an toàn bằng CopSSH (OpenSSH chạy trên Windows qua Cygwin).",
-          "Áp policy mật khẩu mạnh qua Group Policy: độ phức tạp, độ dài, ngưỡng khóa tài khoản.",
+          "Firmware Node-RED chạy trên Raspberry Pi gắn trên xe. Thu telemetry sensor (môi trường + trạng thái xe) và đẩy ra qua MQTT thông qua uplink 5G.",
+          "React + Node.js + MySQL phía cloud. Dashboard live cho remote operator hiển thị trạng thái hiện tại của xe, với rule cảnh báo các ngưỡng nguy cơ môi trường.",
+          "5G làm transport. Độ trễ thấp hơn và uplink throughput cao hơn LTE giúp teleop từ xa và live telemetry thực sự khả thi ở khoảng cách.",
         ],
       },
       {
-        heading: "Xác minh",
+        heading: "Hiện tại",
         body: [
-          "Tuyên bố hardening không giá trị nếu không có xác minh. Tôi chạy lại các probe đã dùng với baseline trên máy đã hardening: thử nslookup zone transfer, quét cổng nmap tìm service mở bất ngờ, thử xác thực trên bề mặt remote access cũ. Mọi probe đã hoạt động trước đó phải fail sau khi hardening.",
+          "Capstone năm cuối, đã ship demo. Chiếc xe và subsystem IoT vẫn ở lại SP như một phần của track nghiên cứu autonomous vehicle.",
         ],
       },
+    ],
+  },
+  "nepseeds": {
+    en: [
       {
-        heading: "Vì sao lab này vẫn quan trọng",
+        heading: "About",
         body: [
-          "Phần mềm cụ thể đã có vài thập kỷ tuổi, nhưng mindset chuyển thẳng sang công việc bảo mật hiện đại: giả định baseline đã bị bẻ, hardening bằng cách loại bỏ bề mặt trước, rồi xác minh bằng probing chủ động. Hầu hết các hệ thống production tôi đụng tới sau này (giám sát nước thải, Osiris) đều có các giả định broken-by-default đáng nghi vấn tương tự.",
+          "Nepseeds is a specialized provider of rare Nepenthes seeds from Southeast Asia, with a focus on global shipping to enthusiasts and collectors worldwide. The mission is to enrich the Nepenthes hobby by offering a diverse selection of seeds and promoting the growth of unique and fascinating plant varieties.",
+          "We take pride in the joy of seeing customers grow their own thriving Nepenthes from home, and we strive to provide the highest quality seeds and service. The site is live at [nepseeds.com](https://nepseeds.com/).",
+        ],
+      },
+    ],
+    vi: [
+      {
+        heading: "Giới thiệu",
+        body: [
+          "Nepseeds là nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, tập trung vào việc giao hàng toàn cầu cho người chơi và nhà sưu tập trên khắp thế giới. Sứ mệnh là làm phong phú thêm cộng đồng chơi Nepenthes bằng cách cung cấp đa dạng hạt giống và thúc đẩy việc trồng các giống cây độc đáo, thú vị.",
+          "Chúng tôi tự hào khi thấy khách hàng tự trồng được Nepenthes khỏe mạnh ngay tại nhà, và luôn cố gắng cung cấp hạt giống và dịch vụ chất lượng cao nhất. Trang web ở [nepseeds.com](https://nepseeds.com/).",
         ],
       },
     ],
