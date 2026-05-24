@@ -348,8 +348,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "About",
         body: [
-          "SMU-X project for Signpost Collective, paired with the coursework deliverable for COR1301 Leadership and Team Building. SMU-X engagements are real external client work: the client team uses what you ship and tells you what does not work, so the feedback loop is much tighter than a normal class brief.",
-          "What the team built was an internal operations dashboard with role-based access (admin and member tiers, different view and edit permissions for each) and analytics views over the metrics their team actually cared about.",
+          "SMU-X project for Signpost Collective, paired with the coursework deliverable for COR1301 Leadership and Team Building. Signpost runs a volunteer-operations team and already had their own internal dashboard for the day-to-day. The team built our version as the project deliverable: role-based access with admin and member tiers, different view and edit permissions for each, and analytics views over the operational metrics they cared about.",
+          "We shared the codebase openly with the Signpost team afterwards so they could reference it and pull whatever was useful into the dashboard they actually run on.",
         ],
       },
       {
@@ -364,8 +364,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Giới thiệu",
         body: [
-          "Project SMU-X cho Signpost Collective, kết hợp với deliverable cho môn COR1301 Leadership and Team Building. SMU-X là engagement thực tế với khách hàng bên ngoài: team của khách dùng sản phẩm bạn ship và sẽ nói cho bạn biết cái gì không work, nên vòng phản hồi gần hơn nhiều so với đề bài lớp học thông thường.",
-          "Cái team xây là một internal operations dashboard với role-based access (tier admin và member, mỗi bên có quyền view và edit khác nhau) và các analytics view trên những metric mà team họ thực sự quan tâm.",
+          "Project SMU-X cho Signpost Collective, kết hợp với deliverable cho môn COR1301 Leadership and Team Building. Signpost vận hành một team volunteer-operations và đã có dashboard nội bộ riêng cho công việc hằng ngày. Team xây phiên bản của tụi tôi như deliverable của project: role-based access với tier admin và member, mỗi bên có quyền view và edit khác nhau, và các analytics view trên những metric vận hành mà họ quan tâm.",
+          "Sau đó tụi tôi chia sẻ codebase công khai cho team Signpost để họ tham khảo và rút ra cái gì có ích cho dashboard họ thực sự đang dùng.",
         ],
       },
       {
@@ -396,7 +396,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Node-RED firmware on a Raspberry Pi onboard the vehicle. Captured sensor telemetry (environmental + vehicle state) and pushed it out over MQTT through the 5G uplink.",
           "React + Node.js + MySQL on the cloud side. Live dashboard for the remote operator showing the vehicle's current state, with alerting rules on environmental hazard thresholds.",
-          "5G as the transport. Lower latency and higher uplink throughput than LTE made remote teleop and live telemetry actually feasible at distance.",
         ],
       },
       {
@@ -424,7 +423,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Firmware Node-RED chạy trên Raspberry Pi gắn trên xe. Thu telemetry sensor (môi trường + trạng thái xe) và đẩy ra qua MQTT thông qua uplink 5G.",
           "React + Node.js + MySQL phía cloud. Dashboard live cho remote operator hiển thị trạng thái hiện tại của xe, với rule cảnh báo các ngưỡng nguy cơ môi trường.",
-          "5G làm transport. Độ trễ thấp hơn và uplink throughput cao hơn LTE giúp teleop từ xa và live telemetry thực sự khả thi ở khoảng cách.",
         ],
       },
       {

@@ -150,9 +150,9 @@ export const projects: Project[] = [
     titleVi: "Dashboard nội bộ cho Signpost Collective",
     course: "COR1301 Leadership and Team Building, Singapore Management University",
     description:
-      "Internal operations dashboard for Signpost Collective. SMU-X engagement with real client use. Admin and member role-based access plus analytics views.",
+      "SMU-X project for Signpost Collective. Built a reference internal operations dashboard and shared the codebase openly with their team.",
     descriptionVi:
-      "Dashboard vận hành nội bộ cho Signpost Collective. Dự án SMU-X có khách hàng thật sử dụng. Phân quyền theo vai trò admin và member, kèm các view phân tích.",
+      "Dự án SMU-X cho Signpost Collective. Xây dashboard vận hành nội bộ tham chiếu và chia sẻ codebase công khai với team của họ.",
     dates: "2026",
     category: "Coursework",
     tags: ["Next.js", "Vercel", "TypeScript", "SMU-X"],
@@ -169,6 +169,7 @@ export const projects: Project[] = [
     dates: "Oct 2023",
     category: "Coursework",
     tags: ["Product", "UX", "Aggregator"],
+    imageSrc: "/images/highlights/pm-club-grabcompare.webp",
   },
   {
     slug: "asv-5g-autonomous",
