@@ -150,24 +150,12 @@ export default async function ProjectPage({
             </div>
           )}
 
-          {caseStudy && caseStudy.length > 0 ? (
+          {caseStudy && caseStudy.length > 0 && (
             <div className="mt-12 flex flex-col gap-10">
               {caseStudy.map((section, idx) => (
                 <CaseStudyBlock key={section.heading} section={section} index={idx} />
               ))}
             </div>
-          ) : (
-            <section className="mt-12 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-6">
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ruby)]">
-                {t("project.comingSoon")}
-              </div>
-              <h3 className="mb-2 font-sans text-[16px] font-semibold text-[var(--color-fg)]">
-                {t("project.fullCaseStudyTitle")}
-              </h3>
-              <p className="text-[13px] leading-[1.6] text-[var(--color-fg-muted)]">
-                {t("project.fullCaseStudyBody")}
-              </p>
-            </section>
           )}
 
           {related.length > 0 && (

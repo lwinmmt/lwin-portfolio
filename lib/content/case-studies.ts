@@ -25,7 +25,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "My role",
         body: [
-          "Cloud and IoT engineer on a small team, first as an SP-attached intern then on as a W2 IoT Solutions consultant. I owned the Azure-side architecture and the integration between field RTUs, the broker, and the operations dashboard.",
+          "Cloud and IoT engineer, doubling as team lead. The team was five on paper, three day-to-day, and really just me and one other engineer doing the heavy lifting. Joined as an SP-attached intern, stayed on as a W2 IoT Solutions consultant. Owned the Azure-side architecture, the integration between field RTUs, the broker, and the operations dashboard, and steered what the team shipped next.",
         ],
       },
       {
@@ -57,7 +57,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Vai trò của tôi",
         body: [
-          "Kỹ sư Cloud và IoT trong một team nhỏ, ban đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Tôi phụ trách kiến trúc phía Azure và việc tích hợp giữa các RTU ngoài thực địa, broker, và dashboard vận hành.",
+          "Kỹ sư Cloud và IoT, kiêm trưởng nhóm. Team trên giấy tờ có 5 người, vận hành thực tế là 3, và thực ra chỉ tôi cùng một kỹ sư khác làm phần nặng. Bắt đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Phụ trách kiến trúc phía Azure, việc tích hợp giữa các RTU thực địa, broker, và dashboard vận hành, đồng thời quyết định nhóm sẽ làm cái gì tiếp theo.",
         ],
       },
       {
@@ -174,14 +174,14 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Context",
         body: [
-          "Hydroponic SMEs in Singapore are run by tight teams with thin margins. Irrigation and lighting are still mostly manual or run on dumb timers, which means crop loss when pumps fail overnight and over-watering when conditions shift.",
-          "Osiris was a product attempt at the smallest useful thing: a controller that automates the daily cycle and tells the operator when something is off, without forcing them to learn a dashboard.",
+          "Hydroponics in Singapore is a small market. Most of the activity sits on the supply side: selling grow racks to hobbyists and schools at low margin. There isn't a real ecosystem of funded operators beyond that.",
+          "Osiris was an attempt to push past the rack itself. Smart vertical farming: daily irrigation and lighting on automatic cycles, device-agnostic relay control so anything plugged into a normal socket could be toggled remotely, and the operator only pulled in when something needed attention.",
         ],
       },
       {
         heading: "My role",
         body: [
-          "Founder. I owned the hardware design, firmware, cloud pipeline, and the conversations with farmers. I led the funding pitch and the booth at World Cities Summit. The architectural decisions and the trade-offs are mine.",
+          "Founder. I owned the hardware design, firmware, cloud pipeline, and the conversations with farmers. I led the funding pitch and the booth at World Cities Summit.",
         ],
       },
       {
@@ -193,9 +193,10 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Architecture",
         bullets: [
-          "ESP32-based controller with relays for the irrigation pumps and the LED grow lights. Local daily schedule on the device so the rig keeps running if the cloud is unreachable.",
-          "Telemetry pushed up to AWS S3. Cheap, simple, and good enough for the early scale.",
-          "Web dashboard for the farmers to monitor crop view, the daily cycle, and any alerts.",
+          "ESP32 controller in a roughly 20×20 cm enclosure, mounted next to the rack. Wi-Fi to the local router.",
+          "Relay switches wired to a standard socket panel: anything plugged into the panel (pump, light, fan, anything off a wall socket) becomes remotely toggleable. A hand-built device-agnostic smart plug strip, a few years before the consumer ones turned up on Shopee.",
+          "Local daily schedule on the device so the rig keeps running if the cloud is unreachable. Telemetry pushed up to AWS S3.",
+          "Web dashboard for the operator to monitor crop view, the daily cycle, and any alerts.",
         ],
       },
       {
@@ -209,8 +210,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Where it stands",
         body: [
-          "Osiris kept going in a different shape. The original hydroponics product stopped shipping, but the company pivoted to a systems-integrator-style consulting model for custom IoT builds.",
-          "The original platform (ESP32 controller, cloud pipeline, dashboard) ended up reusable across domains: the same architecture gets redeployed with different sensors for different problem spaces. The early lessons in firmware reliability, supply chain, and deployment ride along.",
+          "Osiris pivoted away from a packaged hydroponics product into a systems-integrator model: custom IoT builds for other people's problems. Different shape, same crew.",
         ],
       },
     ],
@@ -218,14 +218,14 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Bối cảnh",
         body: [
-          "Các doanh nghiệp thủy canh vừa và nhỏ ở Singapore vận hành bằng team gọn, biên lợi nhuận mỏng. Tưới tiêu và chiếu sáng phần lớn vẫn là thủ công hoặc chạy bằng timer ngu, dẫn đến mất mùa khi bơm hỏng qua đêm và tưới quá đà khi điều kiện thay đổi.",
-          "Osiris là một nỗ lực sản phẩm cho thứ nhỏ nhất nhưng có ích: một controller tự động hóa chu kỳ hằng ngày và báo cho người vận hành khi có gì đó sai, mà không bắt họ phải học một dashboard.",
+          "Thủy canh ở Singapore là một thị trường nhỏ. Phần lớn hoạt động nằm ở mặt cung: bán giá thể trồng cho người chơi và trường học với biên lợi nhuận thấp. Không có hệ sinh thái thực sự của các nhà vận hành được tài trợ ngoài đó.",
+          "Osiris là nỗ lực đi xa hơn chính cái giá thể. Smart vertical farming: chu kỳ tưới và đèn chiếu sáng hằng ngày tự động, điều khiển relay không phụ thuộc thiết bị nên bất cứ thứ gì cắm vào ổ cắm thông thường đều có thể bật-tắt từ xa, và người vận hành chỉ phải vào cuộc khi có chuyện thực sự cần.",
         ],
       },
       {
         heading: "Vai trò của tôi",
         body: [
-          "Nhà sáng lập. Tôi phụ trách thiết kế phần cứng, firmware, pipeline cloud, và các cuộc trò chuyện với nông dân. Tôi dẫn dắt pitch xin tài trợ và gian trưng bày tại World Cities Summit. Các quyết định kiến trúc và đánh đổi là của tôi.",
+          "Nhà sáng lập. Tôi phụ trách thiết kế phần cứng, firmware, pipeline cloud, và các cuộc trò chuyện với nông dân. Tôi dẫn dắt pitch xin tài trợ và gian trưng bày tại World Cities Summit.",
         ],
       },
       {
@@ -237,9 +237,10 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Kiến trúc",
         bullets: [
-          "Controller dựa trên ESP32 với relay điều khiển bơm tưới và đèn LED trồng cây. Lịch chạy hằng ngày lưu local trên thiết bị để hệ thống vẫn hoạt động khi cloud không kết nối.",
-          "Telemetry đẩy lên AWS S3. Rẻ, đơn giản, và đủ tốt cho quy mô ban đầu.",
-          "Dashboard web cho người nông dân theo dõi tình trạng cây, chu kỳ hằng ngày, và các cảnh báo.",
+          "Bộ điều khiển ESP32 trong hộp khoảng 20×20 cm, gắn cạnh giá thể. Wi-Fi về router nội bộ.",
+          "Relay switch nối vào bảng ổ cắm tiêu chuẩn: bất kỳ thiết bị nào cắm vào bảng (bơm, đèn, quạt, bất cứ thứ gì chạy điện ổ cắm) đều bật-tắt từ xa được. Một thanh smart plug không phụ thuộc thiết bị tự ráp tay, vài năm trước khi loại tương tự bán đại trà trên Shopee.",
+          "Lịch hằng ngày chạy ngay trên thiết bị để rig vẫn hoạt động khi mất kết nối cloud. Telemetry đẩy lên AWS S3.",
+          "Dashboard web cho người vận hành theo dõi camera giá thể, chu kỳ hằng ngày, và mọi cảnh báo.",
         ],
       },
       {
@@ -253,8 +254,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Hiện tại",
         body: [
-          "Osiris vẫn tiếp tục dưới một hình thức khác. Sản phẩm thủy canh ban đầu dừng ship, nhưng công ty xoay trục sang mô hình tư vấn kiểu systems-integrator cho các project IoT đặt riêng.",
-          "Nền tảng ban đầu (controller ESP32, pipeline cloud, dashboard) hóa ra dùng lại được trên nhiều lĩnh vực: cùng kiến trúc được redeploy với các sensor khác cho các bài toán khác. Những bài học sớm về độ tin cậy firmware, supply chain, và triển khai đi theo cùng.",
+          "Osiris chuyển từ sản phẩm thủy canh đóng gói sang mô hình systems-integrator: các bản IoT tùy chỉnh cho bài toán của người khác. Hình dạng khác, vẫn cùng một crew.",
         ],
       },
     ],
@@ -283,13 +283,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
           "The rig was as much a sales tool as a sensor stack. The farm's team used it to walk clients through what data-driven indoor agriculture looks like. CNA picked it up in May 2022 as a Singapore Indoor Farms feature.",
         ],
       },
-      {
-        heading: "What I learned",
-        body: [
-          "A small, deliberate scope can outperform a complex one. The same engineering effort spent making a hundred sensors work imperfectly would have been less useful than making one rack actually work in front of clients.",
-          "Hardware demos are different from hardware products. The bar for a demo is liveness and legibility on a screen. The bar for a product is the failure modes that show up at 3am.",
-        ],
-      },
     ],
     vi: [
       {
@@ -312,217 +305,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Đem lại gì cho khách hàng",
         body: [
           "Bộ thiết bị này vừa là công cụ bán hàng vừa là sensor stack. Team của trang trại dùng nó để dẫn khách đi qua câu chuyện nông nghiệp trong nhà dựa trên dữ liệu trông thế nào. CNA đưa tin vào tháng 5/2022 trong bài về Singapore Indoor Farms.",
-        ],
-      },
-      {
-        heading: "Bài học",
-        body: [
-          "Phạm vi nhỏ và có chủ đích có thể vượt qua phạm vi phức tạp. Cùng nỗ lực kỹ thuật bỏ vào việc làm cho một trăm cảm biến chạy không hoàn hảo sẽ không có ích bằng việc làm cho một rack thực sự chạy trước mặt khách.",
-          "Demo phần cứng khác sản phẩm phần cứng. Tiêu chí cho demo là live và đọc được trên màn hình. Tiêu chí cho sản phẩm là các failure mode xuất hiện lúc 3 giờ sáng.",
-        ],
-      },
-    ],
-  },
-  "royce-connect": {
-    en: [
-      {
-        heading: "Context",
-        body: [
-          "The IS215 brief asked for an end-to-end digitalization project against a real (or realistic) business. I proposed using Royce Dental, a Singapore dental chain, and the team went with it. Dental chains in Singapore live and die by two numbers: no-show rate and recall conversion, so the brief had real bite once we framed it that way.",
-          "This was an academic exercise, not a client engagement. We did not deploy to a real clinic. Treat what is on the live links as the prototype we shipped at the end of the module.",
-        ],
-      },
-      {
-        heading: "My role",
-        body: [
-          "Project lead. I drove the proposal, the strategic analysis (SWOT, Porter's Five Forces, target market sizing), the product framing, and most of the deck the team presented with. On the build side I worked across both surfaces with the team.",
-        ],
-      },
-      {
-        heading: "Two surfaces, one platform",
-        bullets: [
-          "**Patient mobile app**: appointment booking, recall reminders, and a one-tap confirmation loop designed to bring no-show numbers down.",
-          "**Operations dashboard**: per-outlet retention curves, no-show analytics, and the daily and weekly views the practice manager actually opens.",
-        ],
-      },
-      {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript for the operations dashboard, deployed on Vercel.",
-          "React Native for the patient app. Same TypeScript domain types shared with the web side.",
-          "Both apps configured for fast preview deploys per branch so we could iterate with the team quickly.",
-        ],
-      },
-      {
-        heading: "What I learned",
-        body: [
-          "Two-surface products are mostly about the seam between them. The patient app and the ops dashboard look like different products to their users, but they share a domain model. Getting that model right (appointments, patients, recalls, outlets) was 70 percent of the engineering work.",
-          "Strategy and product framing pull more weight than the code in academic exercises like this. The SWOT, the Porter's analysis, and the deck were what carried the room. The build was the proof, not the pitch.",
-        ],
-      },
-      {
-        heading: "Artifacts",
-        body: [
-          "I will upload the final deck (SWOT, Porter's Five Forces, market sizing, the full digitalization roadmap) to this page once cleaned up for public viewing.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "Đề bài IS215 yêu cầu một dự án số hóa end-to-end cho một doanh nghiệp thật (hoặc gần như thật). Tôi đề xuất dùng Royce Dental, một chuỗi nha khoa tại Singapore, và team đồng ý. Các chuỗi nha khoa ở Singapore sống chết bằng hai con số: tỉ lệ trễ hẹn và tỉ lệ tái khám, nên đề bài có sức nặng thật một khi đã đóng khung như vậy.",
-          "Đây là bài tập học thuật, không phải dự án với khách hàng thật. Chúng tôi không triển khai cho phòng khám thật. Hãy xem những gì có ở live link là bản prototype mà chúng tôi ship lúc kết thúc môn học.",
-        ],
-      },
-      {
-        heading: "Vai trò của tôi",
-        body: [
-          "Trưởng dự án. Tôi dẫn dắt việc đề xuất, phân tích chiến lược (SWOT, Porter's Five Forces, ước tính thị trường mục tiêu), đóng khung sản phẩm, và phần lớn deck thuyết trình. Về phần build, tôi làm việc trên cả hai mặt cùng team.",
-        ],
-      },
-      {
-        heading: "Hai mặt, một nền tảng",
-        bullets: [
-          "**Ứng dụng di động cho bệnh nhân**: đặt lịch hẹn, nhắc tái khám, và vòng xác nhận một chạm được thiết kế để kéo tỉ lệ trễ hẹn xuống.",
-          "**Dashboard vận hành**: đường cong giữ chân khách theo từng chi nhánh, phân tích trễ hẹn, và các view ngày / tuần mà người quản lý phòng khám thực sự mở.",
-        ],
-      },
-      {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript cho dashboard vận hành, deploy trên Vercel.",
-          "React Native cho ứng dụng bệnh nhân. Dùng chung các type domain TypeScript với phần web.",
-          "Cả hai app được cấu hình preview deploy nhanh theo nhánh để chúng tôi iterate cùng team nhanh chóng.",
-        ],
-      },
-      {
-        heading: "Bài học",
-        body: [
-          "Sản phẩm hai mặt chủ yếu là về phần ráp nối giữa chúng. Ứng dụng bệnh nhân và dashboard vận hành trông như hai sản phẩm khác nhau với người dùng cuối, nhưng chúng dùng chung một domain model. Làm đúng model đó (appointments, patients, recalls, outlets) chiếm 70% công việc kỹ thuật.",
-          "Chiến lược và đóng khung sản phẩm có sức nặng hơn code trong các bài tập học thuật kiểu này. SWOT, phân tích Porter, và deck là thứ đã chinh phục phòng. Bản build chỉ là bằng chứng, không phải phần pitch.",
-        ],
-      },
-      {
-        heading: "Tài liệu",
-        body: [
-          "Tôi sẽ upload deck cuối (SWOT, Porter's Five Forces, ước tính thị trường, lộ trình số hóa đầy đủ) lên trang này sau khi dọn dẹp cho phù hợp public.",
-        ],
-      },
-    ],
-  },
-  "signpost-collective-dashboard": {
-    en: [
-      {
-        heading: "Context",
-        body: [
-          "Built for Signpost Collective as an [SMU-X](https://x.smu.edu.sg/) project plus coursework deliverable for COR1301 Leadership and Team Building. SMU-X projects are real engagements with external organizations: the client team actually uses what you ship and tells you when it does not work.",
-        ],
-      },
-      {
-        heading: "What we built",
-        bullets: [
-          "Internal operations dashboard for the Signpost Collective team.",
-          "Role-based access with admin and member tiers, each with different view and edit permissions.",
-          "Analytics views surfacing the operational metrics the team cares about.",
-        ],
-      },
-      {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript for the dashboard.",
-          "Deployed on Vercel with per-branch preview deploys so the client could review changes before merge.",
-        ],
-      },
-      {
-        heading: "What I learned",
-        body: [
-          "SMU-X projects are not coursework with a sticker on it. A real client team uses the thing you ship and will tell you in the next meeting when it does not work for them. That feedback loop sharpens product instincts faster than any case study brief can.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "Xây cho Signpost Collective dưới dạng dự án [SMU-X](https://x.smu.edu.sg/) đồng thời là deliverable môn học cho COR1301 Leadership and Team Building. Dự án SMU-X là các engagement thật với tổ chức bên ngoài: team khách hàng thực sự dùng thứ bạn ship và nói cho bạn biết khi nó không hoạt động.",
-        ],
-      },
-      {
-        heading: "Cái chúng tôi xây",
-        bullets: [
-          "Dashboard vận hành nội bộ cho team Signpost Collective.",
-          "Phân quyền theo vai trò với hai cấp admin và member, mỗi cấp có quyền xem và sửa khác nhau.",
-          "Các view analytics đưa ra các chỉ số vận hành mà team quan tâm.",
-        ],
-      },
-      {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript cho dashboard.",
-          "Deploy trên Vercel với preview deploy theo từng nhánh để khách hàng review thay đổi trước khi merge.",
-        ],
-      },
-      {
-        heading: "Bài học",
-        body: [
-          "Dự án SMU-X không phải là coursework dán nhãn lại. Một team khách hàng thật dùng thứ bạn ship và sẽ nói cho bạn biết trong buổi gặp tiếp theo khi nó không phù hợp với họ. Vòng phản hồi đó mài giũa product instinct nhanh hơn bất kỳ case study brief nào.",
-        ],
-      },
-    ],
-  },
-  "grabcompare": {
-    en: [
-      {
-        heading: "Context",
-        body: [
-          "Ride-hailing in Singapore is fragmented. Grab, Tada, and a handful of other apps serve overlapping routes at different prices and wait times, and there is no easy way to compare them in one place before booking. You open three apps to make one decision.",
-          "GrabCompare was a product concept that aggregated rides across providers in one ranked view. Pick where you are going, see all options side by side, book through the right app.",
-        ],
-      },
-      {
-        heading: "My role",
-        body: [
-          "Project lead on a 3-person team. I drove the product framing, the deck, and the live pitch. Won 1st place at the SMU Product Management Experience Internal Product Challenge in October 2023.",
-        ],
-      },
-      {
-        heading: "Why it landed",
-        body: [
-          "The aggregator pattern is well understood: judges did not have to imagine what the product feels like because they have already used similar tools for flights and hotels. That let the pitch focus on the harder local-execution questions (which APIs to integrate, what to do when one app says 5 minutes and another says 12, how to handle pricing surge across apps) rather than on whether the category should exist.",
-        ],
-      },
-      {
-        heading: "Artifacts",
-        body: [
-          "No public deck or repo currently uploaded. If I can recover the slides from the cohort folder I will attach them here.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "Thị trường gọi xe ở Singapore phân mảnh. Grab, Tada và một số app khác phục vụ các tuyến chồng lấn với giá cước và thời gian chờ khác nhau, và không có cách dễ dàng để so sánh chúng tại một nơi trước khi đặt. Bạn phải mở ba app chỉ để ra một quyết định.",
-          "GrabCompare là một ý tưởng sản phẩm gom các chuyến đi từ nhiều nhà cung cấp vào một view xếp hạng. Chọn điểm đến, xem hết các lựa chọn cạnh nhau, đặt qua đúng app.",
-        ],
-      },
-      {
-        heading: "Vai trò của tôi",
-        body: [
-          "Trưởng dự án trong team 3 người. Tôi dẫn dắt việc đóng khung sản phẩm, deck và phần pitch trực tiếp. Đạt giải Nhất tại SMU Product Management Experience Internal Product Challenge tháng 10/2023.",
-        ],
-      },
-      {
-        heading: "Vì sao nó thuyết phục",
-        body: [
-          "Pattern aggregator thì quen thuộc: ban giám khảo không phải tưởng tượng sản phẩm sẽ thế nào vì họ đã dùng các tool tương tự cho vé máy bay và khách sạn. Điều đó cho phép phần pitch tập trung vào các câu hỏi khó hơn về local execution (API nào tích hợp, làm gì khi một app báo 5 phút còn một app báo 12, xử lý surge giá khắp các app thế nào) thay vì tranh luận liệu category này có nên tồn tại không.",
-        ],
-      },
-      {
-        heading: "Tài liệu",
-        body: [
-          "Hiện chưa upload deck hay repo công khai. Nếu tôi tìm lại được slide từ folder cohort tôi sẽ đính kèm ở đây.",
         ],
       },
     ],
@@ -583,50 +365,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Vì sao lab này vẫn quan trọng",
         body: [
           "Phần mềm cụ thể đã có vài thập kỷ tuổi, nhưng mindset chuyển thẳng sang công việc bảo mật hiện đại: giả định baseline đã bị bẻ, hardening bằng cách loại bỏ bề mặt trước, rồi xác minh bằng probing chủ động. Hầu hết các hệ thống production tôi đụng tới sau này (giám sát nước thải, Osiris) đều có các giả định broken-by-default đáng nghi vấn tương tự.",
-        ],
-      },
-    ],
-  },
-  "nepseeds": {
-    en: [
-      {
-        heading: "Origin",
-        body: [
-          "Started in 2021 with a friend who was growing nepenthes (carnivorous pitcher plants) and selling them as a hobby on Carousell. The volume kept creeping up. Eventually it made sense to formalize it into a real brand with real compliance, real fulfillment, and a real customer base.",
-        ],
-      },
-      {
-        heading: "What it became",
-        body: [
-          "A bootstrapped plant e-commerce operation focused on perishable, regulated botanical inventory. NEA phytosanitary certifications for plant exports, CITES compliance for the protected species we carry, end-to-end supply chain from grower to shipped order. The site is live at [nepseeds.com](https://nepseeds.com/).",
-        ],
-      },
-      {
-        heading: "What I picked up",
-        body: [
-          "Bootstrapping a physical-product business teaches a different set of skills than shipping software. Inventory math. Phytosanitary paperwork. The difference between a customer who is angry because the plant arrived late and a customer who is angry because their last shipment was wrong. Operations work compounds: small process fixes save hours every week.",
-          "It also taught me when not to over-engineer. A Shopify store with a tight fulfillment workflow beats a custom-built platform for this scale.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Khởi đầu",
-        body: [
-          "Bắt đầu năm 2021 cùng một người bạn đang trồng cây nepenthes (cây nắp ấm ăn thịt) và bán làm thú vui trên Carousell. Khối lượng cứ tăng dần. Cuối cùng việc chính thức hóa thành một brand thật với compliance thật, fulfillment thật, và một tập khách hàng thật là hợp lý.",
-        ],
-      },
-      {
-        heading: "Trở thành cái gì",
-        body: [
-          "Một dự án e-commerce cây cảnh tự thân, tập trung vào hàng hóa thực vật dễ hỏng và bị quản lý. Chứng nhận kiểm dịch thực vật NEA cho hàng xuất khẩu, tuân thủ CITES cho các loài được bảo vệ chúng tôi bán, chuỗi cung ứng end-to-end từ nhà vườn đến đơn hàng đã ship. Trang web đang chạy tại [nepseeds.com](https://nepseeds.com/).",
-        ],
-      },
-      {
-        heading: "Tôi học được gì",
-        body: [
-          "Bootstrap một doanh nghiệp sản phẩm vật lý dạy một bộ kỹ năng khác hẳn với ship phần mềm. Toán tồn kho. Giấy tờ kiểm dịch thực vật. Sự khác biệt giữa khách hàng giận vì cây tới trễ và khách hàng giận vì lô hàng trước bị sai. Công việc vận hành dồn lại: những fix process nhỏ tiết kiệm hàng giờ mỗi tuần.",
-          "Nó cũng dạy tôi khi nào KHÔNG nên over-engineer. Một cửa hàng Shopify với workflow fulfillment chặt chẽ ăn đứt một platform tự xây cho quy mô này.",
         ],
       },
     ],

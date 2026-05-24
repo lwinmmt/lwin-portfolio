@@ -92,9 +92,9 @@ export const projects: Project[] = [
     titleVi: "Tự động hóa IoT cho thủy canh",
     course: "Osiris Technology",
     description:
-      "ESP32-driven irrigation and lighting automation for hydroponic SMEs. AWS S3 data pipeline. SMU BIG grant funded. Showcased to Ministers Indranee Rajah and Desmond Lee at World Cities Summit 2024.",
+      "ESP32-driven irrigation and lighting automation for vertical farms and grow setups. Device-agnostic relay control over standard socket panels, with AWS S3 telemetry. SMU BIG grant funded. Showcased to Ministers Indranee Rajah and Desmond Lee at World Cities Summit 2024.",
     descriptionVi:
-      "Tự động hóa tưới tiêu và chiếu sáng cho các doanh nghiệp thủy canh vừa và nhỏ, dùng ESP32. Pipeline dữ liệu trên AWS S3. Được tài trợ bởi quỹ SMU BIG. Trình diễn cho Bộ trưởng Indranee Rajah và Desmond Lee tại World Cities Summit 2024.",
+      "Tự động hóa tưới và đèn chiếu sáng dựa trên ESP32 cho các trang trại thẳng đứng và hệ thống trồng. Điều khiển relay không phụ thuộc thiết bị qua bảng ổ cắm tiêu chuẩn, với telemetry trên AWS S3. Được tài trợ bởi quỹ SMU BIG. Trình diễn cho Bộ trưởng Indranee Rajah và Desmond Lee tại World Cities Summit 2024.",
     dates: "Dec 2023 to Jul 2024",
     category: "Projects",
     tags: ["ESP32", "AWS", "MQTT", "Hardware"],
@@ -249,9 +249,9 @@ export const projects: Project[] = [
     course: "Nepseeds (self-started)",
     courseVi: "Nepseeds (tự khởi nghiệp)",
     description:
-      "Bootstrapped plant e-commerce since July 2021. End-to-end supply chain for perishable, regulated botanical inventory including NEA phytosanitary certifications and CITES compliance. 98% on-time fulfillment, grew social following 600 to 1000+ organically.",
+      "Specialized provider of rare Nepenthes seeds from Southeast Asia, shipping to enthusiasts and collectors worldwide. End-to-end supply chain for perishable, regulated botanical inventory: NEA phytosanitary certifications and CITES compliance. Bootstrapped since July 2021. nepseeds.com.",
     descriptionVi:
-      "Vận hành e-commerce cây cảnh tự thân từ tháng 7 năm 2021. Chuỗi cung ứng end-to-end cho hàng hóa thực vật dễ hỏng và bị quản lý, gồm chứng nhận kiểm dịch thực vật NEA và tuân thủ CITES. Tỉ lệ giao đúng hẹn 98%, tăng follower mạng xã hội từ 600 lên hơn 1000 một cách tự nhiên.",
+      "Nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, giao hàng cho người chơi và nhà sưu tập trên toàn cầu. Chuỗi cung ứng đầu cuối cho hàng hóa thực vật dễ hỏng và bị quản lý: chứng nhận kiểm dịch của NEA và tuân thủ CITES. Bootstrap từ tháng 7 năm 2021. nepseeds.com.",
     dates: "Jul 2021 to Present",
     category: "Projects",
     tags: ["Shopify", "Operations", "E-Commerce"],

@@ -201,10 +201,6 @@ export const messages = {
     // Project detail page
     "project.back": "All projects",
     "project.archDiagramTitle": "Architecture diagram",
-    "project.comingSoon": "Coming soon",
-    "project.fullCaseStudyTitle": "Full case study in progress",
-    "project.fullCaseStudyBody":
-      "Context, role, architecture, implementation highlights, outcomes, and reflections will land here as I expand each project. For ESMOS, the interactive multi-cloud architecture diagram will be embedded inline.",
     "project.relatedIn": "Related in {category}",
     "project.aside.stack": "Stack",
     "project.aside.links": "Links",
@@ -461,10 +457,6 @@ export const messages = {
     // Project detail page
     "project.back": "Tất cả dự án",
     "project.archDiagramTitle": "Sơ đồ kiến trúc",
-    "project.comingSoon": "Sắp ra mắt",
-    "project.fullCaseStudyTitle": "Case study đầy đủ đang được hoàn thiện",
-    "project.fullCaseStudyBody":
-      "Bối cảnh, vai trò, kiến trúc, điểm nhấn triển khai, kết quả và bài học sẽ được bổ sung khi tôi mở rộng từng dự án. Với ESMOS, sơ đồ kiến trúc đa đám mây sẽ được nhúng trực tiếp.",
     "project.relatedIn": "Liên quan trong {category}",
     "project.aside.stack": "Stack",
     "project.aside.links": "Liên kết",
