@@ -120,7 +120,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         body: [
           "Enterprise architecture is mostly about reading the trade-off honestly. Every line on this diagram cost something. The interesting work is justifying each line, not adding more.",
           "Multi-cloud DR is rare in practice because it doubles the operational surface area. The cost is only worth paying when the regulator or the customer asks for it in writing. ESMOS asked, so the diagram has it.",
-          "Authoring the diagram in a real tool (Eraser, exported as SVG) beats screenshotting Lucid every time. It version-controls cleanly, scales without quality loss, and the same file is what you see embedded on this page above.",
         ],
       },
     ],
@@ -164,7 +163,6 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         body: [
           "Enterprise architecture chủ yếu là đọc đánh đổi một cách trung thực. Mỗi đường trên sơ đồ này tốn một cái gì đó. Phần thú vị là biện minh cho từng đường, không phải thêm nhiều đường.",
           "Multi-cloud DR hiếm trong thực tế vì nó nhân đôi bề mặt vận hành. Chi phí chỉ đáng trả khi regulator hoặc khách hàng yêu cầu bằng văn bản. ESMOS có yêu cầu, nên sơ đồ có nó.",
-          "Vẽ sơ đồ trong một tool thật (Eraser, export sang SVG) ăn đứt việc chụp màn hình Lucid mọi lần. Version control sạch sẽ, scale không mất chất lượng, và cùng một file là thứ bạn đang thấy nhúng trên trang này phía trên.",
         ],
       },
     ],
@@ -323,7 +321,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Next.js + TypeScript for the operations dashboard, deployed on Vercel.",
           "React Native for the patient app. Same TypeScript domain types shared with the web side.",
-          "Preview deploys per branch so the team could iterate fast.",
+          "UI designed in Figma Make.",
         ],
       },
     ],
@@ -340,7 +338,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Next.js + TypeScript cho operations dashboard, deploy trên Vercel.",
           "React Native cho app bệnh nhân. Chia sẻ TypeScript domain types với phía web.",
-          "Preview deploy theo branch để iterate nhanh cùng team.",
+          "UI thiết kế trong Figma Make.",
         ],
       },
     ],
@@ -357,8 +355,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Stack",
         bullets: [
-          "Next.js + TypeScript for the dashboard.",
-          "Deployed on Vercel with per-branch preview deploys so the client could review changes before merge.",
+          "Next.js + TypeScript for the dashboard, deployed on Vercel.",
+          "UI designed in Figma Make.",
         ],
       },
     ],
@@ -373,8 +371,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Stack",
         bullets: [
-          "Next.js + TypeScript cho dashboard.",
-          "Deploy trên Vercel với preview deploy theo branch để khách review thay đổi trước khi merge.",
+          "Next.js + TypeScript cho dashboard, deploy trên Vercel.",
+          "UI thiết kế trong Figma Make.",
         ],
       },
     ],
