@@ -170,6 +170,12 @@ export const projects: Project[] = [
     category: "Coursework",
     tags: ["Product", "UX", "Aggregator"],
     imageSrc: "/images/highlights/pm-club-grabcompare.webp",
+    // Same crop as the matching highlight on the home page. The
+    // GrabCompare slides occupy the top half and the six team
+    // members stand below; 30% horizontal keeps Lwin (leftmost)
+    // in narrow card crops, 55% vertical lands on heads instead
+    // of waists.
+    coverFocus: "30% 55%",
   },
   {
     slug: "asv-5g-autonomous",
