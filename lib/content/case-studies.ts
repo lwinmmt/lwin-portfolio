@@ -33,7 +33,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "100+ Tastek industrial RTUs in the field. Each unit had a SIM card slot, so the RTU dialed straight out to the cloud over cellular.",
           "One Azure VM running everything: the Mosquitto MQTT broker, the database, and the web dashboard.",
-          "Vertical scaling via an Auto-Scaling Group. When load grew, the VM scaled up rather than out. Reliable for the workload size we were running.",
+          "When load grew, we resized the VM to a larger SKU. Each resize required a brief stop and restart.",
           "Twilio WhatsApp Business API for alerts. Engineers registered their numbers once, then offline-RTU and threshold-breach notifications landed on WhatsApp.",
         ],
       },
@@ -65,7 +65,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Hơn 100 RTU công nghiệp Tastek tại các điểm. Mỗi unit có khe SIM, nên RTU gọi thẳng lên cloud qua mạng di động.",
           "Một Azure VM chạy mọi thứ: Mosquitto MQTT broker, database, và dashboard web.",
-          "Scale dọc qua Auto-Scaling Group. Khi load tăng, VM scale up thay vì scale out. Đáng tin cậy với workload chúng tôi chạy.",
+          "Khi load tăng, tụi tôi resize VM lên SKU lớn hơn. Mỗi lần resize cần một khoảng stop và restart ngắn.",
           "Twilio WhatsApp Business API cho cảnh báo. Kỹ sư đăng ký số điện thoại một lần, sau đó thông báo RTU offline và vượt ngưỡng tới qua WhatsApp.",
         ],
       },
@@ -270,7 +270,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Stack",
         bullets: [
           "One Raspberry Pi at the rack. GPIO wired to a DHT22 humidity sensor and a separate CO2 sensor.",
-          "Raspberry Pi camera (later iterations swapped in an audio module) for visual monitoring of the rack.",
+          "Raspberry Pi camera for visual monitoring of the rack.",
           "Relays off the Pi GPIO to switch the grow lights and the water pump on and off.",
           "A monitoring view so the operator could observe readings and trigger simple notifications. Useful for the demo, not a production platform.",
         ],
@@ -294,7 +294,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Stack",
         bullets: [
           "Một Raspberry Pi tại rack. GPIO nối với cảm biến độ ẩm DHT22 và một cảm biến CO2 riêng.",
-          "Camera Raspberry Pi (các phiên bản sau thay bằng module audio) để giám sát hình ảnh của rack.",
+          "Camera Raspberry Pi để giám sát hình ảnh của rack.",
           "Relay từ GPIO của Pi để bật / tắt đèn trồng cây và bơm nước.",
           "View giám sát để người vận hành theo dõi số đo và kích hoạt cảnh báo đơn giản. Hữu ích cho demo, không phải nền tảng production.",
         ],
@@ -320,7 +320,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Stack",
         bullets: [
           "Next.js + TypeScript for the operations dashboard, deployed on Vercel.",
-          "React Native for the patient app. Same TypeScript domain types shared with the web side.",
+          "React Native for the patient app.",
           "UI designed in Figma Make.",
         ],
       },
@@ -337,7 +337,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Stack",
         bullets: [
           "Next.js + TypeScript cho operations dashboard, deploy trên Vercel.",
-          "React Native cho app bệnh nhân. Chia sẻ TypeScript domain types với phía web.",
+          "React Native cho app bệnh nhân.",
           "UI thiết kế trong Figma Make.",
         ],
       },
@@ -394,7 +394,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Architecture",
         bullets: [
-          "Node-RED firmware on a Raspberry Pi onboard the vehicle. Captured sensor telemetry (environmental + vehicle state) and pushed it out over MQTT through the 5G uplink.",
+          "Node-RED firmware on a Raspberry Pi onboard the vehicle. Captured sensor telemetry (environmental + vehicle state) and published it over MQTT.",
+          "5G router on the vehicle for the uplink, sitting on SP's dedicated 5G network. The Pi connected to it by ethernet.",
           "React + Node.js + MySQL on the cloud side. Live dashboard for the remote operator showing the vehicle's current state, with alerting rules on environmental hazard thresholds.",
         ],
       },
@@ -421,7 +422,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Kiến trúc",
         bullets: [
-          "Firmware Node-RED chạy trên Raspberry Pi gắn trên xe. Thu telemetry sensor (môi trường + trạng thái xe) và đẩy ra qua MQTT thông qua uplink 5G.",
+          "Firmware Node-RED chạy trên Raspberry Pi gắn trên xe. Thu telemetry sensor (môi trường + trạng thái xe) và publish qua MQTT.",
+          "Router 5G trên xe cho uplink, nằm trên mạng 5G dùng riêng của SP. Pi kết nối tới router qua ethernet.",
           "React + Node.js + MySQL phía cloud. Dashboard live cho remote operator hiển thị trạng thái hiện tại của xe, với rule cảnh báo các ngưỡng nguy cơ môi trường.",
         ],
       },
