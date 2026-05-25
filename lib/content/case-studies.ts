@@ -33,7 +33,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "100+ Tastek industrial RTUs in the field. Each unit had a SIM card slot, so the RTU dialed straight out to the cloud over cellular.",
           "One Azure VM running everything: the Mosquitto MQTT broker, the database, and the web dashboard.",
-          "Vertical scaling via an Auto-Scaling Group. When load grew, the VM scaled up rather than out. Basic, but reliable for the workload.",
+          "Vertical scaling via an Auto-Scaling Group. When load grew, the VM scaled up rather than out. Reliable for the workload size we were running.",
           "Twilio WhatsApp Business API for alerts. Engineers registered their numbers once, then offline-RTU and threshold-breach notifications landed on WhatsApp.",
         ],
       },
@@ -65,7 +65,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         bullets: [
           "Hơn 100 RTU công nghiệp Tastek tại các điểm. Mỗi unit có khe SIM, nên RTU gọi thẳng lên cloud qua mạng di động.",
           "Một Azure VM chạy mọi thứ: Mosquitto MQTT broker, database, và dashboard web.",
-          "Scale dọc qua Auto-Scaling Group. Khi load tăng, VM scale up thay vì scale out. Cơ bản, nhưng đáng tin cậy cho workload này.",
+          "Scale dọc qua Auto-Scaling Group. Khi load tăng, VM scale up thay vì scale out. Đáng tin cậy với workload chúng tôi chạy.",
           "Twilio WhatsApp Business API cho cảnh báo. Kỹ sư đăng ký số điện thoại một lần, sau đó thông báo RTU offline và vượt ngưỡng tới qua WhatsApp.",
         ],
       },
@@ -118,8 +118,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "What I learned",
         body: [
-          "Enterprise architecture is mostly about reading the trade-off honestly. Every line on this diagram cost something. The interesting work is justifying each line, not adding more.",
-          "Multi-cloud DR is rare in practice because it doubles the operational surface area. The cost is only worth paying when the regulator or the customer asks for it in writing. ESMOS asked, so the diagram has it.",
+          "Every line on this diagram costs something to operate, monitor, or recover from. Most of the work on this project was justifying each line in writing, against the brief, before adding it.",
+          "Multi-cloud DR is rare in practice because it doubles the operational surface area. The brief here explicitly required resilience against a single-vendor incident, so the diagram has it.",
         ],
       },
     ],
@@ -161,8 +161,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Bài học",
         body: [
-          "Enterprise architecture chủ yếu là đọc đánh đổi một cách trung thực. Mỗi đường trên sơ đồ này tốn một cái gì đó. Phần thú vị là biện minh cho từng đường, không phải thêm nhiều đường.",
-          "Multi-cloud DR hiếm trong thực tế vì nó nhân đôi bề mặt vận hành. Chi phí chỉ đáng trả khi regulator hoặc khách hàng yêu cầu bằng văn bản. ESMOS có yêu cầu, nên sơ đồ có nó.",
+          "Mỗi đường trên sơ đồ này đều tốn chi phí để vận hành, giám sát, hoặc khôi phục. Phần lớn công việc trong dự án này là biện minh cho từng đường bằng văn bản, đối chiếu với đề bài, trước khi thêm nó vào.",
+          "Multi-cloud DR hiếm trong thực tế vì nó nhân đôi bề mặt vận hành. Đề bài ở đây yêu cầu rõ ràng khả năng chịu được sự cố ở một vendor duy nhất, nên sơ đồ có nó.",
         ],
       },
     ],
@@ -312,7 +312,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "About",
         body: [
-          "IS215 module project. The team picked Royce Dental, a Singapore dental chain, and framed the brief around the two numbers dental chains actually live by: no-show rate and recall conversion. The deliverable was a two-surface product: a patient mobile app for appointments and recall reminders, and an operations dashboard for managers to track retention by outlet and dig into no-show patterns.",
+          "IS215 module project. The team picked Royce Dental, a Singapore dental chain, and framed the brief around two metrics dental chains track closely: no-show rate and recall conversion. The deliverable was a two-surface product: a patient mobile app for appointments and recall reminders, and an operations dashboard for managers to track retention by outlet and dig into no-show patterns.",
           "I was project lead. Drove the proposal, the strategic analysis (SWOT, Porter's Five Forces, market sizing), the product framing, and most of the team's deck. Built across both surfaces with the team.",
         ],
       },
@@ -329,7 +329,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Giới thiệu",
         body: [
-          "Project môn IS215. Team chọn Royce Dental, một chuỗi nha khoa ở Singapore, và đóng khung đề bài quanh hai con số mà chuỗi nha khoa thực sự sống bằng: tỉ lệ vắng hẹn (no-show) và recall conversion. Sản phẩm cuối là hai mặt: app mobile cho bệnh nhân để đặt lịch và nhắc hẹn, và dashboard vận hành cho quản lý theo dõi retention theo chi nhánh và phân tích các pattern no-show.",
+          "Project môn IS215. Team chọn Royce Dental, một chuỗi nha khoa ở Singapore, và đóng khung đề bài quanh hai metric mà chuỗi nha khoa theo dõi sát: tỉ lệ vắng hẹn (no-show) và recall conversion. Sản phẩm cuối là hai mặt: app mobile cho bệnh nhân để đặt lịch và nhắc hẹn, và dashboard vận hành cho quản lý theo dõi retention theo chi nhánh và phân tích các pattern no-show.",
           "Tôi là project lead. Phụ trách proposal, phân tích chiến lược (SWOT, Porter's Five Forces, market sizing), framing sản phẩm, và phần lớn deck của team. Làm chung cả hai mặt với team.",
         ],
       },
@@ -458,7 +458,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "About",
         body: [
-          "A classic blue-team-versus-red-team lab on a deliberately vulnerable Windows Server 2000 box. Take a known-bad baseline, harden it against the era's common attack vectors (DNS zone transfers, unused IIS features, insecure remote-access stack, weak password policy), then re-run the same probes against the hardened box to confirm every exploit that worked before now failed.",
+          "Blue-team hardening lab on a deliberately vulnerable Windows Server 2000 box. Take a known-bad baseline, harden it against the era's common attack vectors (DNS zone transfers, unused IIS features, insecure remote-access stack, weak password policy), then re-run the same probes against the hardened box to confirm every exploit that worked before now failed.",
           "Built as a Singapore Polytechnic security coursework lab. The specific software is decades old, but the mindset (assume the baseline is broken, harden by removing surface area first, then verify with active probing) maps directly to modern security work.",
         ],
       },
@@ -477,7 +477,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Giới thiệu",
         body: [
-          "Một bài lab blue-team versus red-team kinh điển trên một máy Windows Server 2000 cố tình để lỗ hổng. Lấy một baseline đã biết là yếu, hardening lại chống các vector tấn công phổ biến thời đó (DNS zone transfer, IIS để dư tính năng không dùng, stack remote-access không an toàn, chính sách mật khẩu yếu), rồi chạy lại đúng các probe đó lên máy đã hardening để xác nhận mọi exploit từng work giờ đều fail.",
+          "Bài lab blue-team hardening trên một máy Windows Server 2000 cố tình để lỗ hổng. Lấy một baseline đã biết là yếu, hardening lại chống các vector tấn công phổ biến thời đó (DNS zone transfer, IIS để dư tính năng không dùng, stack remote-access không an toàn, chính sách mật khẩu yếu), rồi chạy lại đúng các probe đó lên máy đã hardening để xác nhận mọi exploit từng work giờ đều fail.",
           "Xây dựng như một bài lab môn an ninh ở Singapore Polytechnic. Phần mềm cụ thể đã cũ hàng chục năm, nhưng tư duy (giả định baseline đang lỗi, hardening bằng cách giảm bề mặt tấn công trước, sau đó verify bằng probe chủ động) ánh xạ thẳng vào công việc bảo mật hiện đại.",
         ],
       },
@@ -535,7 +535,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "About",
         body: [
           "Self-hosted virtualized datacenter built on VMware Workstation. Four Windows Server 2012 R2 instances split into role-specific machines: Domain Controller, DNS/DHCP, File Server, Web Server. Active Directory configured with hierarchical OUs, scripted bulk user provisioning for 50+ accounts via PowerShell, and enforced Group Policies for password complexity and shared resource access.",
-          "An SP coursework lab on real Windows Server 2012 R2 with VMware Workstation as the hypervisor. The point of the exercise was end-to-end: design the role split, stand up each VM, wire the AD trust, automate the boring bits with PowerShell, then prove the policies actually applied across machines.",
+          "An SP coursework lab on real Windows Server 2012 R2 with VMware Workstation as the hypervisor. The point of the exercise was end-to-end: design the role split, stand up each VM, wire the AD trust, automate user provisioning and policy enforcement with PowerShell, then prove the policies actually applied across machines.",
         ],
       },
       {
@@ -553,7 +553,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Giới thiệu",
         body: [
           "Datacenter ảo tự host trên VMware Workstation. Bốn instance Windows Server 2012 R2 chia theo vai trò: Domain Controller, DNS/DHCP, File Server, Web Server. Active Directory cấu hình với OU phân cấp, script provision bulk 50+ tài khoản qua PowerShell, và Group Policy bắt buộc cho độ phức tạp mật khẩu và quyền truy cập tài nguyên dùng chung.",
-          "Một bài lab môn của SP trên Windows Server 2012 R2 thật với VMware Workstation làm hypervisor. Mục tiêu là end-to-end: thiết kế phân vai trò, dựng từng VM, đấu nối trust AD, tự động hoá phần boilerplate bằng PowerShell, sau đó chứng minh policy thực sự áp xuyên qua các máy.",
+          "Một bài lab môn của SP trên Windows Server 2012 R2 thật với VMware Workstation làm hypervisor. Mục tiêu là end-to-end: thiết kế phân vai trò, dựng từng VM, đấu nối trust AD, tự động hoá việc provision tài khoản và áp policy bằng PowerShell, sau đó chứng minh policy thực sự áp xuyên qua các máy.",
         ],
       },
       {
@@ -573,7 +573,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "About",
         body: [
           "Multi-site enterprise network using 7 Cisco routers and 5 switches across a hybrid environment that combined Cisco Packet Tracer simulation with SP's physical Cisco server racks. Star-topology LAN supporting 12+ endpoints and 2 internal servers, with a VLSM IP scheme, OSPF multi-area routing with failover, and ACL-based access policies.",
-          "The hybrid setup was the distinguishing piece: the larger topology lived in Packet Tracer, but the inner LAN was wired up on actual Cisco hardware in the SP networking lab. Verifying behaviour across both halves taught the difference between a clean simulation and the cabling reality.",
+          "The hybrid setup was the distinguishing piece: the larger topology lived in Packet Tracer, but the inner LAN was wired up on actual Cisco hardware in the SP networking lab. Verifying behaviour across both halves showed where the simulation drifted from the physical setup.",
         ],
       },
       {
@@ -591,7 +591,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Giới thiệu",
         body: [
           "Mạng doanh nghiệp đa site dùng 7 router Cisco và 5 switch trong môi trường lai, kết hợp giả lập Cisco Packet Tracer với rack Cisco vật lý của SP. LAN topology hình sao hỗ trợ 12+ endpoint và 2 server nội bộ, với sơ đồ IP VLSM, routing OSPF đa vùng có failover, và policy ACL.",
-          "Phần đặc biệt là setup lai: phần topology lớn nằm trong Packet Tracer, nhưng LAN bên trong thì đấu nối trên phần cứng Cisco thật ở lab mạng của SP. Verify hành vi trên cả hai nửa cho thấy rõ khác biệt giữa giả lập sạch và thực tế cáp dây.",
+          "Phần đặc biệt là setup lai: phần topology lớn nằm trong Packet Tracer, nhưng LAN bên trong thì đấu nối trên phần cứng Cisco thật ở lab mạng của SP. Verify hành vi trên cả hai nửa cho thấy chỗ nào giả lập lệch khỏi setup phần cứng thực tế.",
         ],
       },
       {
