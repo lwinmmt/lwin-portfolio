@@ -92,9 +92,9 @@ export const projects: Project[] = [
     titleVi: "Tự động hóa IoT cho thủy canh",
     course: "Osiris Technology",
     description:
-      "ESP32-driven irrigation and lighting automation for vertical farms and grow setups. Device-agnostic relay control over standard socket panels, with AWS S3 telemetry. SMU BIG grant funded. Showcased to Ministers Indranee Rajah and Desmond Lee at World Cities Summit 2024.",
+      "ESP32-driven irrigation and lighting automation for vertical farms and grow setups. Device-agnostic relay control over standard socket panels, MQTT through HiveMQ Cloud, telemetry landed in S3. SMU BIG grant funded. Showcased to Ministers Indranee Rajah and Desmond Lee at World Cities Summit 2024.",
     descriptionVi:
-      "Tự động hóa tưới và đèn chiếu sáng dựa trên ESP32 cho các trang trại thẳng đứng và hệ thống trồng. Điều khiển relay không phụ thuộc thiết bị qua bảng ổ cắm tiêu chuẩn, với telemetry trên AWS S3. Được tài trợ bởi quỹ SMU BIG. Trình diễn cho Bộ trưởng Indranee Rajah và Desmond Lee tại World Cities Summit 2024.",
+      "Tự động hóa tưới và đèn chiếu sáng dựa trên ESP32 cho các trang trại thẳng đứng và hệ thống trồng. Điều khiển relay không phụ thuộc thiết bị qua bảng ổ cắm tiêu chuẩn, MQTT qua HiveMQ Cloud, telemetry lưu vào S3. Được tài trợ bởi quỹ SMU BIG. Trình diễn cho Bộ trưởng Indranee Rajah và Desmond Lee tại World Cities Summit 2024.",
     dates: "Dec 2023 to Jul 2024",
     category: "Projects",
     tags: ["ESP32", "AWS", "MQTT", "Hardware"],
@@ -116,9 +116,9 @@ export const projects: Project[] = [
     titleVi: "IoT Showcase cho Singapore Indoor Farms",
     course: "W2 Industrial Services Hub",
     description:
-      "Raspberry Pi rig with DHT22 humidity, a CO2 sensor, and relay-driven control of the grow lights and water pump. Deployed as a single demo rack at an indoor farm on the west coast of Singapore. Featured on Channel News Asia in May 2022.",
+      "Raspberry Pi rig with DHT22 humidity, a CO2 sensor, and relay-driven control of the grow lights and water pump. One demo rack deployed at their facility on the west coast. Featured on Channel News Asia in May 2022.",
     descriptionVi:
-      "Bộ thiết bị Raspberry Pi với cảm biến độ ẩm DHT22, cảm biến CO2 và điều khiển đèn trồng cây cùng máy bơm nước qua relay. Triển khai dưới dạng một rack demo tại một trang trại trong nhà ở phía tây Singapore. Được Channel News Asia đưa tin vào tháng 5 năm 2022.",
+      "Bộ thiết bị Raspberry Pi với cảm biến độ ẩm DHT22, cảm biến CO2 và điều khiển đèn trồng cây cùng máy bơm nước qua relay. Một rack demo triển khai tại cơ sở của họ ở phía tây Singapore. Được Channel News Asia đưa tin vào tháng 5 năm 2022.",
     dates: "2021 to 2022",
     category: "Projects",
     tags: ["Raspberry Pi", "DHT22", "Relays", "Hardware"],

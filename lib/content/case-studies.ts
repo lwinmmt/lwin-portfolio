@@ -179,7 +179,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "My role",
         body: [
-          "Founder. I owned the hardware design, firmware, cloud pipeline, and the conversations with farmers. I led the funding pitch and the booth at World Cities Summit.",
+          "Founder. Recruited the core team out of SMU and split the work across hardware, firmware, and cloud. On the build side I owned the hardware design, the ESP32 firmware, and the cloud pipeline up through the HiveMQ broker into S3. Outside the build I ran the SMU BIG grant pitch, led the conversations with the farmers we were selling into, and ran the booth at World Cities Summit 2024 where we demoed to Ministers Indranee Rajah and Desmond Lee.",
         ],
       },
       {
@@ -192,8 +192,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Architecture",
         bullets: [
           "ESP32 controller in a roughly 20×20 cm enclosure, mounted next to the rack. Wi-Fi to the local router.",
-          "Relay switches wired to a standard socket panel: anything plugged into the panel (pump, light, fan, anything off a wall socket) becomes remotely toggleable. A hand-built device-agnostic smart plug strip, a few years before the consumer ones turned up on Shopee.",
-          "Local daily schedule on the device so the rig keeps running if the cloud is unreachable. Telemetry pushed up to AWS S3.",
+          "Relay switches wired to a standard socket panel: anything plugged into the panel (pump, light, fan, anything off a wall socket) becomes remotely toggleable. A hand-built device-agnostic smart plug strip.",
+          "Local daily schedule on the device so the rig keeps running if the cloud is unreachable. Telemetry pushed up over MQTT through HiveMQ Cloud, then landed in AWS S3.",
           "Web dashboard for the operator to monitor crop view, the daily cycle, and any alerts.",
         ],
       },
@@ -208,7 +208,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Where it stands",
         body: [
-          "Osiris pivoted away from a packaged hydroponics product into a systems-integrator model: custom IoT builds for other people's problems. Different shape, same crew.",
+          "Osiris pivoted away from a packaged hydroponics product into a systems-integrator model. Now it builds custom IoT systems for clients in industries like construction.",
         ],
       },
     ],
@@ -223,7 +223,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Vai trò của tôi",
         body: [
-          "Nhà sáng lập. Tôi phụ trách thiết kế phần cứng, firmware, pipeline cloud, và các cuộc trò chuyện với nông dân. Tôi dẫn dắt pitch xin tài trợ và gian trưng bày tại World Cities Summit.",
+          "Nhà sáng lập. Tuyển team core từ SMU và chia việc giữa hardware, firmware, và cloud. Về mặt build, tôi phụ trách thiết kế phần cứng, firmware ESP32, và pipeline cloud chạy qua HiveMQ broker vào S3. Ngoài việc build, tôi dẫn dắt pitch xin quỹ SMU BIG, các cuộc trò chuyện với nông dân tụi tôi muốn bán cho, và gian trưng bày tại World Cities Summit 2024 nơi tụi tôi demo cho Bộ trưởng Indranee Rajah và Desmond Lee.",
         ],
       },
       {
@@ -236,8 +236,8 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Kiến trúc",
         bullets: [
           "Bộ điều khiển ESP32 trong hộp khoảng 20×20 cm, gắn cạnh giá thể. Wi-Fi về router nội bộ.",
-          "Relay switch nối vào bảng ổ cắm tiêu chuẩn: bất kỳ thiết bị nào cắm vào bảng (bơm, đèn, quạt, bất cứ thứ gì chạy điện ổ cắm) đều bật-tắt từ xa được. Một thanh smart plug không phụ thuộc thiết bị tự ráp tay, vài năm trước khi loại tương tự bán đại trà trên Shopee.",
-          "Lịch hằng ngày chạy ngay trên thiết bị để rig vẫn hoạt động khi mất kết nối cloud. Telemetry đẩy lên AWS S3.",
+          "Relay switch nối vào bảng ổ cắm tiêu chuẩn: bất kỳ thiết bị nào cắm vào bảng (bơm, đèn, quạt, bất cứ thứ gì chạy điện ổ cắm) đều bật-tắt từ xa được. Một thanh smart plug không phụ thuộc thiết bị tự ráp tay.",
+          "Lịch hằng ngày chạy ngay trên thiết bị để rig vẫn hoạt động khi mất kết nối cloud. Telemetry đẩy lên qua MQTT thông qua HiveMQ Cloud, sau đó lưu vào AWS S3.",
           "Dashboard web cho người vận hành theo dõi camera giá thể, chu kỳ hằng ngày, và mọi cảnh báo.",
         ],
       },
@@ -252,7 +252,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Hiện tại",
         body: [
-          "Osiris chuyển từ sản phẩm thủy canh đóng gói sang mô hình systems-integrator: các bản IoT tùy chỉnh cho bài toán của người khác. Hình dạng khác, vẫn cùng một crew.",
+          "Osiris chuyển từ sản phẩm thủy canh đóng gói sang mô hình systems-integrator. Giờ thì xây dựng các hệ thống IoT tùy chỉnh cho khách trong các ngành như xây dựng.",
         ],
       },
     ],
@@ -262,7 +262,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Context",
         body: [
-          "An indoor farm on the west coast of Singapore wanted a small visible IoT rig they could show clients walking through their facility. Not a full deployment, just one demo rack on their floor to prove the data path end-to-end and let visitors see live readings.",
+          "Singapore Indoor Farms wanted a small visible IoT rig they could show clients walking through their facility. One demo rack on their floor to prove the data path end-to-end and let visitors see live readings.",
           "It was a W2 freelance gig during my SP IoT internship era. The scope was deliberately narrow: prove the loop works, show numbers on a screen, let an operator flip a relay.",
         ],
       },
@@ -278,7 +278,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "What it did for the customer",
         body: [
-          "The rig was as much a sales tool as a sensor stack. The farm's team used it to walk clients through what data-driven indoor agriculture looks like. CNA picked it up in May 2022 as a Singapore Indoor Farms feature.",
+          "The rig was primarily a sales tool. The farm's team used it to walk clients through what data-driven indoor agriculture looks like. CNA picked it up in May 2022 as a Singapore Indoor Farms feature.",
         ],
       },
     ],
@@ -286,7 +286,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Bối cảnh",
         body: [
-          "Một trang trại trong nhà ở phía tây Singapore muốn có một bộ thiết bị IoT nhỏ gọn dễ nhìn để trưng cho khách đi tham quan cơ sở của họ. Không phải triển khai full quy mô, chỉ là một rack demo đặt trên sàn nhà để chứng minh đường đi của dữ liệu end-to-end và để khách thấy số liệu live.",
+          "Singapore Indoor Farms muốn có một bộ thiết bị IoT nhỏ gọn dễ nhìn để trưng cho khách đi tham quan cơ sở của họ. Một rack demo đặt trên sàn nhà để chứng minh đường đi của dữ liệu end-to-end và để khách thấy số liệu live.",
           "Đây là một việc freelance của W2 trong giai đoạn tôi thực tập IoT tại SP. Phạm vi được giữ hẹp có chủ đích: chứng minh vòng lặp hoạt động, hiển thị số trên màn hình, cho người vận hành bật relay.",
         ],
       },
@@ -302,7 +302,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Đem lại gì cho khách hàng",
         body: [
-          "Bộ thiết bị này vừa là công cụ bán hàng vừa là sensor stack. Team của trang trại dùng nó để dẫn khách đi qua câu chuyện nông nghiệp trong nhà dựa trên dữ liệu trông thế nào. CNA đưa tin vào tháng 5/2022 trong bài về Singapore Indoor Farms.",
+          "Bộ thiết bị này chủ yếu là công cụ bán hàng. Team của trang trại dùng nó để dẫn khách đi qua câu chuyện nông nghiệp trong nhà dựa trên dữ liệu trông thế nào. CNA đưa tin vào tháng 5/2022 trong bài về Singapore Indoor Farms.",
         ],
       },
     ],
