@@ -572,15 +572,15 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "About",
         body: [
-          "Multi-site enterprise network using 7 Cisco routers and 5 switches across a hybrid environment that combined Cisco Packet Tracer simulation with SP's physical Cisco server racks. Star-topology LAN supporting 12+ endpoints and 2 internal servers, with a VLSM IP scheme, OSPF multi-area routing with failover, and ACL-based access policies.",
-          "The hybrid setup was the distinguishing piece: the larger topology lived in Packet Tracer, but the inner LAN was wired up on actual Cisco hardware in the SP networking lab. Verifying behaviour across both halves showed where the simulation drifted from the physical setup.",
+          "Multi-site enterprise network using 7 Cisco routers and 5 switches. Star-topology LAN supporting 12+ endpoints and 2 internal servers, with a VLSM IP scheme, OSPF multi-area routing with failover, and ACL-based access policies.",
+          "The design was built first in Cisco Packet Tracer. The same topology and configs were then applied to the physical Cisco rack in the SP networking lab.",
         ],
       },
       {
         heading: "Tools",
         bullets: [
-          "Cisco Packet Tracer for the simulated outer topology.",
-          "Physical Cisco routers and switches in the SP networking lab for the inner LAN.",
+          "Cisco Packet Tracer for the design phase.",
+          "Physical Cisco routers and switches in the SP networking lab for the build phase.",
           "Cisco IOS CLI for configuration.",
           "OSPF multi-area routing, VLSM addressing, ACL policies.",
         ],
@@ -590,15 +590,15 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
       {
         heading: "Giới thiệu",
         body: [
-          "Mạng doanh nghiệp đa site dùng 7 router Cisco và 5 switch trong môi trường lai, kết hợp giả lập Cisco Packet Tracer với rack Cisco vật lý của SP. LAN topology hình sao hỗ trợ 12+ endpoint và 2 server nội bộ, với sơ đồ IP VLSM, routing OSPF đa vùng có failover, và policy ACL.",
-          "Phần đặc biệt là setup lai: phần topology lớn nằm trong Packet Tracer, nhưng LAN bên trong thì đấu nối trên phần cứng Cisco thật ở lab mạng của SP. Verify hành vi trên cả hai nửa cho thấy chỗ nào giả lập lệch khỏi setup phần cứng thực tế.",
+          "Mạng doanh nghiệp đa site dùng 7 router Cisco và 5 switch. LAN topology hình sao hỗ trợ 12+ endpoint và 2 server nội bộ, với sơ đồ IP VLSM, routing OSPF đa vùng có failover, và policy ACL.",
+          "Thiết kế được dựng trước trong Cisco Packet Tracer. Sau đó cùng topology và config được áp lên rack Cisco vật lý ở lab mạng của SP.",
         ],
       },
       {
         heading: "Công cụ",
         bullets: [
-          "Cisco Packet Tracer cho phần topology giả lập bên ngoài.",
-          "Router và switch Cisco vật lý tại lab mạng của SP cho LAN bên trong.",
+          "Cisco Packet Tracer cho phần thiết kế.",
+          "Router và switch Cisco vật lý tại lab mạng của SP cho phần build.",
           "Cisco IOS CLI để cấu hình.",
           "OSPF routing đa vùng, định địa chỉ VLSM, policy ACL.",
         ],

@@ -242,9 +242,9 @@ export const projects: Project[] = [
     titleVi: "Mạng LAN doanh nghiệp đa điểm với OSPF (Cisco)",
     course: "ET0716 LAN Switching and Wireless, Singapore Polytechnic",
     description:
-      "Multi-site enterprise LAN with OSPF. Hybrid build: Cisco Packet Tracer simulation plus SP's physical Cisco rack.",
+      "Multi-site enterprise LAN with OSPF. Designed in Cisco Packet Tracer, then replicated on SP's physical Cisco rack.",
     descriptionVi:
-      "LAN doanh nghiệp đa site với OSPF. Build lai: giả lập Cisco Packet Tracer cộng rack Cisco vật lý của SP.",
+      "LAN doanh nghiệp đa site với OSPF. Thiết kế trong Cisco Packet Tracer, sau đó dựng lại trên rack Cisco vật lý của SP.",
     dates: "Jun 2019 to Aug 2019",
     category: "Coursework",
     tags: ["Cisco", "OSPF", "Networking", "VLSM"],
