@@ -85,7 +85,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Context",
         body: [
           "ESMOS is a fictional regional healthcare provider that needs to scale a single Odoo-based clinical system out across APAC, with hard requirements on availability, disaster recovery, and data sovereignty. The course brief asked for an enterprise solution: multi-region, multi-cloud, with explicit RTO and RPO targets.",
-          "I treated it like a real architecture review. The diagram below is the v9.4 output: four clouds, three active AWS regions, an Azure DR + always-active Helpdesk, a Cloudflare edge, a GCP secondary nameserver for DNS resilience, and a backup path to Cloudflare R2.",
+          "The diagram below is the v9.4 output: four clouds, three active AWS regions, an Azure DR + always-active Helpdesk, a Cloudflare edge, a GCP secondary nameserver for DNS resilience, and a backup path to Cloudflare R2.",
         ],
       },
       {
@@ -128,7 +128,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Bối cảnh",
         body: [
           "ESMOS là một nhà cung cấp dịch vụ y tế khu vực hư cấu cần scale một hệ thống lâm sàng dựa trên Odoo ra khắp APAC, với yêu cầu khắt khe về availability, disaster recovery, và data sovereignty. Đề bài môn học yêu cầu một enterprise solution: đa vùng, đa cloud, có RTO và RPO rõ ràng.",
-          "Tôi tiếp cận nó như một architecture review thật. Sơ đồ bên dưới là output v9.4: bốn cloud, ba AWS region active, một Azure DR + Helpdesk always-active, edge Cloudflare, GCP làm secondary nameserver cho DNS resilience, và đường backup tới Cloudflare R2.",
+          "Sơ đồ bên dưới là output v9.4: bốn cloud, ba AWS region active, một Azure DR + Helpdesk always-active, edge Cloudflare, GCP làm secondary nameserver cho DNS resilience, và đường backup tới Cloudflare R2.",
         ],
       },
       {

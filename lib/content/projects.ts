@@ -77,9 +77,9 @@ export const projects: Project[] = [
     titleVi: "Kiến trúc đa cloud khu vực APAC",
     course: "IS214 Enterprise Solution Management, Singapore Management University",
     description:
-      "Multi-region AWS (Singapore, Tokyo, Sydney) + Azure DR (Hong Kong) + Cloudflare edge with GCP secondary NS. Architecture diagram embedded inline on the case study page; click to open full size and pan or zoom around the four clouds.",
+      "Multi-region AWS (Singapore, Tokyo, Sydney) + Azure DR (Hong Kong) + Cloudflare edge with GCP secondary NS. Architecture diagram embedded inline on the case study page.",
     descriptionVi:
-      "AWS đa vùng (Singapore, Tokyo, Sydney) + Azure DR (Hong Kong) + Cloudflare edge với GCP làm nameserver dự phòng. Sơ đồ kiến trúc nhúng trực tiếp trong trang case study, bấm vào để mở cỡ lớn và pan / zoom quanh bốn cloud.",
+      "AWS đa vùng (Singapore, Tokyo, Sydney) + Azure DR (Hong Kong) + Cloudflare edge với GCP làm nameserver dự phòng. Sơ đồ kiến trúc nhúng trực tiếp trong trang case study.",
     dates: "Jan 2026 to Apr 2026",
     category: "Coursework",
     tags: ["AWS", "Azure", "Cloudflare", "Kubernetes", "Aurora Global"],
