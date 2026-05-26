@@ -238,7 +238,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
           "Bộ điều khiển ESP32 trong hộp khoảng 20×20 cm, gắn cạnh giá thể. Wi-Fi về router nội bộ.",
           "Relay switch nối vào bảng ổ cắm tiêu chuẩn: bất kỳ thiết bị nào cắm vào bảng (bơm, đèn, quạt, bất cứ thứ gì chạy điện ổ cắm) đều bật-tắt từ xa được. Một thanh smart plug không phụ thuộc thiết bị tự ráp tay.",
           "Lịch hằng ngày chạy ngay trên thiết bị để rig vẫn hoạt động khi mất kết nối cloud. Telemetry đẩy lên qua MQTT thông qua HiveMQ Cloud, sau đó lưu vào AWS S3.",
-          "Dashboard web cho người vận hành theo dõi camera giá thể, chu kỳ hằng ngày, và mọi cảnh báo.",
+          "Dashboard web cho người vận hành theo dõi tình trạng cây trồng, chu kỳ hằng ngày, và mọi cảnh báo.",
         ],
       },
       {
@@ -272,7 +272,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
           "One Raspberry Pi at the rack. GPIO wired to a DHT22 humidity sensor and a separate CO2 sensor.",
           "Raspberry Pi camera for visual monitoring of the rack.",
           "Relays off the Pi GPIO to switch the grow lights and the water pump on and off.",
-          "A monitoring view so the operator could observe readings and trigger simple notifications. Useful for the demo, not a production platform.",
+          "A monitoring view so the operator could observe readings and trigger simple notifications.",
         ],
       },
       {
@@ -296,7 +296,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
           "Một Raspberry Pi tại rack. GPIO nối với cảm biến độ ẩm DHT22 và một cảm biến CO2 riêng.",
           "Camera Raspberry Pi để giám sát hình ảnh của rack.",
           "Relay từ GPIO của Pi để bật / tắt đèn trồng cây và bơm nước.",
-          "View giám sát để người vận hành theo dõi số đo và kích hoạt cảnh báo đơn giản. Hữu ích cho demo, không phải nền tảng production.",
+          "View giám sát để người vận hành theo dõi số đo và kích hoạt cảnh báo đơn giản.",
         ],
       },
       {
@@ -461,7 +461,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "About",
         body: [
           "Blue-team hardening lab on a deliberately vulnerable Windows Server 2000 box. Take a known-bad baseline, harden it against the era's common attack vectors (DNS zone transfers, unused IIS features, insecure remote-access stack, weak password policy), then re-run the same probes against the hardened box to confirm every exploit that worked before now failed.",
-          "Built as a Singapore Polytechnic security coursework lab. The specific software is decades old, but the mindset (assume the baseline is broken, harden by removing surface area first, then verify with active probing) maps directly to modern security work.",
+          "Built as a Singapore Polytechnic security coursework lab.",
         ],
       },
       {
@@ -480,7 +480,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Giới thiệu",
         body: [
           "Bài lab blue-team hardening trên một máy Windows Server 2000 cố tình để lỗ hổng. Lấy một baseline đã biết là yếu, hardening lại chống các vector tấn công phổ biến thời đó (DNS zone transfer, IIS để dư tính năng không dùng, stack remote-access không an toàn, chính sách mật khẩu yếu), rồi chạy lại đúng các probe đó lên máy đã hardening để xác nhận mọi exploit từng work giờ đều fail.",
-          "Xây dựng như một bài lab môn an ninh ở Singapore Polytechnic. Phần mềm cụ thể đã cũ hàng chục năm, nhưng tư duy (giả định baseline đang lỗi, hardening bằng cách giảm bề mặt tấn công trước, sau đó verify bằng probe chủ động) ánh xạ thẳng vào công việc bảo mật hiện đại.",
+          "Xây dựng như một bài lab môn an ninh ở Singapore Polytechnic.",
         ],
       },
       {
@@ -518,7 +518,7 @@ export const caseStudies: Record<string, ProjectCaseStudy> = {
         heading: "Giới thiệu",
         body: [
           "Topology WAN hub-and-spoke nối ba văn phòng chi nhánh về HQ trung tâm qua một internet backbone giả lập. Sơ đồ IP có phân cấp (172.23.0.0/16), routing RIPv2 với xác thực PPP, DHCP từng chi nhánh, cộng với các policy ACL chuẩn và mở rộng để kiểm soát lưu lượng giữa các chi nhánh và ra internet.",
-          "Xây dựng như một bài lab mạng ở Singapore Polytechnic. Toàn bộ topology chỉ chạy trong Cisco Packet Tracer Multi-User Mode, không có phần cứng vật lý. Nhờ vậy mà dựng các kịch bản lỗi và verify routing converge theo đúng thiết kế khá thẳng tiến.",
+          "Xây dựng như một bài lab mạng ở Singapore Polytechnic. Toàn bộ topology chỉ chạy trong Cisco Packet Tracer Multi-User Mode, không có phần cứng vật lý. Nhờ vậy mà việc dựng các kịch bản lỗi và verify routing converge theo đúng thiết kế khá đơn giản.",
         ],
       },
       {
