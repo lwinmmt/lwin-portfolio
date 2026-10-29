@@ -54,7 +54,7 @@ public/
   images/highlights/  Highlight cover images
   logos/              Org logos
   sounds/             Terminal keystroke audio sprite
-sanity/               Sanity schemas + client
+sanity/               Studio environment and schemas
 proxy.ts              Studio auth, English rewrites and retired /vi redirects
 next.config.ts        CSP + security headers
 ```
@@ -67,6 +67,7 @@ Strings:
 - Bare URLs such as `/about` rewrite to their English route. Old `/vi/...` links redirect permanently to the matching English path, retaining query parameters.
 - Old locale cookies and browser language preferences do not change the public language. Desktop and mobile language controls are removed.
 - Legacy Vietnamese message/content fields remain in the source for compatibility with the retired locale. They are not generated as public Vietnamese pages.
+- Retired language controls, cookie-writing helpers and unused CMS query/client scaffolding have been removed from active source. Git history preserves those files; the current Studio configuration remains available.
 - Dates remain stored in English and pass through the existing `formatDates` helper.
 
 Shared facts:
