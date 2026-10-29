@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 
@@ -14,10 +15,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await seedLocaleFromParams(params);
   const m = messages[locale];
-  return {
-    title: m["page.title.uses"],
-    description: m["page.description.uses"],
-  };
+  return pageMetadata(
+    "/uses",
+    m["page.title.uses"],
+    m["page.description.uses"],
+  );
 }
 
 export default async function UsesPage({

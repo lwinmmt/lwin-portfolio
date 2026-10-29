@@ -8,13 +8,11 @@ import { localeHref } from "@/lib/i18n/href";
 // Asymmetric 2-col hero on lg+: text block (greeting, name, intro,
 // 'Right now' chip, CTAs) on the left, hero stage (globe or terminal
 // variant) vertically centered in a narrower right column. On smaller
-// viewports the grid collapses to a single column and the stage falls
-// between the intro paragraph and the 'Right now' chip in natural
-// document order.
+// viewports the stage is omitted, leaving the introduction, status and
+// contact actions followed by Experience.
 //
 // HeroStage is a client component that swaps between the two variants
-// based on a localStorage-backed preference. Lets us A/B the look
-// without redeploying or editing this file.
+// randomly per visit, with an in-place switcher for visitors.
 //
 // Server component (async). Reads the request locale via getT() and
 // renders every translatable string from messages.ts. Profile.ts
@@ -31,7 +29,7 @@ export function Hero() {
     .replace("{org}", currentOrgFullName);
 
   return (
-    <section className="grid gap-8 lg:grid-cols-[3fr_2fr] lg:gap-10">
+    <section className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
       <div
         className="animate-fade-up lg:col-start-1 lg:row-start-1"
         style={{ animationDelay: "0ms" }}
@@ -45,39 +43,30 @@ export function Hero() {
         </h1>
       </div>
 
-      <p
-        className="max-w-[640px] text-[1.0625rem] leading-[1.65] text-[var(--color-fg-soft)] animate-fade-up lg:col-start-1 lg:row-start-2"
+      <div
+        className="max-w-[640px] space-y-4 text-[1.0625rem] leading-[1.65] text-[var(--color-fg-soft)] animate-fade-up lg:col-start-1 lg:row-start-2"
         style={{ animationDelay: "150ms" }}
       >
-        <strong className="font-semibold text-[var(--color-fg)]">
-          {t("hero.studentRole")}
-        </strong>{" "}
-        {t("hero.intro.atSchool")}{" "}
-        <a
-          href={profile.schoolLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
-        >
-          {profile.school}
-        </a>
-        {t("hero.intro.iBuild")}{" "}
-        <span className="font-semibold text-[var(--color-ruby-deep)]">
-          {t("hero.intro.emphasis")}
-        </span>
-        {t("hero.intro.rest")}
-      </p>
-
-      {/* Hero stage: stacked between intro and 'Right now' on mobile
-          (natural document order in a single-column grid). On lg+ it
-          spans the full text-block height and self-centers in the
-          column so the visual mass sits at the optical midpoint of the
-          text block on the left, not anchored to the bottom CTA row. */}
-      <div
-        className="animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:self-center"
-        style={{ animationDelay: "300ms" }}
-      >
-        <HeroStage />
+        <p>
+          <strong className="font-semibold text-[var(--color-fg)]">
+            {t("hero.studentRole")}
+          </strong>{" "}
+          {t("hero.intro.atSchool")}{" "}
+          <a
+            href={profile.schoolLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-[var(--color-fg)] transition-colors hover:text-[var(--color-ruby-deep)]"
+          >
+            {profile.school}
+          </a>
+          {t("hero.intro.iBuild")}{" "}
+          <span className="font-semibold text-[var(--color-ruby-deep)]">
+            {t("hero.intro.emphasis")}
+          </span>
+          {t("hero.intro.rest")}
+        </p>
+        <p>{t("hero.intro.support")}</p>
       </div>
 
       <div
@@ -105,7 +94,7 @@ export function Hero() {
           </span>
         </a>
         <div className="mt-2 pl-1 font-mono text-[10.5px] tracking-[0.04em] text-[var(--color-fg-faint)]">
-          {currentOrgFullName}
+          {profile.currentStatusDetail}
         </div>
       </div>
 
@@ -141,6 +130,15 @@ export function Hero() {
         >
           {t("hero.cta.linkedin")}
         </a>
+      </div>
+
+      {/* The animation is desktop-only. Hiding this grid item also
+          removes its row gap from the mobile layout. */}
+      <div
+        className="hidden min-w-0 animate-fade-up lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:block lg:self-center"
+        style={{ animationDelay: "300ms" }}
+      >
+        <HeroStage />
       </div>
     </section>
   );

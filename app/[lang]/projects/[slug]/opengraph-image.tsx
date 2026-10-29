@@ -33,7 +33,7 @@ export default async function ProjectOpengraphImage({
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   const title = project?.title ?? "Project";
-  const category = project?.category ?? "Case study";
+  const category = project?.category === "Coursework" ? "Coursework & Competitions" : "Work & Ventures";
   const description = project?.description ?? "";
 
   return new ImageResponse(
@@ -71,7 +71,7 @@ export default async function ProjectOpengraphImage({
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           <div
             style={{
-              fontSize: 88,
+              fontSize: title.length > 65 ? 56 : title.length > 40 ? 64 : 76,
               fontWeight: 700,
               letterSpacing: -3,
               lineHeight: 1.02,
@@ -80,20 +80,19 @@ export default async function ProjectOpengraphImage({
             }}
           >
             {title}
-            <span style={{ color: RUBY }}>.</span>
           </div>
           {description && (
             <div
               style={{
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: 400,
                 lineHeight: 1.4,
                 maxWidth: 1040,
                 color: FG_MUTED,
               }}
             >
-              {description.length > 220
-                ? description.slice(0, 217) + "..."
+              {description.length > 196
+                ? description.slice(0, 193) + "..."
                 : description}
             </div>
           )}

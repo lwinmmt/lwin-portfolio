@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
@@ -29,10 +30,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await seedLocaleFromParams(params);
   const m = messages[locale];
-  return {
-    title: m["page.title.about"],
-    description: m["page.description.about"],
-  };
+  return pageMetadata(
+    "/about",
+    m["page.title.about"],
+    m["page.description.about"],
+  );
 }
 
 // Map an interest group id to its translation key. About-page only.
@@ -55,8 +57,9 @@ export default async function AboutPage({
 
   return (
     <DashboardShell>
-      {/* Two-column layout at lg+: bio left, sticky portrait rail right */}
-      <div className="lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
+      {/* Reserve the portrait rail for wider screens so the biography
+          keeps its reading width beside the desktop navigation. */}
+      <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_220px] xl:gap-12">
         <div className="min-w-0">
           {/* Header */}
           <header>
@@ -68,8 +71,8 @@ export default async function AboutPage({
             </h1>
           </header>
 
-          {/* Mobile/tablet portrait: stacked above bio. Hidden at lg where the rail takes over. */}
-          <div className="mt-7 flex items-center gap-5 lg:hidden">
+          {/* Portrait above the biography until the wider rail fits. */}
+          <div className="mt-7 flex items-center gap-5 xl:hidden">
             <div className="relative">
               <div
                 aria-hidden="true"
@@ -108,8 +111,8 @@ export default async function AboutPage({
           </div>
         </div>
 
-        {/* Sticky portrait rail at lg+ */}
-        <aside className="sticky top-24 hidden self-start lg:block">
+        {/* Sticky portrait rail on wider desktops. */}
+        <aside className="sticky top-24 hidden self-start xl:block">
           <div className="relative">
             <div
               aria-hidden="true"
@@ -148,7 +151,7 @@ export default async function AboutPage({
 
       {/* Activities */}
       <Section title={t("about.section.activities")} count={2}>
-        <ul className="grid gap-3.5 sm:grid-cols-3">
+        <ul className="grid gap-3.5 sm:grid-cols-2">
           {activities.map((a) => (
             <ActivityCard key={a.id} entry={a} locale={locale} />
           ))}
@@ -231,13 +234,11 @@ function CommunityServiceRow({
   entry: CommunityRole;
   locale: Locale;
 }) {
-  const { org, dates, logoSrc } = entry;
+  const { org, dates, logoSrc, logoScale } = entry;
   const role = pickLocalized(entry.role, entry.roleVi, locale);
-  const description = pickLocalized(
-    entry.description,
-    entry.descriptionVi,
-    locale,
-  );
+  const description = entry.description
+    ? pickLocalized(entry.description, entry.descriptionVi, locale)
+    : undefined;
   return (
     <li className="relative pb-7 last:pb-0">
       <span
@@ -248,9 +249,10 @@ function CommunityServiceRow({
           <Image
             src={logoSrc}
             alt=""
-            width={44}
-            height={44}
+            width={Math.ceil(44 * (logoScale ?? 1))}
+            height={Math.ceil(44 * (logoScale ?? 1))}
             className="h-9 w-9 object-contain"
+            style={logoScale ? { transform: `scale(${logoScale})` } : undefined}
           />
         ) : (
           <span className="h-2 w-2 rounded-full bg-[var(--color-ruby)]" />
@@ -267,9 +269,16 @@ function CommunityServiceRow({
       <div className="mt-1 font-sans text-[12.5px] font-medium text-[var(--color-fg-muted)]">
         {role}
       </div>
-      <p className="mt-1.5 text-[13px] leading-[1.6] text-[var(--color-fg-soft)]">
-        {description}
-      </p>
+      {description && (
+        <p className="mt-1.5 text-[13px] leading-[1.6] text-[var(--color-fg-soft)]">
+          {description}
+        </p>
+      )}
+      {entry.bullets && (
+        <ul className="mt-2 list-disc space-y-2 pl-4 text-[13px] leading-[1.6] text-[var(--color-fg-soft)] marker:text-[var(--color-fg-faint)]">
+          {entry.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
+        </ul>
+      )}
     </li>
   );
 }
@@ -308,7 +317,7 @@ function ActivityCard({
         </div>
         <div className="min-w-0 flex-1">
           <div
-            className="truncate font-sans text-[13px] font-semibold leading-tight text-[var(--color-fg)]"
+            className="font-sans text-[13px] font-semibold leading-tight text-[var(--color-fg)]"
             title={org}
           >
             {org}

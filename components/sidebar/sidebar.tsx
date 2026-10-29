@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarIcon } from "./sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { profile, navItems, navResources, navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
 import { useLocale, useT } from "@/lib/i18n/client";
@@ -20,7 +19,7 @@ export function Sidebar() {
   return (
     <aside
       aria-label={t("nav.aria.primary")}
-      className="fixed top-0 left-0 z-40 hidden h-dvh w-[260px] flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 lg:flex"
+      className="fixed top-0 left-0 z-40 hidden h-dvh overflow-y-auto overflow-x-hidden w-[260px] flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-bg-sidebar)] px-4 py-7 lg:flex"
     >
       <div className="flex items-center gap-3 px-3 pb-6">
         {/* next/image so this avatar gets format negotiation
@@ -91,7 +90,6 @@ export function Sidebar() {
         </kbd>
       </button>
 
-      <LanguageSwitcher />
       {/* Theme toggle removed. Site is light-only. forcedTheme="light"
           in app/layout.tsx overrides system + any stored next-themes
           value so visitors on Android with dark system theme still
@@ -136,7 +134,7 @@ function NavSection({ items, pathname }: { items: NavLink[]; pathname: string })
               key={item.href}
               email={email}
               className={className + " w-full"}
-              tooltipPlacement="right"
+              tooltipPlacement="top"
               layout="block"
               ariaLabel={label}
             >

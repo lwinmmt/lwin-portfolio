@@ -1,610 +1,442 @@
-// Case-study content for each project. Split out of projects.ts so
-// the /projects index page bundle does not ship paragraphs of detail
-// text it will never render. The detail page at /projects/[slug]
-// imports both projects (slim) + caseStudies (heavy) and joins them.
-//
-// Auto-generated once by scripts/split-projects.mjs. Edits go here.
-
+// English case studies. Facts follow the approved master CV and interview clarifications.
 import type { CaseStudySection } from "./projects";
 
-export type ProjectCaseStudy = {
-  en?: CaseStudySection[];
-  vi?: CaseStudySection[];
-};
+export type ProjectCaseStudy = { en?: CaseStudySection[]; vi?: CaseStudySection[] };
 
 export const caseStudies: Record<string, ProjectCaseStudy> = {
   "inno2-nea-wastewater": {
-    en: [
+    "en": [
       {
-        heading: "Context",
-        body: [
-          "In 2020 the National Environment Agency rolled out wastewater surveillance as a community-level COVID-19 early warning system. Inno2 (the W2 Industrial Services Hub initiative I worked on) built the cloud and edge stack that powered the deployment.",
-          "We built it from scratch. By the time I rotated off the project, the platform was running across roughly 50 sites (migrant worker dormitories, residential blocks, and treatment facilities), with engineers visiting site cabinets daily to verify uptime. Deployment kept scaling past 360 sites after I left.",
-        ],
+        "heading": "Problem and scope",
+        "body": [
+          "Changing a wastewater sampler’s collection schedule required a site visit. Our team built the IoT solution from scratch so operators could change settings remotely and monitor conditions such as temperature.",
+          "I worked on the SP/W2 project and continued as a freelance IoT Solutions Consultant with W2. I gathered requirements through discussions with W2’s team, which supported the NEA wastewater-sampling programme.",
+          "The platform involved more than 100 RTUs during my involvement and reached roughly 50 sites by the end of my engagement. Deployment expanded beyond 360 sites after I left."
+        ]
       },
       {
-        heading: "My role",
-        body: [
-          "Cloud and IoT engineer plus team lead on a five-person team. Joined as an SP-attached intern and stayed on as a W2 IoT Solutions consultant. Owned the Azure-side architecture, the integration between field RTUs, the broker, and the operations dashboard, and drove the team's day-to-day direction on what to build next.",
-        ],
+        "heading": "My contribution",
+        "bullets": [
+          "Set up the Azure VM and integrated SIM-equipped Tastek RTUs with the Mosquitto MQTT broker and web dashboard.",
+          "Worked with the team on dashboard SSL certificates and the wider monitoring and control solution."
+        ]
       },
       {
-        heading: "Architecture",
-        bullets: [
-          "100+ Tastek industrial RTUs in the field. Each unit had a SIM card slot, so the RTU dialed straight out to the cloud over cellular.",
-          "One Azure VM running everything: the Mosquitto MQTT broker, the database, and the web dashboard.",
-          "When load grew, we resized the VM to a larger SKU. Each resize required a brief stop and restart.",
-          "Twilio WhatsApp Business API for alerts. Engineers registered their numbers once, then offline-RTU and threshold-breach notifications landed on WhatsApp.",
-        ],
+        "heading": "Implementation and operating trade-off",
+        "bullets": [
+          "A single Azure VM hosted Mosquitto, the database and the web dashboard.",
+          "RTU onboarding involved physically connecting each unit to a computer and configuring it to communicate with the Azure VM over cellular.",
+          "We accommodated growing demand by vertically resizing the VM. Each resize required a brief stop and restart.",
+          "The wider system used Twilio WhatsApp alerts for faults and threshold events."
+        ]
       },
       {
-        heading: "Outcomes",
-        bullets: [
-          "Contributed to the Lee Hsien Loong IDM Smart Nation Award 2022 received by W2.",
-          "Featured by [The Straits Times](https://www.straitstimes.com/singapore/wastewater-surveillance-sites-for-covid-19-to-double-by-2022-from-current-200-nea) when NEA announced the doubling of surveillance sites.",
-          "Stayed in regular production use, with the alerting flow catching dropouts before site visits.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "Năm 2020, National Environment Agency triển khai giám sát nước thải như một hệ thống cảnh báo sớm COVID-19 ở cấp cộng đồng. Inno2 (sáng kiến của W2 Industrial Services Hub mà tôi làm) xây dựng tầng cloud và edge phục vụ việc triển khai đó.",
-          "Chúng tôi xây từ con số 0. Khi tôi rời dự án, hệ thống đang chạy trên khoảng 50 điểm (ký túc xá lao động nhập cư, khu dân cư, và các nhà máy xử lý), với kỹ sư đến các tủ thiết bị mỗi ngày để kiểm tra uptime. Sau khi tôi rời, hệ thống tiếp tục được mở rộng lên hơn 360 điểm.",
-        ],
-      },
-      {
-        heading: "Vai trò của tôi",
-        body: [
-          "Kỹ sư Cloud và IoT, kiêm trưởng nhóm trong team năm người. Bắt đầu là thực tập sinh gắn với SP, sau đó làm consultant IoT Solutions cho W2. Phụ trách kiến trúc phía Azure, việc tích hợp giữa các RTU thực địa, broker, và dashboard vận hành, đồng thời quyết định nhóm sẽ làm cái gì tiếp theo.",
-        ],
-      },
-      {
-        heading: "Kiến trúc",
-        bullets: [
-          "Hơn 100 RTU công nghiệp Tastek tại các điểm. Mỗi unit có khe SIM, nên RTU gọi thẳng lên cloud qua mạng di động.",
-          "Một Azure VM chạy mọi thứ: Mosquitto MQTT broker, database, và dashboard web.",
-          "Khi load tăng, tụi tôi resize VM lên SKU lớn hơn. Mỗi lần resize cần một khoảng stop và restart ngắn.",
-          "Twilio WhatsApp Business API cho cảnh báo. Kỹ sư đăng ký số điện thoại một lần, sau đó thông báo RTU offline và vượt ngưỡng tới qua WhatsApp.",
-        ],
-      },
-      {
-        heading: "Kết quả",
-        bullets: [
-          "Góp phần vào giải Lee Hsien Loong IDM Smart Nation Award 2022 mà W2 nhận được.",
-          "Được [The Straits Times](https://www.straitstimes.com/singapore/wastewater-surveillance-sites-for-covid-19-to-double-by-2022-from-current-200-nea) đưa tin khi NEA công bố tăng gấp đôi số điểm giám sát.",
-          "Vận hành production đều đặn, luồng cảnh báo bắt được các lần mất kết nối trước khi kỹ sư đến hiện trường.",
-        ],
-      },
-    ],
+        "heading": "Wider programme",
+        "body": [
+          "[The Straits Times](https://www.straitstimes.com/singapore/wastewater-surveillance-sites-for-covid-19-to-double-by-2022-from-current-200-nea) reported on the wider NEA surveillance programme. The article provides programme context."
+        ]
+      }
+    ]
   },
   "esmos-multi-cloud": {
-    en: [
+    "en": [
       {
-        heading: "Context",
-        body: [
-          "ESMOS is a fictional regional healthcare provider that needs to scale a single Odoo-based clinical system out across APAC, with hard requirements on availability, disaster recovery, and data sovereignty. The course brief asked for an enterprise solution: multi-region, multi-cloud, with explicit RTO and RPO targets.",
-          "The diagram below is the v9.4 output: four clouds, three active AWS regions, an Azure DR + always-active Helpdesk, a Cloudflare edge, a GCP secondary nameserver for DNS resilience, and a backup path to Cloudflare R2.",
-        ],
+        "heading": "Coursework context",
+        "body": [
+          "ESMOS was a fictional regional healthcare provider used for IS214 coursework at SMU. The brief covered APAC expansion, availability, disaster recovery and data sovereignty."
+        ]
       },
       {
-        heading: "My role",
-        body: [
-          "Team lead and solution architect. With the cloud and architecture background on the team, I drove the regional layout, the failover model, the DR runbook, and the diagram. I authored the Service Design Document the rest of the deliverables hung off, and wrote the rationale for each non-obvious choice (why Aurora Global over manual replication, why a second cloud for DR, why GCP just for DNS).",
-        ],
+        "heading": "Architecture and my contribution",
+        "bullets": [
+          "Developed the architecture, produced the diagram and authored the Service Design Document, connecting service choices to the brief and recovery runbook.",
+          "Designed a regional architecture spanning AWS in Singapore, Tokyo and Sydney, with Azure East Asia in Hong Kong for cross-cloud recovery.",
+          "Compared Aurora Global Database with manual replication, explaining managed replication and failover alongside vendor dependence.",
+          "Explained how cross-cloud recovery addressed the single-vendor failure scenario, including the additional cost and operational complexity.",
+          "Designed geo-routing and failover behaviour around the scenario’s requirements."
+        ]
       },
       {
-        heading: "Architecture, the short version",
-        bullets: [
-          "Three AWS regions: Singapore primary, Tokyo and Sydney active replicas. Each runs its own EKS cluster with the same Odoo deployment. Latency routing at the edge sends each user to their nearest region.",
-          "Aurora Global Database as the single source of truth. Tokyo and Sydney read the SG primary via VPC peering; on a SG-region failure, Aurora promotes a secondary with sub-minute RTO. If both SG and TK go down, Sydney promotes.",
-          "Azure East Asia in Hong Kong as the cross-cloud DR target. AKS sits idle until a Cloudflare DNS failover (gated by /healthz write validation) flips traffic. The Odoo Helpdesk on Azure runs always-active on its own subdomain.",
-          "Cloudflare for the edge (WAF, DDoS, CDN, TLS) and authoritative DNS. GCP Cloud DNS holds the secondary NS records so DNS itself survives a Cloudflare control-plane outage.",
-          "Cloudflare R2 for cold archival: daily Aurora snapshots get exported to R2 and life-cycled to long-term tier after 90 days. Helpdesk backups land in Azure Blob.",
-          "Moodle on EC2 inside an Auto Scaling Group, with WireGuard for staff access. Video uploads run S3 to Lambda to MediaConvert to HLS, then back out through Cloudflare CDN.",
-          "BetterStack does the external uptime checks. CloudWatch Container Insights per region rolls up into a cross-region dashboard, with SNS pushing alarm emails out.",
-        ],
+        "heading": "Implementation with the team",
+        "bullets": [
+          "Deployed the AWS/Azure environment using Terraform and AI-assisted development.",
+          "Deployed Odoo on AWS EKS and set up the Azure AKS recovery environment and an always-active Odoo Helpdesk service on Azure.",
+          "Configured Aurora Global Database for cross-region replication.",
+          "Configured Cloudflare and GCP Cloud DNS to reduce reliance on a single DNS provider.",
+          "Configured Cloudflare R2 for cold archival and Azure Blob Storage for Helpdesk backups.",
+          "Deployed Moodle on EC2 in an Auto Scaling Group and configured WireGuard for staff access.",
+          "Built an S3, Lambda and MediaConvert video-processing pipeline with HLS delivery through the Cloudflare CDN.",
+          "Implemented a /healthz write-validation gate before routing traffic to Azure recovery.",
+          "Configured Cloudflare WAF, DDoS protection, CDN and TLS.",
+          "Configured CloudWatch Container Insights, cross-region visibility and SNS email alerts."
+        ]
       },
       {
-        heading: "Decisions worth talking about",
-        body: [
-          "**Aurora Global over hand-rolled cross-region replication.** Managed failover, sub-minute RTO, and the ops team does not have to babysit replication lag. The trade-off is vendor lock-in, but for a healthcare workload the operational simplicity wins.",
-          "**Multi-cloud DR rather than multi-region within AWS.** The brief specifically required resilience against a single-vendor incident. Azure DR adds real cost and complexity, but it is the only way to actually answer the question being asked. If this were my own startup I would push back on the requirement first.",
-          "**/healthz-gated DNS failover.** The failover only flips when an explicit write-path health check confirms Azure DR can take traffic. Cheap insurance against flapping, and forces the runbook to be honest about what 'ready' means.",
-          "**GCP for DNS only.** Three-vendor DNS sounds overkill, but DNS is the single most catastrophic failure surface in a multi-cloud setup. Putting the secondary NS on a third party makes DNS itself survive any single-vendor incident.",
-        ],
+        "heading": "Monitoring, demonstration and presentation",
+        "bullets": [
+          "Configured BetterStack external uptime monitoring using the application hostname.",
+          "Demonstrated geo-routing and regional failover by taking one region down and showing traffic moving to another.",
+          "Presented the architecture and explained the service choices."
+        ]
       },
       {
-        heading: "What I learned",
-        body: [
-          "Every line on this diagram costs something to operate, monitor, or recover from. Most of the work on this project was justifying each line in writing, against the brief, before adding it.",
-          "Multi-cloud DR is rare in practice because it doubles the operational surface area. The brief here explicitly required resilience against a single-vendor incident, so the diagram has it.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "ESMOS là một nhà cung cấp dịch vụ y tế khu vực hư cấu cần scale một hệ thống lâm sàng dựa trên Odoo ra khắp APAC, với yêu cầu khắt khe về availability, disaster recovery, và data sovereignty. Đề bài môn học yêu cầu một enterprise solution: đa vùng, đa cloud, có RTO và RPO rõ ràng.",
-          "Sơ đồ bên dưới là output v9.4: bốn cloud, ba AWS region active, một Azure DR + Helpdesk always-active, edge Cloudflare, GCP làm secondary nameserver cho DNS resilience, và đường backup tới Cloudflare R2.",
-        ],
-      },
-      {
-        heading: "Vai trò của tôi",
-        body: [
-          "Trưởng nhóm và solution architect. Với nền tảng cloud và kiến trúc trong team, tôi dẫn dắt regional layout, mô hình failover, DR runbook, và sơ đồ. Tôi viết Service Design Document mà phần còn lại của các deliverable bám theo, và viết lập luận cho mỗi lựa chọn không hiển nhiên (vì sao chọn Aurora Global thay vì replication thủ công, vì sao cần cloud thứ hai cho DR, vì sao GCP chỉ dùng cho DNS).",
-        ],
-      },
-      {
-        heading: "Kiến trúc, phiên bản ngắn",
-        bullets: [
-          "Ba AWS region: Singapore primary, Tokyo và Sydney active replica. Mỗi region chạy EKS cluster riêng với cùng một Odoo deployment. Latency routing ở edge gửi mỗi user về region gần nhất.",
-          "Aurora Global Database làm single source of truth. Tokyo và Sydney đọc SG primary qua VPC peering; khi SG region fail, Aurora promote một secondary với RTO dưới một phút. Nếu cả SG và TK đều down, Sydney promote.",
-          "Azure East Asia tại Hong Kong làm cross-cloud DR target. AKS nằm idle cho đến khi Cloudflare DNS failover (gated bởi /healthz write validation) chuyển traffic. Odoo Helpdesk trên Azure chạy always-active trên subdomain riêng.",
-          "Cloudflare cho edge (WAF, DDoS, CDN, TLS) và authoritative DNS. GCP Cloud DNS giữ secondary NS records để DNS bản thân nó vẫn sống sót khi Cloudflare control-plane gặp sự cố.",
-          "Cloudflare R2 cho cold archival: snapshot Aurora hằng ngày được export sang R2 và life-cycle sang tier dài hạn sau 90 ngày. Backup Helpdesk đẩy vào Azure Blob.",
-          "Moodle trên EC2 trong Auto Scaling Group, dùng WireGuard cho staff access. Upload video chạy S3 sang Lambda sang MediaConvert ra HLS, rồi đi tiếp qua Cloudflare CDN.",
-          "BetterStack làm uptime check ngoài. CloudWatch Container Insights theo từng region được roll up vào cross-region dashboard, với SNS đẩy alarm email.",
-        ],
-      },
-      {
-        heading: "Các quyết định đáng bàn",
-        body: [
-          "**Aurora Global thay vì replication tự dựng giữa các region.** Failover được quản lý, RTO dưới một phút, và đội vận hành không phải canh replication lag. Đánh đổi là vendor lock-in, nhưng với workload y tế thì sự đơn giản về vận hành thắng.",
-          "**Multi-cloud DR thay vì multi-region trong AWS.** Đề bài yêu cầu cụ thể khả năng chịu được sự cố ở một vendor duy nhất. Azure DR thêm chi phí và độ phức tạp thật, nhưng đó là cách duy nhất để thực sự trả lời câu hỏi được đặt ra. Nếu đây là startup của riêng tôi, tôi sẽ phản biện yêu cầu này trước đã.",
-          "**DNS failover gate bằng /healthz.** Failover chỉ flip khi một health check write-path xác nhận Azure DR sẵn sàng nhận traffic. Bảo hiểm rẻ chống flapping, và ép runbook phải trung thực về định nghĩa 'ready'.",
-          "**GCP chỉ cho DNS.** DNS ba vendor nghe có vẻ overkill, nhưng DNS là failure surface thảm khốc nhất trong setup multi-cloud. Đặt secondary NS ở bên thứ ba khiến bản thân DNS sống sót qua mọi sự cố ở một vendor.",
-        ],
-      },
-      {
-        heading: "Bài học",
-        body: [
-          "Mỗi đường trên sơ đồ này đều tốn chi phí để vận hành, giám sát, hoặc khôi phục. Phần lớn công việc trong dự án này là biện minh cho từng đường bằng văn bản, đối chiếu với đề bài, trước khi thêm nó vào.",
-          "Multi-cloud DR hiếm trong thực tế vì nó nhân đôi bề mặt vận hành. Đề bài ở đây yêu cầu rõ ràng khả năng chịu được sự cố ở một vendor duy nhất, nên sơ đồ có nó.",
-        ],
-      },
-    ],
+        "heading": "Reading the diagram",
+        "body": [
+          "The original coursework diagram includes design targets and recovery assumptions. The team deployed and demonstrated the stack, but the diagram’s recovery targets are not measured recovery-time results."
+        ]
+      }
+    ]
   },
   "osiris-hydroponics": {
-    en: [
+    "en": [
       {
-        heading: "Context",
-        body: [
-          "Hydroponics in Singapore is a small market. Most of the activity sits on the supply side: selling grow racks to hobbyists and schools at low margin. There isn't a real ecosystem of funded operators beyond that.",
-          "Osiris was an attempt to push past the rack itself. Smart vertical farming: daily irrigation and lighting on automatic cycles, device-agnostic relay control so anything plugged into a normal socket could be toggled remotely, and the operator only pulled in when something needed attention.",
-        ],
+        "heading": "Problem and pilot scope",
+        "body": [
+          "SME operators and hydroponics solution providers needed a way to monitor racks and control lighting and irrigation remotely. We tested the switch boxes on demonstration racks during early pre-revenue pilots."
+        ]
       },
       {
-        heading: "My role",
-        body: [
-          "Founder. Recruited the core team out of SMU and split the work across hardware, firmware, and cloud. On the build side I owned the hardware design, the ESP32 firmware, and the cloud pipeline up through the HiveMQ broker into S3. Outside the build I ran the SMU BIG grant pitch, led the conversations with the farmers we were selling into, and ran the booth at World Cities Summit 2024 where we demoed to Ministers Indranee Rajah and Desmond Lee.",
-        ],
+        "heading": "Hardware, firmware and cloud work",
+        "bullets": [
+          "Built and soldered switch-box prototypes using ESP32 controllers, DHT22 sensors and relays.",
+          "Wrote MicroPython firmware to operate relay-connected equipment through standard socket panels.",
+          "Implemented local daily schedules so lighting and irrigation cycles could continue when the cloud was unavailable.",
+          "Configured telemetry over Wi-Fi and MQTT through HiveMQ Cloud to AWS S3.",
+          "Recorded prototype hardware specifications to support a transition toward PCB design."
+        ]
       },
       {
-        heading: "Funding and validation",
-        body: [
-          "Funded by the [SMU BIG (Business Innovations Generator) acceleration grant](https://iie.smu.edu.sg/acceleration-grant) out of SMU IIE. Featured in [Singapore Business Review](https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures)'s list of nine SMU student ventures to watch.",
-        ],
+        "heading": "Venture and stakeholder work",
+        "bullets": [
+          "Co-founded Osiris and recruited the core SMU team, dividing hardware, firmware and cloud responsibilities.",
+          "Demonstrated dashboard-based monitoring and remote lighting and irrigation control with the team.",
+          "Presented the BIG grant pitch. The venture received grant support and SMU incubation.",
+          "Demonstrated remote hydroponic control to visitors at the World Cities Summit 2024 SMU IIE booth.",
+          "Discussed initial requirements and potential construction IoT/SIDS applications with a construction-industry company."
+        ]
       },
       {
-        heading: "Architecture",
-        bullets: [
-          "ESP32 controller in a roughly 20×20 cm enclosure, mounted next to the rack. Wi-Fi to the local router.",
-          "Relay switches wired to a standard socket panel: anything plugged into the panel (pump, light, fan, anything off a wall socket) becomes remotely toggleable. A hand-built device-agnostic smart plug strip.",
-          "Local daily schedule on the device so the rig keeps running if the cloud is unreachable. Telemetry pushed up over MQTT through HiveMQ Cloud, then landed in AWS S3.",
-          "Web dashboard for the operator to monitor crop view, the daily cycle, and any alerts.",
-        ],
+        "heading": "Public coverage",
+        "body": [
+          "Osiris was included in [Singapore Business Review](https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures)’s feature on student entrepreneurs from several institutions."
+        ]
+      }
+    ]
+  },
+  "becalearn": {
+    "en": [
+      {
+        "heading": "Problem and initiative",
+        "body": [
+          "Intern onboarding relied on scattered learning materials and Excel-based instructions. I initiated BecaLearn outside the internship brief to centralise documentation, video links and guidance on what new interns needed to learn."
+        ]
       },
       {
-        heading: "Showcase moments",
-        bullets: [
-          "World Cities Summit 2024 at the SMU IIE booth. Demoed Osiris to Ministers Indranee Rajah and Desmond Lee.",
-          "Featured in Singapore Business Review.",
-          "Internal demo at SMU IIE for the BIG cohort.",
-        ],
+        "heading": "My contribution",
+        "bullets": [
+          "Designed the application architecture for VNTT’s internal data-centre hosting and prepared Docker Compose deployment configuration.",
+          "Built the initial LMS using AI-assisted development.",
+          "Prepared the proposal and gained stakeholder support.",
+          "Assigned page reviews and user acceptance testing of business flows to another intern.",
+          "Reviewed the testing feedback and implemented selected improvements."
+        ]
       },
       {
-        heading: "Where it stands",
-        body: [
-          "Osiris pivoted away from a packaged hydroponics product into a systems-integrator model. Now it builds custom IoT systems for clients in industries like construction.",
-        ],
-      },
-    ],
-    vi: [
+        "heading": "Deployment testing and handover",
+        "body": [
+          "Handed over the codebase and Docker Compose configuration after deployment testing to support internal hosting and future development."
+        ]
+      }
+    ]
+  },
+  "vntt-industrial-gateway": {
+    "en": [
       {
-        heading: "Bối cảnh",
-        body: [
-          "Thủy canh ở Singapore là một thị trường nhỏ. Phần lớn hoạt động nằm ở mặt cung: bán giá thể trồng cho người chơi và trường học với biên lợi nhuận thấp. Không có hệ sinh thái thực sự của các nhà vận hành được tài trợ ngoài đó.",
-          "Osiris là nỗ lực đi xa hơn chính cái giá thể. Smart vertical farming: chu kỳ tưới và đèn chiếu sáng hằng ngày tự động, điều khiển relay không phụ thuộc thiết bị nên bất cứ thứ gì cắm vào ổ cắm thông thường đều có thể bật-tắt từ xa, và người vận hành chỉ phải vào cuộc khi có chuyện thực sự cần.",
-        ],
-      },
-      {
-        heading: "Vai trò của tôi",
-        body: [
-          "Nhà sáng lập. Tuyển team core từ SMU và chia việc giữa hardware, firmware, và cloud. Về mặt build, tôi phụ trách thiết kế phần cứng, firmware ESP32, và pipeline cloud chạy qua HiveMQ broker vào S3. Ngoài việc build, tôi dẫn dắt pitch xin quỹ SMU BIG, các cuộc trò chuyện với nông dân tụi tôi muốn bán cho, và gian trưng bày tại World Cities Summit 2024 nơi tụi tôi demo cho Bộ trưởng Indranee Rajah và Desmond Lee.",
-        ],
+        "heading": "Integration problem",
+        "body": [
+          "Built and tested an EdgeX Foundry gateway prototype to consolidate readings from different industrial protocols for monitoring."
+        ]
       },
       {
-        heading: "Tài trợ và xác thực",
-        body: [
-          "Được tài trợ bởi [quỹ tăng tốc SMU BIG (Business Innovations Generator)](https://iie.smu.edu.sg/acceleration-grant) thuộc SMU IIE. Được điểm danh trong danh sách 9 startup sinh viên SMU đáng theo dõi của [Singapore Business Review](https://sbr.com.sg/markets-investing/exclusive/meet-9-singapore-students-promising-business-ventures).",
-        ],
+        "heading": "My implementation",
+        "bullets": [
+          "Built an EdgeX Foundry gateway prototype with simulated Modbus TCP, MQTT and Siemens S7 inputs.",
+          "Integrated custom device services with Python sensor simulators in an 18-container Docker environment.",
+          "Applied deadband filtering, enrichment and classification to prepare sensor readings for downstream monitoring.",
+          "Configured TLS publishing to HiveMQ for the gateway-to-cloud MQTT path.",
+          "Used InfluxDB and Grafana to inspect sensor data flowing through the prototype."
+        ]
       },
       {
-        heading: "Kiến trúc",
-        bullets: [
-          "Bộ điều khiển ESP32 trong hộp khoảng 20×20 cm, gắn cạnh giá thể. Wi-Fi về router nội bộ.",
-          "Relay switch nối vào bảng ổ cắm tiêu chuẩn: bất kỳ thiết bị nào cắm vào bảng (bơm, đèn, quạt, bất cứ thứ gì chạy điện ổ cắm) đều bật-tắt từ xa được. Một thanh smart plug không phụ thuộc thiết bị tự ráp tay.",
-          "Lịch hằng ngày chạy ngay trên thiết bị để rig vẫn hoạt động khi mất kết nối cloud. Telemetry đẩy lên qua MQTT thông qua HiveMQ Cloud, sau đó lưu vào AWS S3.",
-          "Dashboard web cho người vận hành theo dõi tình trạng cây trồng, chu kỳ hằng ngày, và mọi cảnh báo.",
-        ],
+        "heading": "Scope and related exposure",
+        "body": [
+          "Separately, I used AI-assisted coding to map stacker-crane actions to device command codes for higher-level warehouse controls. I learned about AS/RS stacker cranes, shuttles and lifters, and received a walkthrough of a building’s smart parking hardware and licence-plate lookup kiosk."
+        ]
+      }
+    ]
+  },
+  "ntuc-workstation-automation": {
+    "en": [
+      {
+        "heading": "Problem",
+        "body": [
+          "Computer setup involved repetitive manual software installation and configuration. Asset details also had to be recorded manually."
+        ]
       },
       {
-        heading: "Khoảnh khắc trưng bày",
-        bullets: [
-          "World Cities Summit 2024 tại gian SMU IIE. Demo Osiris cho Bộ trưởng Indranee Rajah và Desmond Lee.",
-          "Được giới thiệu trên Singapore Business Review.",
-          "Demo nội bộ tại SMU IIE cho cohort BIG.",
-        ],
+        "heading": "Provisioning used by the IT team",
+        "bullets": [
+          "Automated software installation, configuration and domain joining using custom Windows images and PowerShell.",
+          "Created bootable Windows installation media using Rufus.",
+          "Reduced hands-on setup effort from more than 45 minutes to under 10 minutes per computer. This measures staff effort rather than total installation time.",
+          "Shared the images and scripts with IT colleagues who used them for workstation setup, and trained a colleague to use them."
+        ]
       },
       {
-        heading: "Hiện tại",
-        body: [
-          "Osiris chuyển từ sản phẩm thủy canh đóng gói sang mô hình systems-integrator. Giờ thì xây dựng các hệ thống IoT tùy chỉnh cho khách trong các ngành như xây dựng.",
-        ],
+        "heading": "Asset records and support",
+        "bullets": [
+          "Built a Python/MySQL workflow to collect MAC addresses, IP addresses and NetBIOS names into a central asset database, replacing manual entry for the IT team.",
+          "Created and managed Active Directory user accounts and provided day-to-day IT support."
+        ]
       },
-    ],
+      {
+        "heading": "Additional proof of concept",
+        "body": [
+          "Demonstrated automatic software installation through Chocolatey for Business so the IT team could evaluate another deployment option. This remained a proof of concept."
+        ]
+      }
+    ]
   },
   "singapore-indoor-farms": {
-    en: [
+    "en": [
       {
-        heading: "Context",
-        body: [
-          "Singapore Indoor Farms wanted a small visible IoT rig they could show clients walking through their facility. One demo rack on their floor to prove the data path end-to-end and let visitors see live readings.",
-          "It was a W2 freelance gig during my SP IoT internship era. The scope was deliberately narrow: prove the loop works, show numbers on a screen, let an operator flip a relay.",
-        ],
+        "heading": "Purpose and contribution",
+        "body": [
+          "Built a Raspberry Pi rig for one hydroponic demonstration rack so the farm’s team could show clients live monitoring and control during facility walkthroughs. This was a freelance W2 project."
+        ]
       },
       {
-        heading: "Stack",
-        bullets: [
-          "One Raspberry Pi at the rack. GPIO wired to a DHT22 humidity sensor and a separate CO2 sensor.",
-          "Raspberry Pi camera for visual monitoring of the rack.",
-          "Relays off the Pi GPIO to switch the grow lights and the water pump on and off.",
-          "A monitoring view so the operator could observe readings and trigger simple notifications.",
-        ],
-      },
-      {
-        heading: "What it did for the customer",
-        body: [
-          "The rig was primarily a sales tool. The farm's team used it to walk clients through what data-driven indoor agriculture looks like. CNA picked it up in May 2022 as a Singapore Indoor Farms feature.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "Singapore Indoor Farms muốn có một bộ thiết bị IoT nhỏ gọn dễ nhìn để trưng cho khách đi tham quan cơ sở của họ. Một rack demo đặt trên sàn nhà để chứng minh đường đi của dữ liệu end-to-end và để khách thấy số liệu live.",
-          "Đây là một việc freelance của W2 trong giai đoạn tôi thực tập IoT tại SP. Phạm vi được giữ hẹp có chủ đích: chứng minh vòng lặp hoạt động, hiển thị số trên màn hình, cho người vận hành bật relay.",
-        ],
-      },
-      {
-        heading: "Stack",
-        bullets: [
-          "Một Raspberry Pi tại rack. GPIO nối với cảm biến độ ẩm DHT22 và một cảm biến CO2 riêng.",
-          "Camera Raspberry Pi để giám sát hình ảnh của rack.",
-          "Relay từ GPIO của Pi để bật / tắt đèn trồng cây và bơm nước.",
-          "View giám sát để người vận hành theo dõi số đo và kích hoạt cảnh báo đơn giản.",
-        ],
-      },
-      {
-        heading: "Đem lại gì cho khách hàng",
-        body: [
-          "Bộ thiết bị này chủ yếu là công cụ bán hàng. Team của trang trại dùng nó để dẫn khách đi qua câu chuyện nông nghiệp trong nhà dựa trên dữ liệu trông thế nào. CNA đưa tin vào tháng 5/2022 trong bài về Singapore Indoor Farms.",
-        ],
-      },
-    ],
+        "heading": "Implementation",
+        "bullets": [
+          "Connected DHT22 humidity and separate CO2 sensors through Raspberry Pi GPIO.",
+          "Added Raspberry Pi camera monitoring.",
+          "Controlled grow lights and a water pump through relays.",
+          "Integrated readings, equipment controls and simple notifications into a monitoring interface for demonstrations."
+        ]
+      }
+    ]
   },
   "royce-connect": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "IS215 module project. The team picked Royce Dental, a Singapore dental chain, and framed the brief around two metrics dental chains track closely: no-show rate and recall conversion. The deliverable was a two-surface product: a patient mobile app for appointments and recall reminders, and an operations dashboard for managers to track retention by outlet and dig into no-show patterns.",
-          "I was project lead. Drove the proposal, the strategic analysis (SWOT, Porter's Five Forces, market sizing), the product framing, and most of the team's deck. Built across both surfaces with the team.",
-        ],
+        "heading": "Coursework and product framing",
+        "body": [
+          "I led the proposal, framing appointment no-shows and recall conversion as a product opportunity for the team’s chosen case company, Royce Dental.",
+          "Applied SWOT, Porter’s Five Forces and market sizing to support the proposal."
+        ]
       },
       {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript for the operations dashboard, deployed on Vercel.",
-          "React Native for the patient app.",
-          "UI designed in Figma Make.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Giới thiệu",
-        body: [
-          "Project môn IS215. Team chọn Royce Dental, một chuỗi nha khoa ở Singapore, và đóng khung đề bài quanh hai metric mà chuỗi nha khoa theo dõi sát: tỉ lệ vắng hẹn (no-show) và recall conversion. Sản phẩm cuối là hai mặt: app mobile cho bệnh nhân để đặt lịch và nhắc hẹn, và dashboard vận hành cho quản lý theo dõi retention theo chi nhánh và phân tích các pattern no-show.",
-          "Tôi là project lead. Phụ trách proposal, phân tích chiến lược (SWOT, Porter's Five Forces, market sizing), framing sản phẩm, và phần lớn deck của team. Làm chung cả hai mặt với team.",
-        ],
+        "heading": "My contribution with the team",
+        "bullets": [
+          "Designed patient appointment and recall-reminder workflows.",
+          "Developed workflows for managers to review retention and no-show patterns across outlets.",
+          "Contributed to the React Native patient app and Next.js/TypeScript operations dashboard.",
+          "Used Figma Make for UI work and Vercel for operations-dashboard deployment.",
+          "Created most of the presentation deck to explain the problem, proposed features and operating model."
+        ]
       },
       {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript cho operations dashboard, deploy trên Vercel.",
-          "React Native cho app bệnh nhân.",
-          "UI thiết kế trong Figma Make.",
-        ],
-      },
-    ],
+        "heading": "Project scope",
+        "body": [
+          "The product proposal, patient app and operations-dashboard demonstrations were IS215 coursework deliverables."
+        ]
+      }
+    ]
   },
   "signpost-collective-dashboard": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "SMU-X project for Signpost Collective, paired with the coursework deliverable for COR1301 Leadership and Team Building. Signpost runs a volunteer-operations team and already had their own internal dashboard for the day-to-day. The team built our version as the project deliverable: role-based access with admin and member tiers, different view and edit permissions for each, and analytics views over the operational metrics they cared about.",
-          "We shared the codebase openly with the Signpost team afterwards so they could reference it and pull whatever was useful into the dashboard they actually run on.",
-        ],
+        "heading": "Project context",
+        "body": [
+          "An SMU-X project for COR1301 Leadership and Team Building. Signpost Collective already had an internal dashboard. Our team built a reference dashboard for volunteer operations."
+        ]
       },
       {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript for the dashboard, deployed on Vercel.",
-          "UI designed in Figma Make.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Giới thiệu",
-        body: [
-          "Project SMU-X cho Signpost Collective, kết hợp với deliverable cho môn COR1301 Leadership and Team Building. Signpost vận hành một team volunteer-operations và đã có dashboard nội bộ riêng cho công việc hằng ngày. Team xây phiên bản của tụi tôi như deliverable của project: role-based access với tier admin và member, mỗi bên có quyền view và edit khác nhau, và các analytics view trên những metric vận hành mà họ quan tâm.",
-          "Sau đó tụi tôi chia sẻ codebase công khai cho team Signpost để họ tham khảo và rút ra cái gì có ích cho dashboard họ thực sự đang dùng.",
-        ],
+        "heading": "My contribution with the team",
+        "bullets": [
+          "Co-developed the Next.js/TypeScript reference dashboard for volunteer operations.",
+          "Implemented admin/member permissions to control viewing and editing access.",
+          "Developed analytics views.",
+          "Used Figma Make for UI design and Vercel for deployment."
+        ]
       },
       {
-        heading: "Stack",
-        bullets: [
-          "Next.js + TypeScript cho dashboard, deploy trên Vercel.",
-          "UI thiết kế trong Figma Make.",
-        ],
+        "heading": "Delivery",
+        "body": [
+          "Shared the reference-dashboard codebase with Signpost Collective."
+        ]
+      }
+    ]
+  },
+  "grabcompare": {
+    "en": [
+      {
+        "heading": "Problem and deliverables",
+        "body": [
+          "GrabCompare proposed a single experience for comparing ride-hailing prices and waiting times across providers including Grab and Tada. The work was for the SMU Product Management Club’s internal product challenge."
+        ]
       },
-    ],
+      {
+        "heading": "My contribution with the team",
+        "bullets": [
+          "Identified the problem, researched alternatives and developed the business case.",
+          "Co-designed a Figma prototype showing the comparison experience.",
+          "Co-authored the research documentation and product proposal.",
+          "Prepared presentation slides and presented the proposal."
+        ]
+      },
+      {
+        "heading": "Result",
+        "body": [
+          "Our team placed first in the internal challenge in October 2023."
+        ]
+      }
+    ]
   },
   "asv-5g-autonomous": {
-    en: [
+    "en": [
       {
-        heading: "Context",
-        body: [
-          "Final Year Project at Singapore Polytechnic, contributing to the school's first SAE Level 3 autonomous 5G vehicle. The vehicle itself was a multi-team effort across mechatronics, controls, and IoT. My team owned the IoT subsystem: collecting telemetry from the vehicle and surfacing it to a remote operator over 5G.",
-        ],
+        "heading": "Capstone context",
+        "body": [
+          "The vehicle was a multidisciplinary SP project involving autonomy, mechatronics, controls and IoT teams. I worked in the five-intern IoT team, mainly on cloud and dashboard integration, with additional Raspberry Pi and Node-RED contributions."
+        ]
       },
       {
-        heading: "My role",
-        body: [
-          "Led the 5-person IoT subteam. Coordinated the split between firmware, cloud, and dashboard work and steered what each phase shipped. On the build side I focused on the cloud and the dashboard integration.",
-        ],
+        "heading": "Telemetry and integration",
+        "bullets": [
+          "Integrated cloud components and the React/Node.js/MySQL dashboard for live vehicle-status and sensor readings.",
+          "Contributed to the Node-RED flows on the onboard Raspberry Pi, publishing telemetry over MQTT.",
+          "The Pi connected by Ethernet to a 5G router using SP’s dedicated 5G network.",
+          "The team captured GPS, battery status, temperature, humidity and CO2 readings.",
+          "Integrated telemetry with DECADA for storage. The monitoring dashboard was a separate component."
+        ]
       },
       {
-        heading: "Architecture",
-        bullets: [
-          "Node-RED firmware on a Raspberry Pi onboard the vehicle. Captured sensor telemetry (environmental + vehicle state) and published it over MQTT.",
-          "5G router on the vehicle for the uplink, sitting on SP's dedicated 5G network. The Pi connected to it by ethernet.",
-          "React + Node.js + MySQL on the cloud side. Live dashboard for the remote operator showing the vehicle's current state, with alerting rules on environmental hazard thresholds.",
-        ],
-      },
-      {
-        heading: "Where it stands",
-        body: [
-          "Final-year capstone, shipped to demo. The vehicle and the IoT subsystem stayed at SP as part of their autonomous-vehicle research track.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Bối cảnh",
-        body: [
-          "Final Year Project tại Singapore Polytechnic, đóng góp cho chiếc xe tự hành SAE Level 3 dùng 5G đầu tiên của trường. Chính chiếc xe là dự án đa nhóm trải dài mechatronics, controls, và IoT. Team của tôi phụ trách subsystem IoT: thu telemetry từ xe và đưa lên cho remote operator qua 5G.",
-        ],
-      },
-      {
-        heading: "Vai trò của tôi",
-        body: [
-          "Dẫn dắt subteam IoT 5 người. Điều phối phần chia việc giữa firmware, cloud, và dashboard, đồng thời quyết định mỗi pha sẽ ship cái gì. Về phần build, tôi tập trung vào cloud và việc tích hợp dashboard.",
-        ],
-      },
-      {
-        heading: "Kiến trúc",
-        bullets: [
-          "Firmware Node-RED chạy trên Raspberry Pi gắn trên xe. Thu telemetry sensor (môi trường + trạng thái xe) và publish qua MQTT.",
-          "Router 5G trên xe cho uplink, nằm trên mạng 5G dùng riêng của SP. Pi kết nối tới router qua ethernet.",
-          "React + Node.js + MySQL phía cloud. Dashboard live cho remote operator hiển thị trạng thái hiện tại của xe, với rule cảnh báo các ngưỡng nguy cơ môi trường.",
-        ],
-      },
-      {
-        heading: "Hiện tại",
-        body: [
-          "Capstone năm cuối, đã ship demo. Chiếc xe và subsystem IoT vẫn ở lại SP như một phần của track nghiên cứu autonomous vehicle.",
-        ],
-      },
-    ],
+        "heading": "Demonstration",
+        "body": [
+          "Demonstrated the IoT subsystem at SP Engineering Show 2021 and explained how data travelled from the vehicle to the dashboard."
+        ]
+      }
+    ]
   },
   "nepseeds": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "Nepseeds is a specialized provider of rare Nepenthes seeds from Southeast Asia, with a focus on global shipping to enthusiasts and collectors worldwide. The mission is to enrich the Nepenthes hobby by offering a diverse selection of seeds and promoting the growth of unique and fascinating plant varieties.",
-          "We take pride in the joy of seeing customers grow their own thriving Nepenthes from home, and we strive to provide the highest quality seeds and service. The site is live at [nepseeds.com](https://nepseeds.com/).",
-        ],
+        "heading": "Business and role",
+        "body": [
+          "I co-founded Nepseeds in July 2021 and continue to handle operations part-time. The business primarily sells Nepenthes seeds, with occasional live-plant shipments."
+        ]
       },
-    ],
-    vi: [
       {
-        heading: "Giới thiệu",
-        body: [
-          "Nepseeds là nhà cung cấp chuyên biệt về hạt giống Nepenthes hiếm từ Đông Nam Á, tập trung vào việc giao hàng toàn cầu cho người chơi và nhà sưu tập trên khắp thế giới. Sứ mệnh là làm phong phú thêm cộng đồng chơi Nepenthes bằng cách cung cấp đa dạng hạt giống và thúc đẩy việc trồng các giống cây độc đáo, thú vị.",
-          "Chúng tôi tự hào khi thấy khách hàng tự trồng được Nepenthes khỏe mạnh ngay tại nhà, và luôn cố gắng cung cấp hạt giống và dịch vụ chất lượng cao nhất. Trang web ở [nepseeds.com](https://nepseeds.com/).",
-        ],
+        "heading": "Storefront and fulfilment",
+        "bullets": [
+          "Manage the Shopify storefront, orders and customer enquiries.",
+          "Manage international shipping, fulfilment and tracking.",
+          "Coordinate with NParks on phytosanitary certification where required.",
+          "Trained the business partner to add products in Shopify so either of us could update the catalogue."
+        ]
       },
-    ],
+      {
+        "heading": "Automation and community",
+        "bullets": [
+          "Implemented an AI-assisted order-triggered script that sends shipping labels and order/packing slips to a printer, removing the need to start each print job manually.",
+          "Publish Facebook and Instagram posts using Meta Business Suite.",
+          "Grew the Facebook group organically to approximately 1,500 members through posts and responsive customer communication."
+        ]
+      }
+    ]
+  },
+  "seagate-lyve-cloud": {
+    "en": [
+      {
+        "heading": "Hackathon contribution",
+        "body": [
+          "The team placed fourth in the Seagate Lyve Cloud Hackathon in 2022."
+        ]
+      }
+    ]
   },
   "windows-server-2000-security": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "Blue-team hardening lab on a deliberately vulnerable Windows Server 2000 box. Take a known-bad baseline, harden it against the era's common attack vectors (DNS zone transfers, unused IIS features, insecure remote-access stack, weak password policy), then re-run the same probes against the hardened box to confirm every exploit that worked before now failed.",
-          "Built as a Singapore Polytechnic security coursework lab.",
-        ],
+        "heading": "Lab work",
+        "body": [
+          "Evaluated a Windows Server 2000 baseline using security probes, applied DNS, IIS, password and remote-access controls, then repeated the probes to compare behaviour."
+        ]
       },
       {
-        heading: "Tools",
-        bullets: [
-          "Windows Server 2000 inside VMware Workstation for the lab environment.",
-          "IIS Lockdown Tool to strip unused IIS modules and reduce attack surface.",
-          "CopSSH (Cygwin-based OpenSSH on Windows) replacing the insecure remote-access stack.",
-          "Group Policy for password complexity, length, and lockout thresholds.",
-          "nmap, nslookup, and standard probing scripts for before-and-after validation.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Giới thiệu",
-        body: [
-          "Bài lab blue-team hardening trên một máy Windows Server 2000 cố tình để lỗ hổng. Lấy một baseline đã biết là yếu, hardening lại chống các vector tấn công phổ biến thời đó (DNS zone transfer, IIS để dư tính năng không dùng, stack remote-access không an toàn, chính sách mật khẩu yếu), rồi chạy lại đúng các probe đó lên máy đã hardening để xác nhận mọi exploit từng work giờ đều fail.",
-          "Xây dựng như một bài lab môn an ninh ở Singapore Polytechnic.",
-        ],
-      },
-      {
-        heading: "Công cụ",
-        bullets: [
-          "Windows Server 2000 trên VMware Workstation cho môi trường lab.",
-          "IIS Lockdown Tool để tắt các module IIS không dùng và giảm bề mặt tấn công.",
-          "CopSSH (OpenSSH chạy trên Windows qua Cygwin) thay cho stack remote-access không an toàn.",
-          "Group Policy cho độ phức tạp, độ dài và ngưỡng khoá tài khoản của mật khẩu.",
-          "nmap, nslookup, và các script probe tiêu chuẩn để verify trước-sau.",
-        ],
-      },
-    ],
+        "heading": "Implementation and tools",
+        "bullets": [
+          "VMware Workstation hosted the lab environment.",
+          "Used IIS Lockdown to reduce unused IIS features.",
+          "Used CopSSH for remote access and Group Policy for password and lockout controls.",
+          "Used Nmap, nslookup and probing scripts for before-and-after checks."
+        ]
+      }
+    ]
   },
   "cisco-wan-architecture": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "Hub-and-spoke WAN topology connecting three branch offices to a central HQ across a simulated internet backbone. Hierarchical IP addressing (172.23.0.0/16), RIPv2 routing with PPP authentication, DHCP per branch, and standard plus extended ACL policies controlling inter-branch and internet-facing traffic.",
-          "Built as a Singapore Polytechnic networking lab. The full topology lived only in Cisco Packet Tracer's Multi-User Mode, with no physical hardware involved. That made it straightforward to spin up failure scenarios and verify the routing converged the way the design intended.",
-        ],
+        "heading": "Lab work and contribution",
+        "body": [
+          "Led a three-person team building a simulated hub-and-spoke WAN connecting headquarters and three branches in Cisco Packet Tracer Multi-User."
+        ]
       },
       {
-        heading: "Tools",
-        bullets: [
-          "Cisco Packet Tracer (Multi-User Mode) for the full virtual topology.",
-          "Cisco IOS CLI for router and switch configuration.",
-          "RIPv2 with PPP authentication, DHCP, standard and extended ACLs.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Giới thiệu",
-        body: [
-          "Topology WAN hub-and-spoke nối ba văn phòng chi nhánh về HQ trung tâm qua một internet backbone giả lập. Sơ đồ IP có phân cấp (172.23.0.0/16), routing RIPv2 với xác thực PPP, DHCP từng chi nhánh, cộng với các policy ACL chuẩn và mở rộng để kiểm soát lưu lượng giữa các chi nhánh và ra internet.",
-          "Xây dựng như một bài lab mạng ở Singapore Polytechnic. Toàn bộ topology chỉ chạy trong Cisco Packet Tracer Multi-User Mode, không có phần cứng vật lý. Nhờ vậy mà việc dựng các kịch bản lỗi và verify routing converge theo đúng thiết kế khá đơn giản.",
-        ],
-      },
-      {
-        heading: "Công cụ",
-        bullets: [
-          "Cisco Packet Tracer (Multi-User Mode) cho toàn bộ topology ảo.",
-          "Cisco IOS CLI để cấu hình router và switch.",
-          "RIPv2 với xác thực PPP, DHCP, ACL chuẩn và mở rộng.",
-        ],
-      },
-    ],
+        "heading": "Configuration",
+        "bullets": [
+          "Integrated RIPv2 routing, PPP authentication, DHCP and standard/extended ACLs.",
+          "Used hierarchical addressing within 172.23.0.0/16.",
+          "Configured routers and switches using the Cisco IOS CLI within the simulated topology."
+        ]
+      }
+    ]
   },
   "windows-server-2012-r2-enterprise": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "Self-hosted virtualized datacenter built on VMware Workstation. Four Windows Server 2012 R2 instances split into role-specific machines: Domain Controller, DNS/DHCP, File Server, Web Server. Active Directory configured with hierarchical OUs, scripted bulk user provisioning for 50+ accounts via PowerShell, and enforced Group Policies for password complexity and shared resource access.",
-          "An SP coursework lab on real Windows Server 2012 R2 with VMware Workstation as the hypervisor. The point of the exercise was end-to-end: design the role split, stand up each VM, wire the AD trust, automate user provisioning and policy enforcement with PowerShell, then prove the policies actually applied across machines.",
-        ],
+        "heading": "Lab work and contribution",
+        "body": [
+          "Led a three-person team building a four-VM Windows Server 2012 R2 environment for a fictional sports facility."
+        ]
       },
       {
-        heading: "Tools",
-        bullets: [
-          "Windows Server 2012 R2 across four VMs.",
-          "VMware Workstation as the hypervisor.",
-          "Active Directory + Group Policy.",
-          "PowerShell for bulk user provisioning and policy automation.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Giới thiệu",
-        body: [
-          "Datacenter ảo tự host trên VMware Workstation. Bốn instance Windows Server 2012 R2 chia theo vai trò: Domain Controller, DNS/DHCP, File Server, Web Server. Active Directory cấu hình với OU phân cấp, script provision bulk 50+ tài khoản qua PowerShell, và Group Policy bắt buộc cho độ phức tạp mật khẩu và quyền truy cập tài nguyên dùng chung.",
-          "Một bài lab môn của SP trên Windows Server 2012 R2 thật với VMware Workstation làm hypervisor. Mục tiêu là end-to-end: thiết kế phân vai trò, dựng từng VM, đấu nối trust AD, tự động hoá việc provision tài khoản và áp policy bằng PowerShell, sau đó chứng minh policy thực sự áp xuyên qua các máy.",
-        ],
-      },
-      {
-        heading: "Công cụ",
-        bullets: [
-          "Windows Server 2012 R2 trên bốn VM.",
-          "VMware Workstation làm hypervisor.",
-          "Active Directory + Group Policy.",
-          "PowerShell cho bulk user provisioning và tự động hoá policy.",
-        ],
-      },
-    ],
+        "heading": "Configuration",
+        "bullets": [
+          "Configured Active Directory, organisational units, role-based policies, quotas and cross-server authentication for more than 50 accounts.",
+          "Used VMware Workstation for the virtual machines and PowerShell for bulk user provisioning.",
+          "Worked across domain, DNS/DHCP, file and web-server roles."
+        ]
+      }
+    ]
   },
   "cisco-enterprise-lan": {
-    en: [
+    "en": [
       {
-        heading: "About",
-        body: [
-          "Multi-site enterprise network using 7 Cisco routers and 5 switches. Star-topology LAN supporting 12+ endpoints and 2 internal servers, with a VLSM IP scheme, OSPF multi-area routing with failover, and ACL-based access policies.",
-          "The design was built first in Cisco Packet Tracer. The same topology and configs were then applied to the physical Cisco rack in the SP networking lab.",
-        ],
+        "heading": "Lab work and contribution",
+        "body": [
+          "Led a three-person team integrating VLSM addressing, OSPF routing and ACL access controls."
+        ]
       },
       {
-        heading: "Tools",
-        bullets: [
-          "Cisco Packet Tracer for the design phase.",
-          "Physical Cisco routers and switches in the SP networking lab for the build phase.",
-          "Cisco IOS CLI for configuration.",
-          "OSPF multi-area routing, VLSM addressing, ACL policies.",
-        ],
-      },
-    ],
-    vi: [
-      {
-        heading: "Giới thiệu",
-        body: [
-          "Mạng doanh nghiệp đa site dùng 7 router Cisco và 5 switch. LAN topology hình sao hỗ trợ 12+ endpoint và 2 server nội bộ, với sơ đồ IP VLSM, routing OSPF đa vùng có failover, và policy ACL.",
-          "Thiết kế được dựng trước trong Cisco Packet Tracer. Sau đó cùng topology và config được áp lên rack Cisco vật lý ở lab mạng của SP.",
-        ],
-      },
-      {
-        heading: "Công cụ",
-        bullets: [
-          "Cisco Packet Tracer cho phần thiết kế.",
-          "Router và switch Cisco vật lý tại lab mạng của SP cho phần build.",
-          "Cisco IOS CLI để cấu hình.",
-          "OSPF routing đa vùng, định địa chỉ VLSM, policy ACL.",
-        ],
-      },
-    ],
-  },
+        "heading": "Physical configuration",
+        "bullets": [
+          "Designed the network in Cisco Packet Tracer.",
+          "Configured physical routers and switches in the SP lab to implement the design across seven routers, five switches, more than 12 endpoints and two servers.",
+          "Used the Cisco IOS CLI for configuration."
+        ]
+      }
+    ]
+  }
 };

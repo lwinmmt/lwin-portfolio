@@ -35,7 +35,7 @@ function EducationRow({
   const { school, schoolLink, dates, initial, logoSrc } = entry;
   const degree = pickLocalized(entry.degree, entry.degreeVi, locale);
   return (
-    <li className="flex items-start gap-3 py-3.5">
+    <li className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-1 py-3.5 sm:flex sm:gap-3">
       <EntityLogo
         logoSrc={logoSrc}
         initial={initial}
@@ -48,7 +48,7 @@ function EducationRow({
           {degree}
         </div>
       </div>
-      <div className="whitespace-nowrap pt-0.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
+      <div className="col-start-2 whitespace-nowrap pt-0.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
         {formatDates(dates, locale)}
       </div>
     </li>

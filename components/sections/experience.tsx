@@ -53,7 +53,7 @@ function ExperienceRow({
         ? EMPLOYMENT_TYPE_VI[type]
         : type;
   return (
-    <li className="flex items-center gap-3 py-3.5">
+    <li className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 py-3.5 sm:flex sm:gap-3">
       <EntityLogo logoSrc={logoSrc} initial={initial} name={company} />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
@@ -68,7 +68,7 @@ function ExperienceRow({
           {role}
         </div>
       </div>
-      <div className="whitespace-nowrap font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
+      <div className="col-start-2 whitespace-nowrap font-mono text-[11px] tracking-[0.04em] text-[var(--color-fg-faint)]">
         {formatDates(dates, locale)}
       </div>
     </li>

@@ -8,8 +8,8 @@
 // route transitions.
 //
 // New flow:
-//   1. proxy.ts middleware reads the cookie / Accept-Language and
-//      rewrites bare paths like /about into /{locale}/about.
+//   1. proxy.ts rewrites bare paths like /about into /en/about.
+//      Retired Vietnamese paths redirect to their English counterparts.
 //   2. [lang]/layout.tsx receives the locale via params, calls
 //      setLocaleForRequest(locale) to seed the cache.
 //   3. Server components downstream call getLocale() / getT() and

@@ -25,7 +25,7 @@ export function HeroTerminal() {
       t("hero.terminal.school"),
       t("hero.terminal.location"),
     ],
-    2: ["esmos/  royce-connect/  smart-greenhouse/  multi-cloud/"],
+    2: ["esmos-multi-cloud/  royce-connect/", "osiris-hydroponics/  inno2-nea-wastewater/"],
     3: ["lwinmmt@gmail.com"],
   };
   return (

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { profile } from "@/lib/content/profile";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       // Studio is auth-gated by Sanity but no value to indexing.
       disallow: ["/studio", "/studio/"],
     },
-    sitemap: "https://lwinmmt.com/sitemap.xml",
-    host: "https://lwinmmt.com",
+    sitemap: `${profile.siteUrl}/sitemap.xml`,
+    host: profile.siteUrl,
   };
 }

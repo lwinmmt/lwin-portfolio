@@ -49,30 +49,14 @@ function useAudio(enabled: boolean) {
   const ctxRef = useRef<AudioContext | null>(null);
   const bufferRef = useRef<AudioBuffer | null>(null);
   const readyRef = useRef(false);
+  const resumeRef = useRef<Promise<void> | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
 
-    // Browser autoplay policy: AudioContext won't actually play sound
-    // until the user has made a gesture (click / tap / keypress /
-    // pointermove) somewhere on the page. Creating the AudioContext
-    // before that first gesture leaves it in `suspended` state and
-    // every play call is silently ignored. So we split the work:
-    //
-    //   1. PREFETCH the 2.5MB sprite bytes on requestIdleCallback.
-    //      no AudioContext yet, no autoplay involvement, no LCP
-    //      impact. The bytes warm the browser cache so step 2 is
-    //      instant.
-    //   2. On the first user gesture (any kind), create the
-    //      AudioContext (now starts in `running` state) and decode
-    //      the prefetched bytes. From here, every typing tick plays
-    //      as expected.
-    //
-    // Trade-off: if a visitor lands on the terminal variant and
-    // never moves the mouse / never scrolls before the animation
-    // finishes, the typing is silent. Any interaction at all.
-    // even a pointermove on initial load. Flips it on for the
-    // rest of the session.
+    // Prefetch the sprite while idle, then initialize audio after an
+    // interaction. Browser policy may keep the context suspended;
+    // typing continues whether or not sound is available.
     let cachedBytes: ArrayBuffer | null = null;
     let unmounted = false;
 
@@ -88,20 +72,23 @@ function useAudio(enabled: boolean) {
     };
 
     const unlock = async () => {
+      if (unmounted) return;
       try {
         const ctx = new AudioContext();
         ctxRef.current = ctx;
+        const isCurrent = () => !unmounted && ctxRef.current === ctx && ctx.state !== "closed";
         // If the prefetch didn't land yet, fetch synchronously now.
         if (!cachedBytes) {
           const res = await fetch("/sounds/sound.ogg");
           if (!res.ok) return;
           cachedBytes = await res.arrayBuffer();
         }
+        if (!isCurrent()) return;
         // decodeAudioData consumes the buffer; clone first so a
         // remount (e.g. variant toggle) can still re-decode without
         // re-fetching.
         const buf = await ctx.decodeAudioData(cachedBytes.slice(0));
-        if (unmounted) return;
+        if (!isCurrent()) return;
         bufferRef.current = buf;
         readyRef.current = true;
       } catch {
@@ -141,6 +128,9 @@ function useAudio(enabled: boolean) {
 
     return () => {
       unmounted = true;
+      readyRef.current = false;
+      bufferRef.current = null;
+      resumeRef.current = null;
       gestureEvents.forEach((e) =>
         document.removeEventListener(e, onGesture),
       );
@@ -148,18 +138,42 @@ function useAudio(enabled: boolean) {
         w.cancelIdleCallback(idleId);
       }
       if (timeoutId !== undefined) clearTimeout(timeoutId);
-      ctxRef.current?.close();
+      const ctx = ctxRef.current;
+      ctxRef.current = null;
+      if (ctx && ctx.state !== "closed") {
+        void ctx.close().catch(() => {
+          // Audio may already be unavailable during page teardown.
+        });
+      }
     };
   }, [enabled]);
 
   const playSound = (sound: [number, number] | undefined) => {
-    if (!readyRef.current || !ctxRef.current || !bufferRef.current || !sound)
-      return;
-    if (ctxRef.current.state === "suspended") ctxRef.current.resume();
-    const src = ctxRef.current.createBufferSource();
-    src.buffer = bufferRef.current;
-    src.connect(ctxRef.current.destination);
-    src.start(0, sound[0] / 1000, sound[1] / 1000);
+    const ctx = ctxRef.current;
+    const buffer = bufferRef.current;
+    if (!readyRef.current || !ctx || !buffer || !sound || ctx.state === "closed") return;
+
+    try {
+      if (ctx.state === "suspended") {
+        if (!resumeRef.current) {
+          const resume = ctx.resume();
+          resumeRef.current = resume;
+          void resume.catch(() => {
+            // A pending resume can reject when the variant unmounts.
+          }).finally(() => {
+            if (resumeRef.current === resume) resumeRef.current = null;
+          });
+        }
+        return;
+      }
+      if (ctx.state !== "running") return;
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      src.connect(ctx.destination);
+      src.start(0, sound[0] / 1000, sound[1] / 1000);
+    } catch {
+      // Optional sound must not interrupt the terminal animation.
+    }
   };
 
   const down = (key: string) =>
@@ -446,22 +460,22 @@ export function Terminal({
   return (
     <div
       ref={containerRef}
-      className={`mx-auto w-full max-w-lg font-mono text-xs ${className ?? ""}`}
+      className={`mx-auto w-full min-w-0 max-w-lg font-mono text-xs ${className ?? ""}`}
     >
       <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-2xl">
         {/* Title bar (mac-style traffic lights + tab title) */}
         <div className="flex items-center gap-2 bg-neutral-800 px-4 py-3">
-          <div className="flex items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-1.5">
             <div className="h-3 w-3 rounded-full bg-red-500 transition-colors hover:bg-red-600" />
             <div className="h-3 w-3 rounded-full bg-yellow-500 transition-colors hover:bg-yellow-600" />
             <div className="h-3 w-3 rounded-full bg-green-500 transition-colors hover:bg-green-600" />
           </div>
-          <div className="flex-1 text-center">
-            <span className="truncate text-xs text-neutral-400">
+          <div className="min-w-0 flex-1 text-center">
+            <span className="block truncate text-xs text-neutral-400" title={`${username}. Zsh`}>
               {username}. Zsh
             </span>
           </div>
-          <div className="w-[52px]" />
+          <div className="w-[52px] shrink-0" />
         </div>
 
         {/* Scrollable content. Native scrollbar hidden across engines

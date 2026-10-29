@@ -18,11 +18,10 @@ export const education: EducationEntry[] = [
     id: "smu",
     school: "Singapore Management University",
     schoolLink: "https://www.smu.edu.sg/",
-    degree:
-      "Bachelor of Science in Information Systems (Product Development & Business Analytics)",
+    degree: "Bachelor of Science in Information Systems",
     degreeVi:
       "Cử nhân Khoa học Hệ thống Thông tin (Phát triển Sản phẩm & Phân tích Kinh doanh)",
-    dates: "Aug 2023 to Present",
+    dates: "Aug 2023 to Expected 2027",
     initial: "SMU",
     logoSrc: "/logos/schools/smu.png",
   },
@@ -31,7 +30,7 @@ export const education: EducationEntry[] = [
     school: "Singapore Polytechnic",
     schoolLink: "https://www.sp.edu.sg/",
     degree:
-      "Diploma in Computer Engineering (Networking & Cybersecurity Track)",
+      "Diploma in Computer Engineering (networking & cybersecurity)",
     degreeVi:
       "Cao đẳng Kỹ thuật Máy tính (chuyên ngành Mạng & An ninh mạng)",
     dates: "Apr 2018 to May 2021",

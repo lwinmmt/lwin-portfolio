@@ -8,21 +8,15 @@ import { LocaleHtmlAttr } from "@/components/layout/locale-html-attr";
 import { LOCALES, type Locale } from "@/lib/i18n/types";
 
 // generateStaticParams returns one entry per supported locale, so
-// every page nested under this segment is prerendered into TWO
-// static HTML pages at build time. One for each locale. Combined
-// with proxy.ts rewriting bare paths like /about to /{cookie-locale}
-// /about, visitors see clean URLs but Next.js serves cached static
-// HTML from the CDN. Navigation transitions become CDN-fast.
+// public pages are prerendered in English. The route segment remains
+// to preserve existing /en links; proxy.ts redirects retired /vi links.
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
 
 const VALID_LOCALES: ReadonlySet<string> = new Set(LOCALES);
 
-// Per-locale metadata. Without this, every prerendered VI page would
-// embed the English title + description in its <meta> tags, so
-// WhatsApp / Twitter / Google previews for vi.lwinmmt.com URLs would
-// be in English. Each locale gets its own copy from messages.ts.
+// Shared defaults. Each page supplies its own canonical and social URL.
 export async function generateMetadata({
   params,
 }: {
@@ -44,23 +38,14 @@ export async function generateMetadata({
     openGraph: {
       title,
       description: ogDescription,
-      url: locale === "en" ? "https://lwinmmt.com" : "https://lwinmmt.com/vi",
       siteName: "Lwin MMT",
-      locale: locale === "vi" ? "vi_VN" : "en_SG",
+      locale: "en_SG",
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: ogDescription,
-    },
-    alternates: {
-      canonical: locale === "en" ? "/en" : "/vi",
-      languages: {
-        en: "/en",
-        vi: "/vi",
-        "x-default": "/en",
-      },
     },
   };
 }

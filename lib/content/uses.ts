@@ -28,146 +28,139 @@ export type UsesGroup = {
  *  Everyday as a tagged prefix). */
 export const usesGroups: UsesGroup[] = [
   {
-    id: "ai-tools",
-    label: "AI Tools, Daily",
-    labelVi: "Công cụ AI dùng hằng ngày",
-    description:
-      "No fixed workflow. I reach for whichever model fits the task and validate the output. The skill is in knowing which to pick and how to frame the ask.",
-    descriptionVi:
-      "Không có workflow cố định. Tôi dùng model nào phù hợp với việc đó và kiểm chứng kết quả. Kỹ năng nằm ở chỗ biết chọn cái nào và biết đặt câu hỏi thế nào.",
-    items: [
+    "id": "ai-tools",
+    "label": "AI-assisted development",
+    "description": "I use AI to assist implementation, scripting, research and iteration. My work includes framing the problem, choosing the architecture, reviewing output and integrating the result.",
+    "items": [
       {
-        name: "Claude Code",
-        detail: "Coding. CLI + IDE.",
-        detailVi: "Lập trình. CLI + IDE.",
-        link: "https://claude.com/claude-code",
+        "name": "Claude Code",
+        "detail": "Coding. CLI + IDE.",
+        "link": "https://claude.com/claude-code"
       },
       {
-        name: "ChatGPT",
-        detail: "Quick search, drafting, and image generation.",
-        detailVi: "Tìm kiếm nhanh, viết nháp, và tạo ảnh.",
-        link: "https://chatgpt.com",
+        "name": "ChatGPT",
+        "detail": "Quick search, drafting, and image generation.",
+        "link": "https://chatgpt.com"
       },
       {
-        name: "Gemini",
-        detail: "Quick research, Google-integrated.",
-        detailVi: "Nghiên cứu nhanh, tích hợp Google.",
-        link: "https://gemini.google.com",
+        "name": "Gemini",
+        "detail": "Quick research, Google-integrated.",
+        "link": "https://gemini.google.com"
       },
       {
-        name: "Kimi",
-        detail: "Long-form essays and research.",
-        detailVi: "Viết dài và nghiên cứu chuyên sâu.",
-        link: "https://kimi.com",
-      },
-    ],
+        "name": "Kimi",
+        "detail": "Long-form essays and research.",
+        "link": "https://kimi.com"
+      }
+    ]
   },
   {
-    id: "languages",
-    label: "Languages",
-    labelVi: "Ngôn ngữ",
-    items: [
-      // Chip-only. No detail. Names alone carry enough signal for
-      // mainstream languages and HTML/CSS. Python first because it
-      // is the most familiar / most-reached-for.
-      { name: "Python" },
-      { name: "TypeScript / JavaScript" },
-      { name: "SQL" },
-      { name: "HTML" },
-      { name: "CSS" },
-    ],
+    "id": "languages",
+    "label": "Languages",
+    "items": [
+      {
+        "name": "Python"
+      },
+      {
+        "name": "TypeScript / JavaScript"
+      },
+      {
+        "name": "SQL"
+      },
+      {
+        "name": "HTML"
+      },
+      {
+        "name": "CSS"
+      },
+      {
+        "name": "MicroPython"
+      },
+      {
+        "name": "PowerShell"
+      },
+      {
+        "name": "C++"
+      }
+    ]
   },
   {
-    id: "editor",
-    label: "Editor & Terminal",
-    labelVi: "Editor & Terminal",
-    items: [
+    "id": "editor",
+    "label": "Editor & Terminal",
+    "items": [
       {
-        name: "Sublime Text",
-        detail:
-          "Scratchpad. Quick notes, paste-and-tidy, off-the-record drafts.",
-        detailVi:
-          "Sổ tay nháp. Ghi nhanh, dán-rồi-dọn, bản nháp tạm.",
-        link: "https://www.sublimetext.com",
+        "name": "Sublime Text",
+        "detail": "Quick notes, drafts and text editing.",
+        "link": "https://www.sublimetext.com"
       },
       {
-        name: "VS Code",
-        detail: "Primary IDE. Where actual code gets written.",
-        detailVi: "IDE chính. Nơi code thực sự được viết.",
-        link: "https://code.visualstudio.com",
+        "name": "VS Code",
+        "detail": "Code editing and project development.",
+        "link": "https://code.visualstudio.com"
       },
       {
-        name: "Ghostty",
-        detail: "Terminal. GPU-accelerated, native.",
-        detailVi: "Terminal. Tăng tốc GPU, native.",
-        link: "https://ghostty.org",
+        "name": "Ghostty",
+        "detail": "Terminal. GPU-accelerated, native.",
+        "link": "https://ghostty.org"
       },
       {
-        name: "Homebrew",
-        detail: "macOS package manager.",
-        detailVi: "Trình quản lý package cho macOS.",
-        link: "https://brew.sh",
+        "name": "Homebrew",
+        "detail": "macOS package manager.",
+        "link": "https://brew.sh"
       },
-    ],
+      {
+        "name": "Overleaf",
+        "detail": "LaTeX resume editing and document preparation.",
+        "link": "https://www.overleaf.com/"
+      }
+    ]
   },
   {
-    id: "hardware",
-    label: "Hardware",
-    labelVi: "Phần cứng",
-    items: [
+    "id": "hardware",
+    "label": "Hardware",
+    "items": [
       {
-        name: "MacBook Pro M2, 16 inch",
-        detail: "Daily driver.",
-        detailVi: "Máy chính dùng hằng ngày.",
-      },
-    ],
+        "name": "MacBook Pro M2, 16 inch",
+        "detail": "Development laptop."
+      }
+    ]
   },
   {
-    id: "everyday",
-    label: "Everyday Software",
-    labelVi: "Phần mềm hằng ngày",
-    items: [
+    "id": "everyday",
+    "label": "Productivity & software",
+    "items": [
       {
-        name: "Raycast",
-        detail:
-          "Spotlight replacement. Launcher, snippets, clipboard history.",
-        detailVi:
-          "Thay thế Spotlight. Launcher, snippet, lịch sử clipboard.",
-        link: "https://raycast.com",
+        "name": "Raycast",
+        "detail": "Spotlight replacement. Launcher, snippets, clipboard history.",
+        "link": "https://raycast.com"
       },
       {
-        name: "Akiflow",
-        detail: "Task management. All my todos and time-blocks live here.",
-        detailVi:
-          "Quản lý công việc. Tất cả todo và time-block của tôi nằm ở đây.",
-        link: "https://akiflow.com",
+        "name": "Akiflow",
+        "detail": "Task management and time blocking.",
+        "link": "https://akiflow.com"
       },
       {
-        name: "Bitwarden",
-        detail: "Password manager.",
-        detailVi: "Trình quản lý mật khẩu.",
-        link: "https://bitwarden.com",
+        "name": "Bitwarden",
+        "detail": "Password manager.",
+        "link": "https://bitwarden.com"
       },
       {
-        name: "Linear",
-        detail: "When projects have a team.",
-        detailVi: "Khi dự án có nhiều người trong team.",
-        link: "https://linear.app",
+        "name": "Linear",
+        "detail": "Team project and issue tracking.",
+        "link": "https://linear.app"
       },
       {
-        name: "Comet",
-        detail: "Daily browser. Perplexity's AI-native build.",
-        detailVi: "Trình duyệt chính. Bản AI-native của Perplexity.",
-        link: "https://comet.perplexity.ai",
+        "name": "Comet",
+        "detail": "Browser with AI-assisted research tools.",
+        "link": "https://comet.perplexity.ai"
       },
       {
-        name: "Notion",
-        detail: "Notes, drafts, second brain.",
-        detailVi: "Ghi chú, bản nháp, bộ não thứ hai.",
-        link: "https://notion.so",
-      },
-    ],
-  },
+        "name": "Notion",
+        "detail": "Notes, documentation and drafts.",
+        "link": "https://notion.so"
+      }
+    ]
+  }
 ];
 
 /** Tools-I've-worked-with chip block. Each sub-group renders as a
@@ -183,35 +176,53 @@ export type WorkedWithGroup = {
 
 export const workedWithGroups: WorkedWithGroup[] = [
   {
-    id: "web-ui",
-    label: "Web & UI",
-    labelVi: "Web & UI",
-    items: [
+    "id": "web-ui",
+    "label": "Web & UI",
+    "labelVi": "Web & UI",
+    "items": [
       "Next.js",
       "React",
       "Tailwind CSS",
       "shadcn/ui",
       "magic ui",
       "Aceternity UI",
-    ],
+      "React Native"
+    ]
   },
   {
-    id: "backend-data",
-    label: "Backend & data",
-    labelVi: "Backend & dữ liệu",
-    items: ["Node.js", "PostgreSQL", "MySQL"],
+    "id": "backend-data",
+    "label": "Backend & data",
+    "labelVi": "Backend & dữ liệu",
+    "items": [
+      "Node.js",
+      "PostgreSQL",
+      "MySQL",
+      "InfluxDB"
+    ]
   },
   {
-    id: "cloud-deploy",
-    label: "Cloud & deploy",
-    labelVi: "Cloud & triển khai",
-    items: ["AWS", "Azure", "Cloudflare", "Vercel", "Railway", "GitHub"],
+    "id": "cloud-deploy",
+    "label": "Cloud & deploy",
+    "labelVi": "Cloud & triển khai",
+    "items": [
+      "AWS",
+      "Azure",
+      "Cloudflare",
+      "Vercel",
+      "Railway",
+      "GitHub",
+      "Terraform",
+      "Amazon EKS",
+      "Azure AKS",
+      "Aurora Global Database",
+      "GCP Cloud DNS"
+    ]
   },
   {
-    id: "infra-ops",
-    label: "Infra & ops",
-    labelVi: "Infra & ops",
-    items: [
+    "id": "infra-ops",
+    "label": "Infra & ops",
+    "labelVi": "Infra & ops",
+    "items": [
       "Docker",
       "VMware",
       "VirtualBox",
@@ -220,13 +231,17 @@ export const workedWithGroups: WorkedWithGroup[] = [
       "Grafana",
       "Ubuntu",
       "Windows Server 2012",
-    ],
+      "Docker Compose",
+      "Active Directory",
+      "Rufus",
+      "Chocolatey for Business (proof of concept)"
+    ]
   },
   {
-    id: "iot-embedded",
-    label: "IoT & embedded",
-    labelVi: "IoT & embedded",
-    items: [
+    "id": "iot-embedded",
+    "label": "IoT & embedded",
+    "labelVi": "IoT & embedded",
+    "items": [
       "ESP32",
       "Raspberry Pi",
       "Arduino",
@@ -234,24 +249,46 @@ export const workedWithGroups: WorkedWithGroup[] = [
       "Node-RED",
       "EdgeX Foundry",
       "Industrial RTUs",
-    ],
+      "HiveMQ Cloud",
+      "DHT22",
+      "Modbus TCP (simulators)",
+      "Siemens S7 (simulators)"
+    ]
   },
   {
-    id: "networking-security",
-    label: "Networking & security",
-    labelVi: "Mạng & bảo mật",
-    items: [
+    "id": "networking-security",
+    "label": "Networking & security",
+    "labelVi": "Mạng & bảo mật",
+    "items": [
       "Cisco Packet Tracer",
       "Nmap",
       "Wireshark",
       "OpenVPN",
-      "WireGuard",
-    ],
+      "WireGuard"
+    ]
   },
   {
-    id: "design-diagrams",
-    label: "Design & diagrams",
-    labelVi: "Thiết kế & sơ đồ",
-    items: ["Figma", "Excalidraw", "Eraser"],
+    "id": "design-diagrams",
+    "label": "Design & diagrams",
+    "labelVi": "Thiết kế & sơ đồ",
+    "items": [
+      "Figma",
+      "Excalidraw",
+      "Eraser",
+      "Figma Make",
+      "Service Design Documents"
+    ]
   },
+  {
+    "id": "business-operations",
+    "label": "Business & operations",
+    "labelVi": "Business & operations",
+    "items": [
+      "Shopify",
+      "Meta Business Suite",
+      "WordPress",
+      "Asana",
+      "User acceptance testing"
+    ]
+  }
 ];

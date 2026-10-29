@@ -10,7 +10,10 @@ import type { Locale } from "@/lib/i18n/types";
 // Hoist the slice so it's computed once at module load, not on every
 // server render of /. The home page caps highlights at 4; the full
 // list lives at /highlights.
-const HOME_HIGHLIGHTS = highlights.slice(0, 4);
+const highlightDate = (highlight: Highlight) => Date.parse(highlight.date.split(" to ")[0]);
+const HOME_HIGHLIGHTS = [...highlights]
+  .sort((a, b) => highlightDate(b) - highlightDate(a))
+  .slice(0, 4);
 
 export function Highlights() {
   const t = getT();

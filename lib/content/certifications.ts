@@ -40,7 +40,6 @@ export const certifications: Certification[] = [
     name: "Certified Ethical Hacker (CEH)",
     issuer: "EC-Council",
     issuedDate: "Aug 2021",
-    expiresDate: "Aug 2024",
     credentialId: "ECC3261589704",
     credentialUrl:
       "https://aspen.eccouncil.org/VerifyBadge?type=certification&a=WOs8AsH9gnc2Re2hjGo9whQwa7jt1hVo3+yydh6XikA=",
@@ -51,7 +50,6 @@ export const certifications: Certification[] = [
     name: "AWS Certified Cloud Practitioner",
     issuer: "Amazon Web Services",
     issuedDate: "Jul 2020",
-    expiresDate: "Jul 2023",
     credentialId: "GRSKCK82HFE11GCG",
     credentialUrl: "https://www.credly.com/badges/309eee4c-5734-40e3-8acf-ce02f6f67d99",
     status: "lapsed",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, m as motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useT } from "@/lib/i18n/client";
@@ -11,8 +11,8 @@ import type { HeroVariant } from "./hero-variant";
 // in useEffect below). next/dynamic + ssr:false defers its chunk to
 // the moment the variant actually selects it. Saves the terminal
 // component + key-sound sprite tables off the initial bundle for
-// globe-variant visits. Globe stays a static import because SSR
-// always renders globe first to avoid hydration mismatch.
+// globe-variant visits. Neither variant mounts below the desktop
+// breakpoint, so hidden canvas, typing and audio work do not run.
 const HeroTerminal = dynamic(
   () => import("./terminal").then((m) => ({ default: m.HeroTerminal })),
   { ssr: false },
@@ -23,25 +23,48 @@ const HeroTerminal = dynamic(
 //   - "terminal". Auto-typing mock shell session
 //
 // Selection rules:
-//   - SSR always renders globe. Keeps the server response stable so
-//     hydration mismatch is impossible.
+//   - SSR and initial hydration leave the stage empty. The media-query
+//     subscription mounts it only at desktop widths.
 //   - On hydration, pick randomly (50/50). Each fresh visit lands on
 //     one variant or the other. Neither becomes "the" home page.
 //   - The small switcher button at the top-right of the stage lets
 //     the visitor flip to the other variant in place. No persistence
 //     beyond the current page session; a refresh re-randomizes.
 
+// Match Tailwind's lg breakpoint, including the media-query rem unit.
+const DESKTOP_QUERY = "(min-width: 64rem)";
+
+function subscribeToDesktop(onChange: () => void) {
+  const query = window.matchMedia(DESKTOP_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function getDesktopSnapshot() {
+  return window.matchMedia(DESKTOP_QUERY).matches;
+}
+
+function getServerDesktopSnapshot() {
+  return false;
+}
+
 export function HeroStage() {
   const t = useT();
+  const isDesktop = useSyncExternalStore(
+    subscribeToDesktop,
+    getDesktopSnapshot,
+    getServerDesktopSnapshot,
+  );
   const [variant, setVariant] = useState<HeroVariant>("globe");
   const [hydrated, setHydrated] = useState(false);
-
   useEffect(() => {
     // Math.random is fine here. This is presentational randomness,
     // not anything security-sensitive.
     setVariant(Math.random() < 0.5 ? "globe" : "terminal");
     setHydrated(true);
   }, []);
+
+  if (!isDesktop) return null;
 
   const other: HeroVariant = variant === "globe" ? "terminal" : "globe";
 

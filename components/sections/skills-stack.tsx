@@ -19,7 +19,7 @@ export function SkillsStack() {
         </h2>
         <Link
           href={localeHref("/uses", locale)}
-          className="text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
+          className="shrink-0 whitespace-nowrap text-[12.5px] font-medium text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-ruby)]"
         >
           {t("skills.viewAll")}
         </Link>
@@ -33,7 +33,7 @@ export function SkillsStack() {
           <div className="space-y-3.5">
             {skillGroups.map((group) => (
               <div key={group.id}>
-                <div className="mb-1.5 flex items-baseline gap-2">
+                <div className="mb-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   <div className="font-sans text-[12.5px] font-semibold text-[var(--color-fg)]">
                     {pickLocalized(group.label, group.labelVi, locale)}
                   </div>
@@ -81,7 +81,7 @@ export function SkillsStack() {
                     {cert.expiresDate && ` · ${t("skills.cert.expires")} ${cert.expiresDate}`}
                   </div>
                   {cert.credentialId && (
-                    <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">
+                    <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)] [overflow-wrap:anywhere]">
                       {t("skills.cert.id")} {cert.credentialId}
                     </div>
                   )}

@@ -10,6 +10,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { seedLocaleFromParams } from "@/lib/i18n/server";
 import { messages } from "@/lib/i18n/messages";
 import { LOCALES, type Locale } from "@/lib/i18n/types";
+import { pageMetadata } from "@/lib/page-metadata";
 
 const VALID_LOCALES: ReadonlySet<string> = new Set(LOCALES);
 
@@ -26,8 +27,8 @@ export async function generateMetadata({
   const locale = lang as Locale;
   const m = messages[locale];
   return {
+    ...pageMetadata("/", m["meta.title.default"], m["meta.description"]),
     title: { absolute: m["meta.title.default"] },
-    description: m["meta.description"],
   };
 }
 

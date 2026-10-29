@@ -1,13 +1,13 @@
 # lwinmmt.com
 
-Personal portfolio for **Lwin MMT**. AI & IIoT Engineer at VNTT, Information Systems student at Singapore Management University. Built with Next.js 16 (App Router), React 19, Tailwind v4, and Sanity (CMS, headless).
+Personal portfolio for **Lwin MMT**. Information Systems student at Singapore Management University, based in Singapore. Experience across IoT integration, cloud deployment, workflow automation and operations. Built with Next.js 16 (App Router), React 19, Tailwind v4, and Sanity (CMS, headless).
 
 ## Stack
 
 - **Framework**: Next.js 16 + React 19 (App Router, Turbopack)
 - **Styling**: Tailwind v4 + CSS variables, `framer-motion` for sliding pills
 - **CMS**: Sanity v5 (`/studio` route, Basic-Auth gated via `proxy.ts`)
-- **i18n**: custom EN/VN stack, cookie + `Accept-Language` resolution, message bundles in `lib/i18n/messages.ts`
+- **Language**: English only, with permanent redirects for retired `/vi` URLs
 - **Hosting**: Vercel
 
 ## Local dev
@@ -24,11 +24,12 @@ Site at http://localhost:3000.
 
 ```
 app/                  Next.js App Router routes
-  about/              /about
-  highlights/         /highlights (bento)
-  projects/           /projects + /projects/[slug] + opengraph-image
-  resume/             /resume
-  uses/               /uses
+  [lang]/             English /en routes and their bare-path aliases
+    about/            /en/about
+    highlights/       /en/highlights (bento)
+    projects/         /en/projects + /en/projects/[slug] + opengraph-image
+    resume/           /en/resume
+    uses/             /en/uses
   studio/             Sanity Studio (Basic-Auth gated by proxy.ts)
 components/
   hero/               Hero variants (globe canvas, terminal mock)
@@ -43,30 +44,43 @@ components/
 lib/
   i18n/               Locale resolution, message bundles, date formatter
   content/            Typed content tables (projects, highlights, …)
-  nav-utils.ts        Sidebar nav config
+  page-metadata.ts    Shared English canonical and social metadata
+  nav-utils.ts        Navigation URL helpers
   og-tokens.ts        OG image colour tokens
   use-mod-key.ts      Cmd-vs-Ctrl platform hook
 public/
   diagrams/           ESMOS architecture SVG
-  files/projects/     PDF case studies
+  resume/             Public resume PDF
   images/highlights/  Highlight cover images
   logos/              Org logos
   sounds/             Terminal keystroke audio sprite
 sanity/               Sanity schemas + client
-proxy.ts              Basic-Auth gate for /studio (Next 16 proxy convention)
+proxy.ts              Studio auth, English rewrites and retired /vi redirects
 next.config.ts        CSP + security headers
 ```
 
-## i18n
+## Language and shared profile
 
 Strings:
 - Static UI copy lives in `lib/i18n/messages.ts`. Keyed by dotted-namespace strings (`hero.cta.resume`, etc.). Access via `getT()` in server components, `useT()` in client components.
-- Content tables (projects, highlights, awards) carry parallel `*Vi` siblings (e.g. `title` + `titleVi`); the renderer picks via `pickLocalized(en, vi, locale)`.
-- Dates are stored once in English and run through `formatDates(dates, locale)` at render. VN gets numeric months + "đến nay" instead of "to Present".
+- The public site serves English only. `LOCALES` contains `en`; existing `/en/...` links stay valid.
+- Bare URLs such as `/about` rewrite to their English route. Old `/vi/...` links redirect permanently to the matching English path, retaining query parameters.
+- Old locale cookies and browser language preferences do not change the public language. Desktop and mobile language controls are removed.
+- Legacy Vietnamese message/content fields remain in the source for compatibility with the retired locale. They are not generated as public Vietnamese pages.
+- Dates remain stored in English and pass through the existing `formatDates` helper.
 
-Locale resolution:
-- Explicit cookie wins → else `Accept-Language` → else `en`.
-- Switcher writes the cookie + calls `router.refresh()`; `LocaleSwap` re-keys the page body so the swap animates.
+Shared facts:
+- `lib/content/profile.ts` holds the public identity, current studies, Singapore location and site URL. The hero, terminal, structured profile and social preview use those values.
+- `lib/content/experience.ts`, `education.ts`, `skills.ts`, `certifications.ts` and `highlights.ts` supply shared summaries. Full role bullets and case-study links are shared by the web resume.
+- `lib/page-metadata.ts` supplies page-specific canonical/social URLs under `https://www.lwinmmt.com/en`. The sitemap lists 23 English pages (six main pages and 17 project case studies).
+
+## Content and public download
+
+- `lib/content/projects.ts` holds card summaries, route slugs, media and external links.
+- `lib/content/case-studies.ts` holds detailed English project narratives. Preserve existing slugs when revising copy.
+- `lib/content/about.ts` holds volunteering, leadership, awards and interests.
+- The public download is `public/resume/lwinmmt-resume.pdf`, a selective one-page resume. Keep comprehensive internal career records separate from public assets.
+- `npm run build`, `npm run lint` and `npx tsc --noEmit` are the local checks. Review desktop, tablet, mobile and short-height layouts before publishing.
 
 ## Studio
 

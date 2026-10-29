@@ -6,11 +6,8 @@ const SVG_NATURAL_W = 5237;
 const SVG_NATURAL_H = 3248;
 
 // Inline ESMOS architecture diagram. Renders the Eraser-exported SVG
-// at full width with a "Raw SVG" link in the caption so curious readers
-// can open the file directly in a new tab to zoom or download. The
-// click-to-fullscreen modal was removed: react-zoom-pan-pinch never
-// gave a reliable fit-to-view first paint, and the inline image is
-// already legible at section width on every viewport that matters.
+// as an overview, with a full-size link for reading its detail in a
+// new tab. The original SVG remains available for zooming or download.
 //
 // Async server component: reads i18n via getT() so caption + link
 // labels follow the request locale.
@@ -34,7 +31,7 @@ export async function ESMOSDiagram() {
           href={SVG_PATH}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-soft)] transition-colors hover:text-[var(--color-ruby)]"
+          className="inline-flex min-h-11 items-center font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-fg-soft)] transition-colors hover:text-[var(--color-ruby)]"
         >
           {t("esmos.diagram.rawSvg")}
         </a>

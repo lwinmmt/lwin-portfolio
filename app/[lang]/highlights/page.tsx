@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,10 +19,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await seedLocaleFromParams(params);
   const m = messages[locale];
-  return {
-    title: m["page.title.highlights"],
-    description: m["page.description.highlights"],
-  };
+  return pageMetadata(
+    "/highlights",
+    m["page.title.highlights"],
+    m["page.description.highlights"],
+  );
 }
 
 type BentoLayout = "side-by-side" | "stacked" | "text-only";
@@ -34,10 +36,6 @@ export default async function HighlightsPage({
   await seedLocaleFromParams(params);
   const t = getT();
   const locale = getLocale();
-  // Highlights order in lib/content/highlights.ts is intentional and
-  // maps directly to bento slots. Destructure by name so the layout is
-  // explicit, not derived from .map().
-  const [vntt, wcs, sbr, pmclub, cna] = highlights;
 
   return (
     <DashboardShell>
@@ -53,50 +51,16 @@ export default async function HighlightsPage({
         </p>
       </header>
 
-      {/* Bento grid. VNTT claims the full top row. The other four cards
-          fill two rows below in mixed widths. 5-col grid on lg, 2-col on
-          md, single column on mobile. */}
-      <section className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-5 lg:gap-6 lg:auto-rows-[minmax(320px,auto)]">
-        {vntt && (
+      <section className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
+        {highlights.map((highlight, index) => (
           <BentoCard
-            h={vntt}
-            className="md:col-span-2 lg:col-span-5"
-            layout="side-by-side"
+            key={highlight.title}
+            h={highlight}
+            className={index === 0 || !highlight.imageSrc ? "md:col-span-2" : undefined}
+            layout={!highlight.imageSrc ? "text-only" : index === 0 ? "side-by-side" : "stacked"}
             locale={locale}
           />
-        )}
-        {wcs && (
-          <BentoCard
-            h={wcs}
-            className="md:col-span-1 lg:col-span-3"
-            layout="side-by-side"
-            locale={locale}
-          />
-        )}
-        {pmclub && (
-          <BentoCard
-            h={pmclub}
-            className="md:col-span-1 lg:col-span-2"
-            layout="stacked"
-            locale={locale}
-          />
-        )}
-        {cna && (
-          <BentoCard
-            h={cna}
-            className="md:col-span-1 lg:col-span-2"
-            layout="stacked"
-            locale={locale}
-          />
-        )}
-        {sbr && (
-          <BentoCard
-            h={sbr}
-            className="md:col-span-2 lg:col-span-3"
-            layout="side-by-side"
-            locale={locale}
-          />
-        )}
+        ))}
       </section>
     </DashboardShell>
   );

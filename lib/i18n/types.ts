@@ -1,9 +1,9 @@
-// Locale type + constants. Two locales for now (English + Vietnamese);
-// add a third entry to LOCALES and the messages dictionary to grow.
+// Only English is publicly served. The legacy Vietnamese content type
+// remains compatible with existing data while pages are reviewed in stages.
 
 export type Locale = "en" | "vi";
 
-export const LOCALES: readonly Locale[] = ["en", "vi"] as const;
+export const LOCALES: readonly Locale[] = ["en"] as const;
 export const DEFAULT_LOCALE: Locale = "en";
 
 // Friendly names shown in the language switcher. The "short" label

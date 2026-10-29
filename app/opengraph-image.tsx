@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 import { OG_TOKENS, OG_SIZE, OG_CONTENT_TYPE } from "@/lib/og-tokens";
+import { profile } from "@/lib/content/profile";
 
-export const alt = "Lwin MMT. AI and IIoT Engineer at VNTT.";
+export const alt = `${profile.name}. ${profile.headline}. ${profile.location}.`;
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
@@ -82,7 +83,7 @@ export default async function OpengraphImage() {
           >
             <span>Information Systems student at SMU.</span>
             <span style={{ color: RUBY, fontWeight: 600 }}>
-              I build IoT systems and ship products end-to-end.
+              Practical solutions across IoT, cloud and software.
             </span>
           </div>
         </div>
@@ -109,7 +110,7 @@ export default async function OpengraphImage() {
                 background: RUBY,
               }}
             />
-            <span>AI & IIoT Engineer at VNTT, Ho Chi Minh City</span>
+            <span>{profile.headline} · {profile.location}</span>
           </div>
           <div>GitHub, LinkedIn, Email</div>
         </div>

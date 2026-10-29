@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { seedLocaleFromParams } from "@/lib/i18n/server";
 import { messages } from "@/lib/i18n/messages";
@@ -12,10 +13,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await seedLocaleFromParams(params);
   const m = messages[locale];
-  return {
-    title: m["page.title.projects"],
-    description: m["page.description.projects"],
-  };
+  return pageMetadata(
+    "/projects",
+    m["page.title.projects"],
+    m["page.description.projects"],
+  );
 }
 
 export default function ProjectsLayout({

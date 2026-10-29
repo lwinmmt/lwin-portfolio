@@ -8,22 +8,14 @@ import { SidebarIcon } from "@/components/sidebar/sidebar-icon";
 import { EmailButton } from "@/components/ui/email-button";
 import { navContact, type NavLink } from "@/lib/content";
 import { isActiveRoute } from "@/lib/nav-utils";
-import { writeLocaleCookie } from "@/lib/i18n/cookie";
 import { useLocale, useT } from "@/lib/i18n/client";
-import { localeHref, swapLocaleInPath } from "@/lib/i18n/href";
-import {
-  DEFAULT_LOCALE,
-  LOCALES,
-  LOCALE_NAMES,
-  type Locale,
-} from "@/lib/i18n/types";
-import { useRouter } from "next/navigation";
+import { localeHref } from "@/lib/i18n/href";
+import type { Locale } from "@/lib/i18n/types";
 import type { MessageKey } from "@/lib/i18n/messages";
 
 // Mobile dock + overflow "More" sheet. Replaces the desktop sidebar
 // for everything <lg. The dock carries the 5 primary nav routes + a
-// "More" trigger; everything else (Blog, Highlights, Studio, social
-// links, theme, language) lives in the bottom sheet so mobile users
+// "More" trigger; Highlights and contact links live in the bottom sheet so mobile users
 // have parity with the desktop sidebar instead of missing routes.
 
 type DockItem = {
@@ -41,8 +33,7 @@ const DOCK_ITEMS: DockItem[] = [
 ];
 
 // Items shown in the overflow sheet. Internal routes first, then
-// external contact links, then the controls (theme + language) at
-// the bottom as their own toggle blocks.
+// external contact links.
 // /studio is intentionally absent: the CMS is unconfigured, the
 // route is Basic-Auth-gated by proxy.ts, and a "Studio" link here
 // would look broken. Direct /studio URL still works for the
@@ -259,13 +250,6 @@ function MobileMoreSheet({
             />
           ))}
         </SheetSection>
-
-        {/* Locale toggle at the bottom. Utility control visually
-            separated from navigation. ThemePill was removed when the
-            site went light-only (see app/layout.tsx forcedTheme). */}
-        <div className="mt-5 pb-4">
-          <LocalePill />
-        </div>
       </div>
     </div>
   );
@@ -361,73 +345,5 @@ function SheetExternalRow({
     >
       {inner}
     </a>
-  );
-}
-
-// ThemePill removed. Site is light-only. forcedTheme="light" in
-// app/layout.tsx pins the theme regardless of OS preference or any
-// previously-stored next-themes value.
-
-function LocalePill() {
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-  const t = useT();
-
-  const switchTo = (next: Locale) => {
-    if (next === locale) return;
-    // See LanguageSwitcher: cookie write for next bare-URL visit,
-    // push to the prerendered HTML for the new locale for instant CDN
-    // navigation. router.refresh() would only re-render the EN page
-    // because the URL is already locale-prefixed.
-    writeLocaleCookie(next);
-    router.push(swapLocaleInPath(pathname || "/", next));
-  };
-
-  return (
-    <div className="flex flex-col gap-1.5 rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-bg-warm)] p-2">
-      <div className="px-1 font-mono text-[9.5px] uppercase tracking-[0.14em] text-[var(--color-fg-faint)]">
-        {t("switcher.aria")}
-      </div>
-      <div className="flex gap-1">
-        {LOCALES.map((l) => {
-          const active = locale === l || (!locale && l === DEFAULT_LOCALE);
-          return (
-            <button
-              key={l}
-              type="button"
-              onClick={() => switchTo(l)}
-              aria-pressed={active}
-              aria-label={LOCALE_NAMES[l].long}
-              className="relative h-9 flex-1 rounded-md font-mono text-[11px] font-medium uppercase tracking-[0.14em] transition-colors"
-            >
-              {active && (
-                <motion.span
-                  layoutId="mobile-locale-pill"
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-md bg-[var(--color-fg)]"
-                  transition={{
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 32,
-                    mass: 0.7,
-                  }}
-                />
-              )}
-              <span
-                className={
-                  "relative z-10 " +
-                  (active
-                    ? "text-[var(--color-bg)]"
-                    : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]")
-                }
-              >
-                {LOCALE_NAMES[l].short}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { Locale } from "./types";
+import { profile } from "../content/profile";
 
 // Translation dictionary. Add a new key under BOTH locales when you need
 // a new translated string. Keys use dot.notation for grouping.
@@ -12,12 +13,12 @@ export const messages = {
     // EN visitors get English OG/Twitter cards and VI visitors get
     // Vietnamese. Hero copy is mirrored in the description for parity
     // with social shares.
-    "meta.title.default": "Lwin, AI and IIoT Engineer",
+    "meta.title.default": `${profile.name} | ${profile.headline}`,
     "meta.title.template": "%s | Lwin MMT",
     "meta.description":
-      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.",
+      profile.description,
     "meta.og.description":
-      "Information Systems student at Singapore Management University. I build IoT systems and ship products end-to-end. Engineer by training. Daily AI-tools operator.",
+      profile.description,
     "a11y.skipToMain": "Skip to main content",
     // Per-route page titles + descriptions. Used by each page's
     // generateMetadata so the <title> tag and meta description match
@@ -34,7 +35,7 @@ export const messages = {
       "Talks, press, awards, and notable moments.",
     "page.title.uses": "Uses",
     "page.description.uses":
-      "Daily AI tools, dev stack, IoT and cloud stack, hardware, and everyday software.",
+      "Tools and workflow across IoT, cloud, software, project delivery and operations.",
     "page.title.resume": "Resume",
     "page.description.resume": "Web-readable resume with PDF download.",
     "page.title.projects": "Projects",
@@ -64,7 +65,7 @@ export const messages = {
     "nav.aria.moreSheet": "More navigation",
     "nav.skipToMain": "Skip to main content",
     // Sidebar chrome
-    "sidebar.subtitle": "AI & IIoT Engineer",
+    "sidebar.subtitle": profile.headline,
     "sidebar.search": "Search",
     // Image alt boilerplate (translated subject + boilerplate noun)
     "image.alt.cover": "{title} cover",
@@ -78,25 +79,26 @@ export const messages = {
     // Hero variant switcher
     "hero.variant.aria": "Switch to {variant} variant",
     // Hero terminal mock output
-    "hero.terminal.role": "AI & IIoT Engineer @ VNTT",
-    "hero.terminal.school": "Info Systems student @ SMU",
-    "hero.terminal.location": "Ho Chi Minh City • GMT+7",
+    "hero.terminal.role": profile.headline,
+    "hero.terminal.school": "Information Systems student @ SMU · Expected 2027",
+    "hero.terminal.location": profile.location,
     // ESMOS diagram caption
     "esmos.diagram.caption": "Architecture v9.4 · Authored in Eraser",
-    "esmos.diagram.rawSvg": "Raw SVG",
+    "esmos.diagram.rawSvg": "Open full-size diagram",
     // Language switcher
     "switcher.aria": "Language",
     // Hero
     "hero.greeting": "Hi, I'm",
     "hero.studentRole": "Information Systems student",
     "hero.intro.atSchool": "at",
-    "hero.intro.iBuild": ". I build",
-    "hero.intro.emphasis": "IoT systems and ship products end-to-end",
-    "hero.intro.rest": ". Hardware, cloud, and the operating system in between. Engineer by training. Daily AI-tools operator.",
+    "hero.intro.iBuild": ". I work across",
+    "hero.intro.emphasis": "IoT, cloud and software",
+    "hero.intro.rest": " to turn practical problems into working solutions.",
+    "hero.intro.support": "My experience combines hands-on implementation with understanding requirements, demonstrating solutions and improving everyday operations.",
     "hero.rightNow": "Right now",
-    "hero.currentRole": "AI & IIoT Engineer",
+    "hero.currentRole": profile.currentRole,
     "hero.currentRole.at": "at",
-    "hero.currentOrgFullName": "Vietnam Technology & Telecommunication Joint Stock Company",
+    "hero.currentOrgFullName": profile.currentOrgFullName,
     "hero.cta.resume": "Resume",
     "hero.cta.email": "Email",
     "hero.cta.github": "GitHub",
@@ -145,22 +147,22 @@ export const messages = {
     "about.quote.emphasis": "hardware, cloud, and product.",
     // About bio paragraphs (renderRich-formatted)
     "about.bio.p1":
-      "I'm an **Information Systems student** at **Singapore Management University**, on a dual track of **Product Development** and **Business Analytics**. Before SMU, I did a **Diploma in Computer Engineering** at **Singapore Polytechnic**, which is where most of my hardware and networking foundations came from.",
+      "I'm an **Information Systems student** at **Singapore Management University**, based in **Singapore** and expecting to graduate in **2027**. Before SMU, I completed a **Diploma in Computer Engineering (networking & cybersecurity)** at **Singapore Polytechnic**.",
     "about.bio.p2":
-      "The story so far has been a mix of architected production IoT systems (**NEA wastewater monitoring**), founding things from scratch (**Osiris** smart vertical farm, funded by an [SMU BIG grant](https://iie.smu.edu.sg/acceleration-grant)), and bootstrapping commercial operations (5 years of **Nepseeds** plant e-commerce). Right now I'm at [Vietnam Technology & Telecommunication (VNTT)](https://vntt.com.vn/) in Ho Chi Minh City learning what production-scale industrial IoT actually feels like, working on systems built on [**EdgeX Foundry**](https://docs.edgexfoundry.org/4.0/).",
+      "I enjoy understanding a problem, building a solution and explaining how it works. My experience spans **wastewater-sampler IoT integration**, **ESP32 hardware and firmware at Osiris**, **Windows provisioning automation**, and **Shopify operations at Nepseeds**. At **VNTT**, I built an industrial gateway prototype and initiated **BecaLearn**, an internal learning platform.",
     "about.bio.p3":
-      "I'm a heavy daily user of __Claude Code, Gemini, ChatGPT, and Kimi__ and treat the ability to direct them well as a real competitive skill. Most of my recent project output uses AI-assisted code generation; my contribution sits in **framing the problem**, making the **architecture decisions**, and **validating the output**.",
+      "I use **AI-assisted development** for implementation, scripting and iteration. I contribute through **requirements discussions**, **architecture choices**, **hands-on integration**, **testing** and **demonstrations**. I’m interested in work that combines technical problem-solving with business understanding and stakeholder communication.",
     "about.bio.p4":
-      "Outside of school and work, I hold a **motorcycle and car license** and I'm pursuing a **Boat License (PPCDL)**. I follow **Theo (t3.gg)**, **Mo Bitar**, and **Fireship** for engineering and dev-tooling content, and I invest consistently in the US stock market. I used to play a lot of Counter Strike Global Offensive, Dota 2, and Minecraft, but not much time for that these days.",
+      "Outside projects, I have trained and coordinated volunteers, led student event crews and supported community programmes. I follow technology and science, enjoy PC gaming, hold car and motorcycle licences, and have an interest in recreational boating and US equities.",
     // About interest group labels
     "about.interests.motorsports": "Motorsports & Mobility",
     "about.interests.investing": "Investing",
-    "about.interests.education": "Developer YouTube",
-    "about.interests.gamingPast": "Used to Play",
+    "about.interests.education": "Technology & Science",
+    "about.interests.gamingPast": "PC Gaming",
     // Resume page
     "resume.eyebrow": "Resume",
     "resume.byline":
-      "**Information Systems student** at **Singapore Management University**. Currently **AI & IIoT Engineer at VNTT**, Ho Chi Minh City.",
+      "**Information Systems student** at **Singapore Management University**, based in Singapore. Expected graduation: **2027**.",
     "resume.cta.download": "Download PDF",
     "resume.section.experience": "Experience",
     "resume.experienceCount": "{n} roles",
@@ -176,27 +178,27 @@ export const messages = {
     "resume.endYear.now": "NOW",
     // Resume role highlights (ROLE_HIGHLIGHTS in app/resume/page.tsx)
     "resume.highlight.vntt":
-      "Learning production-scale industrial IoT on EdgeX Foundry.",
+      "EdgeX gateway prototype with simulated devices and BecaLearn, a self-initiated internal learning platform.",
     "resume.highlight.nepseeds":
-      "5 years bootstrapped, NEA phytosanitary + CITES compliance, 98% on-time fulfillment.",
+      "Shopify operations, NParks phytosanitary coordination, automated printing and organic community growth.",
     "resume.highlight.osiris":
-      "SMU BIG grant. World Cities Summit 2024 showcase to Ministers Indranee Rajah + Desmond Lee.",
+      "ESP32 hardware, MicroPython firmware, MQTT/S3 telemetry and early hydroponic pilots.",
     "resume.highlight.w2":
-      "NEA wastewater monitoring. Contributed to LHL IDM Smart Nation Award 2022.",
+      "Azure-hosted wastewater-sampler monitoring and control with SIM-equipped RTUs.",
     "resume.highlight.sp-iot":
       "5G Autonomous Surveillance Vehicle. Featured at SP Engineering Show 2021.",
     // Projects list page
     "projects.eyebrow": "Projects",
     "projects.title": "Projects & Coursework",
     "projects.description":
-      "Projects are things I built, shipped, or have run for real users. Coursework projects are Singapore Management University and Singapore Polytechnic related.",
+      "Work, ventures, prototypes, coursework and competitions. Each case study explains the context, my contribution and what was delivered or demonstrated.",
     "projects.filter.all": "All",
     "projects.count.one": "{n} project",
     "projects.count.many": "{n} projects",
     // Project category display labels (the enum value drives logic;
     // these strings are display-only)
-    "projects.category.Coursework": "Coursework",
-    "projects.category.Projects": "Projects",
+    "projects.category.Coursework": "Coursework & Competitions",
+    "projects.category.Projects": "Work & Ventures",
     "projects.empty": "No projects match this filter yet.",
     // Project detail page
     "project.back": "All projects",
@@ -220,7 +222,7 @@ export const messages = {
     "highlightsPage.titleHead": "Moments worth remembering",
     "highlightsPage.titleDot": ".",
     "highlightsPage.intro":
-      "Talks, press features, awards, and other public moments. Click into any of them for context.",
+      "Project demonstrations, venture milestones, competitions and public coverage.",
     "highlightsPage.open": "Open",
     // Education
     "education.title": "Education",
@@ -236,16 +238,16 @@ export const messages = {
     "skills.cert.verify": "Verify",
     // Uses page
     "uses.eyebrow": "Uses",
-    "uses.titleHead": "The daily toolkit",
+    "uses.titleHead": "Tools & workflow",
     "uses.titleDot": ".",
     "uses.intro":
-      "The tools I reach for every day. Rotation changes; if something falls off the list it gets removed.",
-    "uses.dailyCore": "Daily core",
-    "uses.aiTools.subtitle": "{n} agents, no fixed workflow",
+      "Tools I use or have worked with across implementation, documentation, research and project delivery. Experience ranges from production work to coursework and prototypes.",
+    "uses.dailyCore": "Development workflow",
+    "uses.aiTools.subtitle": "{n} tools for different tasks",
     "uses.hardwareTag": "Hardware /",
     "uses.workedWith.label": "Tools I've worked with",
     "uses.workedWith.subtitle":
-      "Not all daily, all hands-on at some point.",
+      "Hands-on experience across work, ventures, coursework and lab work. Project pages explain the context and scope.",
     // Blog page
     "blog.eyebrow": "Blog",
     "blog.titleHead": "Notes in progress",
@@ -351,6 +353,7 @@ export const messages = {
     "hero.intro.iBuild": ". Tôi xây dựng",
     "hero.intro.emphasis": "hệ thống IoT và đưa sản phẩm ra thị trường, từ đầu đến cuối",
     "hero.intro.rest": ". Phần cứng, điện toán đám mây, và hệ điều hành ở giữa. Kỹ sư được đào tạo bài bản. Sử dụng công cụ AI hàng ngày.",
+    "hero.intro.support": "My experience combines hands-on implementation with understanding requirements, demonstrating solutions and improving everyday operations.",
     "hero.rightNow": "Hiện tại",
     "hero.currentRole": "Kỹ sư AI & IIoT",
     "hero.currentRole.at": "tại",

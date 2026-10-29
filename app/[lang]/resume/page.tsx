@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +21,6 @@ import { pickLocalized } from "@/lib/i18n/content";
 import { formatDates } from "@/lib/i18n/dates";
 import { localeHref } from "@/lib/i18n/href";
 import { renderRich } from "@/lib/i18n/rich";
-import type { MessageKey } from "@/lib/i18n/messages";
 
 export async function generateMetadata({
   params,
@@ -29,33 +29,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await seedLocaleFromParams(params);
   const m = messages[locale];
-  return {
-    title: m["page.title.resume"],
-    description: m["page.description.resume"],
-  };
+  return pageMetadata(
+    "/resume",
+    m["page.title.resume"],
+    m["page.description.resume"],
+  );
 }
 
 const RESUME_PDF = "/resume/lwinmmt-resume.pdf";
 
 // Role id -> message key for the achievement highlight line. Strings
 // live in lib/i18n/messages so they translate.
-const ROLE_HIGHLIGHT_KEY: Record<string, MessageKey> = {
-  vntt: "resume.highlight.vntt",
-  nepseeds: "resume.highlight.nepseeds",
-  osiris: "resume.highlight.osiris",
-  w2: "resume.highlight.w2",
-  "sp-iot": "resume.highlight.sp-iot",
-};
-
-// Role-to-case-study mapping. When a role has a corresponding project,
-// the highlight line becomes a tappable link to the case study.
-const ROLE_CASE_STUDY: Record<string, string> = {
-  nepseeds: "nepseeds",
-  osiris: "osiris-hydroponics",
-  w2: "inno2-nea-wastewater",
-  "sp-iot": "asv-5g-autonomous",
-};
-
 export default async function ResumePage({
   params,
 }: {
@@ -68,8 +52,8 @@ export default async function ResumePage({
     <DashboardShell>
       {/* Bento-style identity card */}
       <header className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)] p-6 sm:p-7">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-start gap-5">
+        <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+          <div className="flex min-w-0 flex-col items-start gap-5 sm:flex-row">
             <Image
               src={profile.photoSrc}
               alt={`${profile.name} portrait`}
@@ -165,8 +149,6 @@ export default async function ResumePage({
             const endYear = /to Present|present/i.test(r.dates)
               ? t("resume.endYear.now")
               : (r.dates.match(/\b(20\d{2})\b/g) ?? []).pop() ?? "";
-            const highlightKey = ROLE_HIGHLIGHT_KEY[r.id];
-            const highlight = highlightKey ? t(highlightKey) : null;
             const role = pickLocalized(r.role, r.roleVi, locale);
             const typeLabel =
               r.type === undefined
@@ -205,21 +187,18 @@ export default async function ResumePage({
                 <div className="mt-0.5 font-sans text-[12.5px] text-[var(--color-fg-muted)]">
                   {role}
                 </div>
-                {highlight && (
-                  <div className="mt-1 flex items-start gap-2 font-mono text-[11px] leading-[1.55] text-[var(--color-fg-soft)]">
-                    <span aria-hidden="true" className="text-[var(--color-fg-faint)]">
-                      &rarr;
-                    </span>
-                    {ROLE_CASE_STUDY[r.id] ? (
-                      <Link
-                        href={localeHref(`/projects/${ROLE_CASE_STUDY[r.id]}`, locale)}
-                        className="underline decoration-[var(--color-border-default)] decoration-1 underline-offset-[3px] transition-colors hover:text-[var(--color-fg)] hover:decoration-[var(--color-ruby-deep)]"
-                      >
-                        {highlight}
+                {r.bullets && (
+                  <ul className="mt-3 list-disc space-y-2 pl-4 text-[13px] leading-[1.65] text-[var(--color-fg-soft)] marker:text-[var(--color-fg-faint)]">
+                    {r.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
+                  </ul>
+                )}
+                {!!r.projectLinks?.length && (
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[12px] text-[var(--color-ruby)]">
+                    {r.projectLinks.map((link) => (
+                      <Link key={link.slug} href={localeHref(`/projects/${link.slug}`, locale)} className="underline underline-offset-4">
+                        {link.label}{"\u00a0"}<span aria-hidden="true">&rarr;</span>
                       </Link>
-                    ) : (
-                      <span>{highlight}</span>
-                    )}
+                    ))}
                   </div>
                 )}
               </li>
@@ -233,9 +212,9 @@ export default async function ResumePage({
           {education.map((e) => (
             <li
               key={e.id}
-              className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"
+              className="flex flex-col gap-x-4 gap-y-1 py-3 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between"
             >
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 sm:flex-1">
                 <div className="font-sans text-[14px] font-semibold text-[var(--color-fg)]">
                   {e.school}
                 </div>
@@ -286,7 +265,7 @@ export default async function ResumePage({
                   {c.expiresDate && ` · ${t("resume.cert.expires")} ${c.expiresDate}`}
                 </div>
                 {c.credentialId && (
-                  <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)]">
+                  <div className="mt-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-fg-faint)] [overflow-wrap:anywhere]">
                     {t("resume.cert.id")} {c.credentialId}
                   </div>
                 )}

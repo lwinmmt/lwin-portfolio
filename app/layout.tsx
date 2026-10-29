@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ConsoleBranding } from "@/components/console-branding";
 import { MotionProvider } from "@/components/providers/motion-provider";
+import { profile } from "@/lib/content/profile";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,8 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 // Minimal root metadata. The real title/description/OG/Twitter cards
-// are emitted per-locale by app/[lang]/layout.tsx generateMetadata,
-// so EN and VI visitors get language-matched social previews. This
+// are emitted by app/[lang]/layout.tsx and each page's metadata. This
 // root-level fallback only applies to error pages or routes that
 // somehow render outside the [lang] tree.
 //
@@ -32,7 +32,7 @@ const geistMono = Geist_Mono({
 // href="mailto:"> anchor, which still works fine because it has its
 // own href. Data detectors only kick in on plain text.
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lwinmmt.com"),
+  metadataBase: new URL(profile.siteUrl),
   title: "Lwin MMT",
   formatDetection: {
     email: false,
@@ -56,12 +56,10 @@ export const viewport: Viewport = {
 
 // Root layout is fully static. No cookies(), no headers(), nothing
 // that would mark routes dynamic. The LocaleProvider + locale-aware
-// content move into app/[lang]/layout.tsx, which prerenders both
-// EN and VI variants at build time via generateStaticParams.
+// content remain inside app/[lang]/layout.tsx, which prerenders the
+// English routes via generateStaticParams.
 //
-// `html lang="en"` is hardcoded as a baseline; the [lang]/layout
-// provides the actual locale context for content. Most search
-// engines weight document content over this attribute anyway.
+// The public site is English-only, including its initial HTML.
 export default function RootLayout({
   children,
 }: Readonly<{

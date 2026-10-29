@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -49,10 +50,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) return { title: "Project not found" };
-  return {
-    title: project.title,
-    description: project.description,
-  };
+  return pageMetadata(
+    `/projects/${slug}`,
+    project.title,
+    project.description,
+    `/en/projects/${slug}/opengraph-image/default`,
+  );
 }
 
 export default async function ProjectPage({
@@ -114,8 +117,8 @@ export default async function ProjectPage({
         </div>
       </header>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_240px]">
-        <div>
+      <div className="mt-10 grid gap-10 xl:grid-cols-[minmax(0,1fr)_220px]">
+        <div className="min-w-0">
           <ProjectLightboxGallery
             title={title}
             cover={

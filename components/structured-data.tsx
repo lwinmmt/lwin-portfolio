@@ -46,18 +46,20 @@ export function PersonJsonLd() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: profile.name,
-    alternateName: "Lwin Min Min Thant",
-    jobTitle: profile.currentRole,
-    worksFor: { "@type": "Organization", name: profile.currentOrg },
-    url: "https://lwinmmt.com",
+    affiliation: {
+      "@type": "CollegeOrUniversity",
+      name: profile.school,
+      url: profile.schoolLink,
+    },
+    url: profile.siteUrl,
     sameAs: [profile.github, profile.linkedin],
     address: {
       "@type": "PostalAddress",
       addressLocality: profile.location,
+      addressCountry: "SG",
     },
     image: profile.photoSrc,
-    description:
-      "Information Systems student at Singapore Management University. AI & IIoT Engineer at VNTT in Ho Chi Minh City. I build IoT systems and ship products end-to-end.",
+    description: profile.description,
   };
   return (
     <script
@@ -79,7 +81,7 @@ export function ProjectBreadcrumbsJsonLd({
   slug: string;
   title: string;
 }) {
-  const base = "https://lwinmmt.com";
+  const base = `${profile.siteUrl}/en`;
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
