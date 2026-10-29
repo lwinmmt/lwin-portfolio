@@ -36,8 +36,6 @@ export async function generateMetadata({
   );
 }
 
-const RESUME_PDF = "/resume/lwinmmt-resume.pdf";
-
 // Role id -> message key for the achievement highlight line. Strings
 // live in lib/i18n/messages so they translate.
 export default async function ResumePage({
@@ -101,8 +99,8 @@ export default async function ResumePage({
             </div>
           </div>
           <a
-            href={RESUME_PDF}
-            download
+            href={profile.resumePdfUrl}
+            download="lwin-resume.pdf"
             className="group relative inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-[var(--color-ruby)] px-5 py-2.5 font-sans text-[13.5px] font-medium text-white shadow-[0_0_0_1px_var(--color-ruby-deep),0_6px_18px_color-mix(in_oklab,var(--color-ruby)_28%,transparent)] transition-all hover:-translate-y-px hover:bg-[var(--color-ruby-deep)]"
           >
             <span className="relative flex h-3.5 w-3.5 items-center justify-center">

@@ -3,6 +3,7 @@
 export const profile = {
   name: "Lwin MMT",
   siteUrl: "https://www.lwinmmt.com",
+  resumePdfUrl: "/resume/lwin-resume.pdf",
   headline: "IoT, Cloud & Software",
   description:
     "Information Systems student at Singapore Management University, based in Singapore. Hands-on work across IoT integration, cloud deployment, workflow automation and product projects.",

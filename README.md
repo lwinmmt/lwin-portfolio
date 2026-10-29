@@ -79,7 +79,7 @@ Shared facts:
 - `lib/content/projects.ts` holds card summaries, route slugs, media and external links.
 - `lib/content/case-studies.ts` holds detailed English project narratives. Preserve existing slugs when revising copy.
 - `lib/content/about.ts` holds volunteering, leadership, awards and interests.
-- The public download is `public/resume/lwinmmt-resume.pdf`, a selective one-page resume. Keep comprehensive internal career records separate from public assets.
+- The public download is `public/resume/lwin-resume.pdf`, synced from the approved one-page resume. The page and command palette share `profile.resumePdfUrl`; the old PDF URL redirects permanently to the current file. Keep comprehensive internal career records separate from public assets.
 - `npm run build`, `npm run lint` and `npx tsc --noEmit` are the local checks. Review desktop, tablet, mobile and short-height layouts before publishing.
 
 ## Studio

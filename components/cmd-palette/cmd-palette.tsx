@@ -93,7 +93,7 @@ function buildItems(
       label: t("cmd.action.resumePdf"),
       hint: actionHint,
       group: "Actions",
-      href: "/resume/lwinmmt-resume.pdf",
+      href: profile.resumePdfUrl,
       external: true,
       search: "download resume pdf cv hồ sơ",
     },

@@ -99,6 +99,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/resume/lwinmmt-resume.pdf",
+        destination: "/resume/lwin-resume.pdf",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

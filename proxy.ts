@@ -124,9 +124,9 @@ export const config = {
   // path matching above.
   matcher: [
     // resume/ is excluded because the resume PDF lives at
-    // public/resume/lwinmmt-resume.pdf and the proxy would
-    // otherwise rewrite /resume/lwinmmt-resume.pdf into
-    // /{locale}/resume/lwinmmt-resume.pdf. Neither a route nor a
+    // public/resume/lwin-resume.pdf and the proxy would
+    // otherwise rewrite /resume/lwin-resume.pdf into
+    // /{locale}/resume/lwin-resume.pdf. Neither a route nor a
     // static file, so the download link 404'd. The /resume PAGE
     // (no trailing slash + path) still hits the proxy and gets
     // locale-rewritten as expected because the exclude pattern
